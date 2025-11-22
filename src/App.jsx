@@ -1,16 +1,22 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Cadastro from "./cadastro";
+import Login from "./login";
+import Index1 from "./index1";
 import './App.css'
-import Index1 from './index1'
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [tela, setTela] = useState("cadastro");
+
+  function irPara(t) {
+    setTela(t);
+  }
 
   return (
     <>
-      <Index1 />
-      
+      {tela === "cadastro" && <Cadastro irPara={irPara} />}
+      {tela === "login" && <Login irPara={irPara} />}
+      {tela === "dashboard" && <Index1 irPara={irPara} />}
     </>
   )
 }

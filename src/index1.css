@@ -1,142 +1,289 @@
+/* ===== ESTILOS GERAIS ===== */
+
 .dashboard {
-  font-family: Arial, sans-serif;
-  padding: 10px;
-  background-color: #f8f8f8;
-  color: #333;
+  font-family: "Arial", sans-serif;
+  padding: 5px;
+  background-color: #f3f0e8;
+  color: black;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
+/* ===== HEADER ===== */
 .header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  background-color: #fff;
-  padding: 10px 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  gap: 15px;
+  padding: 5px 25px;
+  background-color: white;
+  border-bottom: 1.5px solid #b88b09;
 }
 
-.logo-circle {
-  width: 50px;
-  height: 50px;
+.hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+/* Logo circular */
+.logo-circulo {
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
-  background-image:url(./images/LogoToomate.png) ;
-  background-size: contain; 
-  background-repeat: no-repeat;
+  background-image: url(./images/LogoToomate.png);
+  background-size: cover;
   background-position: center;
-  background-color: #fff; 
-  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+  border: 1.5px solid #b88b09;
 }
 
-.user-circle {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background-image:url(./images/persona.png) ;
-  background-size: contain; 
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: #fff; 
-  box-shadow: 0 0 4px rgba(0,0,0,0.2);
+/* Informações do restaurante */
+.restaurante {
+  display: flex;
+  flex-direction: column;
 }
 
-.restaurant-info {
-  flex-grow: 1;
-  text-align: center;
-}
-
-.restaurant-name {
+.restaurante-name {
+  font-size: 22px;
   font-weight: bold;
+}
+
+.restaurante-subnome {
+  margin-top: -4px;
+  font-size: 14px;
+  color: #555;
+}
+
+.sair-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  background: brown;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-right: 0;
+  padding: 10px;
+  margin-right: 0;
 }
 
 .menu {
   display: flex;
-  /* justify-content: center; */
-  gap: 15px;
-  margin: 20px 0;
+  justify-content: space-between;
+  margin: 12px 0;
 }
 
 .menu button {
-  background: #b0b0b0;
-  width: 140px;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
-  cursor: pointer;
+  flex: 1;
+  margin: 0 10px;
+  padding: 6px;
+  background-color: #fff;
+  border: 1.5px solid #b88b09;
+  color: black;
+  border-radius: 10px;
   font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
 }
 
 .menu button:hover {
-  background: #999;
+  background-color: #fff6d8;
 }
 
-.stats {
+.status {
   display: flex;
-  justify-content: space-around;
-  flex-wrap: wrap;
+  justify-content: space-between;
   gap: 10px;
 }
 
 .card {
-  background: linear-gradient(to right, #ccc, #666);
-  color: white;
-  padding: 20px;
+  background-color: white;
+  border: 1.5px solid #d2b467;
+  padding: 10px;
+  height: 125px;
   border-radius: 10px;
   text-align: center;
-  flex: 1 1 200px;
-  min-width: 200px;
-}
-
-.content {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 20px;
-  gap: 20px;
-}
-
-.chart {
-  flex: 3;
-  background: white;
-  border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  display: flex;
+  flex: 1;
+  display: flex;            
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  color: #555;
+}
+
+.numero {
+  font-size: 25px;
+  margin-top: 5px;
+  font-weight: bold;
+  color: black;
+}
+
+/* ÁREA PRINCIPAL */
+.container2 {
+  display: flex;
+  margin-top: 10px;
+  gap: 12px;
+}
+
+/* GRÁFICO */
+.grafico {
+  flex: 3;
+  background-color: white;
+  border-radius: 12px;
+  border: 1.5px solid #d2b467;
+  padding: 12px;
 
   background-image: url(./images/grafico.png);
-  background-size: contain; 
+  background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  min-width: 550px;
-  min-height: 250px; 
-  max-height: 400px; 
+
+  min-height: 150px;
+  max-height: 290px;
 }
 
-.notifications {
+/* NOTIFICAÇÕES */
+.notificacao {
   flex: 1;
   background: white;
-  border-radius: 10px;
+  border-radius: 12px;
   padding: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border: 1.5px solid #d2b467;
+  min-height: 150px;
+  max-height: 290px;
+}
+
+.alerta-titulo {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  color: #c92c2c;
+  margin-bottom: 15px;
 }
 
 .alerta-btn {
-  display: block;
-  height: 60px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
   width: 100%;
-  background: linear-gradient(to right, #aaa, #444);
-  color: white;
-  border: none;
   padding: 10px;
-  border-radius: 8px;
-  margin-top: 10px;
+  border-radius: 10px;
+  border: none;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  margin-bottom: 12px;
+}
+
+.validade, .estoque, .fornecedor, .boleto {
+  border: 1.5px solid #d2b467;  
+  background-color: #fff2ea;
+  padding: 10px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  min-width: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(./images/fundo-tela.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1.5px solid #d2b467;
+  text-align: center;
+}
+
+.titulo {
+  font-size: 26px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: black;
+}
+
+.subtitulo {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: black;
+}
+
+.subtitulo2 {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: black;
+}
+
+input {
+  width: 100%;
+  border-radius: 6px;
+  border: 1.5px solid #d2b467;
+  padding: 10px 10px;
+  margin-bottom: 25px;
+  background-color: rgb(175, 175, 175);
+}
+
+.auth-btn:hover {
+  opacity: 0.9;
+}
+
+.auth-switch {
+  color: #d2b467;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.auth-switch span {
+  color: 1.5px solid #d2b467;
   cursor: pointer;
   font-weight: bold;
 }
 
-.alerta-btn:hover {
-  opacity: 0.9;
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 40px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 8px 40px 8px 10px;
+  outline: none;
+  margin-bottom: 15px;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #555;
 }

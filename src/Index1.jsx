@@ -1,46 +1,80 @@
-import React from 'react';
-import './index1.css';
+import React from "react";
+import "./index1.css";
+import { Menu } from "lucide-react";
+import "./index1.css";
 
-export default function Index1() {
+export default function Index1({ irPara }) {
   return (
     <div className="dashboard">
       <header className="header">
-        <div className="logo-circle"></div>
+        <button className="hamburger-btn">
+          <Menu size={28} color="#b88b09" />
+        </button>
 
-        <div className="restaurant-info">
-          <div className="restaurant-name">Toomate</div>
-          <div className="restaurant-sub">Informações adicionais</div>
+        <div className="logo-circulo"></div>
+
+        <div className="restaurante">
+          <div className="restaurante-name">Toomate Bistrô</div>
+          <div className="restaurante-subnome">Kaio</div>
         </div>
-
-        <div className="user-circle"></div>
+        <button onClick={() => irPara("login")} className="sair-btn">
+          Sair
+        </button>
       </header>
 
       <nav className="menu">
         <button>Estoque</button>
         <button>Fornecedores</button>
+        <button>Gastos</button>
         <button>Boletos</button>
         <button>Fiados</button>
       </nav>
 
-      <div className="stats">
-        <div className="card">Qtd. de produtos abaixo do estoque mínimo</div>
-        <div className="card">Qtd. de produtos perto da data de validade</div>
-        <div className="card">Qtd. de boletos próximos do vencimento</div>
-        <div className="card">Qtd. total de clientes devedores</div>
+      <div className="status">
+        <div className="card">
+          <span>Produtos Abaixo do Estoque Min.</span>
+          <span className="numero">8</span>
+        </div>
+        <div className="card">
+          <span>Produtos Perto da Data de Vencimento</span>
+          <span className="numero">12</span>
+        </div>
+        <div className="card">
+          <span>Boletos próximos ao Vencimento</span>
+          <span className="numero">4</span>
+        </div>
+        <div className="card">
+          <span>Total de clientes devedores</span>
+          <span className="numero">25</span>
+        </div>
       </div>
 
-      <div className="content">
-        <div className="chart">
-          {/* <p>[ Gráfico ilustrativo aqui ]</p> */}
+      <div className="container2">
+        <div className="grafico">
         </div>
 
-        <div className="notifications">
-          <p><strong>Últimas notificações </strong><br /> Contas a vencer / Alertas de estoque</p>
-          <button className="alerta-btn">Alertas de Estoque</button>
-          <button className="alerta-btn">Alertas de Boleto</button>
-          <button className="alerta-btn">Alertas de Validade</button>
-        </div>
+      <div className="notificacao">
+        <h2 className="alerta-titulo">ALERTAS!</h2>
+
+        <button className="alerta-btn validade">
+          <span>⚠️</span> Notificação de Validade!
+        </button>
+
+        <button className="alerta-btn estoque">
+          <span>📦</span> Notificação de Estoque!
+        </button>
+
+        <button className="alerta-btn fornecedor">
+          <span>📄</span> Notificação de Fornecedor!
+        </button>
+
+        <button className="alerta-btn boleto">
+          <span>💵</span> Notificação de Boleto!
+        </button>
+      </div>
       </div>
     </div>
+
   );
+  
 }
