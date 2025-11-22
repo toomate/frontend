@@ -31,7 +31,7 @@ export default function Login({ irPara }) {
           </button>
         </div>
 
-        <button className="auth-btn" onClick={() => irPara("dashboard")}>
+        <button className="btn" onClick={() => irPara("dashboard")}>
           Entrar
         </button>
 

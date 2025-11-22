@@ -7,19 +7,20 @@ export default function Index1({ irPara }) {
   return (
     <div className="dashboard">
       <header className="header">
-        <button className="hamburger-btn">
-          <Menu size={28} color="#b88b09" />
-        </button>
+        <div className="lado-esquerdo">
+          <button className="hamburger-btn">
+            <Menu size={28} color="#b88b09"/>
+          </button>
 
-        <div className="logo-circulo"></div>
+          <div className="logo-circulo"></div>
 
-        <div className="restaurante">
-          <div className="restaurante-name">Toomate Bistrô</div>
-          <div className="restaurante-subnome">Kaio</div>
+          <div className="restaurante">
+            <div className="restaurante-name">Toomate Bistrô</div>
+            <div className="restaurante-subnome">Kaio</div>
+          </div>
         </div>
-        <button onClick={() => irPara("login")} className="sair-btn">
-          Sair
-        </button>
+          
+        <button onClick={() => irPara("login")} className="btn">Sair</button>
       </header>
 
       <nav className="menu">
@@ -74,7 +75,5 @@ export default function Index1({ irPara }) {
       </div>
       </div>
     </div>
-
   );
-  
 }

@@ -46,7 +46,7 @@ export default function Cadastro({ irPara }) {
           </button>
         </div>
 
-        <button className="auth-btn" onClick={() => irPara("login")}>
+        <button className="btn" onClick={() => irPara("login")}>
           Cadastrar
         </button>
 
