@@ -293,3 +293,184 @@ input {
   padding: 3px;
   color: #555;
 }
+
+/* Responsividade */
+/* Tela entre 991px e 1390px */
+
+@media (max-width: 1390px) {
+  .dashboard {
+    min-width: auto;
+    padding: 0 10px;
+  }
+
+  .logo-circulo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .restaurante-name {
+    font-size: 18px;
+  }
+
+  .restaurante-subnome {
+    font-size: 12px;
+  }
+
+  .menu button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .card {
+    height: 110px;
+  }
+
+  .numero {
+    font-size: 20px;
+  }
+
+  .alerta-btn {
+    font-size: 14px;
+  }
+
+  .grafico,
+  .notificacao {
+    max-height: 300px;
+  }
+}
+
+/* Tela entre 768px - 990px */
+@media (max-width: 990px) {
+  .menu button {
+    margin: 0 5px;
+    font-size: 13px;
+  }
+
+  .status {
+    gap: 5px;
+  }
+
+  .card {
+    padding: 8px;
+    height: 100px;
+  }
+
+  .numero {
+    font-size: 18px;
+  }
+
+  .grafico,
+  .notificacao {
+    min-height: 180px;
+  }
+}
+
+/* Tela menor que 768px */
+@media (max-width: 768px) {
+
+  /* HEADER */
+  .header {
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .lado-esquerdo {
+    width: 100%;
+    justify-content: flex-start;
+    gap: 15px;
+  }
+
+  .logo-circulo {
+    width: 50px;
+    height: 50px;
+  }
+
+  .restaurante-name {
+    font-size: 18px;
+  }
+
+  .restaurante-subnome {
+    font-size: 12px;
+  }
+
+  .header-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .menu {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .menu button {
+    width: 100%;
+    margin: 0;
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .status {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card {
+    flex: 0 0 48%;
+    margin-bottom: 10px;
+    height: 110px;
+  }
+
+  .numero {
+    font-size: 20px;
+  }
+
+  .container2 {
+    flex-direction: column-reverse;
+    padding: 10px;
+  }
+
+  .notificacao {
+    width: 100%;
+    max-height: none;
+  }
+
+  .grafico {
+    width: 100%;
+    margin-top: 15px;
+    min-height: 200px;
+  }
+
+  .alerta-btn {
+    font-size: 16px;
+    gap: 15px;
+  }
+}
+
+/* Tela menor que 480px */
+@media (max-width: 480px) {
+  .restaurante-name {
+    font-size: 16px;
+  }
+
+  .menu button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .card {
+    flex: 0 0 100%;
+  }
+
+  .numero {
+    font-size: 18px;
+  }
+
+  .alerta-btn {
+    font-size: 14px;
+  }
+}
