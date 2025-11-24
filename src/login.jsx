@@ -16,6 +16,7 @@ export default function Login({ irPara }) {
 
         <input type="text" placeholder="Usuário" />
 
+        {/* Campo Senha */}
         <div className="input-wrapper">
           <input 
             type={mostrarSenha ? "text" : "password"}

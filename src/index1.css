@@ -186,7 +186,7 @@
 }
 
 .validade, .estoque, .fornecedor, .boleto {
-  background-color: #fae9de;
+  background-color: #fff0f0;
   padding: 10px;
 }
 
@@ -298,6 +298,13 @@ input {
 /* Tela entre 991px e 1390px */
 
 @media (max-width: 1390px) {
+
+  .container {
+    min-width: 991px;
+    max-width: 1390px;
+    min-height: 100vh;
+  }
+
   .dashboard {
     min-width: auto;
     padding: 0 10px;
@@ -452,6 +459,11 @@ input {
 
 /* Tela menor que 480px */
 @media (max-width: 480px) {
+
+  .container {
+    min-width: 480px;
+    min-height: 100vh;
+  }
   .restaurante-name {
     font-size: 16px;
   }
