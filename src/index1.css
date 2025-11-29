@@ -67,7 +67,7 @@
   height: 35px;
   background: #c92c2c;
   color: white;
-  border-radius: 6px;
+  border-radius: 5px;
   font-weight: bold;
   margin-right: 0;
   padding: 10px;
@@ -94,7 +94,7 @@
   background-color: white;
   border: 1px solid gold;
   color: black;
-  border-radius: 10px;
+  border-radius: 5px;
   font-weight: bold;
   cursor: pointer;
   font-size: 16px;
@@ -114,7 +114,7 @@
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.30);
   padding: 10px;
   height: 125px;
-  border-radius: 10px;
+  border-radius: 5px;
   text-align: center;
   flex: 1;
   display: flex;            
@@ -139,7 +139,7 @@
 .grafico {
   flex: 3;
   background-color: white;
-  border-radius: 12px;
+  border-radius: 5px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.40);
   padding: 12px;
   background-image: url(./images/grafico.png);
@@ -153,7 +153,7 @@
 .notificacao {
   flex: 1;
   background: white;
-  border-radius: 12px;
+  border-radius: 5px;
   padding: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.40);
   min-height: 200px;
@@ -175,7 +175,7 @@
   gap: 20px;
   width: 100%;
   padding: 10px;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
   font-size: 18px;
   font-weight: bold;
@@ -245,7 +245,7 @@ body, #root {
   width: 400px;
   background: white;
   padding: 20px;
-  border-radius: 12px;
+  border-radius: 5px;
   border: 1.5px solid gold;
   text-align: center;
 }
@@ -271,7 +271,7 @@ body, #root {
 
 input {
   width: 100%;
-  border-radius: 6px;
+  border-radius: 5px;
   padding: 10px 10px;
   margin-bottom: 25px;
   background-color: white;
@@ -300,7 +300,7 @@ input {
 .input-wrapper input {
   width: 100%;
   height: 40px;
-  border-radius: 6px;
+  border-radius: 5px;
   padding: 10px 40px 10px 10px;
   margin-bottom: 15px;
   border: 1.5px solid rgb(175, 175, 175);  
