@@ -275,6 +275,7 @@ input {
   padding: 10px 10px;
   margin-bottom: 25px;
   background-color: white;
+  color: rgb(175, 175, 175);
   border: 1.5px solid rgb(175, 175, 175);
 }
 
