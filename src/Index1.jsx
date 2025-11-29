@@ -58,19 +58,23 @@ export default function Index1({ irPara }) {
         <h2 className="alerta-titulo">ALERTAS!</h2>
 
         <button className="alerta-btn validade">
-          <span>⚠️</span> Notificação de Validade!
+          <span className="validade-icone"></span>
+          <span>Notificação de Validade!</span> 
         </button>
 
         <button className="alerta-btn estoque">
-          <span>📦</span> Notificação de Estoque!
+          <span className="estoque-icone"></span>
+          <span>Notificação de Estoque!</span> 
         </button>
 
         <button className="alerta-btn fornecedor">
-          <span>📄</span> Notificação de Fornecedor!
+          <span className="fornecedor-icone"></span>
+          <span>Notificação de Fornecedor!</span> 
         </button>
 
         <button className="alerta-btn boleto">
-          <span>💵</span> Notificação de Boleto!
+          <span className="boleto-icone"></span>
+          <span>Notificação de Boleto!</span> 
         </button>
       </div>
       </div>

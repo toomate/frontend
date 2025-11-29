@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import Cadastro from "./cadastro";
 import Login from "./login";
-import Index1 from "./index1";
+import Index1 from "./Index1";
 import './App.css'
 
 

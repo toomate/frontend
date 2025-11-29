@@ -5,7 +5,7 @@
   height: 100%;
   min-width: 1390px;
   min-height: 100vh;
-  background-color: #f3f0e8;
+  background-color: white;
   color: black;
   margin: 0 auto;
 }
@@ -17,7 +17,7 @@
   gap: 20px;
   padding: 5px 25px;
   background-color: white;
-  border-bottom: 1.5px solid #b88b09;
+  border-bottom: 3px solid black;
 }
 
 .hamburger-btn {
@@ -65,9 +65,8 @@
   justify-content: center;
   align-items: center;
   height: 35px;
-  background: brown;
+  background: #c92c2c;
   color: white;
-  border: 1.5px solid #b88b09;
   border-radius: 6px;
   font-weight: bold;
   margin-right: 0;
@@ -93,7 +92,7 @@
   margin: 0 10px;
   padding: 10px;
   background-color: white;
-  border: 1.5px solid #b88b09;
+  border: 1px solid gold;
   color: black;
   border-radius: 10px;
   font-weight: bold;
@@ -111,7 +110,8 @@
 
 .card {
   background-color: white;
-  border: 1.5px solid #b88b09;
+  border: 1px solid gold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.30);
   padding: 10px;
   height: 125px;
   border-radius: 10px;
@@ -140,7 +140,7 @@
   flex: 3;
   background-color: white;
   border-radius: 12px;
-  border: 1.5px solid #b88b09;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.40);
   padding: 12px;
   background-image: url(./images/grafico.png);
   background-size: contain;
@@ -155,7 +155,7 @@
   background: white;
   border-radius: 12px;
   padding: 10px;
-  border: 1.5px solid #b88b09;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.40);
   min-height: 200px;
   max-height: 350px;
 }
@@ -164,6 +164,7 @@
   text-align: center;
   font-size: 22px;
   font-weight: bold;
+  font-style: italic;
   color: #c92c2c;
   margin-bottom: 15px;
 }
@@ -182,12 +183,35 @@
   background-color: white;
   color: black;
   margin-bottom: 12px;
-  border: 1.5px solid #b88b09;
 }
 
 .validade, .estoque, .fornecedor, .boleto {
-  background-color: #fff0f0;
+  background-color: #ffeaea;
   padding: 10px;
+}
+
+.validade-icone, .estoque-icone, .fornecedor-icone, .boleto-icone {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.validade-icone {
+  background-image: url(./images/validade.png);
+}
+
+.estoque-icone {
+  background-image: url(./images/estoque.png);
+}
+
+.fornecedor-icone {
+  background-image: url(./images/fornecedor.png);
+}
+
+.boleto-icone {
+  background-image: url(./images/boleto.png);
 }
 
 * {
@@ -222,7 +246,7 @@ body, #root {
   background: white;
   padding: 20px;
   border-radius: 12px;
-  border: 1.5px solid #b88b09;
+  border: 1.5px solid gold;
   text-align: center;
 }
 
@@ -250,18 +274,18 @@ input {
   border-radius: 6px;
   padding: 10px 10px;
   margin-bottom: 25px;
-  background-color: rgb(175, 175, 175);
-  border: 1.5px solid #b88b09;
+  background-color: white;
+  border: 1.5px solid rgb(175, 175, 175);
 }
 
 .auth-switch {
-  color: #b88b09;
+  color: black;
   margin-top: 15px;
   font-size: 14px;
 }
 
 .auth-switch span {
-  color: 1.5px solid #b88b09;
+  color: 1.5px solid gold;
   cursor: pointer;
   font-weight: bold;
 }
@@ -279,8 +303,7 @@ input {
   border-radius: 6px;
   padding: 10px 40px 10px 10px;
   margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border: 1.5px solid #b88b09;
+  border: 1.5px solid rgb(175, 175, 175);  
 }
 
 .eye-btn {
