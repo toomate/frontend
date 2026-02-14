@@ -514,3 +514,120 @@ input {
     font-size: 14px;
   }
 }
+
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  width: 420px;
+  background: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+.box-cadastro {
+  width: 480px;
+  border-color: unset;
+  border-color: black;
+}
+
+.titulo {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  height: 65px;
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  gap: 6px;
+}
+
+.form-group label {
+  text-align: start;
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+
+input,
+select {
+  height: 40px;
+  width: 300px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+  color: #ccc;
+}
+
+input::placeholder {
+  color: #ccc;
+}
+
+input {
+  margin: auto;
+  color: #000;
+}
+
+.select-wrapper {
+  width: 300px;
+  display: flex;
+  color: black;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 40px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  padding: 0 5px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.btn {
+  height: 42px;
+  width: 48%;
+  border-radius: 6px;
+  background: red;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-cancelar {
+  background: red;
+}
+
+.btn-voltar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000;
+}
