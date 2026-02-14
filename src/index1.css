@@ -685,7 +685,7 @@ input {
   align-items: center;
   font-weight: bold;
   margin-bottom: 10px;
-  color: #000;
+  color: black;
 }
 
 .modal-header button {
@@ -731,4 +731,96 @@ input {
 
 .icone-sucesso {
   color: green;
+}
+
+.boletos {
+  font-family: "Arial", sans-serif;
+  height: 100%;
+  min-width: 1380px;
+  min-height: 100vh;
+  background-color: white;
+  color: black;
+  margin: 0 auto;
+}
+
+.conteudo span {
+  display: flex;
+  align-items: flex-start;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.card-pagamentos {
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.filtros {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filtros select {
+  color: black;
+  background-color: #ccc;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border-radius: 6px;
+  background-color: #ccc !important;
+}
+
+.busca input {
+  background-color: transparent;
+}
+
+.busca input::placeholder {
+  color: black !important;
+}
+
+.btn-calendario {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.item-pagamento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+  border-top: 1px solid #ccc;
+}
+
+.vencimento {
+  text-align: left;
+} 
+
+.descricao {
+  background-color: gainsboro !important;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 6px 0;
+}
+
+.valor {
+  background: #ccc;
+  padding: 6px 10px;
+  border-radius: 6px;
+  width: 120px;
+}
+
+.btn-pago {
+  background: green;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
 }
