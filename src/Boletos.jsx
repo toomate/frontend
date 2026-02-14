@@ -2,6 +2,7 @@ import React from "react";
 import "./index1.css";
 import { Menu } from "lucide-react";
 import "./index1.css";
+import { Menu, CalendarDays, Search } from "lucide-react";
 
 export default function Index1({ irPara }) {
   return (
