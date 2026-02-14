@@ -6,7 +6,7 @@ export default function CadastroInsumo({ irPara }) {
   return (
     <div className="container">
       <div className="box box-cadastro">
-        
+      
         <button className="btn-voltar" onClick={() => irPara("dashboard")}>
           <ArrowLeft size={20} />
         </button>
@@ -27,8 +27,8 @@ export default function CadastroInsumo({ irPara }) {
               <option>Bebidas</option>
               <option>Limpeza</option>
             </select>
-            <button className="icon-btn">
-              <Plus size={16} />
+            <button className="icon-btn"> 
+              +
             </button>
           </div>
         </div>
