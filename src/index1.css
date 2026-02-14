@@ -536,7 +536,7 @@ input {
 .box-cadastro {
   width: 480px;
   border-color: unset;
-  border-color: black;
+  border: 1.5px solid gold;
 }
 
 .titulo {
