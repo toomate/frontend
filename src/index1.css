@@ -608,16 +608,6 @@ input {
   margin-top: 16px;
 }
 
-.btn {
-  height: 42px;
-  width: 48%;
-  border-radius: 6px;
-  background: red;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-}
-
 .btn-cancelar {
   background: red;
 }
