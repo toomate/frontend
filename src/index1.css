@@ -631,3 +631,40 @@ input {
   cursor: pointer;
   color: #000;
 }
+
+.form-group1 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.form-group2 {
+  height: 65px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  gap: 6px;
+  align-items: flex-start;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+
+.form-group2 input{
+  width: 140px;
+  font-size: 14px;
+  color: black;
+}
+
+.botao-upload {
+  color: white;
+  padding: 3px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.botao-upload input {
+  padding: 10px;
+}
