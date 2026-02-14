@@ -668,3 +668,77 @@ input {
 .botao-upload input {
   padding: 10px;
 }
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 320px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.modal-header button {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  color: black;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn-cancelar1, .btn-salvar1, .btn-ok{
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #c92c2c;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.modal-sucesso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.icone-sucesso {
+  color: green;
+}
