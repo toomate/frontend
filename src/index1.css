@@ -734,13 +734,21 @@ input {
 }
 
 .boletos {
+  display: flex;
+  flex-direction: column;
   font-family: "Arial", sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
   height: 100%;
+  width: 100%;
   min-width: 1380px;
   min-height: 100vh;
   background-color: white;
   color: black;
   margin: 0 auto;
+  z-index: 9999;
+
 }
 
 .conteudo span {
@@ -772,6 +780,7 @@ input {
 .busca {
   display: flex;
   align-items: center;
+  padding: 0 10px;
   gap: 5px;
   border-radius: 6px;
   background-color: #ccc !important;
@@ -789,6 +798,7 @@ input {
   background-color: white;
   border: none;
   cursor: pointer;
+  color: black;
 }
 
 .item-pagamento {
@@ -823,4 +833,104 @@ input {
   padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
+}
+
+.react-calendar__navigation button {
+  font-size: 18px;
+  color: black;
+  background: none;
+}
+
+.modal-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+  background-color: white;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body-calendario {
+  flex: 1;
+  padding: 5px 10px;
+  overflow: hidden;
+  display: flex;
+}
+
+.modal-body-calendario .react-calendar {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  border: none;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.react-calendar__navigation {
+  margin: 2px !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px;
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__prev-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button,
+.react-calendar__navigation__label {
+  padding: 3px;
+}
+
+.react-calendar__tile abbr {
+  font-weight: bold;
+  font-size: 13px;
+  color: black;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  grid-template-columns: repeat(7, 1fr);
+  padding: 0;
+}
+
+.react-calendar__month-view__weekdays__weekday--weekend {
+  font-size: 12px;
+  color: red;
+  padding: 0;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #c92c2c;
+}
+
+.conteudo-dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 11px;
+}
+
+.react-calendar__month-view__days {
+  border: #555;
+}
+
+.nome-divida, .valor {
+  color: black;
+}
+
+.status.pago {
+  color: green;
+  font-weight: bold;
+  padding: 0;
+}
+
+.valor {
+  padding: 2px;
 }

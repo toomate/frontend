@@ -1,8 +1,13 @@
 import React from "react";
+import { useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 import "./index1.css";
 import { Menu, CalendarDays, Search } from "lucide-react";
 
 export default function Boletos({ irPara }) {
+const [abrirCalendario, setAbrirCalendario] = useState(false);
+const [dataSelecionada, setDataSelecionada] = useState(new Date());
   return (
     <div className="boletos">
       <header className="header">
@@ -15,7 +20,7 @@ export default function Boletos({ irPara }) {
 
           <div className="restaurante">
             <div className="restaurante-name">Toomate Bistrô</div>
-            <div className="restaurante-subnome">Usuário 1</div>
+            <div className="restaurante-subnome">Kaio</div>
           </div>
         </div>
 
@@ -63,7 +68,10 @@ export default function Boletos({ irPara }) {
               <input placeholder="Busca por nome" />
             </div>
 
-            <button className="btn-calendario">
+            <button
+              className="btn-calendario"
+              onClick={() => setAbrirCalendario(true)}
+            >
               <CalendarDays size={20} />
             </button>
           </div>
@@ -75,8 +83,49 @@ export default function Boletos({ irPara }) {
           </div>
         </div>
       </div>
+      {abrirCalendario && (
+        <div className="modal-fullscreen">
+          <header className="header">
+            <div className="lado-esquerdo">
+              <button className="hamburger-btn">
+                <Menu size={28} color="#b88b09" />
+              </button>
+
+              <div className="logo-circulo"></div>
+
+              <div className="restaurante">
+                <div className="restaurante-name">Toomate Bistrô</div>
+                <div className="restaurante-subnome">Kaio</div>
+              </div>
+            </div>
+
+            <button onClick={() => setAbrirCalendario(false)} className="btn">
+              Sair
+            </button>
+          </header>
+          
+          <div className="modal-body-calendario">
+            <Calendar
+              onChange={(date) => setDataSelecionada(date)}
+              value={dataSelecionada}
+              tileContent={({ date, view }) => {
+                if (view === "month") {
+                  return (
+                    <div className="conteudo-dia">
+                      <span className="status pago">Pago ✓</span>
+                      <span className="nome-divida">Nome Divida</span>
+                      <span className="valor">R$ 0000,00</span>
+                    </div>
+                  );
+                }
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
+  
 }
 
 function ItemPagamento() {
