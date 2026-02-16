@@ -1,0 +1,53 @@
+.categorias-container {
+    width: 80%;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    background-color: #F8ECC6;
+    font-weight: 500;
+    color: black;
+    border-bottom: 2.5px solid gray;
+}
+
+.categoria-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 8%;
+}
+
+.menu-categoria {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+}
+
+.categorias {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.categoria {
+    height: 100%;
+    width: 18%;
+    padding-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.categoria,
+.menu-icon {
+    border: 1.2px solid #6B4423;
+    border-radius: 5px;
+}
+
+#active {
+    background-color: #6B4423;
+    color: #F8ECC6;
+}
