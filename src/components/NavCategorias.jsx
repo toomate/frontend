@@ -3,8 +3,6 @@ import { Menu } from "lucide-react";
 import "./NavCategorias.css"
 
 export function NavCategorias() {
-    const [user, setUser] = useState([])
-
     return (
         <div className="categorias-container">
             <div className="categorias">

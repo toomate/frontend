@@ -1,0 +1,31 @@
+.button-container {
+    display: flex;
+    border: 1.5px solid #6B4423;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    width: 12%;
+    height: 5.5vh;
+    background-color: #F8ECC6;
+    color: black;
+    cursor: pointer;
+}
+
+.button-value {
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    font-weight: 450;
+}
+
+.icon-container {
+    margin-left: auto;
+    width: 20%;
+    display: flex;
+    align-items: center;
+}
+
+.button-icon {
+    display: flex;
+    align-items: center;
+}
