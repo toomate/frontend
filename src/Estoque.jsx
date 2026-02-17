@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "./components/Navbar/Navbar";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import { Cabecalho } from "./components/Cabecalho/Cabecalho";
@@ -7,10 +7,19 @@ import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
 import { Button } from "./components/Button/Button";
 import "./Estoque.css"
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
-import { EstoqueItem } from "./components/EstoqueItem/EstoqueItem";
+import { api } from "./provider/Api";
 
 export function Estoque() {
+    const [grupo, setGrupo] = useState([])
 
+    useEffect(() => {
+        api.get('/insumos')
+        .then((res) => {
+            setGrupo(res.data)
+        })
+    }, [])
+
+    console.log(grupo)
     const dados = [
         {
             id: 1,
@@ -39,6 +48,40 @@ export function Estoque() {
                 {
                     id: 10,
                     nome: "Camil",
+                    qtd: 13,
+                    medida: "KG",
+                    dtVencimento: "10/07/2004",
+                    estoque: 12
+                }
+            ]
+        }, 
+        {
+            id: 4,
+            insumo: "Refrigereco",
+            qtd: 13,
+            medida: "KG",
+            dtVencimento: "10/07/2004",
+            itens: [
+                {
+                    id: 10,
+                    nome: "Coca-Cola",
+                    qtd: 13,
+                    medida: "KG",
+                    dtVencimento: "10/07/2004",
+                    estoque: 12
+                }
+            ]
+        },
+        {
+            id: 6,
+            insumo: "Saguadin",
+            qtd: 13,
+            medida: "KG",
+            dtVencimento: "10/07/2004",
+            itens: [
+                {
+                    id: 10,
+                    nome: "Doritão",
                     qtd: 13,
                     medida: "KG",
                     dtVencimento: "10/07/2004",
