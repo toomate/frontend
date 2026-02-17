@@ -1,0 +1,43 @@
+.linha-estoque {
+    display: grid;
+    grid-template-columns: 170px 1fr 1fr 1fr 1fr 12px;
+    align-items: center;
+    width: 95%;
+}
+
+.linha-estoque>* {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.grupo-container {
+    border-bottom: 1px solid black;
+    background-color: white;
+    color: black;
+    height: 12vh;
+    font-size: medium;
+    font-weight: 500;
+}
+
+.insumo {
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
+.insumo-nome {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: larger;
+    border: 1px solid black;
+    border-radius: 5px;
+    height: 80%;
+    width: 80%;
+}
+
+.icone {
+    cursor: pointer;
+}

@@ -26,8 +26,10 @@
     margin: 0;
     border: 0;
     border-radius: 0;
-    height: 65%;
     color: black;
+    height: 100%;
+    padding: 0 10px;
+    border: none;
 }
 
 .search-input:focus {
