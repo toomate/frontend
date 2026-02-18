@@ -13,7 +13,7 @@ export function EstoqueGrupo({ grupo }) {
                 transition: "transform 0.2s ease"
             }} /></div>
                 <div className="insumo-nome">{grupo.insumo}</div>
-            </div> <div className="qtd-total">{grupo.qtd}</div> <div className="medida">{grupo.medida}</div> <div className="dt-vencimento">{grupo.dtVencimento}</div><div className="controle"></div>
+            </div> <div className="qtd-total">{grupo.qtdTotal}</div> <div className="medida">{grupo.medida}</div> <div className="dt-vencimento">{grupo.dtVencimento}</div><div className="controle"></div>
         </div>
         {expandido && (
             <EstoqueItem elementos={grupo.itens} />

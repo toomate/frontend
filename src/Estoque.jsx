@@ -13,85 +13,13 @@ export function Estoque() {
     const [grupo, setGrupo] = useState([])
 
     useEffect(() => {
-        api.get('/insumos')
+        api.get('/lotes/estoque')
         .then((res) => {
             setGrupo(res.data)
         })
     }, [])
 
     console.log(grupo)
-    const dados = [
-        {
-            id: 1,
-            insumo: "Arroz",
-            qtd: 13,
-            medida: "KG",
-            dtVencimento: "10/07/2004",
-            itens: [
-                {
-                    id: 10,
-                    nome: "Tio João",
-                    qtd: 13,
-                    medida: "KG",
-                    dtVencimento: "10/07/2004",
-                    estoque: 12
-                }
-            ]
-        },
-        {
-            id: 2,
-            insumo: "Feijão",
-            qtd: 113,
-            medida: "KG",
-            dtVencimento: "11/07/2004",
-            itens: [
-                {
-                    id: 10,
-                    nome: "Camil",
-                    qtd: 13,
-                    medida: "KG",
-                    dtVencimento: "10/07/2004",
-                    estoque: 12
-                }
-            ]
-        }, 
-        {
-            id: 4,
-            insumo: "Refrigereco",
-            qtd: 13,
-            medida: "KG",
-            dtVencimento: "10/07/2004",
-            itens: [
-                {
-                    id: 10,
-                    nome: "Coca-Cola",
-                    qtd: 13,
-                    medida: "KG",
-                    dtVencimento: "10/07/2004",
-                    estoque: 12
-                }
-            ]
-        },
-        {
-            id: 6,
-            insumo: "Saguadin",
-            qtd: 13,
-            medida: "KG",
-            dtVencimento: "10/07/2004",
-            itens: [
-                {
-                    id: 10,
-                    nome: "Doritão",
-                    qtd: 13,
-                    medida: "KG",
-                    dtVencimento: "10/07/2004",
-                    estoque: 12
-                }
-            ]
-        }
-    ]
-
-
     function ButtonPlus() {
         return (
             <div className="plus-container">
@@ -120,8 +48,8 @@ export function Estoque() {
                 </div>
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
-                    {dados.map(dado => (
-                        <EstoqueGrupo key={dado.id} grupo={dado}/>
+                    {grupo.map(atual => (
+                        <EstoqueGrupo key={atual.fkCategoria} grupo={atual}/>
                     ))}
                 </div>
             </div>
