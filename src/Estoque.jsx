@@ -19,7 +19,7 @@ export function Estoque() {
         })
     }, [])
 
-    console.log(grupo)
+    console.log(grupo.data)
     function ButtonPlus() {
         return (
             <div className="plus-container">
@@ -49,7 +49,7 @@ export function Estoque() {
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
                     {grupo.map(atual => (
-                        <EstoqueGrupo key={atual.fkCategoria} grupo={atual}/>
+                        <EstoqueGrupo key={atual.fkInsumo} grupo={atual}/>
                     ))}
                 </div>
             </div>
