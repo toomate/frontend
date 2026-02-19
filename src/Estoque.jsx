@@ -12,15 +12,28 @@ import { api } from "./provider/Api";
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
-    const parametro = categoriaAtiva === "Geral" ? "" : `/${categoriaAtiva}`
+    const [pesquisa, setPesquisa] = useState("")
+
+    const pesquisar = (valor) => {
+        setPesquisa(valor)
+        if (valor.length > 0) {
+            setCategoriaAtiva("Geral")
+        }
+    };
 
     useEffect(() => {
+        let parametro = categoriaAtiva === "Geral" ? "" : `/${categoriaAtiva}`
+
+        if(pesquisa.length > 0){
+            parametro = `/search?insumo=${pesquisa}`
+        } 
+        
         api.get(`/lotes/estoque${parametro}`)
-        .then((res) => {
-            console.log("console", res.data)
-            setGrupo(res.data)
-        })
-    }, [categoriaAtiva])
+            .then((res) => {
+                console.log("console", res.data)
+                setGrupo(res.data)
+            })
+    }, [categoriaAtiva, pesquisa])
 
     function ButtonPlus() {
         return (
@@ -42,7 +55,7 @@ export function Estoque() {
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} />
                 </div>
                 <div className="botoes-container">
-                    <Search Icone={SearchIcon} />
+                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                     <ButtonPlus />
                     <Button texto="Rotinas" Icone={Bookmark} />
                     <Button texto="Salvar" Icone={Save} />
@@ -51,7 +64,7 @@ export function Estoque() {
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
                     {grupo.length > 0 ? grupo.map(atual => (
-                        <EstoqueGrupo key={atual.fkInsumo} grupo={atual}/>
+                        <EstoqueGrupo key={atual.fkInsumo} grupo={atual} />
                     )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                 </div>
             </div>
