@@ -3,7 +3,7 @@ import { ChevronDown } from "lucide-react";
 import "./EstoqueGrupo.css"
 import { EstoqueItem } from "../EstoqueItem/EstoqueItem";
 
-export function EstoqueGrupo({ grupo }) {
+export function EstoqueGrupo({ grupo, alterarValor}) {
     console.log(grupo.insumo)
     const [expandido, setExpandido] = useState(false);
     return (<>
@@ -16,7 +16,7 @@ export function EstoqueGrupo({ grupo }) {
             </div> <div className="qtd-total">{grupo.qtdTotal}</div> <div className="medida">{grupo.medida}</div> <div className="dt-vencimento">{grupo.dtVencimento}</div><div className="controle"></div>
         </div>
         {expandido && (
-            <EstoqueItem elementos={grupo.itens} />
+            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} />
         )}
     </>
 

@@ -21,13 +21,29 @@ export function Estoque() {
         }
     };
 
+    const alterarQuantidade = (idLote, operacao) => {
+        const novoGrupo = grupo.map(item => {
+            const itensAtualizados = item.itens.map(atual => {
+                if (atual.idLote === idLote) {
+                    return {
+                        ...atual,
+                        quantidadeMedida: operacao === 'somar' ? atual.quantidadeMedida + 1 : atual.quantidadeMedida - 1
+                    }
+                }
+                return atual
+            })
+            return { ...item, itens: itensAtualizados}
+        })
+        setGrupo(novoGrupo)
+    }
+
     useEffect(() => {
         let parametro = categoriaAtiva === "Geral" ? "" : `/${categoriaAtiva}`
 
-        if(pesquisa.length > 0){
+        if (pesquisa.length > 0) {
             parametro = `/search?insumo=${pesquisa}`
-        } 
-        
+        }
+
         api.get(`/lotes/estoque${parametro}`)
             .then((res) => {
                 console.log("console", res.data)
@@ -64,7 +80,7 @@ export function Estoque() {
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
                     {grupo.length > 0 ? grupo.map(atual => (
-                        <EstoqueGrupo key={atual.fkInsumo} grupo={atual} />
+                        <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} />
                     )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                 </div>
             </div>
