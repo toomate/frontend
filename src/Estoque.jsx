@@ -11,15 +11,17 @@ import { api } from "./provider/Api";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
+    const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
+    const parametro = categoriaAtiva === "Geral" ? "" : `/${categoriaAtiva}`
 
     useEffect(() => {
-        api.get('/lotes/estoque')
+        api.get(`/lotes/estoque${parametro}`)
         .then((res) => {
+            console.log("console", res.data)
             setGrupo(res.data)
         })
-    }, [])
+    }, [categoriaAtiva])
 
-    console.log(grupo.data)
     function ButtonPlus() {
         return (
             <div className="plus-container">
@@ -37,7 +39,7 @@ export function Estoque() {
             </div>
             <div className="categoria-container">
                 <div className="nav-categorias-container">
-                    <NavCategorias />
+                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} />
                 </div>
                 <div className="botoes-container">
                     <Search Icone={SearchIcon} />
@@ -48,9 +50,9 @@ export function Estoque() {
                 </div>
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
-                    {grupo.map(atual => (
+                    {grupo.length > 0 ? grupo.map(atual => (
                         <EstoqueGrupo key={atual.fkInsumo} grupo={atual}/>
-                    ))}
+                    )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                 </div>
             </div>
         </div>
