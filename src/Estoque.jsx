@@ -13,6 +13,7 @@ export function Estoque() {
     const [grupo, setGrupo] = useState([])
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [pesquisa, setPesquisa] = useState("")
+    const [mudancas, setMudancas] = useState([])
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
@@ -22,21 +23,48 @@ export function Estoque() {
     };
 
     const alterarQuantidade = (idLote, operacao) => {
+        let novaQtd = null;
+        let nomeProduto = null;
+
         const novoGrupo = grupo.map(item => {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
+                    novaQtd = operacao === 'somar' ? atual.quantidadeMedida + 1 : atual.quantidadeMedida - 1
+                    nomeProduto = atual.nomeMarca
+
                     return {
                         ...atual,
-                        quantidadeMedida: operacao === 'somar' ? atual.quantidadeMedida + 1 : atual.quantidadeMedida - 1
+                        quantidadeMedida: novaQtd
                     }
+                    
                 }
                 return atual
             })
-            return { ...item, itens: itensAtualizados}
+            return { ...item, itens: itensAtualizados }
         })
         setGrupo(novoGrupo)
-    }
 
+        setMudancas(prev => {
+            const existente = prev.find(m => m.id === idLote)
+            if (existente) {
+                return prev.map(m => 
+                    m.id === idLote
+                    ? {...m, quantidadeMedida: novaQtd}
+                    : m
+                )
+            }
+
+            return [
+                ...prev,
+                {
+                    id: idLote,
+                    produto: nomeProduto,
+                    quantidadeMedida: novaQtd
+                }
+            ]
+        })
+    }
+    
     useEffect(() => {
         let parametro = categoriaAtiva === "Geral" ? "" : `/${categoriaAtiva}`
 
@@ -46,7 +74,6 @@ export function Estoque() {
 
         api.get(`/lotes/estoque${parametro}`)
             .then((res) => {
-                console.log("console", res.data)
                 setGrupo(res.data)
             })
     }, [categoriaAtiva, pesquisa])
@@ -60,7 +87,6 @@ export function Estoque() {
             </div>
         )
     }
-
     return (
         <div className="estoque-container">
             <div className="nav-header">

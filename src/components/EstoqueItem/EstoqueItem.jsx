@@ -14,7 +14,7 @@ export function EstoqueItem(props) {
                 <div className="medida">{atual.unidadeMedida}</div>
                 <div className="dt-vencimento">{atual.dataValidade}</div>
                 <div className="controle-container">
-                    <div className="controle"><CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={15} /> {atual.quantidadeMedida} <CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={15} /></div>
+                    <div className="controle"><CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />{atual.quantidadeMedida}<CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} /></div>
                 </div>
             </div>
         </React.Fragment>)}
