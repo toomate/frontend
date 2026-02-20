@@ -26,10 +26,6 @@ export function Estoque() {
 
 
     const abrirCard = () => {
-        // if (mudancas.length === 0) {
-        //     alert("Não há mudanças para salvar!");
-        //     return;
-        // }
         setExibirRelatorio(true)
     }
 

@@ -42,10 +42,6 @@
     font-size: larger;
 }
 
-.categoria:hover{
-    opacity: 0.7;
-}
-
 .categoria,
 .menu-categoria {
     border: 1.2px solid #6B4423;
@@ -54,5 +50,6 @@
 
 #active {
     background-color: #6B4423;
+    transition: background-color 0.28s ease;
     color: #F8ECC6;
 }
