@@ -4,7 +4,7 @@ import './index.css'
 import App from './App.jsx'
 import { Navbar } from './components/Navbar/Navbar.jsx'
 import { NavCategorias } from './components/NavCategorias/NavCategorias.jsx'
-import { Estoque } from './estoque.jsx'
+import { Estoque } from './Estoque.jsx'
 import { Button } from './components/Button/Button.jsx'
 import { Bookmark, SearchIcon } from 'lucide-react'
 import { Search } from './components/Search/Search.jsx'
@@ -16,8 +16,8 @@ import { CardRelatorio } from './components/CardRelatorio/CardRelatorio.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* <App /> */}
-    {/* <Estoque /> */}
-    <CardRelatorio props={[{
+    <Estoque />
+    {/* <CardRelatorio props={[{
       id: 1,
       produto: "nomeProduto",
       quantidadeMedida: 23
@@ -27,6 +27,6 @@ createRoot(document.getElementById('root')).render(
       produto: "nomeProduto2",
       quantidadeMedida: 24
     }
-    ]} />
+    ]} /> */}
   </StrictMode>,
 )

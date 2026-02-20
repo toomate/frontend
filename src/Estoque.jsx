@@ -7,7 +7,7 @@ import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
 import { Button } from "./components/Button/Button";
 import "./Estoque.css"
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
-import { api } from "./provider/Api";
+import { api, dynamicGetEstoque} from "./provider/Api";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
@@ -66,16 +66,7 @@ export function Estoque() {
     }
     
     useEffect(() => {
-        let parametro = categoriaAtiva === "Geral" ? "" : `/${categoriaAtiva}`
-
-        if (pesquisa.length > 0) {
-            parametro = `/search?insumo=${pesquisa}`
-        }
-
-        api.get(`/lotes/estoque${parametro}`)
-            .then((res) => {
-                setGrupo(res.data)
-            })
+        dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
     }, [categoriaAtiva, pesquisa])
 
     function ButtonPlus() {
