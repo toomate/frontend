@@ -11,10 +11,22 @@ import { Search } from './components/Search/Search.jsx'
 import { Cabecalho } from './components/Cabecalho/Cabecalho.jsx'
 import { EstoqueGrupo } from './components/EstoqueGrupo/EstoqueGrupo.jsx'
 import { EstoqueItem } from './components/EstoqueItem/EstoqueItem.jsx'
+import { CardRelatorio } from './components/CardRelatorio/CardRelatorio.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* <App /> */}
-    <Estoque />
+    {/* <Estoque /> */}
+    <CardRelatorio props={[{
+      id: 1,
+      produto: "nomeProduto",
+      quantidadeMedida: 23
+    },
+    {
+      id: 2,
+      produto: "nomeProduto2",
+      quantidadeMedida: 24
+    }
+    ]} />
   </StrictMode>,
 )
