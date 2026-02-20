@@ -1,0 +1,8 @@
+/* célula de fundo no month view */
+.rbc-month-view .rbc-day-bg { background-color: black; }
+
+/* célula que contém eventos */
+.rbc-month-view .rbc-day-slot { padding: 4px; }
+
+/* eventos dentro da célula */
+.rbc-event { border-radius: 0; }
