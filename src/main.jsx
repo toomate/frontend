@@ -17,16 +17,5 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     {/* <App /> */}
     <Estoque />
-    {/* <CardRelatorio props={[{
-      id: 1,
-      produto: "nomeProduto",
-      quantidadeMedida: 23
-    },
-    {
-      id: 2,
-      produto: "nomeProduto2",
-      quantidadeMedida: 24
-    }
-    ]} /> */}
   </StrictMode>,
 )

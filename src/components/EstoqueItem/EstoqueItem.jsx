@@ -3,7 +3,6 @@ import "./EstoqueItem.css"
 import React from "react";
 
 export function EstoqueItem(props) {
-    console.log(props.elementos)
     return (
         <>{props.elementos.map((atual) => <React.Fragment key={atual.idInsumo}>
             <div className="linha-estoque item-container">

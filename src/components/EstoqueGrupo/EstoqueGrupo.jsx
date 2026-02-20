@@ -4,7 +4,6 @@ import "./EstoqueGrupo.css"
 import { EstoqueItem } from "../EstoqueItem/EstoqueItem";
 
 export function EstoqueGrupo({ grupo, alterarValor}) {
-    console.log(grupo.insumo)
     const [expandido, setExpandido] = useState(false);
     return (<>
         <div className="linha-estoque grupo-container">

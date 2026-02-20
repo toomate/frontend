@@ -7,13 +7,15 @@ import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
 import { Button } from "./components/Button/Button";
 import "./Estoque.css"
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
-import { api, dynamicGetEstoque} from "./provider/Api";
+import { api, dynamicGetEstoque } from "./provider/Api";
+import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
+    const [exibirRelatorio, setExibirRelatorio] = useState(false);
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
@@ -21,6 +23,15 @@ export function Estoque() {
             setCategoriaAtiva("Geral")
         }
     };
+
+
+    const abrirCard = () => {
+        // if (mudancas.length === 0) {
+        //     alert("Não há mudanças para salvar!");
+        //     return;
+        // }
+        setExibirRelatorio(true)
+    }
 
     const alterarQuantidade = (idLote, operacao) => {
         let novaQtd = null;
@@ -36,7 +47,7 @@ export function Estoque() {
                         ...atual,
                         quantidadeMedida: novaQtd
                     }
-                    
+
                 }
                 return atual
             })
@@ -47,10 +58,10 @@ export function Estoque() {
         setMudancas(prev => {
             const existente = prev.find(m => m.id === idLote)
             if (existente) {
-                return prev.map(m => 
+                return prev.map(m =>
                     m.id === idLote
-                    ? {...m, quantidadeMedida: novaQtd}
-                    : m
+                        ? { ...m, quantidadeMedida: novaQtd }
+                        : m
                 )
             }
 
@@ -64,7 +75,7 @@ export function Estoque() {
             ]
         })
     }
-    
+
     useEffect(() => {
         dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
     }, [categoriaAtiva, pesquisa])
@@ -80,10 +91,17 @@ export function Estoque() {
     }
     return (
         <div className="estoque-container">
+            {exibirRelatorio && (
+                <div className="escurecer">
+                    <CardRelatorio props={mudancas}
+                        fechar={() => setExibirRelatorio(false)} />
+                </div>
+            )}  
             <div className="nav-header">
                 <Navbar />
             </div>
             <div className="categoria-container">
+                
                 <div className="nav-categorias-container">
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} />
                 </div>
@@ -91,7 +109,7 @@ export function Estoque() {
                     <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                     <ButtonPlus />
                     <Button texto="Rotinas" Icone={Bookmark} />
-                    <Button texto="Salvar" Icone={Save} />
+                    <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                     <ScanBarcode color="black" size={30} />
                 </div>
                 <div className="insumos-container">

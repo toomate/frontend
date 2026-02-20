@@ -4,7 +4,6 @@ import "./NavCategorias.css"
 
 export function NavCategorias({categoriaAtual, aoMudarCategoria}) {
     const categorias = ["Geral", "Mercearia", "Proteínas", "Vegetais", "Grãos", "Bebidas"]
-    console.log(categoriaAtual)
     return (
         <div className="categorias-container">
             <div className="categorias">
