@@ -16,7 +16,7 @@ import { CardConfirmacao } from './components/CardConfirmacao/CardConfirmacao.js
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <App /> */}
-    <Estoque />
+    <App />
+    {/* <Estoque /> */}
   </StrictMode>,
 )
