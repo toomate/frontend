@@ -12,6 +12,7 @@ import { Cabecalho } from './components/Cabecalho/Cabecalho.jsx'
 import { EstoqueGrupo } from './components/EstoqueGrupo/EstoqueGrupo.jsx'
 import { EstoqueItem } from './components/EstoqueItem/EstoqueItem.jsx'
 import { CardRelatorio } from './components/CardRelatorio/CardRelatorio.jsx'
+import { CardConfirmacao } from './components/CardConfirmacao/CardConfirmacao.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

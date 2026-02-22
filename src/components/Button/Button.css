@@ -19,6 +19,10 @@
     font-size: large;
 }
 
+.button-value.no-icon {
+    margin-left: 0;
+}
+
 .icon-container {
     margin-left: auto;
     width: 20%;

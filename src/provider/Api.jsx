@@ -30,6 +30,16 @@ export class Lote {
             throw error;
         }
     }
+
+    static async atualizarQuantidade(mudancas) {
+        try {
+            const response = await api.patch('/lotes', mudancas)
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao tentar atualizar o estoque:", error)
+            throw error;
+        }
+    }
 }
 
 export default api;

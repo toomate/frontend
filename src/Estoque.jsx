@@ -9,6 +9,7 @@ import "./Estoque.css"
 import { Lote } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
+import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
@@ -16,6 +17,8 @@ export function Estoque() {
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
     const [exibirRelatorio, setExibirRelatorio] = useState(false);
+    const [cardRemocao, setCardRemocao] = useState(false);
+    const [idSelecionado, setIdSelecionado] = useState(0);
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
@@ -27,6 +30,31 @@ export function Estoque() {
 
     const abrirCard = () => {
         setExibirRelatorio(true)
+    }
+
+    const abrirCardRemocao = (id) => {
+        console.log("aqui")
+        setCardRemocao(true)
+        console.log(cardRemocao)
+        setIdSelecionado(id)
+        console.log(idSelecionado)
+    }
+
+    const salvarAlteracoes = async () => {
+        try {
+            await Lote.atualizarQuantidade(mudancas)
+            await Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res))
+            setExibirRelatorio(false)
+        } catch (error) {
+            console.error("Erro ao salvar alterações:", error)
+            throw error;
+        }
+    }
+
+    const removerAlteracao = () => {
+        const novoArray = mudancas.filter((e) => e.id !== Number(idSelecionado))
+        setMudancas(novoArray)
+        setCardRemocao(false)
     }
 
     const alterarQuantidade = (idLote, operacao) => {
@@ -90,14 +118,19 @@ export function Estoque() {
             {exibirRelatorio && (
                 <div className="escurecer">
                     <CardRelatorio props={mudancas}
-                        fechar={() => setExibirRelatorio(false)} />
+                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} />
                 </div>
-            )}  
+            )}
+            {cardRemocao && (
+                <div className="escurecer">
+                    <CardConfirmacao titulo={"Deseja descartar as alterações?"} fecharCard={() => {setCardRemocao(false)}} confirmar={removerAlteracao} />
+                </div>
+            )}
             <div className="nav-header">
                 <Navbar />
             </div>
             <div className="categoria-container">
-                
+
                 <div className="nav-categorias-container">
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} />
                 </div>
