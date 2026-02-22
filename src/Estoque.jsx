@@ -6,8 +6,8 @@ import { Search } from "./components/Search/Search";
 import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
 import { Button } from "./components/Button/Button";
 import "./Estoque.css"
+import { Lote } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
-import { api, dynamicGetEstoque } from "./provider/Api";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 
 export function Estoque() {
@@ -73,7 +73,7 @@ export function Estoque() {
     }
 
     useEffect(() => {
-        dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
+        Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
     }, [categoriaAtiva, pesquisa])
 
     function ButtonPlus() {

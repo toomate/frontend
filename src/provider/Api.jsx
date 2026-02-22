@@ -14,19 +14,21 @@ export const getBoletos = async () => {
     }
 };
 
-export const dynamicGetEstoque = async (categoria, busca) => {
-    try {
-        let parametro = categoria === "Geral" ? "" : `/${categoria}`
+export class Lote {
+    static async dynamicGetEstoque(categoria, busca) {
+        try {
+            let parametro = categoria === "Geral" ? "" : `/${categoria}`
 
-        if (busca.length > 0) {
-            parametro = `/search?insumo=${busca}`
+            if (busca.length > 0) {
+                parametro = `/search?insumo=${busca}`
+            }
+
+            const response = await api.get(`/lotes/estoque${parametro}`)
+            return response.data;
+        } catch (error) {
+            console.error("Erro ao buscar o estoque:", error)
+            throw error;
         }
-
-        const response = await api.get(`/lotes/estoque${parametro}`)
-        return response.data;
-    } catch (error) {
-        console.error("Erro ao buscar o estoque:", error)
-        throw error;
     }
 }
 
