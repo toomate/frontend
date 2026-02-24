@@ -18,9 +18,9 @@ import CadastroLote from './CadastroLote.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <App /> */}
+    <App />
     {/* <CadastroInsumo></CadastroInsumo> */}
-    <CadastroLote></CadastroLote>
+    {/* <CadastroLote></CadastroLote> */}
     {/* <Estoque /> */}
   </StrictMode>,
 )

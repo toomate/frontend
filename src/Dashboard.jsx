@@ -2,33 +2,19 @@ import React from "react";
 import { Menu } from "lucide-react";
 import "./index.css";
 import { Navbar } from "./components/Navbar/Navbar";
+import HeaderPadrao from "./HeaderPadrao";
 
-export default function Index1({ irPara }) {
+export default function Index({ irPara }) {
   return (
     <div className="dashboard">
-      <header className="header">
-        <div className="lado-esquerdo">
-        <button className="hamburger-btn">
-            <Menu size={28} color="#b88b09"/>
-          </button>
-          
-          <div className="logo-circulo"></div>
-
-          <div className="restaurante">
-          <div className="restaurante-name">Toomate Bistrô</div>
-            <div className="restaurante-subnome">Kaio</div>
-            </div>
-            </div>
-          
-            <button onClick={() => irPara("login")} className="btn">Sair</button>
-      </header>
-
-      {/* <Navbar /> */}
+      <HeaderPadrao/>
+      
       <nav className="menu">
-        <button>Estoque</button>
-        <button>Fornecedores</button>
-        <button>Gastos</button>
-        <button>Boletos</button>
+        <button onClick={() => irPara("Estoque")} className="btn">Estoque</button>
+        <button onClick={() => irPara("Fornecedores")} className="btn">Fornecedores</button>
+        <button onClick={() => irPara("Gastos")} className="btn">Gastos</button>
+        <button onClick={() => irPara("Boletos")} className="btn">Boletos</button>
+        <button onClick={() => irPara("Fiados")} className="btn">Fiados</button>
         <button>Fiados</button>
       </nav>
 

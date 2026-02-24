@@ -2,9 +2,8 @@ import React from "react";
 import { Menu } from "lucide-react";
 import "./index.css";
 
-export default function Index1({ irPara }) {
+export default function HeaderPadrao({ irPara }) {
   return (
-    <div className="dashboard">
       <header className="header">
         <div className="lado-esquerdo">
           <button className="hamburger-btn">
@@ -21,6 +20,5 @@ export default function Index1({ irPara }) {
           
         <button onClick={() => irPara("login")} className="btn">Sair</button>
       </header>
-    </div>
   )
 }
