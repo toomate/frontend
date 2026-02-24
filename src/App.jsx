@@ -9,7 +9,7 @@ import './App.css'
 
 
 function App() {
-  const [tela, setTela] = useState("Index1");
+  const [tela, setTela] = useState("Boletos");
 
   function irPara(t) {
     setTela(t);
@@ -17,11 +17,11 @@ function App() {
 
   return (
     <>
-      {tela === "Index1" && <Index1 irPara={irPara} />}
-      {tela === "cadastro" && <Cadastro irPara={irPara} />}
+      {tela === "Boletos" && <Boletos irPara={irPara} />}
+      {/* {tela === "cadastro" && <Cadastro irPara={irPara} />}
       {tela === "login" && <Login irPara={irPara} />}
       {tela === "dashboard" && <Index1 irPara={irPara} />}
-      {tela === "boletos" && <Boletos irPara={irPara} />}
+      {tela === "boletos" && <Boletos irPara={irPara} />} */}
     </>
   )
 }
