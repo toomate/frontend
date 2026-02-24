@@ -1,0 +1,78 @@
+.escurecer {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.762);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.icone-clicavel {
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.icone-clicavel:hover {
+    opacity: 0.7;
+}
+
+.container-card {
+    position: fixed;
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-evenly;
+    width: 45vw;
+    height: 50vh;
+    border-radius: 2px;
+}
+
+.titulo-relatorio {
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.botoes,
+.produtos {
+    width: 100%;
+}
+
+
+.produto-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.produto-linha{
+    display: grid;
+    grid-template-columns: 150px 10fr 1fr;
+    flex-direction: row;
+    width: 90%;
+}
+
+.produtos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 60%;
+    gap: 10px;
+}
+
+.botoes {
+    display: flex;
+    justify-content: space-around;
+}
+
+.produto {
+    color: black;
+    display: flex;
+    justify-content: center;
+}

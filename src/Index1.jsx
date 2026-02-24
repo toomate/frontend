@@ -2,27 +2,29 @@ import React from "react";
 import "./index1.css";
 import { Menu } from "lucide-react";
 import "./index1.css";
+import { Navbar } from "./components/Navbar/Navbar";
 
 export default function Index1({ irPara }) {
   return (
     <div className="dashboard">
-      <header className="header">
+      {/* <header className="header">
         <div className="lado-esquerdo">
-          <button className="hamburger-btn">
+        <button className="hamburger-btn">
             <Menu size={28} color="#b88b09"/>
           </button>
-
+          
           <div className="logo-circulo"></div>
 
           <div className="restaurante">
-            <div className="restaurante-name">Toomate Bistrô</div>
+          <div className="restaurante-name">Toomate Bistrô</div>
             <div className="restaurante-subnome">Kaio</div>
-          </div>
-        </div>
+            </div>
+            </div>
           
-        <button onClick={() => irPara("login")} className="btn">Sair</button>
-      </header>
+            <button onClick={() => irPara("login")} className="btn">Sair</button>
+      </header> */}
 
+      <Navbar />
       <nav className="menu">
         <button>Estoque</button>
         <button>Fornecedores</button>
@@ -54,29 +56,29 @@ export default function Index1({ irPara }) {
         <div className="grafico">
         </div>
 
-      <div className="notificacao">
-        <h2 className="alerta-titulo">ALERTAS!</h2>
+        <div className="notificacao">
+          <h2 className="alerta-titulo">ALERTAS!</h2>
 
-        <button className="alerta-btn validade">
-          <span className="validade-icone"></span>
-          <span>Notificação de Validade!</span> 
-        </button>
+          <button className="alerta-btn validade">
+            <span className="validade-icone"></span>
+            <span>Notificação de Validade!</span>
+          </button>
 
-        <button className="alerta-btn estoque">
-          <span className="estoque-icone"></span>
-          <span>Notificação de Estoque!</span> 
-        </button>
+          <button className="alerta-btn estoque">
+            <span className="estoque-icone"></span>
+            <span>Notificação de Estoque!</span>
+          </button>
 
-        <button className="alerta-btn fornecedor">
-          <span className="fornecedor-icone"></span>
-          <span>Notificação de Fornecedor!</span> 
-        </button>
+          <button className="alerta-btn fornecedor">
+            <span className="fornecedor-icone"></span>
+            <span>Notificação de Fornecedor!</span>
+          </button>
 
-        <button className="alerta-btn boleto">
-          <span className="boleto-icone"></span>
-          <span>Notificação de Boleto!</span> 
-        </button>
-      </div>
+          <button className="alerta-btn boleto">
+            <span className="boleto-icone"></span>
+            <span>Notificação de Boleto!</span>
+          </button>
+        </div>
       </div>
     </div>
   );

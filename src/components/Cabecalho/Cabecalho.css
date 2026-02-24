@@ -1,0 +1,13 @@
+.elemento-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 95%;
+    height: 5vh;
+    background-color: #6B4423;
+    color: #F8ECC6;
+    border-radius: 10px;
+    font-weight: 500;
+    font-style: italic;
+    border-bottom: 2px solid #D9D9D9 ;
+}

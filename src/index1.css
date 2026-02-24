@@ -41,7 +41,7 @@
   flex-direction: row;
   align-items: center;
   gap: 30px;
-  
+
 }
 
 .restaurante {
@@ -74,7 +74,8 @@
   margin-right: 0;
 }
 
-.menu button:hover, .btn:hover {
+.menu button:hover,
+.btn:hover {
   border: 1.5px solid;
   border-color: blue;
   opacity: 0.9;
@@ -117,7 +118,7 @@
   border-radius: 5px;
   text-align: center;
   flex: 1;
-  display: flex;            
+  display: flex;
   flex-direction: column;
   justify-content: center;
 }
@@ -185,12 +186,18 @@
   margin-bottom: 12px;
 }
 
-.validade, .estoque, .fornecedor, .boleto {
+.validade,
+.estoque,
+.fornecedor,
+.boleto {
   background-color: #ffeaea;
   padding: 10px;
 }
 
-.validade-icone, .estoque-icone, .fornecedor-icone, .boleto-icone {
+.validade-icone,
+.estoque-icone,
+.fornecedor-icone,
+.boleto-icone {
   width: 25px;
   height: 25px;
   border-radius: 50%;
@@ -220,7 +227,8 @@
   box-sizing: border-box;
 }
 
-body, #root {
+body,
+#root {
   height: 100%;
   width: 100%;
 }

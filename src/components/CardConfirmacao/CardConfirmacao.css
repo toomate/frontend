@@ -1,0 +1,14 @@
+.container-card-conf {
+    background-color: white;
+    display: flex;
+    color: black;
+    flex-direction: column;
+    width: 35vw;
+    height: 20vh;
+    justify-content: space-evenly;
+    border-radius: 2px;
+}
+
+.titulo-card-conf {
+    font-size: large;
+}

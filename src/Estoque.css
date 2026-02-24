@@ -1,0 +1,67 @@
+.estoque-container {
+    height: 100vh;
+    width: 100vw;
+    background-color: white;
+}
+
+.categoria-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 89vh;
+}
+
+.nav-categorias-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: 12vh;
+    justify-content: center;
+}
+
+.botoes-container {
+    display: flex;
+    align-items: center;
+    height: 10vh;
+    width: 100%;
+    justify-content: space-evenly;
+}
+
+.insumos-container {
+    width: 100%;
+    height: 67vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.plus-container {
+    display: flex;
+    /* border: 1.5px solid ; */
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    width: 10%;
+    height: 5.5vh;
+    background-color: #6B4423;
+    color: black;
+    cursor: pointer;
+}
+
+.plus-icon-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.plus-icon {
+    display: flex;
+    align-items: center;
+}
+
+.mensagemErro {
+    color: black;
+    font-size: 20px;
+
+}
