@@ -7,7 +7,7 @@ import { Navbar } from "./components/Navbar/Navbar";
 export default function Index1({ irPara }) {
   return (
     <div className="dashboard">
-      {/* <header className="header">
+      <header className="header">
         <div className="lado-esquerdo">
         <button className="hamburger-btn">
             <Menu size={28} color="#b88b09"/>
@@ -22,9 +22,9 @@ export default function Index1({ irPara }) {
             </div>
           
             <button onClick={() => irPara("login")} className="btn">Sair</button>
-      </header> */}
+      </header>
 
-      <Navbar />
+      {/* <Navbar /> */}
       <nav className="menu">
         <button>Estoque</button>
         <button>Fornecedores</button>
