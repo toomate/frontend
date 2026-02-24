@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./index1.css";
+import "./index.css";
 import { Menu, CalendarDays, Search } from "lucide-react";
 
 export default function Boletos({ irPara }) {

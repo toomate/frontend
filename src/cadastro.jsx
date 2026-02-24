@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./index1.css";
+import "./index.css";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Cadastro({ irPara }) {
