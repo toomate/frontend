@@ -5,11 +5,12 @@ import Index from "./Index";
 import CadastroInsumo from './CadastroInsumo';
 import CadastroLote from './CadastroLote';
 import Boletos from './Boletos';
+import Fiado from './fiado';
 import './App.css'
 
 
 function App() {
-  const [tela, setTela] = useState("Boletos");
+  const [tela, setTela] = useState("cadastro");
 
   function irPara(t) {
     setTela(t);
@@ -17,11 +18,13 @@ function App() {
 
   return (
     <>
-      {tela === "Boletos" && <Boletos irPara={irPara} />}
-      {/* {tela === "cadastro" && <Cadastro irPara={irPara} />}
+      {tela === "cadastro" && <Cadastro irPara={irPara} />}
       {tela === "login" && <Login irPara={irPara} />}
-      {tela === "dashboard" && <Index1 irPara={irPara} />}
-      {tela === "boletos" && <Boletos irPara={irPara} />} */}
+      {tela === "dashboard" && <Index irPara={irPara} />}
+      {tela === "cadastroInsumo" && <CadastroInsumo irPara={irPara} />}
+      {tela === "cadastroLote" && <CadastroLote irPara={irPara} />}
+      {tela === "boletos" && <Boletos irPara={irPara} />}
+      {tela === "fiados" && <Fiado irPara={irPara} />}
     </>
   )
 }

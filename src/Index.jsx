@@ -29,7 +29,7 @@ export default function Index1({ irPara }) {
         <button>Fornecedores</button>
         <button>Gastos</button>
         <button>Boletos</button>
-        <button>Fiados</button>
+        <button onClick={() => irPara("fiados")}>Fiados</button>
       </nav>
 
       <div className="status">
