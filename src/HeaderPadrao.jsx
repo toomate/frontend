@@ -1,17 +1,26 @@
 import React from "react";
-import { Menu } from "lucide-react";
+import { Menu, ArrowLeft } from "lucide-react";
 import "./App.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function HeaderPadrao() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   function handleLogout() {
-    // aqui você pode limpar token, localStorage, etc futuramente
-    // localStorage.removeItem("token");
-
-    navigate("/"); // volta para tela de login
+    navigate("/");
   }
+
+  function handleBack() {
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate("/dashboard");
+    }
+  }
+
+  // verifica se está na dashboard
+  const estaNaDashboard = location.pathname === "/dashboard";
 
   return (
     <header className="header">
@@ -28,9 +37,18 @@ export default function HeaderPadrao() {
         </div>
       </div>
 
-      <button onClick={handleLogout} className="btn">
-        Sair
-      </button>
+      <div style={{ display: "flex", gap: "10px" }}>
+        {/* só mostra o botão voltar se NÃO estiver na dashboard */}
+        {!estaNaDashboard && (
+          <button onClick={handleBack} className="btn">
+            <ArrowLeft size={18} /> Voltar
+          </button>
+        )}
+
+        <button onClick={handleLogout} className="btn">
+          Sair
+        </button>
+      </div>
     </header>
   );
 }
