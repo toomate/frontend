@@ -8,7 +8,7 @@ export default function Index({ irPara }) {
   return (
     <div className="dashboard">
       <HeaderPadrao/>
-      
+
       <nav className="menu">
         <button onClick={() => irPara("Estoque")} className="btn">Estoque</button>
         <button onClick={() => irPara("Fornecedores")} className="btn">Fornecedores</button>
