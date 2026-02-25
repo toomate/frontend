@@ -7,6 +7,8 @@ export default function HeaderPadrao() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const estaNaDashboard = location.pathname === "/dashboard";
+
   function handleLogout() {
     navigate("/");
   }
@@ -18,9 +20,6 @@ export default function HeaderPadrao() {
       navigate("/dashboard");
     }
   }
-
-  // verifica se está na dashboard
-  const estaNaDashboard = location.pathname === "/dashboard";
 
   return (
     <header className="header">
@@ -38,16 +37,15 @@ export default function HeaderPadrao() {
       </div>
 
       <div style={{ display: "flex", gap: "10px" }}>
-        {/* só mostra o botão voltar se NÃO estiver na dashboard */}
-        {!estaNaDashboard && (
+        {estaNaDashboard ? (
+          <button onClick={handleLogout} className="btn">
+            Sair
+          </button>
+        ) : (
           <button onClick={handleBack} className="btn">
             <ArrowLeft size={18} /> Voltar
           </button>
         )}
-
-        <button onClick={handleLogout} className="btn">
-          Sair
-        </button>
       </div>
     </header>
   );
