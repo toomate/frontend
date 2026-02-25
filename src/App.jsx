@@ -7,6 +7,7 @@ import CadastroInsumo from "./CadastroInsumo";
 import CadastroLote from "./CadastroLote";
 import Dashboard from "./Dashboard";
 import Fornecedor from "./Fornecedor";
+import Calendario from "./Calendario";
 
 import "./App.css";
 import { Estoque } from "./Estoque";

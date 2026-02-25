@@ -2,6 +2,8 @@
 
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
+var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcyIsImlhdCI6MTc3MjA1OTI1NSwiZXhwIjoxNzcyNDE5MjU1fQ.eFGeT3du6sL9_JPp3ryXXpkoK-XWMjQCuUdHkR2gHgostGFFsGag7xRiewICgZ6ZZTIft9HzxMrArfqNNExBFg"
+
 export const api = axios.create({
   baseURL,
 });
@@ -48,6 +50,16 @@ export const getBoletos = async () => {
     console.error("Erro ao buscar boletos:", error);
     throw error;
   }
+export class boletos {
+
+static async listarBoletos() {
+    try {
+        const response = await api.get('/boletos', token ? { headers: { Authorization: `Bearer ${token}` } } : {});
+        return response.data;
+    } catch (error) {
+        console.error('Erro ao buscar boletos:', error);
+        throw error;
+    }
 };
 
 export class AuthApi {
@@ -78,6 +90,7 @@ export class AuthApi {
       throw error;
     }
   }
+}
 }
 
 export class Lote {
