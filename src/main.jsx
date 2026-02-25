@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
+import './App.css'
 import App from './App.jsx'
 import { Navbar } from './components/Navbar/Navbar.jsx'
 import { NavCategorias } from './components/NavCategorias/NavCategorias.jsx'
@@ -19,8 +19,8 @@ import CadastroLote from './CadastroLote.jsx'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
-    {/* <CadastroInsumo></CadastroInsumo> */}
-    {/* <CadastroLote></CadastroLote> */}
-    {/* <Estoque /> */}
+    {/* <CadastroInsumo></CadastroInsumo>
+    <CadastroLote></CadastroLote>
+     <Estoque /> */}
   </StrictMode>,
 )

@@ -2,7 +2,7 @@ import React from "react";
 import { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
-import "./index.css";
+import "./App.css";
 import { Menu, CalendarDays, Search } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 

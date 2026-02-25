@@ -1,21 +1,24 @@
 import React from "react";
 import { Menu } from "lucide-react";
-import "./index.css";
+import "./App.css";
 import { Navbar } from "./components/Navbar/Navbar";
 import HeaderPadrao from "./HeaderPadrao";
+import { useNavigate } from "react-router-dom";
 
-export default function Index({ irPara }) {
+export default function Index() {
+  const navigate = useNavigate();
+
   return (
     <div className="dashboard">
-      <HeaderPadrao/>
+      <HeaderPadrao />
 
       <nav className="menu">
-        <button onClick={() => irPara("Estoque")} className="btn">Estoque</button>
-        <button onClick={() => irPara("Fornecedores")} className="btn">Fornecedores</button>
-        <button onClick={() => irPara("Gastos")} className="btn">Gastos</button>
-        <button onClick={() => irPara("Boletos")} className="btn">Boletos</button>
-        <button onClick={() => irPara("Fiados")} className="btn">Fiados</button>
-        <button>Fiados</button>
+        <button onClick={() => navigate("/cadastro-insumo")} className="btn">Estoque</button>
+        <button onClick={() => navigate("/cadastro")} className="btn">Fornecedores</button>
+        <button onClick={() => navigate("/dashboard")} className="btn">Gastos</button>
+        <button onClick={() => navigate("/boletos")} className="btn">Boletos</button>
+        <button onClick={() => navigate("/dashboard")} className="btn">Fiados</button>
+        <button className="btn">Fiados</button>
       </nav>
 
       <div className="status">

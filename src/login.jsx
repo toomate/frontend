@@ -1,9 +1,11 @@
 import React, { useState } from "react";
-import "./index.css";
+import "./App.css";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-export default function Login({ irPara }) {
+export default function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <div className="container">
@@ -31,12 +33,12 @@ export default function Login({ irPara }) {
           </button>
         </div>
 
-        <button className="btn" onClick={() => irPara("Dashboard")}>
+        <button className="btn" onClick={() => navigate("/dashboard")}>
           Entrar
         </button>
 
         <p className="auth-switch">
-          <span onClick={() => irPara("cadastro")}>Cadastre-se</span>
+          <span onClick={() => navigate("/cadastro")}>Cadastre-se</span>
         </p>
       </div>
     </div>

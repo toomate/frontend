@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import "./index.css";
+import "./App.css";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-export default function Cadastro({ irPara }) {
+export default function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
+
+  const navigate = useNavigate();
 
   return (
     <div className="container">
@@ -46,12 +49,12 @@ export default function Cadastro({ irPara }) {
           </button>
         </div>
 
-        <button className="btn" onClick={() => irPara("login")}>
+        <button className="btn" onClick={() => navigate("/")}>
           Cadastrar
         </button>
 
         <p className="auth-switch">
-          <span onClick={() => irPara("login")}>Já possui conta?</span>
+          <span onClick={() => navigate("/")}>Já possui conta?</span>
         </p>
       </div>
     </div>
