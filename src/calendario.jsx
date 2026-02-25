@@ -1,38 +1,41 @@
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import { useState, useEffect } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendario.css';
+import { boletos } from './provider/Api';
 
+moment.locale('pt-br');
 const localizer = momentLocalizer(moment);
-
-// Array de eventos exemplo
-const myEventsList = [
-  {
-    id: 0,
-    title: 'Nome Divida',
-    value: 'R$ 100,00',
-    start: new Date(2026, 1, 14, 10, 0),
-    end: new Date(2026, 1, 14, 11, 0),
-  },
-];
 
 // Cor usada para eventos e células com eventos
 const EVENT_BG = '#C3C3C3';
 
 // Componente customizado para o evento
 const EventComponent = ({ event }) => (
-  <div className="event-content">
-    <p>Status da divida</p>
-    <strong>{event.title}</strong>
-    <p>{event.value}</p>
+  <div className="event-content" style={{ display: 'flex', alignItems: 'center' }}>
+    <span
+      style={{
+        display: 'inline-block',
+        width: '10px',
+        height: '10px',
+        borderRadius: '50%',
+        backgroundColor: event.status === 1 ? 'green' : 'red',
+        marginRight: '5px'
+      }}
+    ></span>
+    <span className="event-title">{event.title}</span>
   </div>
 );
 
-const MyCalendar = props => (
+
+const MyCalendar = ({ events }) => (
+  // Usar listarBoletos para definir os events do calendário, convertendo os dados para o formato esperado pelo react-big-calendar
+
   <div style={{ height: '80vh' }}>
     <Calendar
       localizer={localizer}
-      events={myEventsList}
+      events={events}
       startAccessor="start"
       endAccessor="end"
       views={['month']}
@@ -52,7 +55,7 @@ const MyCalendar = props => (
       }}
       dayPropGetter={(date) => {
         // Verifica se a data tem algum evento (comparando dia/mês/ano)
-        const hasEvent = myEventsList.some(e => {
+        const hasEvent = events.some(e => {
           const d = new Date(date);
           const s = new Date(e.start);
           return d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate();
@@ -67,10 +70,34 @@ const MyCalendar = props => (
 );
 
 export default function Calendario() {
+  const [myEventsList, setMyEventsList] = useState([]);
+  useEffect(() => {
+    const fetchBoletos = async () => {
+      try {
+        const boletosData = await boletos.listarBoletos();
+        console.log(boletosData);
+        const events = Array.isArray(boletosData) ? boletosData.map(boleto => ({
+          id: boleto.id,
+          title: boleto.descricao.split(' ')[0],
+          status: boleto.pago,
+          value: `R$ ${boleto.valor.toFixed(2)}`,
+          start: moment(boleto.data_vencimento).toDate(),
+          end: moment(boleto.data_vencimento).toDate(),
+        })) : [];
+        setMyEventsList(events);
+      } catch (error) {
+        console.error('Erro ao buscar boletos:', error);
+        setMyEventsList([]);
+      }
+    };
+    fetchBoletos();
+
+  }, []);
+
   return (
     <div>
       <h1>Calendário</h1>
-      <MyCalendar />
+      <MyCalendar events={myEventsList} />
     </div>
   );
 }
