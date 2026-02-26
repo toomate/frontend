@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
-export default function CalendarioDetail(boleto) {
+export default function CalendarioDetail() {
+    const location = useLocation();
+    const boleto = location.state;
+    console.log('Boleto recebido em CalendarioDetail:', boleto);
   return (
   <div className="event-item">
     <span
@@ -13,7 +17,11 @@ export default function CalendarioDetail(boleto) {
         marginRight: '5px'
       }}
     ></span>
-    <span className="event-title">{boleto.descricao}</span>
+    <span className="event-title">{boleto.title}</span><br></br>
+    <span className="event-status">{boleto.status ? 'Pago' : 'Pendente'}</span><br></br>
+    <span className="event-value">{boleto.value}</span><br></br>
+    <span className="event-data">{boleto.end.toLocaleDateString('pt-BR')}</span><br></br>
+
   </div>
 );
 }
