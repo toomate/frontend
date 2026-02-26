@@ -6,7 +6,7 @@ import Cadastro from "./Cadastro";
 import CadastroInsumo from "./CadastroInsumo";
 import CadastroLote from "./CadastroLote";
 import Dashboard from "./Dashboard";
-import Calendario from "./Calendario";
+import Calendario from "./calendario";
 
 import "./App.css";
 

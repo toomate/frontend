@@ -20,7 +20,7 @@ const EventComponent = ({ event }) => (
         width: '10px',
         height: '10px',
         borderRadius: '50%',
-        backgroundColor: event.status === 1 ? 'green' : 'red',
+        backgroundColor: event.status ? 'green' : 'red',
         marginRight: '5px'
       }}
     ></span>
@@ -75,15 +75,20 @@ export default function Calendario() {
     const fetchBoletos = async () => {
       try {
         const boletosData = await boletos.listarBoletos();
-        console.log(boletosData);
-        const events = Array.isArray(boletosData) ? boletosData.map(boleto => ({
-          id: boleto.id,
-          title: boleto.descricao.split(' ')[0],
-          status: boleto.pago,
-          value: `R$ ${boleto.valor.toFixed(2)}`,
-          start: moment(boleto.data_vencimento).toDate(),
-          end: moment(boleto.data_vencimento).toDate(),
-        })) : [];
+        console.log('Boletos da API:', boletosData);
+        const events = Array.isArray(boletosData) ? boletosData.map(boleto => {
+          const startDate = moment.utc(boleto.dataVencimento).startOf('day').toDate();
+          console.log(`Boleto: ${boleto.descricao}, Data original: ${boleto.data_vencimento}, Data convertida: ${startDate}`);
+          return {
+            id: boleto.id,
+            title: boleto.descricao.split(' ')[0],
+            status: boleto.pago,
+            value: `R$ ${boleto.valor.toFixed(2)}`,
+            start: startDate,
+            end: startDate,
+          };
+        }) : [];
+        console.log('Events processados:', events);
         setMyEventsList(events);
       } catch (error) {
         console.error('Erro ao buscar boletos:', error);
