@@ -13,7 +13,7 @@ function detalhar(id){
 for (let boleto of myEventsList) {
   if (boleto.id === id) {
     console.log('Boleto encontrado:', boleto);
-  navigate('/detalhes', {state: boleto});
+  navigate('/calendarioDetalhes', {state: boleto});
 };
 }
 }

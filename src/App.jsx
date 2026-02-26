@@ -22,7 +22,7 @@ function App() {
          <Route path="/cadastro-lote" element={<CadastroLote />} />
          <Route path="/dashboard" element={<Dashboard />} /> */}
          <Route path="/" element={<Calendario />} />
-         <Route path="/detalhes" element={<CalendarioDetail />} />
+         <Route path="/calendarioDetalhes" element={<CalendarioDetail />} />
       </Routes>
      </BrowserRouter>
   );
