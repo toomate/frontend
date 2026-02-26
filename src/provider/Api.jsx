@@ -2,7 +2,7 @@
 
 const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
-var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcyIsImlhdCI6MTc3MjA1OTI1NSwiZXhwIjoxNzcyNDE5MjU1fQ.eFGeT3du6sL9_JPp3ryXXpkoK-XWMjQCuUdHkR2gHgostGFFsGag7xRiewICgZ6ZZTIft9HzxMrArfqNNExBFg"
+var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcyIsImlhdCI6MTc3MjA3NTk2OSwiZXhwIjoxNzcyNDM1OTY5fQ.Tdr8hJ1FB1pZJMQEgWjiXMIJDCbCsHEyNWwMWOPutKqMgMpjPxXiKBoesAL2ynO0poNTnWlT_6eqcq1bOa8Q2A"
 
 export const api = axios.create({
   baseURL,
