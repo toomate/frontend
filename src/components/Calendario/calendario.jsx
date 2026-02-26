@@ -3,8 +3,20 @@ import moment from 'moment';
 import { useState, useEffect } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendario.css';
-import { boletos } from './provider/Api';
+import { boletos } from '../../provider/Api';
+import { useLocation, useNavigate } from 'react-router-dom';
 
+
+export default function Calendario() {
+      const navigate = useNavigate();
+function detalhar(id){
+for (let boleto of myEventsList) {
+  if (boleto.id === id) {
+    console.log('Boleto encontrado:', boleto);
+  navigate('/detalhes', {state: boleto});
+};
+}
+}
 moment.locale('pt-br');
 const localizer = momentLocalizer(moment);
 
@@ -24,7 +36,7 @@ const EventComponent = ({ event }) => (
         marginRight: '5px'
       }}
     ></span>
-    <span className="event-title">{event.title}</span>
+    <span className="event-title" onClick={() => detalhar(event.id)}>{event.title}</span>
   </div>
 );
 
@@ -68,8 +80,6 @@ const MyCalendar = ({ events }) => (
     />
   </div>
 );
-
-export default function Calendario() {
   const [myEventsList, setMyEventsList] = useState([]);
   useEffect(() => {
     const fetchBoletos = async () => {
@@ -80,7 +90,7 @@ export default function Calendario() {
           const startDate = moment.utc(boleto.dataVencimento).startOf('day').toDate();
           console.log(`Boleto: ${boleto.descricao}, Data original: ${boleto.data_vencimento}, Data convertida: ${startDate}`);
           return {
-            id: boleto.id,
+            id: boleto.idBoleto,
             title: boleto.descricao.split(' ')[0],
             status: boleto.pago,
             value: `R$ ${boleto.valor.toFixed(2)}`,
