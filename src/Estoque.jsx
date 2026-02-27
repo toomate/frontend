@@ -6,13 +6,14 @@ import { Search } from "./components/Search/Search";
 import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
 import { Button } from "./components/Button/Button";
 import "./Estoque.css"
-import { Lote } from "./provider/Api";
+import { CategoriaApi, Lote } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
+    const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
@@ -104,6 +105,24 @@ export function Estoque() {
         Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
     }, [categoriaAtiva, pesquisa])
 
+    useEffect(() => {
+        CategoriaApi.listar()
+            .then((response) => {
+                const lista = Array.isArray(response) ? response : response?.categorias ?? [];
+                const normalizada = lista
+                    .map((item) => typeof item === "string" ? item : item?.nome ?? item?.categoria ?? item?.descricao ?? "")
+                    .map((item) => item.trim())
+                    .filter(Boolean);
+
+                if (normalizada.length > 0) {
+                    setCategorias(["Geral", ...new Set(normalizada.filter((item) => item !== "Geral"))])
+                }
+            })
+            .catch(() => {
+                // Mantem fallback local caso a API de categorias falhe.
+            });
+    }, [])
+
     function ButtonPlus() {
         return (
             <div className="plus-container">
@@ -132,7 +151,7 @@ export function Estoque() {
             <div className="categoria-container">
 
                 <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} />
+                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
                 </div>
                 <div className="botoes-container">
                     <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
