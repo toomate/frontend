@@ -51,16 +51,30 @@ export const getBoletos = async () => {
 };
 
 export class AuthApi {
-  static async login({ nome, senha }) {
+  static async login({ apelido, senha }) {
     try {
       const response = await requestComFallback({
         method: "post",
         url: "/usuarios/login",
-        data: { nome, senha },
+        data: { apelido, senha },
       });
       return response.data;
     } catch (error) {
       console.error("Erro ao autenticar usuario:", error);
+      throw error;
+    }
+  }
+
+  static async cadastrar({ nome, apelido, senha, administrador = true }) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/usuarios",
+        data: { nome, apelido, senha, administrador },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao cadastrar usuario:", error);
       throw error;
     }
   }

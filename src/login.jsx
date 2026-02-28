@@ -6,14 +6,14 @@ import "./Login.css";
 
 export default function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
-  const [nome, setNome] = useState("");
+  const [username, setUsername] = useState("");
   const [senha, setSenha] = useState("");
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
 
   async function entrar() {
-    if (!nome.trim() || !senha.trim()) {
+    if (!username.trim() || !senha.trim()) {
       setErro("Preencha usuario e senha.");
       return;
     }
@@ -22,7 +22,7 @@ export default function Login() {
       setCarregando(true);
       setErro("");
 
-      const resposta = await AuthApi.login({ nome: nome.trim(), senha: senha.trim() });
+      const resposta = await AuthApi.login({ apelido: username.trim(), senha: senha.trim() });
       const token = resposta?.token;
 
       if (!token) {
@@ -63,9 +63,9 @@ export default function Login() {
         <input
           className="auth-input"
           type="text"
-          placeholder="Usuario"
-          value={nome}
-          onChange={(e) => setNome(e.target.value)}
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
         />
 
         <div className="auth-input-wrap">
