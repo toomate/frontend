@@ -8,6 +8,30 @@
   padding: 16px 20px 28px;
 }
 
+.fornecedores-toast {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10000;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-weight: 700;
+  border: 1px solid #2a7a2a;
+  background: #e9f8e9;
+  color: #1f5f1f;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+  min-width: 260px;
+  max-width: 88vw;
+  text-align: center;
+}
+
+.fornecedores-toast.erro {
+  border-color: #a81919;
+  background: #ffecec;
+  color: #8f1515;
+}
+
 .fornecedores-toolbar {
   display: grid;
   grid-template-columns: 56px 220px minmax(260px, 1fr);
@@ -17,30 +41,32 @@
 }
 
 .fornecedores-btn-add {
-  border: none;
+  border: 1px solid #6b4423;
   border-radius: 6px;
-  background: #111;
-  color: #fff;
+  background: #6b4423;
+  color: #f8ecc6;
   cursor: pointer;
   height: 42px;
 }
 
 .fornecedores-select {
-  border: 1px solid #b8b8b8;
+  border: 1px solid #6b4423;
   border-radius: 6px;
   padding: 0 12px;
-  color: #1f1f1f;
-  background: #ffffff;
+  color: #6b4423;
+  background: #f8ecc6;
   font-size: 14px;
   height: 42px;
   width: 100%;
+  font-weight: 600;
 }
 
 .fornecedores-busca .search-container {
   width: 100%;
   height: 42px;
-  border: 1px solid #b8b8b8;
+  border: 1px solid #6b4423;
   border-radius: 6px;
+  background: #fffdf4;
 }
 
 .fornecedores-busca .search {
@@ -57,6 +83,29 @@
   justify-content: center;
 }
 
+.filtro-categoria-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 6px 0 12px;
+}
+
+.filtro-categoria-btn {
+  height: 36px;
+  border: 1px solid #6b4423;
+  border-radius: 999px;
+  background: #f8ecc6;
+  color: #6b4423;
+  padding: 0 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.filtro-categoria-btn.active {
+  background: #6b4423;
+  color: #f8ecc6;
+}
+
 .fornecedores-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(220px, 1fr));
@@ -64,60 +113,70 @@
 }
 
 .fornecedor-card {
-  background: #d8d8d8;
-  border-radius: 10px;
-  padding: 12px;
+  background: #ffffff;
+  border: 1px solid #d9bf80;
+  border-radius: 12px;
+  padding: 14px;
   min-height: 120px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  box-shadow: 0 8px 20px rgba(107, 68, 35, 0.16);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.fornecedor-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 26px rgba(107, 68, 35, 0.22);
 }
 
 .fornecedor-card-topo {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 8px;
+  gap: 12px;
 }
 
 .fornecedor-card-topo h3 {
   font-size: 18px;
   margin: 0;
+  color: #5a3519;
 }
 
 .fornecedor-whatsapp {
-  color: #111;
+  color: #2b7d2b;
+  background: #ecfaec;
+  border: 1px solid #bde5bd;
+  border-radius: 999px;
+  width: 42px;
+  height: 42px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fornecedor-telefone {
   font-size: 14px;
-  margin: 8px 0;
-}
-
-.fornecedor-contatar {
-  width: 140px;
-  border: 1px solid #666;
-  border-radius: 999px;
-  padding: 6px 12px;
-  text-align: center;
-  text-decoration: none;
-  font-weight: 600;
-  color: #111;
+  margin: 9px 0;
+  color: #4e4e4e;
+  font-weight: 500;
 }
 
 .fornecedor-acoes {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-top: 2px;
 }
 
 .fornecedor-btn-acao {
   height: 34px;
   width: 34px;
-  border: 1px solid #8f8f8f;
+  border: 1px solid #6b4423;
   border-radius: 8px;
-  background: #f2f2f2;
-  color: #2a2a2a;
+  background: #f8ecc6;
+  color: #6b4423;
   display: flex;
   align-items: center;
   justify-content: center;

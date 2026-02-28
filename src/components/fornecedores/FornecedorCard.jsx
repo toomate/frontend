@@ -1,4 +1,5 @@
-﻿import { MessageCircle, Pencil, Trash2 } from "lucide-react";
+﻿import { Pencil, Trash2 } from "lucide-react";
+import { FaWhatsapp } from "react-icons/fa";
 
 function limparTelefone(telefone = "") {
   return telefone.replace(/\D/g, "");
@@ -17,30 +18,20 @@ export function FornecedorCard({ fornecedor, onEditar, onExcluir }) {
     <article className="fornecedor-card">
       <header className="fornecedor-card-topo">
         <h3>{fornecedor.razaoSocial}</h3>
-
         <a
           href={linkContato}
           target="_blank"
           rel="noreferrer"
-          aria-label={`Abrir contato de ${fornecedor.razaoSocial}`}
+          aria-label={`Abrir WhatsApp de ${fornecedor.razaoSocial}`}
           className="fornecedor-whatsapp"
         >
-          <MessageCircle size={18} />
+          <FaWhatsapp size={24} />
         </a>
       </header>
 
       <p className="fornecedor-telefone">{telefone || "Telefone nao informado"}</p>
 
       <div className="fornecedor-acoes">
-        <a
-          href={linkContato}
-          target="_blank"
-          rel="noreferrer"
-          className="fornecedor-contatar"
-        >
-          Contatar
-        </a>
-
         <button
           type="button"
           className="fornecedor-btn-acao"

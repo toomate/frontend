@@ -35,12 +35,6 @@
             value={form.telefone}
             onChange={aoMudar}
           />
-          <input
-            name="link"
-            placeholder="Link (WhatsApp, site ou contato)"
-            value={form.link}
-            onChange={aoMudar}
-          />
         </div>
 
         <div className="fornecedores-modal-actions">

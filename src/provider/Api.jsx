@@ -120,6 +120,19 @@ export class FornecedorApi {
     }
   }
 
+  static async listarPorCategoria(idCategoria) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/categorias/${idCategoria}/fornecedores`,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar fornecedores por categoria:", error);
+      throw error;
+    }
+  }
+
   static async criar(payload) {
     try {
       const response = await requestComFallback({
