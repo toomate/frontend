@@ -290,6 +290,13 @@ input {
   font-size: 14px;
 }
 
+.auth-erro {
+  color: #a81919;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+
 .auth-switch span {
   color: 1.5px solid gold;
   cursor: pointer;
