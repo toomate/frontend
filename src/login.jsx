@@ -1,8 +1,8 @@
-﻿import React, { useState } from "react";
-import "./App.css";
+﻿import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
+import "./Auth.css";
 
 export default function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -54,23 +54,23 @@ export default function Login() {
   }
 
   return (
-    <div className="container">
-      <div className="box">
-        <span className="titulo">Toomate</span>
-        <span className="subtitulo">Login</span>
-        <span className="subtitulo2">
-          Digite seu nome de usuario e senha para entrar
-        </span>
+    <section className="auth-page">
+      <div className="auth-card">
+        <h1 className="auth-brand">Toomate</h1>
+        <h2 className="auth-title">Login</h2>
+        <p className="auth-subtitle">Entre com seu usuario para acessar o painel.</p>
 
         <input
+          className="auth-input"
           type="text"
           placeholder="Usuario"
           value={nome}
           onChange={(e) => setNome(e.target.value)}
         />
 
-        <div className="input-wrapper">
+        <div className="auth-input-wrap">
           <input
+            className="auth-input"
             type={mostrarSenha ? "text" : "password"}
             placeholder="Senha"
             value={senha}
@@ -81,23 +81,23 @@ export default function Login() {
           />
           <button
             type="button"
-            className="eye-btn"
+            className="auth-eye-btn"
             onClick={() => setMostrarSenha(!mostrarSenha)}
           >
             {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
 
-        {erro && <p className="auth-erro">{erro}</p>}
+        {erro && <p className="auth-error">{erro}</p>}
 
-        <button className="btn" onClick={entrar} disabled={carregando}>
+        <button className="auth-submit" onClick={entrar} disabled={carregando}>
           {carregando ? "Entrando..." : "Entrar"}
         </button>
 
-        <p className="auth-switch">
-          <span onClick={() => navigate("/cadastro")}>Cadastre-se</span>
+        <p className="auth-link-row">
+          Nao tem conta? <span onClick={() => navigate("/cadastro")}>Cadastre-se</span>
         </p>
       </div>
-    </div>
+    </section>
   );
 }

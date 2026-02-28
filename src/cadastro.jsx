@@ -1,62 +1,61 @@
-import React, { useState } from "react";
-import "./App.css";
+﻿import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 export default function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
-
   const navigate = useNavigate();
 
   return (
-    <div className="container">
-      <div className="box">
-        <span className="titulo">Toomate</span>
-        <span className="subtitulo">Cadastro</span>
+    <section className="auth-page">
+      <div className="auth-card auth-card-register">
+        <h1 className="auth-brand">Toomate</h1>
+        <h2 className="auth-title">Cadastro</h2>
+        <p className="auth-subtitle">Crie sua conta para comecar a usar a plataforma.</p>
 
-        <input type="text" placeholder="Nome Completo" />
+        <input className="auth-input" type="text" placeholder="Nome completo" />
+        <input className="auth-input" type="text" placeholder="Usuario" />
 
-        <input type="text" placeholder="Usuário" />
-
-        {/* Campo Senha */}
-        <div className="input-wrapper">
+        <div className="auth-input-wrap">
           <input
+            className="auth-input"
             type={mostrarSenha ? "text" : "password"}
             placeholder="Senha"
           />
           <button
             type="button"
-            className="eye-btn"
+            className="auth-eye-btn"
             onClick={() => setMostrarSenha(!mostrarSenha)}
           >
             {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
 
-        {/* Campo Confirmar Senha */}
-        <div className="input-wrapper">
+        <div className="auth-input-wrap">
           <input
+            className="auth-input"
             type={mostrarConfirmar ? "text" : "password"}
-            placeholder="Confirmar Senha"
+            placeholder="Confirmar senha"
           />
           <button
             type="button"
-            className="eye-btn"
+            className="auth-eye-btn"
             onClick={() => setMostrarConfirmar(!mostrarConfirmar)}
           >
             {mostrarConfirmar ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
 
-        <button className="btn" onClick={() => navigate("/")}>
+        <button className="auth-submit" onClick={() => navigate("/")}>
           Cadastrar
         </button>
 
-        <p className="auth-switch">
-          <span onClick={() => navigate("/")}>Já possui conta?</span>
+        <p className="auth-link-row">
+          Ja possui conta? <span onClick={() => navigate("/")}>Entrar</span>
         </p>
       </div>
-    </div>
+    </section>
   );
 }
