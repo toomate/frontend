@@ -60,6 +60,7 @@ const [abrirCalendario, setAbrirCalendario] = useState(false);
             <ItemPagamento />
             <ItemPagamento />
             <ItemPagamento />
+            <ItemPagamento />
           </div>
         </div>
       </div>
