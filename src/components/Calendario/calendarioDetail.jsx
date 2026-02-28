@@ -1,16 +1,16 @@
 import { useLocation } from 'react-router-dom';
 import './calendarioDetail.css';
 
-export default function CalendarioDetail() {
-  const location = useLocation();
-
-  // Se não vier nada, vira array vazio
-  const boletos = location.state || [];
+export default function CalendarioDetail({ boletos, onClose }){
 
   console.log('Boletos recebidos em CalendarioDetail:', boletos);
 
   return (
-    <div>
+    <div className='detail-wrapper'>
+
+      <button className="modal-close-inside" onClick={onClose}>
+        ✕
+      </button>
 
       {boletos.length === 0 ? (
         <p style={{ textAlign: 'center' }}>Nenhum boleto encontrado.</p>

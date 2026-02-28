@@ -1,8 +1,22 @@
-/* célula de fundo no month view */
-.rbc-month-view .rbc-day-bg { background-color: black; }
-
 /* célula que contém eventos */
 .rbc-month-view .rbc-day-slot { padding: 4px; }
 
 /* eventos dentro da célula */
 .rbc-event { border-radius: 0; }
+
+.ver-dia-btn {
+    font-size: 10px;
+    padding: 2px 6px;
+    margin-bottom: 4px;
+
+    border: none;
+    background-color: #2c3e50;
+    color: white;
+
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.ver-dia-btn:hover {
+    opacity: 0.85;
+}
