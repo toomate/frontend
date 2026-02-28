@@ -1,0 +1,69 @@
+#titulo-calendario {
+    font-size: 2.5em;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+/* Container principal (card/modal) */
+.event-item {
+    width: 500px;
+    margin: 0 auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    background-color: #f3f3f3;
+    font-family: Arial, Helvetica, sans-serif;
+    margin-top: 24px;
+}
+
+/* Header */
+.event-title {
+    background-color: #e6b79e; /* tom salmão */
+    padding: 20px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
+/* Corpo do card */
+.event-body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Cada linha de informação */
+.event-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #444;
+    font-size: 0.95em;
+}
+
+/* Valor */
+.event-value {
+    font-weight: bold;
+}
+
+/* Data */
+.event-data {
+    color: #666;
+}
+
+/* Link inferior */
+.event-link {
+    text-align: right;
+    padding: 15px 20px;
+    font-size: 0.9em;
+}
+
+.event-link a {
+    text-decoration: none;
+    color: #2c3e50;
+    font-weight: 500;
+}
+
+.event-link a:hover {
+    text-decoration: underline;
+}

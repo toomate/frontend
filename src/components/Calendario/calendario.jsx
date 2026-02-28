@@ -12,8 +12,8 @@ export default function Calendario() {
 function detalhar(id){
 for (let boleto of myEventsList) {
   if (boleto.id === id) {
-    console.log('Boleto encontrado:', boleto);
-  navigate('/calendarioDetalhes', {state: boleto});
+    console.log('Boleto encontrado:', [boleto]);
+  navigate('/calendarioDetalhes', {state: [boleto]});
 };
 }
 }
@@ -36,7 +36,7 @@ const EventComponent = ({ event }) => (
         marginRight: '5px'
       }}
     ></span>
-    <span className="event-title" onClick={() => detalhar(event.id)}>{event.title}</span>
+    <span className="event" onClick={() => detalhar(event.id)}>{event.title}</span>
   </div>
 );
 
@@ -91,7 +91,7 @@ const MyCalendar = ({ events }) => (
           console.log(`Boleto: ${boleto.descricao}, Data original: ${boleto.data_vencimento}, Data convertida: ${startDate}`);
           return {
             id: boleto.idBoleto,
-            title: boleto.descricao.split(' ')[0],
+            title: boleto.descricao,
             status: boleto.pago,
             value: `R$ ${boleto.valor.toFixed(2)}`,
             start: startDate,
