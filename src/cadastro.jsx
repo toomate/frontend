@@ -1,7 +1,7 @@
 ﻿import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import "./Auth.css";
+import "./Login.css";
 
 export default function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);

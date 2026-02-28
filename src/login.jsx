@@ -2,7 +2,7 @@
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
-import "./Auth.css";
+import "./Login.css";
 
 export default function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
