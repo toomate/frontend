@@ -277,7 +277,7 @@ body,
 input {
   width: 100%;
   border-radius: 5px;
-  padding: 10px 10px;
+  padding: 10px;
   margin-bottom: 25px;
   background-color: white;
   color: rgb(175, 175, 175);
@@ -482,128 +482,6 @@ input {
   }
 }
 
-/* Tela menor que 480px */
-@media (max-width: 480px) {
-
-  .container {
-    min-width: 480px;
-    min-height: 100vh;
-  }
-
-  .restaurante-name {
-    font-size: 16px;
-  }
-
-  .menu button {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .logo-circulo {
-    width: 40x;
-    height: 40px;
-  }
-
-  .card {
-    flex: 0 0 100%;
-  }
-
-  .numero {
-    font-size: 18px;
-  }
-
-  .alerta-btn {
-    font-size: 14px;
-  }
-}
-
-.container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.box {
-  width: 420px;
-  background: #fff;
-  padding: 32px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  position: relative;
-}
-
-.box-cadastro {
-  width: 480px;
-  border-color: unset;
-  border: 1.5px solid gold;
-}
-
-.titulo {
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.form-group {
-  height: 65px;
-  display: flex;
-  flex-direction: column;
-  justify-content: right;
-  gap: 6px;
-}
-
-.form-group label {
-  text-align: start;
-  font-size: 14px;
-  font-weight: 500;
-  color: black;
-}
-
-input,
-select {
-  height: 40px;
-  width: 300px;
-  padding: 0 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: white;
-  font-size: 14px;
-  color: #ccc;
-}
-
-input::placeholder {
-  color: #ccc;
-}
-
-input {
-  margin: auto;
-  color: #000;
-}
-
-.select-wrapper {
-  width: 300px;
-  display: flex;
-  color: black;
-  gap: 6px;
-}
-
-.icon-btn {
-  width: 40px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  padding: 0 5px;
-}
-
 .actions {
   display: flex;
   justify-content: space-between;
@@ -758,16 +636,16 @@ input {
   align-items: flex-start;
   font-size: 35px;
   font-weight: bold;
+  margin: 20px;
 }
 
 .card-pagamentos {
-  padding: 20px;
-  border-radius: 12px;
+  padding: 0 20px 0 20px;
 }
 
 .filtros {
   display: flex;
-  gap: 10px;
+  gap: 15px;
   align-items: center;
   margin-bottom: 20px;
 }
@@ -790,6 +668,10 @@ input {
 
 .busca input {
   background-color: transparent;
+  width: 400px;
+  color: black;
+  border: none;
+  margin: 0;
 }
 
 .busca input::placeholder {
@@ -813,20 +695,23 @@ input {
 
 .vencimento {
   text-align: left;
+  padding: 5px 0 5px 0;
 } 
 
 .descricao {
-  background-color: gainsboro !important;
-  padding: 6px 10px;
+  background-color: rgb(240, 238, 238) !important;
+  width: auto;
+  padding: 5px;
   border-radius: 6px;
-  margin: 6px 0;
+  margin: 10px;
 }
 
 .valor {
   background: #ccc;
-  padding: 6px 10px;
+  padding: 5px;
   border-radius: 6px;
   width: 120px;
+  margin: 10px;
 }
 
 .btn-pago {
@@ -837,100 +722,39 @@ input {
   cursor: pointer;
 }
 
-.react-calendar__navigation button {
-  font-size: 18px;
-  color: black;
-  background: none;
-}
+/* Tela menor que 480px */
+@media (max-width: 480px) {
 
-.modal-fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
-  background-color: white;
-  z-index: 9999;
+  .container {
+    min-width: 80%;
+    justify-content: center;
+    align-items: center;
+  }
 
-  display: flex;
-  flex-direction: column;
-}
+  .box {
+    min-width: 80%;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+  }
 
-.modal-body-calendario {
-  flex: 1;
-  padding: 5px 10px;
-  display: flex;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
+  .restaurante-name {
+    font-size: 16px;
+  }
 
-.modal-body-calendario .react-calendar {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 100%;
-  border: none;
+  .menu button {
+    font-size: 14px;
+    padding: 10px;
+  }
 
-  display: flex;
-  flex-direction: column;
-}
+  .logo-circulo {
+    width: 40x;
+    height: 40px;
+  }
 
-.react-calendar__navigation {
-  margin: 10px !important;
-  
-}
-
-.react-calendar__navigation__arrow.react-calendar__navigation__prev-button,
-.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button,
-.react-calendar__navigation__arrow.react-calendar__navigation__next-button,
-.react-calendar__navigation__arrow.react-calendar__navigation__next2-button,
-.react-calendar__navigation__label {
-  padding: 3px;
-}
-
-.react-calendar__tile abbr {
-  font-weight: bold;
-  font-size: 13px;
-  color: black;
-}
-
-.react-calendar__month-view__weekdays {
-  display: grid !important;
-  grid-template-columns: repeat(7, 1fr);
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.react-calendar__month-view__weekdays__weekday--weekend {
-  font-size: 12px;
-  color: red;
-  padding: 0;
-}
-
-.react-calendar__month-view__days__day--weekend {
-  color: #c92c2c;
-}
-
-.conteudo-dia {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 11px;
-}
-
-.react-calendar__month-view__days {
-  border: #555;
-}
-
-.nome-divida, .valor {
-  color: black;
-}
-
-.status.pago {
-  color: green;
-  font-weight: bold;
-  padding: 0;
-}
-
-.valor {
-  padding: 2px;
+  .card {
+    flex: 0 0 100%;
+  }
 }
