@@ -1,4 +1,4 @@
-﻿import { Plus, Search } from "lucide-react";
+import { Plus, Search, Tag } from "lucide-react";
 import { Search as CampoBusca } from "../Search/Search";
 
 export function FornecedorToolbar({
@@ -7,17 +7,30 @@ export function FornecedorToolbar({
   ordenacao,
   aoMudarOrdenacao,
   aoAdicionar,
+  aoAdicionarCategoria,
 }) {
   return (
     <div className="fornecedores-toolbar">
-      <button
-        type="button"
-        className="fornecedores-btn-add"
-        aria-label="Adicionar fornecedor"
-        onClick={aoAdicionar}
-      >
-        <Plus size={18} />
-      </button>
+      <div className="fornecedores-toolbar-acoes">
+        <button
+          type="button"
+          className="fornecedores-btn-add"
+          aria-label="Adicionar fornecedor"
+          onClick={aoAdicionar}
+        >
+          <Plus size={18} />
+        </button>
+
+        <button
+          type="button"
+          className="fornecedores-btn-add fornecedores-btn-add-categoria"
+          aria-label="Adicionar categoria"
+          title="Nova categoria"
+          onClick={aoAdicionarCategoria}
+        >
+          <Tag size={18} />
+        </button>
+      </div>
 
       <select
         className="fornecedores-select"

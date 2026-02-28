@@ -199,6 +199,20 @@ export class CategoriaApi {
       throw error;
     }
   }
+
+  static async criar(payload) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/categorias",
+        data: payload,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao cadastrar categoria:", error);
+      throw error;
+    }
+  }
 }
 
 export default api;

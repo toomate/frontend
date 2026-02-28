@@ -34,10 +34,16 @@
 
 .fornecedores-toolbar {
   display: grid;
-  grid-template-columns: 56px 220px minmax(260px, 1fr);
+  grid-template-columns: 112px 220px minmax(260px, 1fr);
   gap: 12px;
   margin-bottom: 10px;
   align-items: stretch;
+}
+
+.fornecedores-toolbar-acoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
 }
 
 .fornecedores-btn-add {
@@ -47,6 +53,11 @@
   color: #f8ecc6;
   cursor: pointer;
   height: 42px;
+}
+
+.fornecedores-btn-add-categoria {
+  background: #f8ecc6;
+  color: #6b4423;
 }
 
 .fornecedores-select {
@@ -99,11 +110,29 @@
   padding: 0 14px;
   font-weight: 600;
   cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .filtro-categoria-btn.active {
   background: #6b4423;
   color: #f8ecc6;
+}
+
+.filtro-categoria-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.filtro-categoria-dot-alta {
+  background: #2b7d2b;
+}
+
+.filtro-categoria-dot-baixa {
+  background: #8f8f8f;
 }
 
 .fornecedores-grid {
@@ -349,7 +378,7 @@
 
 @media (max-width: 900px) {
   .fornecedores-toolbar {
-    grid-template-columns: 56px 1fr;
+    grid-template-columns: 112px 1fr;
   }
 
   .fornecedores-busca {
@@ -364,6 +393,10 @@
 @media (max-width: 620px) {
   .fornecedores-toolbar {
     grid-template-columns: 1fr;
+  }
+
+  .fornecedores-toolbar-acoes {
+    grid-template-columns: 1fr 1fr;
   }
 
   .fornecedores-btn-add,

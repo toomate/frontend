@@ -1,10 +1,12 @@
-﻿import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SearchX, TriangleAlert } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 import { FornecedorToolbar } from "./components/fornecedores/FornecedorToolbar";
 import { FiltroCategoriaFornecedor } from "./components/fornecedores/FiltroCategoriaFornecedor";
 import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
 import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
+import { NovaCategoriaModal } from "./components/fornecedores/NovaCategoriaModal";
+import { BaseModal } from "./components/common/BaseModal";
 import { CategoriaApi, FornecedorApi } from "./provider/Api";
 import "./Fornecedor.css";
 
@@ -13,7 +15,24 @@ const estadoInicialForm = {
   telefone: "",
 };
 
+const estadoInicialCategoriaForm = {
+  nome: "",
+  rotatividade: "true",
+};
+
 const categoriaTodas = { id: "todas", nome: "Todas" };
+
+function parseRotatividadeBinaria(valor) {
+  if (valor === true || valor === "true") {
+    return true;
+  }
+
+  if (valor === false || valor === "false") {
+    return false;
+  }
+
+  return null;
+}
 
 function mapearCategorias(response) {
   const lista = Array.isArray(response) ? response : response?.categorias ?? [];
@@ -21,14 +40,19 @@ function mapearCategorias(response) {
   const categorias = lista
     .map((item) => {
       if (typeof item === "string") {
-        return { id: item, nome: item };
+        return { id: item, nome: item, rotatividade: null };
       }
 
       const id = item?.idCategoria ?? item?.id;
       const nome = item?.nome ?? item?.categoria ?? item?.descricao ?? "";
       if (!id || !String(nome).trim()) return null;
 
-      return { id: String(id), nome: String(nome).trim() };
+      const rotatividade =
+        parseRotatividadeBinaria(item?.rotatividade) ??
+        parseRotatividadeBinaria(item?.altaRotatividade) ??
+        parseRotatividadeBinaria(item?.giroRapido);
+
+      return { id: String(id), nome: String(nome).trim(), rotatividade };
     })
     .filter(Boolean);
 
@@ -63,12 +87,15 @@ export default function Fornecedor() {
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
   const [modalAberto, setModalAberto] = useState(false);
+  const [modalCategoriaAberto, setModalCategoriaAberto] = useState(false);
   const [modoModal, setModoModal] = useState("criar");
   const [fornecedorSelecionado, setFornecedorSelecionado] = useState(null);
   const [confirmacaoExclusaoAberta, setConfirmacaoExclusaoAberta] = useState(false);
   const [salvando, setSalvando] = useState(false);
+  const [salvandoCategoria, setSalvandoCategoria] = useState(false);
   const [excluindo, setExcluindo] = useState(false);
   const [form, setForm] = useState(estadoInicialForm);
+  const [formCategoria, setFormCategoria] = useState(estadoInicialCategoriaForm);
   const [toast, setToast] = useState({ visivel: false, tipo: "sucesso", mensagem: "" });
   const toastTimerRef = useRef(null);
 
@@ -97,9 +124,10 @@ export default function Fornecedor() {
       setCarregando(true);
       setErro("");
 
-      const response = categoriaSelecionada === categoriaTodas.id
-        ? await FornecedorApi.listar()
-        : await FornecedorApi.listarPorCategoria(categoriaSelecionada);
+      const response =
+        categoriaSelecionada === categoriaTodas.id
+          ? await FornecedorApi.listar()
+          : await FornecedorApi.listarPorCategoria(categoriaSelecionada);
 
       const lista = Array.isArray(response) ? response : response?.fornecedores ?? [];
       setFornecedores(lista.map(mapearFornecedor));
@@ -142,6 +170,11 @@ export default function Fornecedor() {
     setModalAberto(true);
   }
 
+  function abrirModalCategoria() {
+    setFormCategoria(estadoInicialCategoriaForm);
+    setModalCategoriaAberto(true);
+  }
+
   function abrirModalEdicao(fornecedor) {
     setModoModal("editar");
     setFornecedorSelecionado(fornecedor);
@@ -158,6 +191,11 @@ export default function Fornecedor() {
     limparForm();
   }
 
+  function fecharModalCategoria() {
+    setModalCategoriaAberto(false);
+    setFormCategoria(estadoInicialCategoriaForm);
+  }
+
   function abrirConfirmacaoExclusao(fornecedor) {
     setFornecedorSelecionado(fornecedor);
     setConfirmacaoExclusaoAberta(true);
@@ -171,6 +209,11 @@ export default function Fornecedor() {
   function onChangeForm(event) {
     const { name, value } = event.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function onChangeFormCategoria(event) {
+    const { name, value } = event.target;
+    setFormCategoria((prev) => ({ ...prev, [name]: value }));
   }
 
   async function salvarFornecedor() {
@@ -205,6 +248,35 @@ export default function Fornecedor() {
       );
     } finally {
       setSalvando(false);
+    }
+  }
+
+  async function salvarCategoria() {
+    const nomeCategoria = formCategoria.nome.trim();
+    const rotatividade = parseRotatividadeBinaria(formCategoria.rotatividade);
+
+    if (!nomeCategoria) {
+      setErro("Informe o nome da categoria.");
+      return;
+    }
+
+    if (rotatividade === null) {
+      setErro("Selecione a rotatividade da categoria.");
+      return;
+    }
+
+    try {
+      setSalvandoCategoria(true);
+      setErro("");
+
+      await CategoriaApi.criar({ nome: nomeCategoria, rotatividade });
+      fecharModalCategoria();
+      await carregarCategorias();
+      exibirToast("Categoria cadastrada com sucesso.");
+    } catch (error) {
+      setErro("Nao foi possivel cadastrar a categoria.");
+    } finally {
+      setSalvandoCategoria(false);
     }
   }
 
@@ -248,9 +320,7 @@ export default function Fornecedor() {
     <div className="fornecedores-page">
       <HeaderPadrao />
 
-      {toast.visivel && (
-        <div className={`fornecedores-toast ${toast.tipo}`}>{toast.mensagem}</div>
-      )}
+      {toast.visivel && <div className={`fornecedores-toast ${toast.tipo}`}>{toast.mensagem}</div>}
 
       <main className="fornecedores-content">
         <FornecedorToolbar
@@ -259,6 +329,7 @@ export default function Fornecedor() {
           ordenacao={ordenacao}
           aoMudarOrdenacao={setOrdenacao}
           aoAdicionar={abrirModalCriacao}
+          aoAdicionarCategoria={abrirModalCategoria}
         />
 
         <FiltroCategoriaFornecedor
@@ -307,42 +378,49 @@ export default function Fornecedor() {
         textoBotao={modoModal === "editar" ? "Atualizar" : "Salvar"}
       />
 
-      {confirmacaoExclusaoAberta && (
-        <div className="fornecedores-modal-overlay" role="presentation">
-          <div
-            className="fornecedores-modal fornecedores-modal-confirmacao"
-            role="dialog"
-            aria-modal="true"
-          >
-            <div className="fornecedores-confirmacao-icone">
-              <TriangleAlert size={28} />
-            </div>
-            <h3>Excluir fornecedor?</h3>
-            <p>
-              Essa acao remove <strong>{fornecedorSelecionado?.razaoSocial}</strong>{" "}
-              da sua lista.
-            </p>
-            <div className="fornecedores-modal-actions">
-              <button
-                type="button"
-                className="fornecedores-btn-cancelar"
-                onClick={fecharConfirmacaoExclusao}
-                disabled={excluindo}
-              >
-                Cancelar
-              </button>
-              <button
-                type="button"
-                className="fornecedores-btn-salvar fornecedores-btn-excluir"
-                onClick={excluirFornecedor}
-                disabled={excluindo}
-              >
-                {excluindo ? "Excluindo..." : "Excluir"}
-              </button>
-            </div>
-          </div>
+      <NovaCategoriaModal
+        aberto={modalCategoriaAberto}
+        aoFechar={fecharModalCategoria}
+        aoSalvar={salvarCategoria}
+        form={formCategoria}
+        aoMudar={onChangeFormCategoria}
+        salvando={salvandoCategoria}
+      />
+
+      <BaseModal
+        aberto={confirmacaoExclusaoAberta}
+        onClose={fecharConfirmacaoExclusao}
+        title="Excluir fornecedor?"
+        width={360}
+        className="fornecedores-modal-confirmacao"
+        footer={
+          <>
+            <button
+              type="button"
+              className="fornecedores-btn-cancelar"
+              onClick={fecharConfirmacaoExclusao}
+              disabled={excluindo}
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              className="fornecedores-btn-salvar fornecedores-btn-excluir"
+              onClick={excluirFornecedor}
+              disabled={excluindo}
+            >
+              {excluindo ? "Excluindo..." : "Excluir"}
+            </button>
+          </>
+        }
+      >
+        <div className="fornecedores-confirmacao-icone">
+          <TriangleAlert size={28} />
         </div>
-      )}
+        <p>
+          Essa acao remove <strong>{fornecedorSelecionado?.razaoSocial}</strong> da sua lista.
+        </p>
+      </BaseModal>
     </div>
   );
 }
