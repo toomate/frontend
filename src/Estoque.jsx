@@ -10,6 +10,7 @@ import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 import HeaderPadrao from "./HeaderPadrao";
+import { CardRotina } from "./components/CardRotina/CardRotina";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
@@ -19,6 +20,7 @@ export function Estoque() {
     const [mudancas, setMudancas] = useState([])
     const [exibirRelatorio, setExibirRelatorio] = useState(false);
     const [cardRemocao, setCardRemocao] = useState(false);
+    const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
 
     const pesquisar = (valor) => {
@@ -34,11 +36,8 @@ export function Estoque() {
     }
 
     const abrirCardRemocao = (id) => {
-        console.log("aqui")
         setCardRemocao(true)
-        console.log(cardRemocao)
         setIdSelecionado(id)
-        console.log(idSelecionado)
     }
 
     const salvarAlteracoes = async () => {
@@ -137,12 +136,18 @@ export function Estoque() {
             {exibirRelatorio && (
                 <div className="escurecer">
                     <CardRelatorio props={mudancas}
-                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} />
+                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={() => setCardRotina(true)} />
                 </div>
             )}
             {cardRemocao && (
                 <div className="escurecer">
                     <CardConfirmacao titulo={"Deseja descartar as alterações?"} fecharCard={() => {setCardRemocao(false)}} confirmar={removerAlteracao} />
+                </div>
+            )}
+
+            {cardRotina && (
+                <div className="escurecer">
+                    <CardRotina fecharCard={() => {setCardRotina(false)}}/>    
                 </div>
             )}
             <div className="nav-header">

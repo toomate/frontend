@@ -3,7 +3,7 @@ import { Button } from "../Button/Button"
 import React from "react"
 import "./CardRelatorio.css"
 
-export function CardRelatorio({ props = [], fechar, salvarAlteracoes, abrirCardRemocao}) {
+export function CardRelatorio({ props = [], fechar, salvarAlteracoes, abrirCardRemocao, abrirCardRotina}) {
     return (
         <div className="container-card">
             <div className="titulo-relatorio"><div>Relatório de Mudanças</div><X className="icone-clicavel" onClick={fechar} /></div>
@@ -16,7 +16,7 @@ export function CardRelatorio({ props = [], fechar, salvarAlteracoes, abrirCardR
             </div>
             <div className="botoes">
                 <Button texto={"Editar"} Icone={SquarePen}></Button>
-                <Button texto={"Guardar"} Icone={Bookmark}></Button>
+                <Button texto={"Guardar"} onClick={abrirCardRotina} Icone={Bookmark}></Button>
                 <Button texto={"Salvar"} onClick={salvarAlteracoes} Icone={Save}></Button>
             </div>
 
