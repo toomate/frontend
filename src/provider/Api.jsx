@@ -4,6 +4,8 @@ const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
 var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcyIsImlhdCI6MTc3MjA3NTk2OSwiZXhwIjoxNzcyNDM1OTY5fQ.Tdr8hJ1FB1pZJMQEgWjiXMIJDCbCsHEyNWwMWOPutKqMgMpjPxXiKBoesAL2ynO0poNTnWlT_6eqcq1bOa8Q2A"
 
+var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcyIsImlhdCI6MTc3MjA3NTk2OSwiZXhwIjoxNzcyNDM1OTY5fQ.Tdr8hJ1FB1pZJMQEgWjiXMIJDCbCsHEyNWwMWOPutKqMgMpjPxXiKBoesAL2ynO0poNTnWlT_6eqcq1bOa8Q2A"
+
 export const api = axios.create({
   baseURL,
 });
@@ -42,14 +44,6 @@ async function requestComFallback(config) {
   }
 }
 
-export const getBoletos = async () => {
-  try {
-    const response = await requestComFallback({ method: "get", url: "/boletos" });
-    return response.data;
-  } catch (error) {
-    console.error("Erro ao buscar boletos:", error);
-    throw error;
-  }
 export class boletos {
 
 static async listarBoletos() {
@@ -61,6 +55,7 @@ static async listarBoletos() {
         throw error;
     }
 };
+}
 
 export class AuthApi {
   static async login({ nome, senha }) {
@@ -90,7 +85,6 @@ export class AuthApi {
       throw error;
     }
   }
-}
 }
 
 export class Lote {
