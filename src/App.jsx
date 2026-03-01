@@ -9,12 +9,14 @@ import Dashboard from "./Dashboard";
 import Fornecedor from "./Fornecedor";
 
 import "./App.css";
+import { Estoque } from "./Estoque";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
+        <Route path="/estoque" element={<Estoque />} />
         <Route path="/boletos" element={<Boletos />} />
         <Route path="/cadastro" element={<Cadastro />} />
         <Route path="/cadastro-insumo" element={<CadastroInsumo />} />

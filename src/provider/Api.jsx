@@ -51,12 +51,12 @@ export const getBoletos = async () => {
 };
 
 export class AuthApi {
-  static async login({ apelido, senha }) {
+  static async login({ nome, senha }) {
     try {
       const response = await requestComFallback({
         method: "post",
         url: "/usuarios/login",
-        data: { apelido, senha },
+        data: { nome, senha },
       });
       return response.data;
     } catch (error) {

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Navbar } from "./components/Navbar/Navbar";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import { Cabecalho } from "./components/Cabecalho/Cabecalho";
 import { Search } from "./components/Search/Search";
@@ -10,6 +9,7 @@ import { CategoriaApi, Lote } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
+import HeaderPadrao from "./HeaderPadrao";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
@@ -146,15 +146,15 @@ export function Estoque() {
                 </div>
             )}
             <div className="nav-header">
-                <Navbar />
+                <HeaderPadrao />
             </div>
             <div className="categoria-container">
 
                 <div className="nav-categorias-container">
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
+                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                 </div>
                 <div className="botoes-container">
-                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                     <ButtonPlus />
                     <Button texto="Rotinas" Icone={Bookmark} />
                     <Button onClick={abrirCard} texto="Salvar" Icone={Save} />

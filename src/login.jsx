@@ -22,7 +22,8 @@ export default function Login() {
       setCarregando(true);
       setErro("");
 
-      const resposta = await AuthApi.login({ apelido: username.trim(), senha: senha.trim() });
+      const resposta = await AuthApi.login({ nome: username.trim(), senha: senha.trim() });
+      console.log("AAAAAA", resposta)
       const token = resposta?.token;
 
       if (!token) {

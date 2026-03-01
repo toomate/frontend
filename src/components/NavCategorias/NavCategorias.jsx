@@ -2,8 +2,6 @@ import { useMemo, useState } from "react";
 import { Menu } from "lucide-react";
 import "./NavCategorias.css";
 
-const categoriasPadrao = ["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"];
-
 export function NavCategorias({
   categoriaAtual,
   aoMudarCategoria,

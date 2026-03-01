@@ -20,7 +20,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
     {/* <CadastroInsumo></CadastroInsumo>
-    <CadastroLote></CadastroLote>
-     <Estoque /> */}
+    <CadastroLote></CadastroLote>*/}
+     {/* <Estoque />  */}
   </StrictMode>,
 )

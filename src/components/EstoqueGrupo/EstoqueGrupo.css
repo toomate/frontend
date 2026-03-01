@@ -2,7 +2,15 @@
     display: grid;
     grid-template-columns: 170px 1fr 1fr 1fr 1fr 12px;
     align-items: center;
+    justify-items: stretch;
     width: 95%;
+}
+
+.linha-estoque>* {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .grupo-container {
@@ -25,7 +33,7 @@
     align-items: center;
     justify-content: center;
     font-weight: 700;
-    font-size: larger;
+    font-size: small;
     border: 1px solid black;
     border-radius: 5px;
     height: 80%;
