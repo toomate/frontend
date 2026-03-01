@@ -52,13 +52,11 @@ useEffect(() => {
   moment.locale('pt-br');
   const localizer = momentLocalizer(moment);
 
-  // Cor usada para eventos e células com eventos
   const EVENT_BG = '#C3C3C3';
 
   // Componente customizado para o evento
  const EventComponent = ({ event, allEvents }) => {
 
-  // Eventos do mesmo dia
   const eventosDoDia = allEvents.filter((e) => {
     const d1 = new Date(e.start);
     const d2 = new Date(event.start);
@@ -76,7 +74,6 @@ useEffect(() => {
 
   const ehPrimeiroDoDia = eventosOrdenados[0]?.id === event.id;
 
-  // 🔥 MOBILE MODE
   if (isMobile) {
     if (!ehPrimeiroDoDia) return null;
 
@@ -92,7 +89,6 @@ useEffect(() => {
     );
   }
 
-  // 💻 DESKTOP MODE (igual ao que você já tinha)
   const primeiraPalavra = event.title?.split(' ')[0];
 
   return (
@@ -130,7 +126,6 @@ useEffect(() => {
 
 
   const MyCalendar = ({ events }) => (
-    // Usar listarBoletos para definir os events do calendário, convertendo os dados para o formato esperado pelo react-big-calendar
 
     <div className="calendar-wrapper">
       <Calendar
