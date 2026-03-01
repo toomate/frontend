@@ -6,7 +6,8 @@
 
 /* Container principal (card/modal) */
 .event-item {
-    width: 500px;
+    width: 100%;
+    max-width: 500px;
     margin: 0 auto;
     border-radius: 12px;
     overflow: hidden;
@@ -89,6 +90,10 @@
 .modal-container {
     position: relative;
     animation: fadeIn 0.2s ease-in-out;
+    width: 95%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-close {
@@ -138,4 +143,63 @@
 
 .modal-close-inside:hover {
     background: #f5f5f5;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+
+    #titulo-calendario {
+        font-size: 1.6em;
+        margin-bottom: 20px;
+    }
+
+    .event-item {
+        border-radius: 10px;
+        margin-top: 16px;
+    }
+
+    .event-title {
+        padding: 14px;
+        font-size: 1em;
+    }
+
+    .event-body {
+        padding: 14px;
+        gap: 10px;
+    }
+
+    .event-row {
+        font-size: 0.85em;
+    }
+
+    .modal-overlay {
+        align-items: flex-end; /* modal sobe do fundo */
+    }
+
+    .modal-container {
+        width: 100%;
+        max-width: 100%;
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        animation: slideUp 0.25s ease-out;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-close-inside {
+        top: 10px;
+        right: 10px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+}
+
+/* animação estilo bottom sheet */
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+    to {
+        transform: translateY(0);
+    }
 }
