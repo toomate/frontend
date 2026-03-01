@@ -11,43 +11,53 @@ import { useLocation, useNavigate } from 'react-router-dom';
 export default function Calendario() {
   const [selectedBoletos, setSelectedBoletos] = useState([]);
 
-function detalhar(id) {
-  const boletosEncontrados = myEventsList.filter(
-    (boleto) => boleto.id === id
-  );
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
-  if (boletosEncontrados.length > 0) {
-    console.log('Boletos encontrados:', boletosEncontrados);
-    setSelectedBoletos(boletosEncontrados);
-  }
-}
+useEffect(() => {
+  const handleResize = () => {
+    setIsMobile(window.innerWidth <= 768);
+  };
 
-function detalharPorData(data) {
-  const boletosDoDia = myEventsList.filter((boleto) => {
-    const d1 = new Date(boleto.start);
-    const d2 = new Date(data);
+  window.addEventListener('resize', handleResize);
+  return () => window.removeEventListener('resize', handleResize);
+}, []);
 
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
+  function detalhar(id) {
+    const boletosEncontrados = myEventsList.filter(
+      (boleto) => boleto.id === id
     );
-  });
 
-  setSelectedBoletos(boletosDoDia);
-}
+    if (boletosEncontrados.length > 0) {
+      console.log('Boletos encontrados:', boletosEncontrados);
+      setSelectedBoletos(boletosEncontrados);
+    }
+  }
 
-moment.locale('pt-br');
-const localizer = momentLocalizer(moment);
+  function detalharPorData(data) {
+    const boletosDoDia = myEventsList.filter((boleto) => {
+      const d1 = new Date(boleto.start);
+      const d2 = new Date(data);
 
-// Cor usada para eventos e células com eventos
-const EVENT_BG = '#C3C3C3';
+      return (
+        d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate()
+      );
+    });
 
-// Componente customizado para o evento
-const EventComponent = ({ event, allEvents }) => {
-  const primeiraPalavra = event.title?.split(' ')[0];
+    setSelectedBoletos(boletosDoDia);
+  }
 
-  // Todos eventos do mesmo dia
+  moment.locale('pt-br');
+  const localizer = momentLocalizer(moment);
+
+  // Cor usada para eventos e células com eventos
+  const EVENT_BG = '#C3C3C3';
+
+  // Componente customizado para o evento
+ const EventComponent = ({ event, allEvents }) => {
+
+  // Eventos do mesmo dia
   const eventosDoDia = allEvents.filter((e) => {
     const d1 = new Date(e.start);
     const d2 = new Date(event.start);
@@ -59,28 +69,34 @@ const EventComponent = ({ event, allEvents }) => {
     );
   });
 
-  const temMultiplos = eventosDoDia.length > 1;
-
-  // 🔥 Ordena para saber qual é o primeiro do dia
   const eventosOrdenados = [...eventosDoDia].sort(
     (a, b) => new Date(a.start) - new Date(b.start)
   );
 
   const ehPrimeiroDoDia = eventosOrdenados[0]?.id === event.id;
 
+  // 🔥 MOBILE MODE
+  if (isMobile) {
+    if (!ehPrimeiroDoDia) return null;
+
+    return (
+      <div className="mobile-day-container">
+        <button
+          className="ver-dia-btn-mobile"
+          onClick={() => detalharPorData(event.start)}
+        >
+          {eventosDoDia.length} boleto{eventosDoDia.length > 1 ? 's' : ''}
+        </button>
+      </div>
+    );
+  }
+
+  // 💻 DESKTOP MODE (igual ao que você já tinha)
+  const primeiraPalavra = event.title?.split(' ')[0];
+
   return (
-    <div
-      className="event-content"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'flex-start',
-        maxWidth: '100%',
-        overflow: 'hidden'
-      }}
-    >
-      {/* 🔥 Só mostra botão se for o primeiro do dia */}
-      {temMultiplos && ehPrimeiroDoDia && (
+    <div className="event-content">
+      {eventosDoDia.length > 1 && ehPrimeiroDoDia && (
         <button
           className="ver-dia-btn"
           onClick={() => detalharPorData(event.start)}
@@ -92,7 +108,6 @@ const EventComponent = ({ event, allEvents }) => {
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         <span
           style={{
-            flexShrink: 0,
             width: '10px',
             height: '10px',
             borderRadius: '50%',
@@ -104,11 +119,6 @@ const EventComponent = ({ event, allEvents }) => {
         <span
           className="event"
           onClick={() => detalhar(event.id)}
-          style={{
-            whiteSpace: 'nowrap',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis'
-          }}
         >
           {primeiraPalavra}
         </span>
@@ -118,50 +128,50 @@ const EventComponent = ({ event, allEvents }) => {
 };
 
 
-const MyCalendar = ({ events }) => (
-  // Usar listarBoletos para definir os events do calendário, convertendo os dados para o formato esperado pelo react-big-calendar
+  const MyCalendar = ({ events }) => (
+    // Usar listarBoletos para definir os events do calendário, convertendo os dados para o formato esperado pelo react-big-calendar
 
-  <div style={{ height: '80vh' }}>
-    <Calendar
-      localizer={localizer}
-      events={events}
-      startAccessor="start"
-      endAccessor="end"
-      views={['month']}
-      style={{ height: '100%' }}
-      toolbar={false}
-      components={{
-        event: (props) => (
-          <EventComponent
-            {...props}
-            allEvents={myEventsList}
-          />
-        ),
-      }}
-      eventPropGetter={() => {
-        return {
-          style: {
-            backgroundColor: EVENT_BG,
-            opacity: 1,
-            color: 'black',
-          },
-        };
-      }}
-      dayPropGetter={(date) => {
-        // Verifica se a data tem algum evento (comparando dia/mês/ano)
-        const hasEvent = events.some(e => {
-          const d = new Date(date);
-          const s = new Date(e.start);
-          return d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate();
-        });
-        if (hasEvent) {
-          return { style: { backgroundColor: EVENT_BG } };
-        }
-        return {};
-      }}
-    />
-  </div>
-);
+    <div className="calendar-wrapper">
+      <Calendar
+        localizer={localizer}
+        events={events}
+        startAccessor="start"
+        endAccessor="end"
+        views={['month']}
+        style={{ height: '100%' }}
+        toolbar={false}
+        components={{
+          event: (props) => (
+            <EventComponent
+              {...props}
+              allEvents={myEventsList}
+            />
+          ),
+        }}
+        eventPropGetter={() => {
+          return {
+            style: {
+              backgroundColor: EVENT_BG,
+              opacity: 1,
+              color: 'black',
+            },
+          };
+        }}
+        dayPropGetter={(date) => {
+          // Verifica se a data tem algum evento (comparando dia/mês/ano)
+          const hasEvent = events.some(e => {
+            const d = new Date(date);
+            const s = new Date(e.start);
+            return d.getFullYear() === s.getFullYear() && d.getMonth() === s.getMonth() && d.getDate() === s.getDate();
+          });
+          if (hasEvent) {
+            return { style: { backgroundColor: EVENT_BG } };
+          }
+          return {};
+        }}
+      />
+    </div>
+  );
   const [myEventsList, setMyEventsList] = useState([]);
   useEffect(() => {
     const fetchBoletos = async () => {
@@ -169,7 +179,9 @@ const MyCalendar = ({ events }) => (
         const boletosData = await boletos.listarBoletos();
         console.log('Boletos da API:', boletosData);
         const events = Array.isArray(boletosData) ? boletosData.map(boleto => {
-          const startDate = moment.utc(boleto.dataVencimento).startOf('day').toDate();
+          const startDate = new Date(
+            boleto.dataVencimento + 'T00:00:00'
+          );
           console.log(`Boleto: ${boleto.descricao}, Data original: ${boleto.data_vencimento}, Data convertida: ${startDate}`);
           return {
             id: boleto.idBoleto,
@@ -192,22 +204,22 @@ const MyCalendar = ({ events }) => (
   }, []);
 
   return (
-    <div>
+    <div className="calendario-container">
       <h1>Calendário de Pagamentos</h1>
       <MyCalendar events={myEventsList} />
-{selectedBoletos.length > 0 && (
-  <div className="modal-overlay">
-    <div
-      className="modal-container"
-      onClick={(e) => e.stopPropagation()}
-    >
-      <CalendarioDetail
-        boletos={selectedBoletos}
-        onClose={() => setSelectedBoletos([])}
-      />
-    </div>
-  </div>
-)}  
+      {selectedBoletos.length > 0 && (
+        <div className="modal-overlay">
+          <div
+            className="modal-container"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CalendarioDetail
+              boletos={selectedBoletos}
+              onClose={() => setSelectedBoletos([])}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

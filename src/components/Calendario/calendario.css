@@ -20,3 +20,95 @@
 .ver-dia-btn:hover {
     opacity: 0.85;
 }
+
+/* ===== CONTAINER GERAL ===== */
+
+.calendario-container {
+    padding: 20px;
+}
+
+/* ===== WRAPPER CALENDÁRIO ===== */
+
+.calendar-wrapper {
+    height: 80vh;
+}
+
+/* ===== RESPONSIVO MOBILE ===== */
+
+@media (max-width: 768px) {
+
+    .calendario-container {
+        padding: 10px;
+    }
+
+    .calendar-wrapper {
+        height: 75vh;
+    }
+
+    /* diminui fonte do calendário */
+    .rbc-month-view {
+        font-size: 11px;
+    }
+
+    .rbc-date-cell {
+        padding: 2px;
+        font-size: 10px;
+    }
+
+    .rbc-event {
+        font-size: 9px;
+        padding: 2px;
+    }
+
+    /* botão ver dia menor */
+    .ver-dia-btn {
+        font-size: 8px;
+        padding: 1px 4px;
+    }
+
+    /* eventos mais compactos */
+    .event-content {
+        gap: 2px;
+    }
+
+    /* remove altura exagerada das células */
+    .rbc-row-content {
+        min-height: 40px;
+    }
+
+}
+
+/* ===== MOBILE EVENT ===== */
+
+.mobile-day-container {
+    width: 100%;
+}
+
+.ver-dia-btn-mobile {
+    width: 100%;
+    padding: 8px 4px;
+    font-size: 12px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    background-color: #2c3e50;
+    color: white;
+    cursor: pointer;
+}
+
+.ver-dia-btn-mobile:hover {
+    opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+
+    .rbc-event {
+        padding: 0 !important;
+        background: transparent !important;
+    }
+
+    .rbc-event-content {
+        margin: 0;
+    }
+
+}
