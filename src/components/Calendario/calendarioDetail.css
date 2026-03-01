@@ -19,10 +19,11 @@
 
 /* Header */
 .event-title {
-    background-color: #e6b79e; /* tom salmão */
+    background-color: #582408; /* tom salmão */
     padding: 20px;
     font-size: 1.3em;
     font-weight: bold;
+    color: white;
 }
 
 /* Corpo do card */
