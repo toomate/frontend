@@ -6,6 +6,7 @@ import './calendario.css';
 import CalendarioDetail from './calendarioDetail';
 import { boletos } from '../../provider/Api';
 import { useLocation, useNavigate } from 'react-router-dom';
+import HeaderPadrao from '../../HeaderPadrao';
 
 
 export default function Calendario() {
@@ -205,6 +206,7 @@ useEffect(() => {
 
   return (
     <div className="calendario-container">
+      <HeaderPadrao></HeaderPadrao>
       <h1>Calendário de Pagamentos</h1>
       <MyCalendar events={myEventsList} />
       {selectedBoletos.length > 0 && (

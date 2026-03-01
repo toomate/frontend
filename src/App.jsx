@@ -15,13 +15,13 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-         {/* <Route path="/" element={<Login />} />
+         <Route path="/" element={<Login />} />
          <Route path="/boletos" element={<Boletos />} />
          <Route path="/cadastro" element={<Cadastro />} />
          <Route path="/cadastro-insumo" element={<CadastroInsumo />} />
          <Route path="/cadastro-lote" element={<CadastroLote />} />
-         <Route path="/dashboard" element={<Dashboard />} /> */}
-         <Route path="/" element={<Calendario />} />
+         <Route path="/dashboard" element={<Dashboard />} />
+         <Route path="/calendario" element={<Calendario />} />
          <Route path="/calendarioDetalhes" element={<CalendarioDetail />} />
       </Routes>
      </BrowserRouter>
