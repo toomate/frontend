@@ -4,7 +4,8 @@
     color: black;
     font-size: medium;
     font-weight: 500;
-    height: 6vh;
+    min-height: 35px;
+    width: 100%;
 }
 
 .insumo-grupo {

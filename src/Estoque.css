@@ -2,10 +2,12 @@
     font-family: "Arial", sans-serif;
 }
 
+
 .estoque-container {
-    height: 100vh;
-    width: 100vw;
-    background-color: white;
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.851);
 }
 
 .categoria-container {
@@ -66,11 +68,22 @@
     width: 100%;
     height: 67vh;
     display: flex;
+    flex: 1;
+    min-height: 0;
     flex-direction: column;
     align-items: center;
 }
 
-
+.grupo-insumos-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 95%;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+    max-height: max-content;
+}
 
 .plus-container {
     display: flex;
@@ -110,4 +123,66 @@
     color: black;
     font-size: 20px;
 
+}
+
+
+@media (max-width: 990px) {
+    #root {
+        width: 100dvw;
+        height: 120dvh;
+    }
+
+    .nav-header .header {
+        width: 100vw;
+    }
+
+    .categoria-container {
+        height: 100%;
+        display: flex;
+    }
+
+    .nav-categorias-container {
+        display: flex;
+        flex-direction: column;
+        height: 45%;
+        padding-bottom: 2px;
+        justify-content: space-around;
+    }
+
+    .nav-categorias-container .categorias-container {
+        position: static;
+    }
+
+    .nav-categorias-container .categorias-container .categorias-toolbar {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .nav-categorias-container .categorias-container .categorias-toolbar .categoria-menu-btn,
+    .categoria-item {
+        width: 100%;
+    }
+
+    .categoria-container .botoes-container .button-container {
+        width: 95%;
+    }
+
+    .categoria-container
+
+    .insumos-container .elemento-container {
+        font-size: small;
+    }
+
+    .insumos-container .grupo-insumos-container .insumo-nome {
+        font-size: small;
+        width: 70%;
+    }
+
+    .insumos-container .grupo-insumos-container .grupo-container {
+        font-size: small;
+    }
+
+    .insumos-container .grupo-insumos-container .item-container {
+        font-size: small;
+    }
 }

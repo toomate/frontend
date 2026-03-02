@@ -141,13 +141,13 @@ export function Estoque() {
             )}
             {cardRemocao && (
                 <div className="escurecer">
-                    <CardConfirmacao titulo={"Deseja descartar as alterações?"} fecharCard={() => {setCardRemocao(false)}} confirmar={removerAlteracao} />
+                    <CardConfirmacao titulo={"Deseja descartar as alterações?"} fecharCard={() => { setCardRemocao(false) }} confirmar={removerAlteracao} />
                 </div>
             )}
 
             {cardRotina && (
                 <div className="escurecer">
-                    <CardRotina fecharCard={() => {setCardRotina(false)}}/>    
+                    <CardRotina fecharCard={() => { setCardRotina(false) }} />
                 </div>
             )}
             <div className="nav-header">
@@ -163,13 +163,17 @@ export function Estoque() {
                     <ButtonPlus />
                     <Button texto="Rotinas" Icone={Bookmark} />
                     <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
-                    <ScanBarcode color="black" size={30} />
+                    <div className="botoes-container-icon">
+                        <ScanBarcode color="black" size={30} />
+                    </div>
                 </div>
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
-                    {grupo.length > 0 ? grupo.map(atual => (
-                        <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} />
-                    )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
+                    <div className="grupo-insumos-container">
+                        {grupo.length > 0 ? grupo.map(atual => (
+                            <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} />
+                        )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
+                    </div>
                 </div>
             </div>
         </div>
