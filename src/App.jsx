@@ -1,32 +1,35 @@
-import { useState } from 'react'
-import Cadastro from "./cadastro";
-import Login from "./login";
-import Index from "./Index";
-import CadastroInsumo from './CadastroInsumo';
-import CadastroLote from './CadastroLote';
-import Boletos from './Boletos';
-import Fiado from './fiado';
-import './App.css'
+﻿import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Login from "./Login";
+import Boletos from "./Boletos";
+import Cadastro from "./Cadastro";
+import CadastroInsumo from "./CadastroInsumo";
+import CadastroLote from "./CadastroLote";
+import Dashboard from "./Dashboard";
+import Calendario from "./components/Calendario/calendario";
+import CalendarioDetail from "./components/Calendario/calendarioDetail";
+import Fiado from "./fiado";
+
+import "./App.css";
+import { Estoque } from "./Estoque";
 
 function App() {
-  const [tela, setTela] = useState("cadastro");
-
-  function irPara(t) {
-    setTela(t);
-  }
-
   return (
-    <>
-      {tela === "cadastro" && <Cadastro irPara={irPara} />}
-      {tela === "login" && <Login irPara={irPara} />}
-      {tela === "dashboard" && <Index irPara={irPara} />}
-      {tela === "cadastroInsumo" && <CadastroInsumo irPara={irPara} />}
-      {tela === "cadastroLote" && <CadastroLote irPara={irPara} />}
-      {tela === "boletos" && <Boletos irPara={irPara} />}
-      {tela === "fiados" && <Fiado irPara={irPara} />}
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+         <Route path="/" element={<Login />} />
+         <Route path="/boletos" element={<Boletos />} />
+         <Route path="/cadastro" element={<Cadastro />} />
+         <Route path="/cadastro-insumo" element={<CadastroInsumo />} />
+         <Route path="/cadastro-lote" element={<CadastroLote />} />
+         <Route path="/dashboard" element={<Dashboard />} />
+         <Route path="/calendario" element={<Calendario />} />
+         <Route path="/calendarioDetalhes" element={<CalendarioDetail />} />
+         <Route path="/fiado" element={<Fiado />} />
+      </Routes>
+     </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
+

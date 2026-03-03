@@ -1,59 +1,143 @@
-import React, { useState } from "react";
-import "./index.css";
+import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { AuthApi } from "./provider/Api";
+import "./Login.css";
 
-export default function Cadastro({ irPara }) {
+export default function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
+  const [nomeCompleto, setNomeCompleto] = useState("");
+  const [username, setUsername] = useState("");
+  const [senha, setSenha] = useState("");
+  const [confirmarSenha, setConfirmarSenha] = useState("");
+  const [carregando, setCarregando] = useState(false);
+  const [erro, setErro] = useState("");
+  const navigate = useNavigate();
+
+  async function cadastrar() {
+    const nomeCompletoFormatado = nomeCompleto.trim();
+    const usernameFormatado = username.trim();
+    const senhaFormatada = senha.trim();
+    const confirmarFormatada = confirmarSenha.trim();
+
+    if (!nomeCompletoFormatado || !usernameFormatado || !senhaFormatada || !confirmarFormatada) {
+      setErro("Preencha nome, username, senha e confirmacao.");
+      return;
+    }
+
+    if (senhaFormatada.length < 6) {
+      setErro("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    if (senhaFormatada !== confirmarFormatada) {
+      setErro("As senhas nao coincidem.");
+      return;
+    }
+
+    try {
+      setCarregando(true);
+      setErro("");
+
+      await AuthApi.cadastrar({
+        nome: nomeCompletoFormatado,
+        apelido: usernameFormatado,
+        senha: senhaFormatada,
+        administrador: true,
+      });
+
+      localStorage.setItem("usuarioNomeCompleto", nomeCompletoFormatado);
+      navigate("/");
+    } catch (error) {
+      const status = error?.response?.status;
+
+      if (status === 409) {
+        setErro("Esse usuario ja existe.");
+        return;
+      }
+
+      if (status === 400) {
+        setErro("Dados invalidos. Verifique os campos.");
+        return;
+      }
+
+      setErro("Nao foi possivel realizar o cadastro.");
+    } finally {
+      setCarregando(false);
+    }
+  }
 
   return (
-    <div className="container">
-      <div className="box">
-        <span className="titulo">Toomate</span>
-        <span className="subtitulo">Cadastro</span>
+    <section className="auth-page">
+      <div className="auth-card auth-card-register">
+        <h1 className="auth-brand">Toomate</h1>
+        <h2 className="auth-title">Cadastro</h2>
+        <p className="auth-subtitle">Crie sua conta para comecar a usar a plataforma.</p>
 
-        <input type="text" placeholder="Nome Completo" />
+        <input
+          className="auth-input"
+          type="text"
+          placeholder="Nome completo"
+          value={nomeCompleto}
+          onChange={(e) => setNomeCompleto(e.target.value)}
+        />
 
-        <input type="text" placeholder="Usuário" />
+        <input
+          className="auth-input"
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
 
-        {/* Campo Senha */}
-        <div className="input-wrapper">
+        <div className="auth-input-wrap">
           <input
+            className="auth-input"
             type={mostrarSenha ? "text" : "password"}
             placeholder="Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
           />
           <button
             type="button"
-            className="eye-btn"
+            className="auth-eye-btn"
             onClick={() => setMostrarSenha(!mostrarSenha)}
           >
             {mostrarSenha ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
 
-        {/* Campo Confirmar Senha */}
-        <div className="input-wrapper">
+        <div className="auth-input-wrap">
           <input
+            className="auth-input"
             type={mostrarConfirmar ? "text" : "password"}
-            placeholder="Confirmar Senha"
+            placeholder="Confirmar senha"
+            value={confirmarSenha}
+            onChange={(e) => setConfirmarSenha(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") cadastrar();
+            }}
           />
           <button
             type="button"
-            className="eye-btn"
+            className="auth-eye-btn"
             onClick={() => setMostrarConfirmar(!mostrarConfirmar)}
           >
             {mostrarConfirmar ? <EyeOff size={20} /> : <Eye size={20} />}
           </button>
         </div>
 
-        <button className="btn" onClick={() => irPara("login")}>
-          Cadastrar
+        {erro && <p className="auth-error">{erro}</p>}
+
+        <button className="auth-submit" onClick={cadastrar} disabled={carregando}>
+          {carregando ? "Cadastrando..." : "Cadastrar"}
         </button>
 
-        <p className="auth-switch">
-          <span onClick={() => irPara("login")}>Já possui conta?</span>
+        <p className="auth-link-row">
+          Ja possui conta? <span onClick={() => navigate("/")}>Entrar</span>
         </p>
       </div>
-    </div>
+    </section>
   );
 }

@@ -1,35 +1,21 @@
-import React from "react";
-import { Menu } from "lucide-react";
-import "./index.css";
-import { Navbar } from "./components/Navbar/Navbar";
+﻿import React from "react";
+import "./App.css";
+import HeaderPadrao from "./HeaderPadrao";
+import { useNavigate } from "react-router-dom";
 
-export default function Index1({ irPara }) {
+export default function Index() {
+  const navigate = useNavigate();
+
   return (
     <div className="dashboard">
-      <header className="header">
-        <div className="lado-esquerdo">
-        <button className="hamburger-btn">
-            <Menu size={28} color="#b88b09"/>
-          </button>
-          
-          <div className="logo-circulo"></div>
+      <HeaderPadrao />
 
-          <div className="restaurante">
-          <div className="restaurante-name">Toomate Bistrô</div>
-            <div className="restaurante-subnome">Kaio</div>
-            </div>
-            </div>
-          
-            <button onClick={() => irPara("login")} className="btn">Sair</button>
-      </header>
-
-      {/* <Navbar /> */}
       <nav className="menu">
-        <button>Estoque</button>
-        <button>Fornecedores</button>
-        <button>Gastos</button>
-        <button>Boletos</button>
-        <button onClick={() => irPara("fiados")}>Fiados</button>
+        <button onClick={() => navigate("/Estoque")} className="btn">Estoque</button>
+        <button onClick={() => navigate("/fornecedores")} className="btn">Fornecedores</button>
+        <button onClick={() => navigate("/Gastos")} className="btn">Gastos</button>
+        <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
+        <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
       </nav>
 
       <div className="status">
@@ -52,8 +38,7 @@ export default function Index1({ irPara }) {
       </div>
 
       <div className="container2">
-        <div className="grafico">
-        </div>
+        <div className="grafico"></div>
 
         <div className="notificacao">
           <h2 className="alerta-titulo">ALERTAS!</h2>
@@ -82,3 +67,4 @@ export default function Index1({ irPara }) {
     </div>
   );
 }
+

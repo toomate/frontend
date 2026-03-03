@@ -1,43 +1,943 @@
-#root {
-  max-width: 1280px;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+.dashboard {
+  font-family: "Arial", sans-serif;
+  height: 100%;
+  min-height: 100vh;
+  background-color: white;
+  color: black;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 5px 25px;
+  background-color: white;
+  border-bottom: 3px solid black;
+}
+
+.hamburger-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.logo-circulo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-image: url(./images/LogoToomate.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.lado-esquerdo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+
+}
+
+.restaurante {
+  display: flex;
+  flex-direction: column;
+}
+
+.restaurante-name {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.restaurante-subnome {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 35px;
+  background: #c92c2c;
+  color: white;
+  border-radius: 5px;
+  font-weight: bold;
+  margin-right: 0;
+  padding: 10px;
+  margin-right: 0;
+}
+
+.menu button:hover,
+.btn:hover {
+  border: 1.5px solid;
+  border-color: blue;
+  opacity: 0.9;
+}
+
+.menu {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 10px;
+}
+
+.menu button {
+  flex: 1;
   text-align: center;
+  margin: 0 10px;
+  padding: 10px;
+  background-color: white;
+  border: 1px solid gold;
+  color: black;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  font-size: 16px;
+  transition: 0.3s;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
+.status {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px 20px;
 }
 
 .card {
-  padding: 2em;
+  background-color: white;
+  border: 1px solid gold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.30);
+  padding: 10px;
+  height: 125px;
+  border-radius: 5px;
+  text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.read-the-docs {
-  color: #888;
+.numero {
+  font-size: 25px;
+  margin-top: 5px;
+  font-weight: bold;
+  color: black;
+}
+
+.container2 {
+  display: flex;
+  margin-top: 10px;
+  gap: 20px;
+  padding: 5px 20px;
+}
+
+.grafico {
+  flex: 3;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.40);
+  padding: 12px;
+  background-image: url(./images/grafico.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  min-height: 200px;
+  max-height: 350px;
+}
+
+.notificacao {
+  flex: 1;
+  background: white;
+  border-radius: 5px;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.40);
+  min-height: 200px;
+  max-height: 350px;
+}
+
+.alerta-titulo {
+  text-align: center;
+  font-size: 22px;
+  font-weight: bold;
+  font-style: italic;
+  color: #c92c2c;
+  margin-bottom: 15px;
+}
+
+.alerta-btn {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+  background-color: white;
+  color: black;
+  margin-bottom: 12px;
+}
+
+.validade,
+.estoque,
+.fornecedor,
+.boleto {
+  background-color: #ffeaea;
+  padding: 10px;
+}
+
+.validade-icone,
+.estoque-icone,
+.fornecedor-icone,
+.boleto-icone {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+}
+
+.validade-icone {
+  background-image: url(./images/validade.png);
+}
+
+.estoque-icone {
+  background-image: url(./images/estoque.png);
+}
+
+.fornecedor-icone {
+  background-image: url(./images/fornecedor.png);
+}
+
+.boleto-icone {
+  background-image: url(./images/boleto.png);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.container {
+  height: 100%;
+  min-width: 1390px;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url(./images/fundo-tela.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 400px;
+  background: white;
+  padding: 20px;
+  border-radius: 5px;
+  border: 1.5px solid gold;
+  text-align: center;
+}
+
+.titulo {
+  font-size: 26px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: black;
+}
+
+.subtitulo {
+  font-size: 18px;
+  margin-bottom: 15px;
+  color: black;
+}
+
+.subtitulo2 {
+  font-size: 14px;
+  margin-bottom: 15px;
+  color: black;
+}
+
+input {
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px 10px;
+  margin-bottom: 25px;
+  background-color: white;
+  color: rgb(175, 175, 175);
+  border: 1.5px solid rgb(175, 175, 175);
+}
+
+.auth-switch {
+  color: black;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.auth-erro {
+  color: #a81919;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+
+.auth-switch span {
+  color: 1.5px solid gold;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  height: 40px;
+  border-radius: 5px;
+  padding: 10px 40px 10px 10px;
+  margin-bottom: 15px;
+  border: 1.5px solid rgb(175, 175, 175);
+}
+
+.eye-btn {
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 3px;
+  color: #555;
+}
+
+/* Responsividade */
+/* Tela entre 991px e 1390px */
+
+@media (max-width: 1390px) {
+
+  .container {
+    min-width: 991px;
+    max-width: 1390px;
+    min-height: 100vh;
+  }
+
+  
+  .logo-circulo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .restaurante-name {
+    font-size: 18px;
+  }
+
+  .restaurante-subnome {
+    font-size: 12px;
+  }
+
+  .menu button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .card {
+    height: 110px;
+  }
+
+  .numero {
+    font-size: 20px;
+  }
+
+  .alerta-btn {
+    font-size: 14px;
+  }
+
+  .grafico,
+  .notificacao {
+    max-height: 300px;
+  }
+}
+
+/* Tela entre 768px - 990px */
+@media (max-width: 990px) {
+  .menu button {
+    margin: 0 5px;
+    font-size: 13px;
+  }
+
+  .status {
+    gap: 5px;
+  }
+
+  .card {
+    padding: 8px;
+    height: 100px;
+  }
+
+  .numero {
+    font-size: 18px;
+  }
+
+  .grafico,
+  .notificacao {
+    min-height: 180px;
+  }
+}
+
+/* Tela menor que 768px */
+@media (max-width: 768px) {
+
+  .header {
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .lado-esquerdo {
+    width: 70%;
+    justify-content: flex-start;
+    gap: 15px;
+  }
+
+  .logo-circulo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .restaurante-name {
+    font-size: 18px;
+  }
+
+  .restaurante-subnome {
+    font-size: 12px;
+  }
+
+  .header-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+
+  .menu {
+    flex-direction: column;
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .menu button {
+    width: 100%;
+    margin: 0;
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .status {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .card {
+    flex: 0 0 48%;
+    margin-bottom: 10px;
+    height: 110px;
+  }
+
+  .numero {
+    font-size: 20px;
+  }
+
+  .container2 {
+    flex-direction: column-reverse;
+    padding: 10px;
+  }
+
+  .notificacao {
+    width: 100%;
+    max-height: none;
+  }
+
+  .grafico {
+    width: 100%;
+    margin-top: 15px;
+    min-height: 200px;
+  }
+
+  .alerta-btn {
+    font-size: 16px;
+    gap: 15px;
+  }
+}
+
+/* Tela menor que 480px */
+@media (max-width: 480px) {
+
+  .container {
+    min-width: 480px;
+    min-height: 100vh;
+  }
+
+  .restaurante-name {
+    font-size: 16px;
+  }
+
+  .menu button {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .logo-circulo {
+    width: 40x;
+    height: 40px;
+  }
+
+  .card {
+    flex: 0 0 100%;
+  }
+
+  .numero {
+    font-size: 18px;
+  }
+
+  .alerta-btn {
+    font-size: 14px;
+  }
+}
+
+.container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  width: 420px;
+  background: #fff;
+  padding: 32px;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+
+.box-cadastro {
+  width: 480px;
+  border-color: unset;
+  border: 1.5px solid gold;
+}
+
+.titulo {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.form-group {
+  height: 65px;
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  gap: 6px;
+}
+
+.form-group label {
+  text-align: start;
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+
+input,
+select {
+  height: 40px;
+  width: 300px;
+  padding: 0 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
+  color: #ccc;
+}
+
+input::placeholder {
+  color: #ccc;
+}
+
+input {
+  margin: auto;
+  color: #000;
+}
+
+.select-wrapper {
+  width: 300px;
+  display: flex;
+  color: black;
+  gap: 6px;
+}
+
+.icon-btn {
+  width: 40px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  padding: 0 5px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 16px;
+}
+
+.btn-cancelar {
+  background: red;
+}
+
+.btn-voltar {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000;
+}
+
+.form-group1 {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.form-group2 {
+  height: 65px;
+  width: 150px;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+  gap: 6px;
+  align-items: flex-start;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: black;
+}
+
+.form-group2 input{
+  width: 140px;
+  font-size: 14px;
+  color: black;
+}
+
+.botao-upload {
+  color: white;
+  padding: 3px 7px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.botao-upload input {
+  padding: 10px;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 320px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.modal-header button {
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  color: black;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  margin-bottom: 15px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.btn-cancelar1, .btn-salvar1, .btn-ok{
+  width: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: #c92c2c;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.modal-sucesso {
+  display: flex;
+  flex-direction: column;
+  align-items: center;      
+  justify-content: center;
+  text-align: center;
+  gap: 12px;
+}
+
+.icone-sucesso {
+  color: green;
+}
+
+.boletos {
+  display: flex;
+  flex-direction: column;
+  font-family: "Arial", sans-serif;
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  min-width: 1380px;
+  min-height: 100vh;
+  background-color: white;
+  color: black;
+  margin: 0 auto;
+  z-index: 9999;
+
+}
+
+.conteudo span {
+  display: flex;
+  align-items: flex-start;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.card-pagamentos {
+  padding: 20px;
+  border-radius: 12px;
+}
+
+.filtros {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.filtros select {
+  color: black;
+  background-color: #ccc;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.busca {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  gap: 5px;
+  border-radius: 6px;
+  background-color: #ccc !important;
+}
+
+.busca input {
+  background-color: transparent;
+}
+
+.busca input::placeholder {
+  color: black !important;
+}
+
+.btn-calendario {
+  background-color: white;
+  border: none;
+  cursor: pointer;
+  color: black;
+}
+
+.item-pagamento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+  border-top: 1px solid #ccc;
+}
+
+.vencimento {
+  text-align: left;
+} 
+
+.descricao {
+  background-color: gainsboro !important;
+  padding: 6px 10px;
+  border-radius: 6px;
+  margin: 6px 0;
+}
+
+.valor {
+  background: #ccc;
+  padding: 6px 10px;
+  border-radius: 6px;
+  width: 120px;
+}
+
+.btn-pago {
+  background: green;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.react-calendar__navigation button {
+  font-size: 18px;
+  color: black;
+  background: none;
+}
+
+.modal-fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: white;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-body-calendario {
+  flex: 1;
+  padding: 5px 10px;
+  display: flex;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.modal-body-calendario .react-calendar {
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100%;
+  border: none;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.react-calendar__navigation {
+  margin: 10px !important;
+  
+}
+
+.react-calendar__navigation__arrow.react-calendar__navigation__prev-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next-button,
+.react-calendar__navigation__arrow.react-calendar__navigation__next2-button,
+.react-calendar__navigation__label {
+  padding: 3px;
+}
+
+.react-calendar__tile abbr {
+  font-weight: bold;
+  font-size: 13px;
+  color: black;
+}
+
+.react-calendar__month-view__weekdays {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr);
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.react-calendar__month-view__weekdays__weekday--weekend {
+  font-size: 12px;
+  color: red;
+  padding: 0;
+}
+
+.react-calendar__month-view__days__day--weekend {
+  color: #c92c2c;
+}
+
+.conteudo-dia {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 11px;
+}
+
+.react-calendar__month-view__days {
+  border: #555;
+}
+
+.nome-divida, .valor {
+  color: black;
+}
+
+.status.pago {
+  color: green;
+  font-weight: bold;
+  padding: 0;
+}
+
+.valor {
+  padding: 2px;
 }

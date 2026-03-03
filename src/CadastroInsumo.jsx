@@ -1,5 +1,5 @@
 import React from "react";
-import "./index.css";
+import "./App.css";
 import { ArrowLeft, Plus } from "lucide-react";
 
 export default function CadastroInsumo({ irPara }) {

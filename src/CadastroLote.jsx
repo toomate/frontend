@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./index.css";
+import "./App.css";
 import { ArrowLeft, Plus, Trash2, Save, CheckCircle} from "lucide-react";
 
 export default function CadastroLote({ irPara }) {

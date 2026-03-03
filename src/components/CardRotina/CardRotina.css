@@ -1,0 +1,30 @@
+.container-card-rotina {
+    display: flex;
+    justify-self: center;
+    flex-direction: column;
+    justify-content: space-around;
+    background-color: white;
+    height: 35vh;
+    color: black;
+    align-items: center;
+    width: 35vw;
+    border-radius: 5px;
+}
+
+.titulo-card-rotina {
+    justify-content: flex-start;
+    font-size: large;
+    font-weight: 600;
+}
+
+.input-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    width: 80%;
+}
+
+
+.input-rotina {
+    width: 100%;
+}
