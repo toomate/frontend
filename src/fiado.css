@@ -3,92 +3,104 @@
   width: 100vw;
   min-height: 100vh;
   background-color: #ffffff;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Arial', sans-serif;
 }
 
 /* ===== Barra de filtros ===== */
 .fiado-filtros {
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
-  padding: 10px 12px;
-  gap: 40px;
+  padding: 1.5% 2.5%;
+  gap: 0.625em;
   width: 100%;
   background: #ffffff;
   box-sizing: border-box;
+  flex-wrap: wrap;
+  overflow: hidden;
 }
 
 .filtro-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  width: 150px;
-  height: 40px;
-  padding: 0 12px;
-  background: #c3c3c3;
-  border-radius: 7px;
-  border: none;
+  gap: 0.5em;
+  height: 2.25em;
+  padding: 0 0.875em;
+  background: #f8ecc6;
+  border-radius: 999em;
+  border: 0.0625em solid #6b4423;
   cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  color: #000000;
+  font-family: 'Arial', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.75rem, 1.1vw, 1rem);
+  color: #6b4423;
   transition: background 0.2s;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .filtro-btn:hover {
-  background: #b0b0b0;
+  background: #f0dfa8;
 }
 
 .filtro-btn.active {
-  background: #9e9e9e;
+  background: #e6d08e;
 }
 
 .add-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 50px;
-  height: 40px;
-  background: #000000;
-  border-radius: 7px;
-  border: none;
+  height: 2.25em;
+  padding: 0 0.875em;
+  background: #6b4423;
+  border-radius: 999em;
+  border: 0.0625em solid #6b4423;
   cursor: pointer;
   transition: background 0.2s;
+  flex-shrink: 0;
 }
 
 .add-btn:hover {
-  background: #333333;
+  background: #8a5a30;
 }
 
+.view-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.25em;
+  flex-shrink: 0;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25em;
+  height: 2.25em;
+  border: 0.0625em solid transparent;
+  border-radius: 0.4em;
+  cursor: pointer;
+  background: transparent;
+  color: #6b4423;
+  transition: all 0.2s;
+}
+
+.view-toggle-btn.active {
+  background: #f8ecc6;
+  border-color: #6b4423;
+  color: #6b4423;
+}
+
+.view-toggle-btn:hover {
+  background: #f8ecc6;
+}
+
+/* ===== Search ===== */
 .fiado-search-wrapper {
   flex: 1;
-  max-width: 500px;
-  min-width: 200px;
-}
-
-.fiado-search-input {
-  width: 100%;
-  height: 40px;
-  padding: 0 40px 0 14px;
-  background: #c3c3c3;
-  border-radius: 7px;
-  border: none;
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  color: #000;
-  box-sizing: border-box;
-}
-
-.fiado-search-input::placeholder {
-  color: #666;
-}
-
-.fiado-search-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 2px #828282;
+  max-width: 35%;
+  min-width: 12em;
 }
 
 .fiado-search-box {
@@ -96,74 +108,60 @@
   width: 100%;
 }
 
+.fiado-search-input {
+  width: 100%;
+  height: 2.625em;
+  padding: 0 12% 0 4%;
+  background: #fffdf4;
+  border-radius: 0.375em;
+  border: 0.0625em solid #6b4423;
+  font-family: 'Arial', sans-serif;
+  font-size: clamp(0.75rem, 1.1vw, 1rem);
+  color: #000;
+  box-sizing: border-box;
+}
+
+.fiado-search-input::placeholder {
+  color: #999;
+}
+
+.fiado-search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.15em rgba(107, 68, 35, 0.25);
+}
+
 .fiado-search-icon {
   position: absolute;
-  right: 10px;
+  right: 3%;
   top: 50%;
   transform: translateY(-50%);
-  color: #4b4b4b;
+  color: #6b4423;
   pointer-events: none;
 }
 
-/* ===== Toggle de visualização ===== */
-.view-toggle {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.view-toggle-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  background: transparent;
-  color: #666;
-  transition: all 0.2s;
-}
-
-.view-toggle-btn.active {
-  background: #c3c3c3;
-  color: #000;
-}
-
-.view-toggle-btn:hover {
-  background: #e0e0e0;
-}
-
-/* ===== Card Grid (visualização cards) ===== */
+/* ===== Card Grid ===== */
 .fiado-cards-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 20px;
-  padding: 20px 35px;
-}
-
-@media (max-width: 1100px) {
-  .fiado-cards-grid {
-    grid-template-columns: 1fr;
-  }
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3% 2%;
+  padding: 1.5% 2.5%;
 }
 
 /* ===== Tabela / Lista ===== */
 .fiado-tabela-container {
-  padding: 0 35px 20px;
+  padding: 0 2.5% 1.5%;
 }
 
 .fiado-tabela-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
-  font-weight: 500;
-  font-size: 16px;
-  color: #000;
-  border-bottom: 2px solid #000;
-  gap: 10px;
+  padding: 1% 1.5%;
+  font-weight: 600;
+  font-size: clamp(0.8rem, 1.1vw, 1.1rem);
+  color: #6b4423;
+  border-bottom: 0.15em solid #6b4423;
+  gap: 1%;
 }
 
 .fiado-tabela-header span {
@@ -176,8 +174,8 @@
 }
 
 .fiado-tabela-body {
-  border: 1px solid #e0e0e0;
-  border-radius: 7px;
+  border: 0.0625em solid #e0d5c5;
+  border-radius: 0.5em;
   overflow: hidden;
 }
 
@@ -185,18 +183,18 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+  padding: 1% 1.5%;
   font-weight: 500;
-  font-size: 15px;
+  font-size: clamp(0.75rem, 1vw, 1rem);
   color: #000;
-  border-bottom: 1px solid #e0e0e0;
-  gap: 10px;
+  border-bottom: 0.0625em solid #e0d5c5;
+  gap: 1%;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .fiado-tabela-row:hover {
-  background: #f5f5f5;
+  background: #fffdf4;
 }
 
 .fiado-tabela-row:last-child {
@@ -212,11 +210,11 @@
   text-align: left;
 }
 
-.fiado-tabela-row .status-badge {
+.status-badge {
   display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 13px;
+  padding: 0.3em 0.8em;
+  border-radius: 1.2em;
+  font-size: clamp(0.65rem, 0.9vw, 0.9rem);
   font-weight: 500;
 }
 
@@ -230,16 +228,16 @@
   color: #155724;
 }
 
-/* ===== Conteúdo vazio ===== */
+/* ===== Empty State ===== */
 .fiado-vazio {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px;
+  padding: 8vh 2%;
   color: #828282;
-  font-size: 18px;
-  gap: 12px;
+  font-size: clamp(0.9rem, 1.2vw, 1.2rem);
+  gap: 1em;
 }
 
 /* ===== Modal Overlay ===== */
@@ -259,57 +257,57 @@
 /* ===== Modal Novo Fiado ===== */
 .novo-fiado-modal {
   background: #fff;
-  border: 1px solid #828282;
-  border-radius: 17px;
+  border: 0.0625em solid #6b4423;
+  border-radius: 1.2em;
   width: 90%;
-  max-width: 700px;
-  padding: 30px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  max-width: 50vw;
+  padding: 2.5%;
+  box-shadow: 0 0.5em 2em rgba(0, 0, 0, 0.15);
 }
 
 .novo-fiado-modal h2 {
-  margin: 0 0 24px;
-  font-size: 22px;
+  margin: 0 0 1.5em;
+  font-size: clamp(1.1rem, 1.5vw, 1.5rem);
   font-weight: 600;
-  color: #000;
+  color: #6b4423;
 }
 
 .novo-fiado-form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 1.2em;
 }
 
 .novo-fiado-form label {
   font-weight: 500;
-  font-size: 14px;
+  font-size: clamp(0.75rem, 1vw, 1rem);
   color: #333;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 0.4em;
 }
 
 .novo-fiado-form input,
 .novo-fiado-form textarea {
-  padding: 10px 14px;
-  border: 1px solid #c3c3c3;
-  border-radius: 7px;
-  font-family: 'Inter', sans-serif;
-  font-size: 15px;
-  background: #f9f9f9;
+  padding: 0.7em 1em;
+  border: 0.0625em solid #c3a882;
+  border-radius: 0.375em;
+  font-family: 'Arial', sans-serif;
+  font-size: clamp(0.75rem, 1vw, 1rem);
+  background: #fffdf4;
   color: #000;
 }
 
 .novo-fiado-form input:focus,
 .novo-fiado-form textarea:focus {
   outline: none;
-  border-color: #828282;
+  border-color: #6b4423;
   background: #fff;
 }
 
 .novo-fiado-form-row {
   display: flex;
-  gap: 16px;
+  gap: 3%;
 }
 
 .novo-fiado-form-row label {
@@ -319,35 +317,121 @@
 .novo-fiado-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 8px;
+  gap: 1em;
+  margin-top: 0.5em;
 }
 
 .novo-fiado-actions button {
-  padding: 10px 24px;
-  border-radius: 7px;
-  border: none;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  font-size: 15px;
+  padding: 0.7em 1.8em;
+  border-radius: 999em;
+  border: 0.0625em solid #6b4423;
+  font-family: 'Arial', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.75rem, 1vw, 1rem);
   cursor: pointer;
   transition: background 0.2s;
 }
 
 .btn-cancelar {
-  background: #e0e0e0;
-  color: #000;
+  background: #f8ecc6;
+  color: #6b4423;
 }
 
 .btn-cancelar:hover {
-  background: #c3c3c3;
+  background: #e6d08e;
 }
 
 .btn-salvar {
-  background: #000;
+  background: #6b4423;
   color: #fff;
 }
 
 .btn-salvar:hover {
-  background: #333;
+  background: #8a5a30;
+}
+
+/* ===== Responsivo: Tablets ===== */
+@media (max-width: 64em) {
+  .fiado-filtros {
+    gap: 0.5em;
+    padding: 2% 2.5%;
+  }
+
+  .fiado-cards-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4% 2%;
+    padding: 2% 3%;
+  }
+
+  .novo-fiado-modal {
+    max-width: 80vw;
+  }
+}
+
+/* ===== Responsivo: Mobile ===== */
+@media (max-width: 48em) {
+  .fiado-filtros {
+    flex-wrap: wrap;
+    gap: 0.5em;
+    padding: 2.5% 3%;
+  }
+
+  .filtro-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: center;
+  }
+
+  .add-btn {
+    flex: 0 0 auto;
+  }
+
+  .fiado-search-wrapper {
+    max-width: 100%;
+    min-width: 100%;
+    flex-basis: 100%;
+    order: 10;
+    margin-top: 0.5em;
+  }
+
+  .fiado-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 5% 2%;
+    padding: 3% 4%;
+  }
+
+  .fiado-tabela-container {
+    padding: 0 3% 3%;
+  }
+
+  .fiado-tabela-header,
+  .fiado-tabela-row {
+    font-size: clamp(0.65rem, 2.5vw, 0.9rem);
+    padding: 2% 2%;
+  }
+
+  .novo-fiado-modal {
+    max-width: 95vw;
+    padding: 5%;
+  }
+
+  .novo-fiado-form-row {
+    flex-direction: column;
+    gap: 1.2em;
+  }
+
+
+}
+
+/* ===== Responsivo: Mobile pequeno ===== */
+@media (max-width: 30em) {
+  .filtro-btn {
+    font-size: clamp(0.65rem, 3.5vw, 0.85rem);
+    padding: 0 0.6em;
+  }
+
+  .fiado-tabela-header span:nth-child(4),
+  .fiado-tabela-row span:nth-child(4) {
+    display: none;
+  }
 }

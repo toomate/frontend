@@ -1,76 +1,77 @@
 .fiado-modal {
   background: #fff;
-  border: 1px solid #828282;
-  border-radius: 17px;
+  border: 0.0625em solid #6b4423;
+  border-radius: 1.2em;
   width: 90%;
-  max-width: 780px;
+  max-width: 55vw;
   max-height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 0.5em 2em rgba(0, 0, 0, 0.18);
 }
 
 /* ===== Header do modal ===== */
 .fiado-modal-header {
-  background: #e0e0e0;
-  padding: 20px 24px;
+  background: #f8ecc6;
+  padding: 3% 3.5%;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0.75em;
   position: relative;
-  border-radius: 17px 17px 0 0;
+  border-radius: 1.2em 1.2em 0 0;
 }
 
 .fiado-modal-close {
   position: absolute;
-  top: 16px;
-  right: 20px;
-  width: 32px;
-  height: 32px;
+  top: 5%;
+  right: 2.5%;
+  width: 2.2em;
+  height: 2.2em;
   background: none;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 0.4em;
   transition: background 0.2s;
 }
 
 .fiado-modal-close:hover {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(107, 68, 35, 0.15);
 }
 
 .fiado-modal-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 0.5em;
   flex-wrap: wrap;
 }
 
 .fiado-modal-row .label {
-  font-weight: 500;
-  font-size: 16px;
-  color: #000;
+  font-weight: 600;
+  font-size: clamp(0.8rem, 1.1vw, 1.1rem);
+  color: #6b4423;
   white-space: nowrap;
 }
 
 .fiado-modal-row .valor-bar {
-  height: 20px;
-  background: #828282;
-  border-radius: 7px;
+  height: auto;
+  min-height: 2em;
+  background: #6b4423;
+  border-radius: 0.375em;
   display: flex;
   align-items: center;
-  padding: 2px 12px;
+  padding: 0.3em 0.75em;
   color: #fff;
-  font-size: 14px;
-  min-width: 100px;
+  font-size: clamp(0.7rem, 1vw, 1rem);
+  min-width: 8%;
 }
 
 .fiado-modal-row .valor-bar.wide {
   flex: 1;
-  min-width: 200px;
+  min-width: 30%;
 }
 
 /* ===== Corpo do modal - Tabela de pedidos ===== */
@@ -83,11 +84,11 @@
 .fiado-modal-table-header {
   display: flex;
   align-items: center;
-  padding: 14px 24px;
-  font-weight: 500;
-  font-size: 16px;
-  color: #000;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5% 3%;
+  font-weight: 600;
+  font-size: clamp(0.8rem, 1.1vw, 1.1rem);
+  color: #6b4423;
+  border-bottom: 0.0625em solid #e0d5c5;
   position: sticky;
   top: 0;
   background: #fff;
@@ -107,14 +108,20 @@
 .fiado-modal-pedido-row {
   display: flex;
   align-items: center;
-  padding: 10px 24px;
-  font-size: 15px;
+  padding: 1.2% 3%;
+  font-size: clamp(0.75rem, 1vw, 1rem);
   color: #000;
-  min-height: 54px;
+  min-height: 3em;
+  transition: opacity 0.3s;
+}
+
+.fiado-modal-pedido-row.pago {
+  opacity: 0.55;
+  text-decoration: line-through;
 }
 
 .fiado-modal-pedido-row:nth-child(odd) {
-  background: #d9d9d9;
+  background: #f8ecc6;
 }
 
 .fiado-modal-pedido-row:nth-child(even) {
@@ -131,17 +138,87 @@
   text-align: left;
 }
 
-.fiado-modal-pedido-row .pedido-bar {
-  height: 40px;
-  background: #828282;
-  border-radius: 7px;
-  flex: 1;
-  margin: 0 6px;
+/* Botão de marcar como pago */
+.btn-pagar-divida {
+  padding: 0.35em 0.9em;
+  border-radius: 999em;
+  border: none;
+  font-family: 'Arial', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.65rem, 0.9vw, 0.85rem);
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.btn-pagar-divida.aberto {
+  background: #fff3cd;
+  color: #856404;
+  border: #856404 0.0625em solid;
+}
+
+.btn-pagar-divida.aberto:hover {
+  background: #ffe69c;
+}
+
+.btn-pagar-divida.pago {
+  background: #d4edda;
+  color: #155724;
+  border: #155724 0.0625em solid;
+  cursor: default;
+}
+
+/* Total no rodapé do modal */
+.fiado-modal-footer {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  padding: 0 10px;
+  padding: 2% 3%;
+  border-top: 0.0625em solid #e0d5c5;
+  background: #fffdf4;
+  flex-wrap: wrap;
+  gap: 1%;
+}
+
+.fiado-modal-footer .total-info {
+  display: flex;
+  gap: 1.5em;
+  font-weight: 600;
+  font-size: clamp(0.8rem, 1vw, 1rem);
+  color: #000;
+  flex-wrap: wrap;
+}
+
+.fiado-modal-footer .total-info .valor-aberto {
+  color: #856404;
+}
+
+.fiado-modal-footer .total-info .valor-pago {
+  color: #155724;
+}
+
+.btn-pagar-todas {
+  padding: 0.5em 1.5em;
+  border-radius: 999em;
+  border: 0.0625em solid #6b4423;
+  background: #6b4423;
   color: #fff;
-  font-size: 14px;
+  font-family: 'Arial', sans-serif;
+  font-weight: 600;
+  font-size: clamp(0.75rem, 1vw, 0.95rem);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-pagar-todas:hover {
+  background: #8a5a30;
+}
+
+.btn-pagar-todas:disabled {
+  background: #c3a882;
+  color: #fff;
+  cursor: default;
+  border-color: #c3a882;
 }
 
 /* ===== Sem pedidos ===== */
@@ -149,7 +226,54 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 5%;
   color: #828282;
-  font-size: 16px;
+  font-size: clamp(0.8rem, 1.1vw, 1rem);
+}
+
+/* ===== Responsivo ===== */
+@media (max-width: 64em) {
+  .fiado-modal {
+    max-width: 80vw;
+  }
+}
+
+@media (max-width: 48em) {
+  .fiado-modal {
+    max-width: 95vw;
+    width: 95%;
+    max-height: 90vh;
+  }
+
+  .fiado-modal-header {
+    padding: 4% 5%;
+  }
+
+  .fiado-modal-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5em;
+  }
+
+  .fiado-modal-row .valor-bar.wide,
+  .fiado-modal-row .valor-bar {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .fiado-modal-table-header span:nth-child(3),
+  .fiado-modal-pedido-row span:nth-child(3) {
+    display: none;
+  }
+
+  .fiado-modal-footer {
+    flex-direction: column;
+    gap: 0.75em;
+    align-items: flex-start;
+  }
+
+  .btn-pagar-todas {
+    width: 100%;
+    text-align: center;
+  }
 }
