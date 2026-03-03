@@ -2,7 +2,7 @@
 import "./App.css";
 import HeaderPadrao from "./HeaderPadrao";
 import { useNavigate } from "react-router-dom";
-import Kpi from "./Kpi";
+import Kpi from "./components/Kpi/Kpi";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -33,6 +33,7 @@ export default function Index() {
         <button onClick={() => navigate("/fornecedor")} className="btn">Fornecedores</button>
         <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
         <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
+        <button onClick={() => navigate("/Vencimentos")} className="btn">Vencimentos</button>
       </nav>
 
       <Kpi kpis={cards}/>

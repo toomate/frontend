@@ -2,7 +2,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 95%;
+    min-width: 95%;
     height: 5vh;
     background-color: #6B4423;
     color: #F8ECC6;

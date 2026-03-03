@@ -1,0 +1,38 @@
+.kpi-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.kpi-container-interior {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20vh;
+    width: 100%;
+}
+
+.kpi-container-interior .status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    padding: 0;
+}
+
+.tabela-container {
+    display: flex;
+    justify-content: center;
+    border: 1px solid red;
+    height: 50vh;
+    width: 100%;
+}
+
+.tabela-container .elemento-container {
+    width: 95%;
+}
+
+.tabela-container .linha-estoque {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}

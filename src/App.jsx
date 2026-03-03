@@ -15,6 +15,8 @@ import Calendario from "./components/Calendario/calendario";
 import CalendarioDetail from "./components/Calendario/calendarioDetail";
 
 import "./App.css";
+import { Estoque } from "./Estoque";
+import Vencimento from "./Vencimento";
 
 function App() {
   return (
@@ -30,6 +32,8 @@ function App() {
          <Route path="/dashboard" element={<Dashboard />} />
          <Route path="/calendario" element={<Calendario />} />
          <Route path="/calendarioDetalhes" element={<CalendarioDetail />} />
+        <Route path="/fornecedores" element={<Fornecedor />} />
+        <Route path="/vencimentos" element={<Vencimento />} />
       </Routes>
      </BrowserRouter>
   );
