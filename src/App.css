@@ -506,8 +506,7 @@ input {
   }
 
   .filtros select,
-  .busca,
-  .btn-calendario {
+  .busca {
     width: 100%;
   }
 
@@ -539,13 +538,13 @@ input {
   background: red;
 }
 
-/* .btn-voltar {
+.btn-voltar {
   position: absolute;
   background: none;
   border: none;
   cursor: pointer;
   color: #000;
-} */
+}
 
 .form-group1 {
   display: flex;
@@ -727,8 +726,16 @@ input {
   color: black !important;
 }
 
+
 .btn-calendario {
-  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 150px;
+  height: 35px;
+  background: #ccc;
+  border-radius: 5px;
   border: none;
   cursor: pointer;
   color: black;

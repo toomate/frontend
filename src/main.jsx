@@ -21,8 +21,6 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
     {/* <CardRotina/> */}
-    {/* <CadastroInsumo></CadastroInsumo>
-    <CadastroLote></CadastroLote>*/}
      {/* <Estoque />  */}
   </StrictMode>,
 )

@@ -202,8 +202,10 @@ useEffect(() => {
   return (
     <div className="calendario-container">
       <HeaderPadrao></HeaderPadrao>
-      <h1>Calendário de Pagamentos</h1>
-      <MyCalendar events={myEventsList} />
+      <div className="calendario-container-inside">
+        <h1>Calendário de Pagamentos</h1>
+        <MyCalendar events={myEventsList} />
+      </div>
       {selectedBoletos.length > 0 && (
         <div className="modal-overlay">
           <div

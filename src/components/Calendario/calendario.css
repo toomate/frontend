@@ -27,8 +27,14 @@
 
 /* ===== CONTAINER GERAL ===== */
 
-.calendario-container {
-    padding: 20px;
+.calendario-container-inside {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+.calendario-container-inside h1 {
+    padding-block-end: 15px;
 }
 
 /* ===== WRAPPER CALENDÁRIO ===== */

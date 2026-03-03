@@ -1,11 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
 import { Menu, CalendarDays, Search } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
+import Calendario from "./components/Calendario/calendario";
+import { BiFontSize } from "react-icons/bi";
 
 export default function Boletos({ irPara }) {
-const [abrirCalendario, setAbrirCalendario] = useState(false);
+const navigate = useNavigate();
+// const [abrirCalendario, setAbrirCalendario] = useState(false);
 
   return (
     <div className="boletos">
@@ -50,9 +54,12 @@ const [abrirCalendario, setAbrirCalendario] = useState(false);
               <input placeholder="Busca por nome" />
             </div>
 
-            <button
-              className="btn-calendario">
-
+            <button 
+              className="btn-calendario" 
+              onClick={() => navigate("/calendario")}
+            >
+                <CalendarDays size={20} />
+                <h3> Painel</h3>
             </button>
           </div>
 

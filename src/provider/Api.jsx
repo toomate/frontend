@@ -58,12 +58,12 @@ static async listarBoletos() {
 }
 
 export class AuthApi {
-  static async login({ nome, senha }) {
+  static async login({ apelido, senha }) {
     try {
       const response = await requestComFallback({
         method: "post",
         url: "/usuarios/login",
-        data: { nome, senha },
+        data: { apelido, senha },
       });
       return response.data;
     } catch (error) {
