@@ -192,15 +192,29 @@
     }
 
     .categoria-container .insumos-container .elemento-container {
-        font-size: 10px;
+        font-size: 9px;
     }
 
     .nav-categorias-container {
         height: auto;
     }
 
-    .insumos-container .grupo-insumos-container .insumo-nome, .qtd-total, .medida, .dt-vencimento, .controle, .item-nome {
+    .insumos-container .grupo-insumos-container .insumo-nome,
+    .qtd-total,
+    .medida,
+    .dt-vencimento,
+    .controle,
+    .item-nome {
         font-size: 10px;
     }
+
+    .grupo-container .insumo-icone-value {
+        height: 20px;
+    }
+
+    .controle .circle-minus-icon, .circle-plus-icon {
+        width: 42px;
+    }
+
 
 }

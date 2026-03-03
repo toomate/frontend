@@ -7,7 +7,7 @@ export function EstoqueGrupo({ grupo, alterarValor}) {
     const [expandido, setExpandido] = useState(false);
     return (<div className="grupo-geral">
         <div className="linha-estoque grupo-container">
-            <div className="insumo"><div className="icone" onClick={() => setExpandido(!expandido)}><ChevronDown style={{
+            <div className="insumo"><div className="icone" onClick={() => setExpandido(!expandido)}><ChevronDown className="insumo-icone-value" style={{
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
             }} /></div>
