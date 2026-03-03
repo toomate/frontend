@@ -1,0 +1,155 @@
+.fiado-modal {
+  background: #fff;
+  border: 1px solid #828282;
+  border-radius: 17px;
+  width: 90%;
+  max-width: 780px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+/* ===== Header do modal ===== */
+.fiado-modal-header {
+  background: #e0e0e0;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  border-radius: 17px 17px 0 0;
+}
+
+.fiado-modal-close {
+  position: absolute;
+  top: 16px;
+  right: 20px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.fiado-modal-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.fiado-modal-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.fiado-modal-row .label {
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.fiado-modal-row .valor-bar {
+  height: 20px;
+  background: #828282;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  padding: 2px 12px;
+  color: #fff;
+  font-size: 14px;
+  min-width: 100px;
+}
+
+.fiado-modal-row .valor-bar.wide {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* ===== Corpo do modal - Tabela de pedidos ===== */
+.fiado-modal-body {
+  padding: 0;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.fiado-modal-table-header {
+  display: flex;
+  align-items: center;
+  padding: 14px 24px;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  background: #fff;
+  z-index: 1;
+}
+
+.fiado-modal-table-header span {
+  flex: 1;
+  text-align: center;
+}
+
+.fiado-modal-table-header span:first-child {
+  flex: 1.4;
+  text-align: left;
+}
+
+.fiado-modal-pedido-row {
+  display: flex;
+  align-items: center;
+  padding: 10px 24px;
+  font-size: 15px;
+  color: #000;
+  min-height: 54px;
+}
+
+.fiado-modal-pedido-row:nth-child(odd) {
+  background: #d9d9d9;
+}
+
+.fiado-modal-pedido-row:nth-child(even) {
+  background: #fff;
+}
+
+.fiado-modal-pedido-row span {
+  flex: 1;
+  text-align: center;
+}
+
+.fiado-modal-pedido-row span:first-child {
+  flex: 1.4;
+  text-align: left;
+}
+
+.fiado-modal-pedido-row .pedido-bar {
+  height: 40px;
+  background: #828282;
+  border-radius: 7px;
+  flex: 1;
+  margin: 0 6px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* ===== Sem pedidos ===== */
+.fiado-modal-vazio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  color: #828282;
+  font-size: 16px;
+}

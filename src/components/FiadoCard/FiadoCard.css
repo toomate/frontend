@@ -1,0 +1,109 @@
+.fiado-card {
+  background: #d9d9d9;
+  border-radius: 25px;
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 140px;
+  position: relative;
+}
+
+/* Linha do nome */
+.fiado-card-nome {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.fiado-card-nome .label {
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.fiado-card-nome .valor-bar {
+  flex: 1;
+  height: 23px;
+  background: #828282;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Linha de valor + contato */
+.fiado-card-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.fiado-card-info .info-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fiado-card-info .label {
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+  white-space: nowrap;
+}
+
+.fiado-card-info .valor-bar {
+  height: 23px;
+  background: #828282;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 400;
+  min-width: 120px;
+}
+
+/* Linha Pedidos + Botão abrir */
+.fiado-card-pedidos {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: auto;
+}
+
+.fiado-card-pedidos .label {
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+}
+
+.fiado-card-abrir-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 32px;
+  background: #d9d9d9;
+  border: 1px solid #000;
+  border-radius: 30px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.fiado-card-abrir-btn:hover {
+  background: #c0c0c0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
