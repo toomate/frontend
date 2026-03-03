@@ -7,89 +7,95 @@ import {
   List,
   FileText,
 } from "lucide-react";
-import { Navbar } from "./components/Navbar/Navbar";
 import { FiadoCard } from "./components/FiadoCard/FiadoCard";
 import { FiadoModal } from "./components/FiadoModal/FiadoModal";
 import "./fiado.css";
+import HeaderPadrao from './HeaderPadrao';
 
-// Dados mock para demonstração
-const FIADOS_MOCK = [
+// Dados mock alinhados com a modelagem: cliente + divida
+const CLIENTES_MOCK = [
   {
-    id: 1,
+    idCliente: 1,
     nome: "João da Silva",
-    valorTotal: 245.5,
-    contato: "(11) 99999-1234",
-    endereco: "Rua das Flores, 123",
-    pedidos: [
-      { descricao: "Almoço executivo", valor: 45.0, data: "01/03/2026" },
-      { descricao: "Marmitex grande", valor: 35.5, data: "05/03/2026" },
-      { descricao: "Suco natural + prato feito", valor: 42.0, data: "10/03/2026" },
-      { descricao: "Feijoada completa", valor: 55.0, data: "15/03/2026" },
-      { descricao: "Sobremesa + café", valor: 18.0, data: "20/03/2026" },
-      { descricao: "Marmitex média", valor: 50.0, data: "25/03/2026" },
+    telefone: "(11) 99999-1234",
+    cep: "01001-000",
+    logradouro: "Rua das Flores, 123",
+    bairro: "Centro",
+    dividas: [
+      { idDivida: 1, valor: 45.00, dataCompra: "2026-03-01T12:00:00", dataPagamento: null, pedido: "Almoço executivo", pago: 0, fkCliente: 1 },
+      { idDivida: 2, valor: 35.50, dataCompra: "2026-03-05T12:00:00", dataPagamento: null, pedido: "Marmitex grande", pago: 0, fkCliente: 1 },
+      { idDivida: 3, valor: 42.00, dataCompra: "2026-03-10T12:00:00", dataPagamento: "2026-03-12T10:00:00", pedido: "Suco natural + prato feito", pago: 1, fkCliente: 1 },
+      { idDivida: 4, valor: 55.00, dataCompra: "2026-03-15T12:00:00", dataPagamento: null, pedido: "Feijoada completa", pago: 0, fkCliente: 1 },
+      { idDivida: 5, valor: 18.00, dataCompra: "2026-03-20T12:00:00", dataPagamento: null, pedido: "Sobremesa + café", pago: 0, fkCliente: 1 },
+      { idDivida: 6, valor: 50.00, dataCompra: "2026-03-25T12:00:00", dataPagamento: null, pedido: "Marmitex média", pago: 0, fkCliente: 1 },
     ],
   },
   {
-    id: 2,
+    idCliente: 2,
     nome: "Maria Oliveira",
-    valorTotal: 180.0,
-    contato: "(11) 98888-5678",
-    endereco: "Av. Brasil, 456",
-    pedidos: [
-      { descricao: "Prato do dia", valor: 38.0, data: "02/03/2026" },
-      { descricao: "Salada especial", valor: 32.0, data: "08/03/2026" },
-      { descricao: "Frango grelhado", valor: 55.0, data: "14/03/2026" },
-      { descricao: "Marmitex pequena", valor: 55.0, data: "22/03/2026" },
+    telefone: "(11) 98888-5678",
+    cep: "04001-000",
+    logradouro: "Av. Brasil, 456",
+    bairro: "Jardins",
+    dividas: [
+      { idDivida: 7, valor: 38.00, dataCompra: "2026-03-02T12:00:00", dataPagamento: null, pedido: "Prato do dia", pago: 0, fkCliente: 2 },
+      { idDivida: 8, valor: 32.00, dataCompra: "2026-03-08T12:00:00", dataPagamento: "2026-03-10T09:00:00", pedido: "Salada especial", pago: 1, fkCliente: 2 },
+      { idDivida: 9, valor: 55.00, dataCompra: "2026-03-14T12:00:00", dataPagamento: null, pedido: "Frango grelhado", pago: 0, fkCliente: 2 },
+      { idDivida: 10, valor: 55.00, dataCompra: "2026-03-22T12:00:00", dataPagamento: null, pedido: "Marmitex pequena", pago: 0, fkCliente: 2 },
     ],
   },
   {
-    id: 3,
+    idCliente: 3,
     nome: "Carlos Santos",
-    valorTotal: 320.0,
-    contato: "(11) 97777-9012",
-    endereco: "Rua Augusta, 789",
-    pedidos: [
-      { descricao: "Rodízio completo", valor: 89.0, data: "03/03/2026" },
-      { descricao: "Porção + bebidas", valor: 65.0, data: "12/03/2026" },
-      { descricao: "Almoço executivo x2", valor: 90.0, data: "18/03/2026" },
-      { descricao: "Jantar especial", valor: 76.0, data: "28/03/2026" },
+    telefone: "(11) 97777-9012",
+    cep: "01310-000",
+    logradouro: "Rua Augusta, 789",
+    bairro: "Consolação",
+    dividas: [
+      { idDivida: 11, valor: 89.00, dataCompra: "2026-03-03T12:00:00", dataPagamento: null, pedido: "Rodízio completo", pago: 0, fkCliente: 3 },
+      { idDivida: 12, valor: 65.00, dataCompra: "2026-03-12T12:00:00", dataPagamento: null, pedido: "Porção + bebidas", pago: 0, fkCliente: 3 },
+      { idDivida: 13, valor: 90.00, dataCompra: "2026-03-18T12:00:00", dataPagamento: null, pedido: "Almoço executivo x2", pago: 0, fkCliente: 3 },
+      { idDivida: 14, valor: 76.00, dataCompra: "2026-03-28T12:00:00", dataPagamento: null, pedido: "Jantar especial", pago: 0, fkCliente: 3 },
     ],
   },
   {
-    id: 4,
+    idCliente: 4,
     nome: "Ana Pereira",
-    valorTotal: 95.0,
-    contato: "(11) 96666-3456",
-    endereco: "Rua Consolação, 321",
-    pedidos: [
-      { descricao: "Marmitex + suco", valor: 42.0, data: "07/03/2026" },
-      { descricao: "Prato feito", valor: 53.0, data: "19/03/2026" },
+    telefone: "(11) 96666-3456",
+    cep: "01301-000",
+    logradouro: "Rua Consolação, 321",
+    bairro: "Consolação",
+    dividas: [
+      { idDivida: 15, valor: 42.00, dataCompra: "2026-03-07T12:00:00", dataPagamento: "2026-03-09T11:00:00", pedido: "Marmitex + suco", pago: 1, fkCliente: 4 },
+      { idDivida: 16, valor: 53.00, dataCompra: "2026-03-19T12:00:00", dataPagamento: "2026-03-20T15:00:00", pedido: "Prato feito", pago: 1, fkCliente: 4 },
     ],
   },
   {
-    id: 5,
+    idCliente: 5,
     nome: "Pedro Almeida",
-    valorTotal: 410.75,
-    contato: "(11) 95555-7890",
-    endereco: "Rua Paulista, 1010",
-    pedidos: [
-      { descricao: "Almoço completo", valor: 68.0, data: "01/03/2026" },
-      { descricao: "Jantar p/ 2", valor: 145.0, data: "09/03/2026" },
-      { descricao: "Sobremesas variadas", valor: 52.75, data: "16/03/2026" },
-      { descricao: "Feijoada + caipirinha", valor: 75.0, data: "23/03/2026" },
-      { descricao: "Marmitex grande x2", valor: 70.0, data: "27/03/2026" },
+    telefone: "(11) 95555-7890",
+    cep: "01311-000",
+    logradouro: "Rua Paulista, 1010",
+    bairro: "Bela Vista",
+    dividas: [
+      { idDivida: 17, valor: 68.00, dataCompra: "2026-03-01T12:00:00", dataPagamento: null, pedido: "Almoço completo", pago: 0, fkCliente: 5 },
+      { idDivida: 18, valor: 145.00, dataCompra: "2026-03-09T12:00:00", dataPagamento: null, pedido: "Jantar p/ 2", pago: 0, fkCliente: 5 },
+      { idDivida: 19, valor: 52.75, dataCompra: "2026-03-16T12:00:00", dataPagamento: null, pedido: "Sobremesas variadas", pago: 0, fkCliente: 5 },
+      { idDivida: 20, valor: 75.00, dataCompra: "2026-03-23T12:00:00", dataPagamento: null, pedido: "Feijoada + caipirinha", pago: 0, fkCliente: 5 },
+      { idDivida: 21, valor: 70.00, dataCompra: "2026-03-27T12:00:00", dataPagamento: null, pedido: "Marmitex grande x2", pago: 0, fkCliente: 5 },
     ],
   },
   {
-    id: 6,
+    idCliente: 6,
     nome: "Lucia Ferreira",
-    valorTotal: 150.0,
-    contato: "(11) 94444-1122",
-    endereco: "Rua XV de Novembro, 55",
-    pedidos: [
-      { descricao: "Salada + wrap", valor: 38.0, data: "04/03/2026" },
-      { descricao: "Prato do dia", valor: 42.0, data: "11/03/2026" },
-      { descricao: "Marmitex + sobremesa", valor: 70.0, data: "21/03/2026" },
+    telefone: "(11) 94444-1122",
+    cep: "01020-000",
+    logradouro: "Rua XV de Novembro, 55",
+    bairro: "Sé",
+    dividas: [
+      { idDivida: 22, valor: 38.00, dataCompra: "2026-03-04T12:00:00", dataPagamento: null, pedido: "Salada + wrap", pago: 0, fkCliente: 6 },
+      { idDivida: 23, valor: 42.00, dataCompra: "2026-03-11T12:00:00", dataPagamento: "2026-03-13T10:00:00", pedido: "Prato do dia", pago: 1, fkCliente: 6 },
+      { idDivida: 24, valor: 70.00, dataCompra: "2026-03-21T12:00:00", dataPagamento: null, pedido: "Marmitex + sobremesa", pago: 0, fkCliente: 6 },
     ],
   },
 ];
@@ -98,28 +104,44 @@ export default function Fiado({ irPara }) {
   const [fiados, setFiados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
-  const [ordenacao, setOrdenacao] = useState(null); // "nome" | "valor" | "data"
-  const [visualizacao, setVisualizacao] = useState("cards"); // "cards" | "lista"
+  const [ordenacao, setOrdenacao] = useState(null);
+  const [visualizacao, setVisualizacao] = useState("cards");
   const [fiadoSelecionado, setFiadoSelecionado] = useState(null);
   const [modalNovo, setModalNovo] = useState(false);
 
-  // Form state para novo fiado
   const [novoFiado, setNovoFiado] = useState({
     nome: "",
-    contato: "",
-    endereco: "",
-    descricaoPedido: "",
-    valorPedido: "",
+    telefone: "",
+    cep: "",
+    logradouro: "",
+    bairro: "",
+    pedido: "",
+    valor: "",
   });
 
   useEffect(() => {
-    // Simula carregamento dos dados (substituir por chamada à API)
+    // Substituir por chamada à API futuramente
     const timer = setTimeout(() => {
-      setFiados(FIADOS_MOCK);
+      setFiados(CLIENTES_MOCK);
       setLoading(false);
     }, 500);
     return () => clearTimeout(timer);
   }, []);
+
+  // Calcula valor em aberto de um cliente
+  const calcularAberto = (cliente) =>
+    cliente.dividas
+      .filter((d) => !d.pago)
+      .reduce((acc, d) => acc + Number(d.valor), 0);
+
+  // Última data de compra
+  const ultimaData = (cliente) => {
+    if (cliente.dividas.length === 0) return "";
+    return cliente.dividas
+      .map((d) => d.dataCompra)
+      .sort()
+      .pop();
+  };
 
   // Filtra e ordena
   const fiadosFiltrados = fiados
@@ -128,22 +150,17 @@ export default function Fiado({ irPara }) {
       const termo = pesquisa.toLowerCase();
       return (
         f.nome.toLowerCase().includes(termo) ||
-        f.contato.toLowerCase().includes(termo)
+        f.telefone.toLowerCase().includes(termo) ||
+        f.bairro.toLowerCase().includes(termo)
       );
     })
     .sort((a, b) => {
       if (ordenacao === "nome") return a.nome.localeCompare(b.nome);
-      if (ordenacao === "valor") return b.valorTotal - a.valorTotal;
+      if (ordenacao === "valor") return calcularAberto(b) - calcularAberto(a);
       if (ordenacao === "data") {
-        const ultimaDataA =
-          a.pedidos.length > 0
-            ? a.pedidos[a.pedidos.length - 1].data
-            : "00/00/0000";
-        const ultimaDataB =
-          b.pedidos.length > 0
-            ? b.pedidos[b.pedidos.length - 1].data
-            : "00/00/0000";
-        return ultimaDataB.localeCompare(ultimaDataA);
+        const dA = ultimaData(a) || "";
+        const dB = ultimaData(b) || "";
+        return dB.localeCompare(dA);
       }
       return 0;
     });
@@ -160,6 +177,61 @@ export default function Fiado({ irPara }) {
     setFiadoSelecionado(null);
   };
 
+  // Marcar uma dívida como paga
+  const pagarDivida = (idCliente, idDivida) => {
+    const agora = new Date().toISOString();
+    setFiados((prev) =>
+      prev.map((c) => {
+        if (c.idCliente !== idCliente) return c;
+        return {
+          ...c,
+          dividas: c.dividas.map((d) =>
+            d.idDivida === idDivida
+              ? { ...d, pago: 1, dataPagamento: agora }
+              : d
+          ),
+        };
+      })
+    );
+    // Atualiza o modal se está aberto
+    setFiadoSelecionado((prev) => {
+      if (!prev || prev.idCliente !== idCliente) return prev;
+      return {
+        ...prev,
+        dividas: prev.dividas.map((d) =>
+          d.idDivida === idDivida
+            ? { ...d, pago: 1, dataPagamento: agora }
+            : d
+        ),
+      };
+    });
+  };
+
+  // Marcar todas as dívidas de um cliente como pagas
+  const pagarTodas = (idCliente) => {
+    const agora = new Date().toISOString();
+    setFiados((prev) =>
+      prev.map((c) => {
+        if (c.idCliente !== idCliente) return c;
+        return {
+          ...c,
+          dividas: c.dividas.map((d) =>
+            d.pago ? d : { ...d, pago: 1, dataPagamento: agora }
+          ),
+        };
+      })
+    );
+    setFiadoSelecionado((prev) => {
+      if (!prev || prev.idCliente !== idCliente) return prev;
+      return {
+        ...prev,
+        dividas: prev.dividas.map((d) =>
+          d.pago ? d : { ...d, pago: 1, dataPagamento: agora }
+        ),
+      };
+    });
+  };
+
   const handleNovoFiadoChange = (campo, valor) => {
     setNovoFiado((prev) => ({ ...prev, [campo]: valor }));
   };
@@ -167,37 +239,51 @@ export default function Fiado({ irPara }) {
   const salvarNovoFiado = () => {
     if (!novoFiado.nome.trim()) return;
 
-    const novo = {
-      id: Date.now(),
+    const novoCliente = {
+      idCliente: Date.now(),
       nome: novoFiado.nome,
-      valorTotal: Number(novoFiado.valorPedido) || 0,
-      contato: novoFiado.contato,
-      endereco: novoFiado.endereco,
-      pedidos: novoFiado.descricaoPedido
+      telefone: novoFiado.telefone,
+      cep: novoFiado.cep,
+      logradouro: novoFiado.logradouro,
+      bairro: novoFiado.bairro,
+      dividas: novoFiado.pedido
         ? [
             {
-              descricao: novoFiado.descricaoPedido,
-              valor: Number(novoFiado.valorPedido) || 0,
-              data: new Date().toLocaleDateString("pt-BR"),
+              idDivida: Date.now() + 1,
+              valor: Number(novoFiado.valor) || 0,
+              dataCompra: new Date().toISOString(),
+              dataPagamento: null,
+              pedido: novoFiado.pedido,
+              pago: 0,
+              fkCliente: Date.now(),
             },
           ]
         : [],
     };
 
-    setFiados((prev) => [...prev, novo]);
+    setFiados((prev) => [...prev, novoCliente]);
     setNovoFiado({
       nome: "",
-      contato: "",
-      endereco: "",
-      descricaoPedido: "",
-      valorPedido: "",
+      telefone: "",
+      cep: "",
+      logradouro: "",
+      bairro: "",
+      pedido: "",
+      valor: "",
     });
     setModalNovo(false);
   };
 
+  const formatarData = (dataStr) => {
+    if (!dataStr) return "—";
+    const d = new Date(dataStr);
+    if (isNaN(d.getTime())) return dataStr;
+    return d.toLocaleDateString("pt-BR");
+  };
+
   return (
     <div className="fiado-page">
-      <Navbar />
+      <HeaderPadrao titulo="Fiados" irPara={irPara} />
 
       {/* Barra de filtros */}
       <div className="fiado-filtros">
@@ -226,10 +312,9 @@ export default function Fiado({ irPara }) {
         </button>
 
         <button className="add-btn" onClick={() => setModalNovo(true)}>
-          <Plus size={22} color="#c3c3c3" />
+          <Plus size={20} color="#fff" />
         </button>
 
-        {/* Toggle visualização */}
         <div className="view-toggle">
           <button
             className={`view-toggle-btn ${visualizacao === "cards" ? "active" : ""}`}
@@ -247,7 +332,6 @@ export default function Fiado({ irPara }) {
           </button>
         </div>
 
-        {/* Barra de pesquisa */}
         <div className="fiado-search-wrapper">
           <div className="fiado-search-box">
             <input
@@ -273,53 +357,58 @@ export default function Fiado({ irPara }) {
           <p>Nenhum fiado encontrado</p>
         </div>
       ) : visualizacao === "cards" ? (
-        /* Visualização em Cards */
         <div className="fiado-cards-grid">
           {fiadosFiltrados.map((fiado) => (
-            <FiadoCard key={fiado.id} fiado={fiado} onAbrir={abrirDetalhe} />
+            <FiadoCard key={fiado.idCliente} fiado={fiado} onAbrir={abrirDetalhe} />
           ))}
         </div>
       ) : (
-        /* Visualização em Lista/Tabela */
         <div className="fiado-tabela-container">
           <div className="fiado-tabela-header">
             <span>Cliente</span>
-            <span>Pedido</span>
-            <span>Valor</span>
+            <span>Último Pedido</span>
+            <span>Valor Aberto</span>
             <span>Data</span>
             <span>Status</span>
           </div>
           <div className="fiado-tabela-body">
-            {fiadosFiltrados.map((fiado) => (
-              <div
-                className="fiado-tabela-row"
-                key={fiado.id}
-                onClick={() => abrirDetalhe(fiado)}
-              >
-                <span>{fiado.nome}</span>
-                <span>
-                  {fiado.pedidos.length > 0
-                    ? fiado.pedidos[fiado.pedidos.length - 1].descricao
-                    : "—"}
-                </span>
-                <span>R$ {Number(fiado.valorTotal).toFixed(2)}</span>
-                <span>
-                  {fiado.pedidos.length > 0
-                    ? fiado.pedidos[fiado.pedidos.length - 1].data
-                    : "—"}
-                </span>
-                <span>
-                  <span className="status-badge aberto">Em aberto</span>
-                </span>
-              </div>
-            ))}
+            {fiadosFiltrados.map((fiado) => {
+              const aberto = calcularAberto(fiado);
+              const todasPagas = fiado.dividas.length > 0 && fiado.dividas.every((d) => d.pago);
+              const ultimaDivida = fiado.dividas.length > 0
+                ? [...fiado.dividas].sort((a, b) => b.dataCompra.localeCompare(a.dataCompra))[0]
+                : null;
+
+              return (
+                <div
+                  className="fiado-tabela-row"
+                  key={fiado.idCliente}
+                  onClick={() => abrirDetalhe(fiado)}
+                >
+                  <span>{fiado.nome}</span>
+                  <span>{ultimaDivida ? ultimaDivida.pedido : "—"}</span>
+                  <span>R$ {aberto.toFixed(2)}</span>
+                  <span>{ultimaDivida ? formatarData(ultimaDivida.dataCompra) : "—"}</span>
+                  <span>
+                    <span className={`status-badge ${todasPagas ? "pago" : "aberto"}`}>
+                      {todasPagas ? "Pago" : "Em aberto"}
+                    </span>
+                  </span>
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
 
-      {/* Modal de detalhe do fiado */}
+      {/* Modal de detalhe */}
       {fiadoSelecionado && (
-        <FiadoModal fiado={fiadoSelecionado} onClose={fecharDetalhe} />
+        <FiadoModal
+          fiado={fiadoSelecionado}
+          onClose={fecharDetalhe}
+          onPagarDivida={pagarDivida}
+          onPagarTodas={pagarTodas}
+        />
       )}
 
       {/* Modal de novo fiado */}
@@ -343,25 +432,50 @@ export default function Fiado({ irPara }) {
 
               <div className="novo-fiado-form-row">
                 <label>
-                  Contato
+                  Telefone
                   <input
                     type="text"
-                    value={novoFiado.contato}
+                    value={novoFiado.telefone}
                     onChange={(e) =>
-                      handleNovoFiadoChange("contato", e.target.value)
+                      handleNovoFiadoChange("telefone", e.target.value)
                     }
                     placeholder="(11) 99999-0000"
                   />
                 </label>
                 <label>
-                  Endereço
+                  CEP
                   <input
                     type="text"
-                    value={novoFiado.endereco}
+                    value={novoFiado.cep}
                     onChange={(e) =>
-                      handleNovoFiadoChange("endereco", e.target.value)
+                      handleNovoFiadoChange("cep", e.target.value)
+                    }
+                    placeholder="00000-000"
+                  />
+                </label>
+              </div>
+
+              <div className="novo-fiado-form-row">
+                <label>
+                  Logradouro
+                  <input
+                    type="text"
+                    value={novoFiado.logradouro}
+                    onChange={(e) =>
+                      handleNovoFiadoChange("logradouro", e.target.value)
                     }
                     placeholder="Rua exemplo, 123"
+                  />
+                </label>
+                <label>
+                  Bairro
+                  <input
+                    type="text"
+                    value={novoFiado.bairro}
+                    onChange={(e) =>
+                      handleNovoFiadoChange("bairro", e.target.value)
+                    }
+                    placeholder="Centro"
                   />
                 </label>
               </div>
@@ -371,9 +485,9 @@ export default function Fiado({ irPara }) {
                   Descrição do pedido
                   <input
                     type="text"
-                    value={novoFiado.descricaoPedido}
+                    value={novoFiado.pedido}
                     onChange={(e) =>
-                      handleNovoFiadoChange("descricaoPedido", e.target.value)
+                      handleNovoFiadoChange("pedido", e.target.value)
                     }
                     placeholder="Ex: Almoço executivo"
                   />
@@ -382,9 +496,9 @@ export default function Fiado({ irPara }) {
                   Valor (R$)
                   <input
                     type="number"
-                    value={novoFiado.valorPedido}
+                    value={novoFiado.valor}
                     onChange={(e) =>
-                      handleNovoFiadoChange("valorPedido", e.target.value)
+                      handleNovoFiadoChange("valor", e.target.value)
                     }
                     placeholder="0.00"
                     min="0"
