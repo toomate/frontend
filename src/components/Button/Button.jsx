@@ -11,7 +11,7 @@ export function Button({ texto, Icone, onClick }) {
             )}
             {Icone && (
                 <div className="icon-container">
-                    <div className="button-icon"><Icone /></div>
+                    <div className="button-icon"><Icone className="button-icon-value" /></div>
                 </div>
             )}
         </div>
