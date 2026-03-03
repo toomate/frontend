@@ -11,9 +11,9 @@ export default function Index() {
       <HeaderPadrao />
 
       <nav className="menu">
-        <button onClick={() => navigate("/Estoque")} className="btn">Estoque</button>
-        <button onClick={() => navigate("/fornecedores")} className="btn">Fornecedores</button>
+        <button onClick={() => navigate("/estoque")} className="btn">Estoque</button>
         <button onClick={() => navigate("/Gastos")} className="btn">Gastos</button>
+        <button onClick={() => navigate("/fornecedor")} className="btn">Fornecedores</button>
         <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
         <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
       </nav>

@@ -3,6 +3,8 @@
 import Login from "./Login";
 import Boletos from "./Boletos";
 import Cadastro from "./Cadastro";
+import { Estoque } from "./Estoque";
+import Fornecedor from "./Fornecedor";
 import CadastroBoleto from "./CadastroBoleto";
 import CadastroFiado from "./CadastroFiado";
 import CadastroFornecedor from "./CadastroFornecedor";
@@ -13,7 +15,6 @@ import Calendario from "./components/Calendario/calendario";
 import CalendarioDetail from "./components/Calendario/calendarioDetail";
 
 import "./App.css";
-import { Estoque } from "./Estoque";
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
          <Route path="/" element={<Login />} />
          <Route path="/boletos" element={<Boletos />} />
          <Route path="/cadastro" element={<Cadastro />} />
+         <Route path="/estoque" element={<Estoque />} />
+         <Route path="/fornecedor" element={<Fornecedor />} />
          <Route path="/cadastro-insumo" element={<CadastroInsumo />} />
          <Route path="/cadastro-lote" element={<CadastroLote />} />
          <Route path="/dashboard" element={<Dashboard />} />
