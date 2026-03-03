@@ -60,7 +60,7 @@ export default function CadastroLote() {
           {/* Upload */}
           <div className="botao-upload">
             Enviar Nota Fiscal
-            <label className="botao-upload">
+            <label className="botao-upload-lote">
               <input type="file" accept="image/*" />
             </label>
           </div>

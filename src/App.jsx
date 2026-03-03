@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+﻿import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./Login";
 import Boletos from "./Boletos";
@@ -16,11 +16,11 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* <Route path="/" element={<Login />} /> */}
+        <Route path="/" element={<Login />} />
         {/* <Route path="/boletos" element={<Boletos />} /> */}
         {/* <Route path="/cadastro" element={<Cadastro />} /> */}
         {/* <Route path="/CadastroBoleto" element={<CadastroBoleto />} /> */}
-        <Route path="/" element={<CadastroFiado />} />
+        {/* <Route path="/CadastroFiado" element={<CadastroFiado />} /> */}
         {/* <Route path="/CadastroFornecedor" element={<CadastroFornecedor />} /> */}
         {/* <Route path="/CadastroInsumo" element={<CadastroInsumo />} /> */}
         {/* <Route path="/CadastroLote" element={<CadastroLote />} /> */}

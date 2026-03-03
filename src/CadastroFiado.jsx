@@ -52,6 +52,14 @@ export default function CadastroFiado() {
           
           <span>Data do pedido</span>
           <input type="date" />
+        
+          {/* Upload */}
+          <div className="botao-upload">
+            Enviar Nota Fiscal
+            <label className="botao-upload-fiado">
+              <input type="file" accept="image/*" />
+            </label>
+          </div>
         </div>
 
         <div className="actions">
