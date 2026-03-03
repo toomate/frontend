@@ -3,64 +3,60 @@ import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function CadastroLote() {
+export default function CadastroFiado() {
   const navigate = useNavigate();
 
-  const [abrirModal, setAbrirModal] = useState(null);
+  const [abrirModal, setAbrirModal] = useState(false);
   const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);
-  const [novaMarca, setNovaMarca] = useState("");
+  const [novoFiado, setNovoFiado] = useState("");
 
   return (
     <div className="container">
       <div className="box">
 
-        <span className="titulo">Cadastro de Lote</span>
+        <span className="titulo">Cadastro de Fiado</span>
 
         <div className="caixa">
 
           {/* Nome do insumo */}
-          <span>Nome</span>
+          <span>Nome do cliente</span>
           <div className="input-wrapper">
             <select className="selectNome">
-              <option>Nome do Insumo</option>
-              <option>Alimentos</option>
-              <option>Bebidas</option>
-              <option>Limpeza</option>
+              <option>Selecione</option>
+              <option>Guilherme Fonseca</option>
+              <option>Guilherme Ortiz</option>
+              <option>João Pedro Assis</option>
+              <option>Laysa Bispo</option>
+              <option>Lucas Aquino</option>
+              <option>Matheus Diniz</option>
             </select>
   
-            <button type="button" className="eye-btn1" onClick={() => setAbrirModal("nome")}>
+            <button type="button" className="eye-btn" onClick={() => setAbrirModal(true)}>
               <Plus size={18} />
             </button>
           </div>
 
-          {/* Marca */}
-          <span>Marca</span>
-          <div className="input-wrapper">
-            <select className="selectMarca">
-              <option>Marca do Insumo</option>
-              <option>Tio João</option>
-              <option>Coca Cola</option>
-              <option>Ciff</option>
+          {/* Pedido */}
+          <span>Pedido</span>
+          <div className="input-wrapper1">
+            <select className="selectPedido">
+              <option>Selecione</option>
+              <option>Cardápio 1</option>
+              <option>Cardápio 2</option>
+              <option>Cardápio 3</option>
             </select>
-
-            <button type="button" className="eye-btn2" onClick={() => setAbrirModal("marca")}>
-              <Plus size={18} />
-            </button>
           </div>
           
-          <span>Preço unitário</span>
+          <span>Valor</span>
           <input type="number" placeholder="R$ XXX,XX" />
           
-          <span>Data de validade</span>
+          <span>Data do pedido</span>
           <input type="date" />
-
-          <span>Quantidade</span>
-          <input type="number" placeholder="0" />
-
+        
           {/* Upload */}
           <div className="botao-upload">
             Enviar Nota Fiscal
-            <label className="botao-upload-lote">
+            <label className="botao-upload-fiado">
               <input type="file" accept="image/*" />
             </label>
           </div>
@@ -82,24 +78,20 @@ export default function CadastroLote() {
         <div className="modal-overlay">
           <div className="modal">
 
-            <span className="titulo">
-              {abrirModal === "nome"
-                ? "Novo nome de Insumo"
-                : "Nova marca de insumo"}
-            </span>
+            <span className="titulo">Nome do cliente</span>
 
             <input
               className="modal-input"
               type="text"
-              placeholder="Nome da marca"
-              value={novaMarca}
-              onChange={(e) => setNovaMarca(e.target.value)}
+              placeholder="Nome do cliente"
+              value={novoFiado}
+              onChange={(e) => setNovoFiado(e.target.value)}
             />
 
             <div className="modal-actions">
               <button
                 className="btn btn-cancelar"
-                onClick={() => setAbrirModal(null)}
+                onClick={() => setAbrirModal(false)}
               >
                 Cancelar <Trash2 size={14} />
               </button>
@@ -107,7 +99,7 @@ export default function CadastroLote() {
               <button
                 className="btn"
                 onClick={() => {
-                  setAbrirModal(null);
+                  setAbrirModal(false);
                   setAbrirModalSucesso(true);
                 }}
               >

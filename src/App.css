@@ -231,8 +231,7 @@ body,
 }
 
 .container {
-  height: 100%;
-  min-width: 1390px;
+  width: 100%;
   min-height: 100vh;
   display: flex;
   justify-content: center;
@@ -277,8 +276,8 @@ body,
 input {
   width: 100%;
   border-radius: 5px;
-  padding: 10px 10px;
-  margin-bottom: 25px;
+  padding: 10px;
+  margin-bottom: 15px;
   background-color: white;
   color: rgb(175, 175, 175);
   border: 1.5px solid rgb(175, 175, 175);
@@ -290,13 +289,6 @@ input {
   font-size: 14px;
 }
 
-.auth-erro {
-  color: #a81919;
-  font-weight: 600;
-  font-size: 14px;
-  margin: 0;
-}
-
 .auth-switch span {
   color: 1.5px solid gold;
   cursor: pointer;
@@ -304,10 +296,29 @@ input {
 }
 
 .input-wrapper {
-  position: relative;
-  width: 100%;
   display: flex;
   align-items: center;
+  position: relative;
+  border: none;
+  width: 100%;
+  padding-right: 40px;
+}
+
+.input-wrapper1 {
+  display: flex;
+  align-items: center;
+  position: relative;
+  border: none;
+  width: 100%;
+}
+
+.selectNome, .selectMarca, .selectCategoria, .selectUnidade, .selectCategoriaBoleto, .selectPedido {
+  width: 100%;
+  padding-right: 50px;
+  height: 40px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1.5px solid rgb(175, 175, 175);
 }
 
 .input-wrapper input {
@@ -319,14 +330,15 @@ input {
   border: 1.5px solid rgb(175, 175, 175);
 }
 
-.eye-btn {
+.eye-btn, .eye-btn1, .eye-btn2 {
   position: absolute;
-  right: 10px;
+  right: 0;
   top: 8px;
   background: none;
   border: none;
   cursor: pointer;
   padding: 3px;
+  align-items: center;
   color: #555;
 }
 
@@ -487,149 +499,53 @@ input {
     font-size: 16px;
     gap: 15px;
   }
-}
 
-/* Tela menor que 480px */
-@media (max-width: 480px) {
-
-  .container {
-    min-width: 480px;
-    min-height: 100vh;
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .restaurante-name {
-    font-size: 16px;
+  .filtros select,
+  .busca,
+  .btn-calendario {
+    width: 100%;
   }
 
-  .menu button {
-    font-size: 14px;
-    padding: 10px;
+  .busca {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    border: 1px solid #ccc;
+    padding: 6px 8px;
+    border-radius: 6px;
+    width: 100%;
   }
 
-  .logo-circulo {
-    width: 40x;
-    height: 40px;
+  .busca input {
+    border: none;
+    outline: none;
+    width: 100%;
   }
-
-  .card {
-    flex: 0 0 100%;
-  }
-
-  .numero {
-    font-size: 18px;
-  }
-
-  .alerta-btn {
-    font-size: 14px;
-  }
-}
-
-.container {
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.box {
-  width: 420px;
-  background: #fff;
-  padding: 32px;
-  border-radius: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  position: relative;
-}
-
-.box-cadastro {
-  width: 480px;
-  border-color: unset;
-  border: 1.5px solid gold;
-}
-
-.titulo {
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.form-group {
-  height: 65px;
-  display: flex;
-  flex-direction: column;
-  justify-content: right;
-  gap: 6px;
-}
-
-.form-group label {
-  text-align: start;
-  font-size: 14px;
-  font-weight: 500;
-  color: black;
-}
-
-input,
-select {
-  height: 40px;
-  width: 300px;
-  padding: 0 10px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: white;
-  font-size: 14px;
-  color: #ccc;
-}
-
-input::placeholder {
-  color: #ccc;
-}
-
-input {
-  margin: auto;
-  color: #000;
-}
-
-.select-wrapper {
-  width: 300px;
-  display: flex;
-  color: black;
-  gap: 6px;
-}
-
-.icon-btn {
-  width: 40px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000;
-  padding: 0 5px;
 }
 
 .actions {
   display: flex;
   justify-content: space-between;
   margin-top: 16px;
+  gap: 10px;
 }
 
 .btn-cancelar {
   background: red;
 }
 
-.btn-voltar {
+/* .btn-voltar {
   position: absolute;
-  top: 20px;
-  left: 20px;
   background: none;
   border: none;
   cursor: pointer;
   color: #000;
-}
+} */
 
 .form-group1 {
   display: flex;
@@ -658,14 +574,19 @@ input {
 }
 
 .botao-upload {
-  color: white;
-  padding: 3px 7px;
-  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 30px;
+  color: black;
+  border-radius: 5px;
   cursor: pointer;
+  gap: 5px;
+  text-align: left;
 }
 
 .botao-upload input {
-  padding: 10px;
+  padding: 0;
 }
 
 .modal-overlay {
@@ -683,9 +604,12 @@ input {
 
 .modal {
   background: white;
-  padding: 20px;
+  padding: 24px;
   border-radius: 12px;
   width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .modal-header {
@@ -714,7 +638,7 @@ input {
 
 .modal-actions {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
   gap: 10px;
 }
 
@@ -746,18 +670,11 @@ input {
   display: flex;
   flex-direction: column;
   font-family: "Arial", sans-serif;
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 100%;
+  min-height: 100dvh;
   width: 100%;
-  min-width: 1380px;
-  min-height: 100vh;
   background-color: white;
   color: black;
   margin: 0 auto;
-  z-index: 9999;
-
 }
 
 .conteudo span {
@@ -765,18 +682,21 @@ input {
   align-items: flex-start;
   font-size: 35px;
   font-weight: bold;
+  margin: 20px;
 }
 
 .card-pagamentos {
-  padding: 20px;
-  border-radius: 12px;
+  height: auto;
+  overflow: visible;
+  padding: 0 20px 0 20px;
 }
 
 .filtros {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .filtros select {
@@ -797,6 +717,10 @@ input {
 
 .busca input {
   background-color: transparent;
+  width: 400px;
+  color: black;
+  border: none;
+  margin: 0;
 }
 
 .busca input::placeholder {
@@ -820,20 +744,23 @@ input {
 
 .vencimento {
   text-align: left;
+  padding: 5px 0 5px 0;
 } 
 
 .descricao {
-  background-color: gainsboro !important;
-  padding: 6px 10px;
+  background-color: rgb(240, 238, 238) !important;
+  width: auto;
+  padding: 5px;
   border-radius: 6px;
-  margin: 6px 0;
+  margin: 10px;
 }
 
 .valor {
   background: #ccc;
-  padding: 6px 10px;
+  padding: 5px;
   border-radius: 6px;
   width: 120px;
+  margin: 10px;
 }
 
 .btn-pago {
@@ -844,100 +771,93 @@ input {
   cursor: pointer;
 }
 
-.react-calendar__navigation button {
-  font-size: 18px;
-  color: black;
-  background: none;
-}
-
-.modal-fullscreen {
-  position: fixed;
-  top: 0;
-  left: 0;
+.caixa {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
   width: 100%;
-  height: 100vh;
-  background-color: white;
-  z-index: 9999;
-
-  display: flex;
-  flex-direction: column;
-}
-
-.modal-body-calendario {
-  flex: 1;
-  padding: 5px 10px;
-  display: flex;
-  overflow-y: auto;
-  overflow-x: hidden;
-}
-
-.modal-body-calendario .react-calendar {
-  width: 100% !important;
-  height: 100% !important;
-  max-width: 100%;
+  max-width: 350px;
+  background: white;
+  padding: 20px;
   border: none;
-
-  display: flex;
-  flex-direction: column;
+  gap: 5px;
 }
 
-.react-calendar__navigation {
-  margin: 10px !important;
-  
-}
+/* Tela menor que 480px */
+@media (max-width: 480px) {
 
-.react-calendar__navigation__arrow.react-calendar__navigation__prev-button,
-.react-calendar__navigation__arrow.react-calendar__navigation__prev2-button,
-.react-calendar__navigation__arrow.react-calendar__navigation__next-button,
-.react-calendar__navigation__arrow.react-calendar__navigation__next2-button,
-.react-calendar__navigation__label {
-  padding: 3px;
-}
+  .container {
+    min-width: 80%;
+    justify-content: center;
+    align-items: center;
+  }
 
-.react-calendar__tile abbr {
-  font-weight: bold;
-  font-size: 13px;
-  color: black;
-}
+  .box {
+    min-width: 80%;
+    background: #fff;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+  }
 
-.react-calendar__month-view__weekdays {
-  display: grid !important;
-  grid-template-columns: repeat(7, 1fr);
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
+  .caixa {
+    min-width: 60%;
+    display: flex;
+    flex-direction: column;
+    margin: 5px;
+  }
 
-.react-calendar__month-view__weekdays__weekday--weekend {
-  font-size: 12px;
-  color: red;
-  padding: 0;
-}
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+  }
 
-.react-calendar__month-view__days__day--weekend {
-  color: #c92c2c;
-}
+  .restaurante-name {
+    font-size: 16px;
+  }
 
-.conteudo-dia {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-size: 11px;
-}
+  .menu button {
+    font-size: 14px;
+    padding: 10px;
+  }
 
-.react-calendar__month-view__days {
-  border: #555;
-}
+  .logo-circulo {
+    height: 40px;
+  }
 
-.nome-divida, .valor {
-  color: black;
-}
+  .card {
+    flex: 0 0 100%;
+  }
 
-.status.pago {
-  color: green;
-  font-weight: bold;
-  padding: 0;
-}
+  .busca {
+    width: 100%;
+  }
 
-.valor {
-  padding: 2px;
+  .btn-pago {
+    width: 100%;
+  }
+
+  .vencimento {
+    font-size: 12px;
+  }
+
+  .descricao {
+    width: 80%;
+    font-size: 12px;
+  }
+
+  .valor {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .btn-pago {
+    width: 70px;
+
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
 }
