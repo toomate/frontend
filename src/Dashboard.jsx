@@ -1,7 +1,5 @@
-import React from "react";
-import { Menu } from "lucide-react";
+﻿import React from "react";
 import "./App.css";
-import { Navbar } from "./components/Navbar/Navbar";
 import HeaderPadrao from "./HeaderPadrao";
 import { useNavigate } from "react-router-dom";
 
@@ -13,8 +11,8 @@ export default function Index() {
       <HeaderPadrao />
 
       <nav className="menu">
-        <button onClick={() => navigate("/cadastro-insumo")} className="btn">Estoque</button>
-        <button onClick={() => navigate("/Fornecedores")} className="btn">Fornecedores</button>
+        <button onClick={() => navigate("/Estoque")} className="btn">Estoque</button>
+        <button onClick={() => navigate("/fornecedores")} className="btn">Fornecedores</button>
         <button onClick={() => navigate("/Gastos")} className="btn">Gastos</button>
         <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
         <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
@@ -40,8 +38,7 @@ export default function Index() {
       </div>
 
       <div className="container2">
-        <div className="grafico">
-        </div>
+        <div className="grafico"></div>
 
         <div className="notificacao">
           <h2 className="alerta-titulo">ALERTAS!</h2>
@@ -70,3 +67,4 @@ export default function Index() {
     </div>
   );
 }
+

@@ -15,9 +15,14 @@ import { CardRelatorio } from './components/CardRelatorio/CardRelatorio.jsx'
 import { CardConfirmacao } from './components/CardConfirmacao/CardConfirmacao.jsx'
 import CadastroInsumo from './CadastroInsumo.jsx'
 import CadastroLote from './CadastroLote.jsx'
+import {CardRotina} from "./components/CardRotina/CardRotina.jsx"
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <App />
+    {/* <CardRotina/> */}
+    {/* <CadastroInsumo></CadastroInsumo>
+    <CadastroLote></CadastroLote>*/}
+     {/* <Estoque />  */}
   </StrictMode>,
 )

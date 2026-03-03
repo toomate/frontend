@@ -283,6 +283,12 @@ input {
   border: 1.5px solid rgb(175, 175, 175);
 }
 
+.auth-switch {
+  color: black;
+  margin-top: 15px;
+  font-size: 14px;
+}
+
 .auth-switch span {
   color: 1.5px solid gold;
   cursor: pointer;

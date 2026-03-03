@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { Navbar } from "./components/Navbar/Navbar";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import { Cabecalho } from "./components/Cabecalho/Cabecalho";
 import { Search } from "./components/Search/Search";
 import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
 import { Button } from "./components/Button/Button";
 import "./Estoque.css"
-import { Lote } from "./provider/Api";
+import { CategoriaApi, Lote } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
+import HeaderPadrao from "./HeaderPadrao";
+import { CardRotina } from "./components/CardRotina/CardRotina";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
+    const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
     const [exibirRelatorio, setExibirRelatorio] = useState(false);
     const [cardRemocao, setCardRemocao] = useState(false);
+    const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
 
     const pesquisar = (valor) => {
@@ -33,11 +36,8 @@ export function Estoque() {
     }
 
     const abrirCardRemocao = (id) => {
-        console.log("aqui")
         setCardRemocao(true)
-        console.log(cardRemocao)
         setIdSelecionado(id)
-        console.log(idSelecionado)
     }
 
     const salvarAlteracoes = async () => {
@@ -104,6 +104,24 @@ export function Estoque() {
         Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
     }, [categoriaAtiva, pesquisa])
 
+    useEffect(() => {
+        CategoriaApi.listar()
+            .then((response) => {
+                const lista = Array.isArray(response) ? response : response?.categorias ?? [];
+                const normalizada = lista
+                    .map((item) => typeof item === "string" ? item : item?.nome ?? item?.categoria ?? item?.descricao ?? "")
+                    .map((item) => item.trim())
+                    .filter(Boolean);
+
+                if (normalizada.length > 0) {
+                    setCategorias(["Geral", ...new Set(normalizada.filter((item) => item !== "Geral"))])
+                }
+            })
+            .catch(() => {
+                // Mantem fallback local caso a API de categorias falhe.
+            });
+    }, [])
+
     function ButtonPlus() {
         return (
             <div className="plus-container">
@@ -118,7 +136,7 @@ export function Estoque() {
             {exibirRelatorio && (
                 <div className="escurecer">
                     <CardRelatorio props={mudancas}
-                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} />
+                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={() => setCardRotina(true)} />
                 </div>
             )}
             {cardRemocao && (
@@ -126,16 +144,22 @@ export function Estoque() {
                     <CardConfirmacao titulo={"Deseja descartar as alterações?"} fecharCard={() => {setCardRemocao(false)}} confirmar={removerAlteracao} />
                 </div>
             )}
+
+            {cardRotina && (
+                <div className="escurecer">
+                    <CardRotina fecharCard={() => {setCardRotina(false)}}/>    
+                </div>
+            )}
             <div className="nav-header">
-                <Navbar />
+                <HeaderPadrao />
             </div>
             <div className="categoria-container">
 
                 <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} />
+                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
+                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                 </div>
                 <div className="botoes-container">
-                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                     <ButtonPlus />
                     <Button texto="Rotinas" Icone={Bookmark} />
                     <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
