@@ -15,11 +15,29 @@ import { CardRelatorio } from './components/CardRelatorio/CardRelatorio.jsx'
 import { CardConfirmacao } from './components/CardConfirmacao/CardConfirmacao.jsx'
 import CadastroInsumo from './CadastroInsumo.jsx'
 import CadastroLote from './CadastroLote.jsx'
-import {CardRotina} from "./components/CardRotina/CardRotina.jsx"
+import { CardRotina } from "./components/CardRotina/CardRotina.jsx"
+import Vencimento from './Kpi.jsx'
+
+const kpis = [{
+  nome: "Insumos Vencidos",
+  valor: 1
+},
+{
+  nome: "Vencem Hoje",
+  valor: 1
+},
+{
+  nome: "Próximos 7 Dias",
+  valor: 1
+}
+]
+
 
 createRoot(document.getElementById('root')).render(
+  
   <StrictMode>
-    <App />
+    {/* <App /> */}
+    <Vencimento kpis={kpis} />
     {/* <CardRotina/> */}
      {/* <Estoque />  */}
   </StrictMode>,
