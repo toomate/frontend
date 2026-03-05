@@ -1,0 +1,15 @@
+.tabela-insumo-container {
+    height: 10vh;
+    display: flex;
+}
+
+
+.tabela-insumo-container .linha-estoque {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 0.2px solid black;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    
+}
+

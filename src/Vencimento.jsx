@@ -1,5 +1,6 @@
 import { Cabecalho } from "./components/Cabecalho/Cabecalho";
 import Kpi from "./components/Kpi/Kpi";
+import LinhaTabela from "./components/LinhaTabela/LinhaTabela";
 import HeaderPadrao from "./HeaderPadrao";
 import "./Vencimento.css"
 
@@ -29,6 +30,9 @@ export default function Vencimento() {
                     </div>
                     <div className="tabela-container">
                         <Cabecalho elementos={["Insumo", "Marca", "Estoque Atual", "Data De Vencimento", "Dias Restantes", "Status"]} />
+                        <div className="tabela-interior">
+                            <LinhaTabela elementos={[["Arroz Tipo 1", "Camil", "04", "02/04/2005", "0", "Vencido"], ["Arroz Tipo 1", "Camil", "04", "02/04/2005", "0", "Vencido"]]} />
+                        </div>
                     </div>
                 </div>
             </div>

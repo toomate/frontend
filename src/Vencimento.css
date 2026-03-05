@@ -23,16 +23,28 @@
 
 .tabela-container {
     display: flex;
-    justify-content: center;
-    border: 1px solid red;
+    align-items: center;
     height: 50vh;
-    width: 100%;
+    width: 95%;
+    flex-direction: column;
 }
 
 .tabela-container .elemento-container {
-    width: 95%;
+    width: 100%;
 }
 
 .tabela-container .linha-estoque {
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.tabela-insumo-container {
+    width: 100%;
+}
+
+.tabela-interior {
+    width: 100%;
+    border: 1px solid black;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    height: 90%;
 }
