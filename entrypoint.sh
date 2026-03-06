@@ -1,6 +1,7 @@
 #!/bin/sh
 
-envsubst < /usr/share/nginx/html/config.js > /usr/share/nginx/html/config.tmp
-mv /usr/share/nginx/html/config.tmp /usr/share/nginx/html/config.js
+cat <<EOF > /usr/share/nginx/html/config.js
+window.API_URL="${API_URL}";
+EOF
 
 nginx -g "daemon off;"
