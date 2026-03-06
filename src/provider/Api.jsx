@@ -1,18 +1,15 @@
 ﻿import axios from "axios";
+import config from "../config";
 
-const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8080";
+const baseURL = config.API_URL;
 
-var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcyIsImlhdCI6MTc3MjA3NTk2OSwiZXhwIjoxNzcyNDM1OTY5fQ.Tdr8hJ1FB1pZJMQEgWjiXMIJDCbCsHEyNWwMWOPutKqMgMpjPxXiKBoesAL2ynO0poNTnWlT_6eqcq1bOa8Q2A"
-
-var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcyIsImlhdCI6MTc3MjA3NTk2OSwiZXhwIjoxNzcyNDM1OTY5fQ.Tdr8hJ1FB1pZJMQEgWjiXMIJDCbCsHEyNWwMWOPutKqMgMpjPxXiKBoesAL2ynO0poNTnWlT_6eqcq1bOa8Q2A"
+var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcy5kZXYiLCJpYXQiOjE3NzI3NjMwNjMsImV4cCI6MTc3MzEyMzA2M30.E2oi-0wK0Vdfp1sbqyZ9EwjTwZRsKJvMUIpN6xTr5TzbplhbdEyqssQUxtTMUKgjfsUpE5knSoBaEGn1ujt4yQ"
 
 export const api = axios.create({
   baseURL,
 });
 
-if (!import.meta.env.VITE_API_URL) {
-  console.warn("VITE_API_URL nao definido. Usando fallback http://localhost:8080");
-}
+console.log(baseURL);
 
 api.interceptors.request.use((config) => {
   const token =
