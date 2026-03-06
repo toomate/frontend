@@ -15,11 +15,18 @@ import { CardRelatorio } from './components/CardRelatorio/CardRelatorio.jsx'
 import { CardConfirmacao } from './components/CardConfirmacao/CardConfirmacao.jsx'
 import CadastroInsumo from './CadastroInsumo.jsx'
 import CadastroLote from './CadastroLote.jsx'
-import {CardRotina} from "./components/CardRotina/CardRotina.jsx"
+import { CardRotina } from "./components/CardRotina/CardRotina.jsx"
+import Vencimento from './Vencimento.jsx'
+import LinhaTabela from './components/LinhaTabela/LinhaTabela.jsx'
+
+
+
 
 createRoot(document.getElementById('root')).render(
+  
   <StrictMode>
     <App />
+    {/* <Vencimento/> */}
     {/* <CardRotina/> */}
      {/* <Estoque />  */}
   </StrictMode>,

@@ -51,7 +51,7 @@
     flex-direction: column;
 }
 
-.produto-linha{
+.produto-linha {
     display: grid;
     grid-template-columns: 150px 10fr 1fr;
     flex-direction: row;
@@ -75,4 +75,25 @@
     color: black;
     display: flex;
     justify-content: center;
+}
+
+@media (max-width: 480px) {
+    .container-card {
+        width: 80%;
+    }
+
+    .container-card .botoes .button-container {
+        width: 30%;
+        display: flex;
+    }
+    
+
+    .container-card .botoes .button-container .button-value {
+        font-size: 12px;
+    }
+   
+    .container-card .botoes .button-container .icon-container .button-icon .button-icon-value {
+        height: 16px;
+        width: 16px;
+    }
 }

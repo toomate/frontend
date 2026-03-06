@@ -2,10 +2,27 @@
 import "./App.css";
 import HeaderPadrao from "./HeaderPadrao";
 import { useNavigate } from "react-router-dom";
+import Kpi from "./components/Kpi/Kpi";
 
 export default function Index() {
   const navigate = useNavigate();
-
+  const cards = [{
+    nome: "Produtos Abaixo do Estoque Min.",
+    valor: 8
+  },
+  {
+    nome: "Produtos Perto da Data de Vencimento",
+    valor: 12
+  },
+  {
+    nome: "Boletos Próximo ao Vencimento",
+    valor: 4
+  },
+  {
+    nome: "Total de Clientes Devedores",
+    valor: 25
+  }
+  ]
   return (
     <div className="dashboard">
       <HeaderPadrao />
@@ -16,26 +33,10 @@ export default function Index() {
         <button onClick={() => navigate("/fornecedor")} className="btn">Fornecedores</button>
         <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
         <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
+        <button onClick={() => navigate("/Vencimentos")} className="btn">Vencimentos</button>
       </nav>
 
-      <div className="status">
-        <div className="card">
-          <span>Produtos Abaixo do Estoque Min.</span>
-          <span className="numero">8</span>
-        </div>
-        <div className="card">
-          <span>Produtos Perto da Data de Vencimento</span>
-          <span className="numero">12</span>
-        </div>
-        <div className="card">
-          <span>Boletos próximos ao Vencimento</span>
-          <span className="numero">4</span>
-        </div>
-        <div className="card">
-          <span>Total de clientes devedores</span>
-          <span className="numero">25</span>
-        </div>
-      </div>
+      <Kpi kpis={cards}/>
 
       <div className="container2">
         <div className="grafico"></div>
