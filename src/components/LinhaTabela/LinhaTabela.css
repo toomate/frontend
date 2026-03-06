@@ -10,10 +10,24 @@
     align-items: center;
     border-bottom: 0.2px solid black;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-    
+
 }
+
 
 #vencido {
-    background-color: rgb(255, 151, 151);
+    animation: piscar 2.5s infinite;
 }
 
+@keyframes piscar {
+    0% {
+        background-color: rgb(255, 182, 182);
+    }
+
+    50% {
+        background-color: transparent;
+    }
+
+    100% {
+        background-color:rgb(255, 182, 182);
+    }
+}
