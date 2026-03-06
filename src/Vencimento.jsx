@@ -20,6 +20,24 @@ export default function Vencimento() {
     }
     ]
 
+    const insumos = [{
+        insumo: "Arroz Tipo 1",
+        marca: "Camil",
+        estoque: 4,
+        dtVencimento: "28/02/2026",
+        diasRestantes: 0,
+        status: "Vencido"
+    },
+    {
+        insumo: "Feijão Carioca",
+        marca: "Camil",
+        estoque: 8,
+        dtVencimento: "20/03/2026",
+        diasRestantes: 3,
+        status: "Vence Logo"
+    }
+    ]
+
     return (
         <>
             <div className="vencimento-container">
@@ -31,7 +49,7 @@ export default function Vencimento() {
                     <div className="tabela-container">
                         <Cabecalho elementos={["Insumo", "Marca", "Estoque Atual", "Data De Vencimento", "Dias Restantes", "Status"]} />
                         <div className="tabela-interior">
-                            <LinhaTabela elementos={[["Arroz Tipo 1", "Camil", "04", "28/02/2026", "0", "Vencido"], ["Feijão Carioca", "Camil", "10", "20/03/2026", "3", "Vence Logo"]]} />
+                            <LinhaTabela elementos={insumos} />
                         </div>
                     </div>
                 </div>

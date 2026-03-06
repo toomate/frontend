@@ -13,9 +13,7 @@ import CadastroLote from "./CadastroLote";
 import Dashboard from "./Dashboard";
 import Calendario from "./components/Calendario/calendario";
 import CalendarioDetail from "./components/Calendario/calendarioDetail";
-
 import "./App.css";
-import { Estoque } from "./Estoque";
 import Vencimento from "./Vencimento";
 
 function App() {
