@@ -48,3 +48,47 @@
     border-top-right-radius: 10px;
     height: 90%;
 }
+
+/* ── 990px ── */
+@media (max-width: 990px) {
+    .kpi-container-interior {
+        height: auto;
+        padding: 16px 0;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .tabela-container {
+        width: 100%;
+        height: auto;
+        overflow-x: auto;
+        /* tabela rola horizontalmente */
+    }
+
+    .tabela-interior {
+        height: auto;
+        min-height: 200px;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .vencimento-container {
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+  
+    .kpi-container-interior .status {
+        width: 96%;
+    }
+
+    .tabela-container {
+        width: 96%;
+    }
+
+    .tabela-interior {
+        font-size: 9px;
+        width: 100%;
+    }
+}

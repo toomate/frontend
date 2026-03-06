@@ -31,7 +31,7 @@ export default function Vencimento() {
                     <div className="tabela-container">
                         <Cabecalho elementos={["Insumo", "Marca", "Estoque Atual", "Data De Vencimento", "Dias Restantes", "Status"]} />
                         <div className="tabela-interior">
-                            <LinhaTabela elementos={[["Arroz Tipo 1", "Camil", "04", "02/04/2005", "0", "Vencido"], ["Arroz Tipo 1", "Camil", "04", "02/04/2005", "0", "Vencido"]]} />
+                            <LinhaTabela elementos={[["Arroz Tipo 1", "Camil", "04", "28/02/2026", "0", "Vencido"], ["Feijão Carioca", "Camil", "10", "20/03/2026", "3", "Vence Logo"]]} />
                         </div>
                     </div>
                 </div>
