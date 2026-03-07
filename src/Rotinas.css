@@ -1,0 +1,102 @@
+.rotinas-container-geral {
+    min-height: 100vh;
+    height: 100%;
+    width: 100%;
+    background-image: url(./images/fundo-tela.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.rotinas-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 89vh;
+}
+
+.rotina-container {
+    display: flex;
+    gap: 10px;
+    width: 98%;
+    justify-self: center;
+}
+
+.rotina-toolbar {
+    display: flex;
+    width: 95%;
+    align-items: center;
+    height: 12vh;
+    justify-content: center;
+}
+
+.rotina-toolbar .search-container {
+    width: 100%;
+    height: 42px;
+    border: 1px solid #6b4423;
+    border-radius: 6px;
+    background: #fffdf4;
+}
+
+.rotina-toolbar .search {
+    width: calc(100% - 36px);
+}
+
+.rotinas-linhas {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+/* ── 990px ── */
+@media (max-width: 990px) {
+    .rotinas-container {
+        height: auto;
+        min-height: 89vh;
+        padding-bottom: 24px;
+    }
+
+    .rotina-toolbar {
+        flex-direction: column;
+        height: auto;
+        gap: 10px;
+        padding: 12px 0;
+        align-items: stretch;
+        width: 98%;
+    }
+
+    .rotina-toolbar .search-container {
+        width: 100%;
+    }
+
+    .rotina-container {
+        width: 98%;
+    }
+}
+
+/* ── 480px ── */
+@media (max-width: 480px) {
+    .rotinas-container {
+        padding-bottom: 32px;
+        overflow-x: hidden;
+    }
+
+    .rotinas-container-geral {
+        overflow-x: hidden;
+    }
+
+    .rotina-toolbar {
+        width: 92%;
+        padding: 10px 0;
+        gap: 8px;
+    }
+
+    .rotina-container {
+        width: 92%;
+    }
+
+    .rotinas-linhas {
+        gap: 8px;
+    }
+}
