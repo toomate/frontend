@@ -24,21 +24,19 @@ export default function Rotinas() {
         <div className="rotinas-container-geral">
             <HeaderPadrao />
             <div className="rotinas-container">
-                <div className="rotina-wrapper">
-                    <div className="rotina-toolbar">
-                        <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
-                        <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
-                    </div>
+                <div className="nav-categorias-container">
+                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
+                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                 </div>
-                <div className="rotina-container">
-                    <div className="rotina-grid">
-                        <div className="rotinas-linhas">
-                            <RotinaCard nomeRotina="Rotina 1" />
-                            <RotinaCard nomeRotina="Rotina 2" />
-                            <RotinaCard nomeRotina="Rotina 2" />
-                            <RotinaCard nomeRotina="Rotina 3" />
-                            <RotinaCard nomeRotina="Rotina 3" />
-                        </div>
+            </div>
+            <div className="rotina-container">
+                <div className="rotina-grid">
+                    <div className="rotinas-linhas">
+                        <RotinaCard nomeRotina="Rotina 1" />
+                        <RotinaCard nomeRotina="Rotina 2" />
+                        <RotinaCard nomeRotina="Rotina 2" />
+                        <RotinaCard nomeRotina="Rotina 3" />
+                        <RotinaCard nomeRotina="Rotina 3" />
                     </div>
                 </div>
             </div>

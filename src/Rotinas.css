@@ -12,7 +12,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 89vh;
 }
 
 .rotina-container {
@@ -22,13 +21,6 @@
     justify-self: center;
 }
 
-.rotina-wrapper {
-    display: flex;
-    width: 100%;
-    height: 12vh;
-    justify-content: center;
-    align-items: center;
-}
 
 .rotina-toolbar {
     display: flex;
@@ -61,7 +53,6 @@
 @media (max-width: 990px) {
     .rotinas-container {
         height: auto;
-        min-height: 89vh;
         padding-bottom: 24px;
     }
 

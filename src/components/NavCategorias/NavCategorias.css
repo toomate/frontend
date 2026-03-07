@@ -109,3 +109,10 @@
     height: 40px;
   }
 }
+
+@media (max-width: 480px) {
+  .categorias-dropdown {
+      position: absolute;
+      top: calc(15% + 6px);
+    }
+}
