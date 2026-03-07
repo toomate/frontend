@@ -1,7 +1,8 @@
 import React from "react";
-import { Menu, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import "./App.css";
 import { useNavigate, useLocation } from "react-router-dom";
+import HamburgerButton from "./components/HamburgerButton/HamburgerButton";
 
 export default function HeaderPadrao() {
   const navigate = useNavigate();
@@ -24,9 +25,7 @@ export default function HeaderPadrao() {
   return (
     <header className="header">
       <div className="lado-esquerdo">
-        <button className="hamburger-btn">
-          <Menu size={28} color="#b88b09" />
-        </button>
+        <HamburgerButton />
 
         <div className="logo-circulo"></div>
 

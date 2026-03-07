@@ -1,0 +1,172 @@
+﻿.botao-hamburguer {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  transition: opacity 0.2s ease;
+}
+
+.botao-hamburguer:hover,
+.botao-hamburguer:focus-visible {
+  opacity: 0.85;
+}
+
+.menu-hamburguer-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.sobreposicao-menu {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  z-index: 90;
+}
+
+.sobreposicao-menu.aberto {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.painel-lateral-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: min(84vw, 320px);
+  background: #fff;
+  border-right: 2px solid #b88b09;
+  transform: translateX(-100%);
+  transition: transform 0.25s ease;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  padding: 14px;
+  box-shadow: 12px 0 24px rgba(0, 0, 0, 0.22);
+}
+
+.painel-lateral-menu.aberto {
+  transform: translateX(0);
+}
+
+.cabecalho-painel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 4px 4px 12px;
+  margin-bottom: 6px;
+  border-bottom: 1.5px solid #eee;
+}
+
+.cabecalho-painel span {
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #444;
+  font-weight: 700;
+}
+
+.botao-fechar-painel {
+  border: none;
+  background: #f1f1f1;
+  color: #111;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.botao-fechar-painel:hover {
+  background: #ffdede;
+}
+
+.conteudo-painel {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: 6px;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.lista-links-painel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+  overflow-y: auto;
+}
+
+.lista-links-painel::-webkit-scrollbar {
+  width: 6px;
+}
+
+.lista-links-painel::-webkit-scrollbar-thumb {
+  background: rgba(184, 139, 9, 0.55);
+}
+
+.lista-links-painel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.link-menu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  width: 100%;
+  margin-top: 0;
+  text-decoration: none;
+  color: #111;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1.5px solid transparent;
+  background-color: #fff;
+  transition: border-color 0.2s ease, background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.link-menu:first-of-type {
+  margin-top: 0;
+}
+
+.link-menu:hover {
+  border-color: #b88b09;
+  background-color: #fff4cc;
+  color: #b88b09;
+}
+
+.link-menu.ativo {
+  background-color: #c92c2c;
+  border-color: #c92c2c;
+  color: white;
+}
+
+.botao-sair-menu {
+  margin-top: auto;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 2px 2px;
+  height: 38px;
+  background: #c92c2c;
+  color: white;
+  border-radius: 8px;
+  font-weight: 700;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: opacity 0.2s ease, border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.botao-sair-menu:hover {
+  border-color: #900;
+  opacity: 0.9;
+}
