@@ -24,10 +24,11 @@ export default function Rotinas() {
         <div className="rotinas-container-geral">
             <HeaderPadrao />
             <div className="rotinas-container">
-
-                <div className="rotina-toolbar">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
-                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
+                <div className="rotina-wrapper">
+                    <div className="rotina-toolbar">
+                        <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
+                        <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
+                    </div>
                 </div>
                 <div className="rotina-container">
                     <div className="rotina-grid">
