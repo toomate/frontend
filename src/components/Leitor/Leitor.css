@@ -1,0 +1,126 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body{
+    background-color: #f5f5f5;
+}
+
+.container-leitor{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    min-height: 100vh;
+    text-align: center;
+}
+
+/* botão voltar */
+.voltar{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #d32f2f;
+    color: white;
+    border-radius: 12px;
+    height: 40px;
+    padding: 0 16px;
+    width: fit-content;
+    margin: 15px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* seta */
+.voltar::before{
+    content: "←";
+    font-size: 18px;
+}
+
+/* imagem camera */
+.leitor-image{
+    width: 140px;
+    max-width: 40vw;
+    margin-bottom: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.leitor-image:hover{
+    transform: scale(1.05);
+}
+
+/* scanner */
+.scanner-container {
+    width: 100%;
+    max-width: 320px;
+    height: 260px;
+    border: 2px dashed #000;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    background-color: white;
+}
+
+/* botões */
+button{
+    background-color: #582408;
+    color: white;
+    border-radius: 12px;
+    height: 45px;
+    padding: 0 20px;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+button:hover{
+    background-color: #7a3612;
+}
+
+/* input */
+input{
+    width: 100%;
+    max-width: 320px;
+    height: 45px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-top: 15px;
+    font-size: 16px;
+}
+
+/* textos */
+p{
+    margin: 8px 0;
+    color: #333;
+}
+
+/* código lido */
+p strong{
+    color: #000;
+}
+
+/* telas maiores */
+@media (min-width: 768px){
+
+    .container-leitor{
+        max-width: 500px;
+        margin: auto;
+    }
+
+    .scanner-container{
+        height: 300px;
+    }
+
+    .leitor-image{
+        width: 180px;
+    }
+}
