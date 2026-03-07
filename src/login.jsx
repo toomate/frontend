@@ -33,6 +33,8 @@ export default function Login() {
 
       localStorage.setItem("token", token);
 
+      console.log("token",  resposta.token)
+
       if (resposta?.nome) {
         localStorage.setItem("usuarioNome", resposta.nome);
       }

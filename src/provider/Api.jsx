@@ -3,7 +3,7 @@ import config from "../config";
 
 const baseURL = config.API_URL;
 
-var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcy5kZXYiLCJpYXQiOjE3NzI3NjMwNjMsImV4cCI6MTc3MzEyMzA2M30.E2oi-0wK0Vdfp1sbqyZ9EwjTwZRsKJvMUIpN6xTr5TzbplhbdEyqssQUxtTMUKgjfsUpE5knSoBaEGn1ujt4yQ"
+// var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcy5kZXYiLCJpYXQiOjE3NzI3NjMwNjMsImV4cCI6MTc3MzEyMzA2M30.E2oi-0wK0Vdfp1sbqyZ9EwjTwZRsKJvMUIpN6xTr5TzbplhbdEyqssQUxtTMUKgjfsUpE5knSoBaEGn1ujt4yQ"
 
 export const api = axios.create({
   baseURL,
@@ -43,15 +43,15 @@ async function requestComFallback(config) {
 
 export class boletos {
 
-static async listarBoletos() {
+  static async listarBoletos() {
     try {
-        const response = await api.get('/boletos', token ? { headers: { Authorization: `Bearer ${token}` } } : {});
-        return response.data;
+      const response = await api.get('/boletos', token ? { headers: { Authorization: `Bearer ${token}` } } : {});
+      return response.data;
     } catch (error) {
-        console.error('Erro ao buscar boletos:', error);
-        throw error;
+      console.error('Erro ao buscar boletos:', error);
+      throw error;
     }
-};
+  };
 }
 
 export class AuthApi {

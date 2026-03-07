@@ -1,3 +1,11 @@
+.vencimento-container {
+    background-image: url(./images/fundo-tela.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+}
+
 .kpi-container {
     display: flex;
     flex-direction: column;
@@ -23,6 +31,7 @@
 
 .tabela-container {
     display: flex;
+    background-color: white;
     align-items: center;
     height: 50vh;
     width: 95%;
@@ -78,7 +87,7 @@
         overflow-x: hidden;
     }
 
-  
+
     .kpi-container-interior .status {
         width: 96%;
     }

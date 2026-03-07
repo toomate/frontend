@@ -131,6 +131,8 @@ export function Estoque() {
             </div>
         )
     }
+
+    console.log(grupo)
     return (
         <div className="estoque-container">
             {exibirRelatorio && (
