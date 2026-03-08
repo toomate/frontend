@@ -72,7 +72,7 @@ export default function Cadastro() {
     <section className="auth-page">
       <div className="auth-card">
         <h1 className="auth-brand">Toomate</h1>
-        <h2 className="auth-title">Cadastro</h2>
+        <h2 className="auth-title">Cadastro de Usuário</h2>
         <p className="auth-subtitle">Crie sua conta para comecar a usar a plataforma.</p>
 
         <input
@@ -129,13 +129,22 @@ export default function Cadastro() {
 
         {erro && <p className="auth-error">{erro}</p>}
 
-        <button className="auth-submit" onClick={cadastrar} disabled={carregando}>
-          {carregando ? "Cadastrando..." : "Cadastrar"}
-        </button>
+        <div className="actions">
+          <button
+            className="auth-submit"
+            onClick={() => navigate(-1)}
+          >
+            Cancelar
+          </button>
 
-        <p className="auth-link-row">
-          Ja possui conta? <span onClick={() => navigate("/")}>Entrar</span>
-        </p>
+          <button
+            className="auth-submit"
+            onClick={cadastrar}
+            disabled={carregando}
+          >
+            {carregando ? "Cadastrando..." : "Cadastrar"}
+          </button>
+        </div>
       </div>
     </section>
   );

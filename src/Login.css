@@ -105,25 +105,31 @@
   margin: 0;
 }
 
+.actions {
+  display: flex !important;
+  gap: 40px;
+  justify-content: center;
+}
+
+.actions .auth-submit {
+  flex: 1;
+  min-width: 0;
+}
+
 .auth-submit {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   height: 44px;
+  border-radius: 6px;
   border: none;
-  border-radius: 10px;
   background: linear-gradient(135deg, #c92c2c, #9f2020);
   color: #fff;
   font-weight: 700;
   font-size: 15px;
   cursor: pointer;
   transition: filter 0.2s ease;
-}
-
-.auth-submit:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.auth-submit:hover:not(:disabled) {
-  filter: brightness(1.05);
 }
 
 .auth-link-row {

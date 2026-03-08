@@ -64,34 +64,58 @@ const navigate = useNavigate();
           </div>
 
           <div className="lista">
-            <ItemPagamento />
-            <ItemPagamento />
-            <ItemPagamento />
-            <ItemPagamento />
+            <div className="item-pagamento">
+              <div className="info-esquerda">
+                <div className="vencimento">Vencimento: 10/02/2026</div>
+
+                <div className="descricao">
+                  Aluguel
+                </div>
+
+                <div className="valor">R$ 8.000,00</div>
+              </div>
+
+              <div className="lado-direito">
+                <button className="btn-pago">Pago ✓</button>
+              </div>
+            </div>
+            
+            <div className="item-pagamento">
+              <div className="info-esquerda">
+                <div className="vencimento">Vencimento: 15/02/2026</div>
+
+                <div className="descricao">
+                  Conta de Água
+                </div>
+
+                <div className="valor">R$ 716,49</div>
+              </div>
+
+              <div className="lado-direito">
+                <button className="btn-pago">Pago ✓</button>
+              </div>
+            </div>
+
+            <div className="item-pagamento">
+              <div className="info-esquerda">
+                <div className="vencimento">Vencimento: 20/02/2026</div>
+
+                <div className="descricao">
+                  Conta de Luz
+                </div>
+
+                <div className="valor">R$ 428,67</div>
+              </div>
+
+              <div className="lado-direito">
+                <button className="btn-pago">Pago ✓</button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
     </div>
   );
   
-}
-
-function ItemPagamento() {
-  return (
-    <div className="item-pagamento">
-      <div className="info-esquerda">
-        <div className="vencimento">Vencimento: dia / mes / ano</div>
-
-        <div className="descricao">
-          Informações do boleto (Razão Social e Produto)
-        </div>
-
-        <div className="valor">R$ Valor</div>
-      </div>
-
-      <div className="lado-direito">
-        <button className="btn-pago">Pago ✓</button>
-      </div>
-    </div>
-  );
 }

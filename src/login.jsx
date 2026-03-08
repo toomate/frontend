@@ -95,10 +95,6 @@ export default function Login() {
         <button className="auth-submit" onClick={entrar} disabled={carregando}>
           {carregando ? "Entrando..." : "Entrar"}
         </button>
-
-        <p className="auth-link-row">
-          Nao tem conta? <span onClick={() => navigate("/cadastro")}>Cadastre-se</span>
-        </p>
       </div>
     </section>
   );

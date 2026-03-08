@@ -142,6 +142,9 @@
 }
 
 .notificacao {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   flex: 1;
   background: white;
   border-radius: 5px;
@@ -268,12 +271,18 @@ body,
 
 input {
   width: 100%;
+  height: 35px;
   border-radius: 5px;
   padding: 10px;
   margin-bottom: 15px;
   background-color: white;
   color: rgb(175, 175, 175);
   border: 1.5px solid rgb(175, 175, 175);
+}
+
+.busca {
+  width: auto;
+  height: 35px;
 }
 
 .auth-switch {
@@ -294,7 +303,7 @@ input {
   position: relative;
   border: none;
   width: 100%;
-  padding-right: 40px;
+  margin-bottom: 10px;
 }
 
 .input-wrapper1 {
@@ -307,9 +316,8 @@ input {
 
 .selectNome, .selectMarca, .selectCategoria, .selectUnidade, .selectCategoriaBoleto, .selectPedido {
   width: 100%;
-  padding-right: 50px;
+  padding-right: 20px;
   height: 40px;
-  margin-bottom: 15px;
   border-radius: 5px;
   border: 1.5px solid rgb(175, 175, 175);
 }
@@ -324,15 +332,15 @@ input {
 }
 
 .eye-btn, .eye-btn1, .eye-btn2 {
-  position: absolute;
-  right: 0;
-  top: 8px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 3px;
+  display: flex;
   align-items: center;
-  color: #555;
+  justify-content: center;
+  width: 60px;
+  border: none;
+  background: transparent !important;
+  color: black;
+  cursor: pointer;
+  padding: 0 0 0 0;
 }
 
 /* Responsividade */
@@ -512,12 +520,6 @@ input {
     border-radius: 6px;
     width: 100%;
   }
-
-  .busca input {
-    border: none;
-    outline: none;
-    width: 100%;
-  }
 }
 
 .actions {
@@ -525,10 +527,6 @@ input {
   justify-content: space-between;
   margin-top: 16px;
   gap: 10px;
-}
-
-.btn-cancelar {
-  background: red;
 }
 
 .btn-voltar {
@@ -569,16 +567,12 @@ input {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 30px;
+  height: 50px;
   color: black;
   border-radius: 5px;
   cursor: pointer;
   gap: 5px;
   text-align: left;
-}
-
-.botao-upload input {
-  padding: 0;
 }
 
 .modal-overlay {
@@ -640,7 +634,7 @@ input {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  background: #c92c2c;
+  background: linear-gradient(135deg, #c92c2c, #9f2020);
   border-radius: 4px;
   padding: 5px;
 }
@@ -694,6 +688,7 @@ input {
 .filtros select {
   color: black;
   background-color: #ccc;
+  border-color: transparent;
   padding: 8px;
   border-radius: 6px;
 }
@@ -710,6 +705,7 @@ input {
 .busca input {
   background-color: transparent;
   width: 400px;
+  height: 30px;
   color: black;
   border: none;
   margin: 0;
