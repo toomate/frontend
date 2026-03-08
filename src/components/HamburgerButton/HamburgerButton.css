@@ -71,18 +71,18 @@
 
 .botao-fechar-painel {
   border: none;
-  background: #f1f1f1;
+  background: #ccc;
   color: #111;
   width: 28px;
   height: 28px;
   border-radius: 50%;
   cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
+  font-size: 16px;
+  padding: 0;
 }
 
 .botao-fechar-painel:hover {
-  background: #ffdede;
+  background: #ccc;
 }
 
 .conteudo-painel {

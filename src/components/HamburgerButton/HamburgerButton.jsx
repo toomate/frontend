@@ -84,7 +84,7 @@ export default function HamburgerButton({
         role="menu"
       >
         <div className="cabecalho-painel">
-          <span>Navegacao</span>
+          <span>Navegação</span>
           <button
             type="button"
             className="botao-fechar-painel"

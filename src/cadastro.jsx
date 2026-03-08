@@ -73,7 +73,7 @@ export default function Cadastro() {
       <div className="auth-card">
         <h1 className="auth-brand">Toomate</h1>
         <h2 className="auth-title">Cadastro de Usuário</h2>
-        <p className="auth-subtitle">Crie sua conta para comecar a usar a plataforma.</p>
+        <p className="auth-subtitle">Crie uma conta para começar a usar a plataforma.</p>
 
         <input
           className="auth-input"
