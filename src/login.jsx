@@ -72,8 +72,7 @@ export default function Login() {
         />
 
         <div className="auth-input-wrap">
-          <input
-            className="auth-input"
+          <input className="auth-input"
             type={mostrarSenha ? "text" : "password"}
             placeholder="Senha"
             value={senha}

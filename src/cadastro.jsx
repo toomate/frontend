@@ -70,7 +70,7 @@ export default function Cadastro() {
 
   return (
     <section className="auth-page">
-      <div className="auth-card auth-card-register">
+      <div className="auth-card">
         <h1 className="auth-brand">Toomate</h1>
         <h2 className="auth-title">Cadastro</h2>
         <p className="auth-subtitle">Crie sua conta para comecar a usar a plataforma.</p>
@@ -92,8 +92,7 @@ export default function Cadastro() {
         />
 
         <div className="auth-input-wrap">
-          <input
-            className="auth-input"
+          <input className="auth-input"
             type={mostrarSenha ? "text" : "password"}
             placeholder="Senha"
             value={senha}
