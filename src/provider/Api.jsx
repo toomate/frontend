@@ -45,7 +45,10 @@ export class boletos {
 
   static async listarBoletos() {
     try {
-      const response = await api.get('/boletos', token ? { headers: { Authorization: `Bearer ${token}` } } : {});
+      const response = await requestComFallback({
+        method: "get",
+        url: "/boletos",
+      });
       return response.data;
     } catch (error) {
       console.error('Erro ao buscar boletos:', error);
