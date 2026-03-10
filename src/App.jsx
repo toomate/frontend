@@ -36,7 +36,7 @@ function App() {
         <Route path="/fornecedores" element={<Fornecedor />} />
         <Route path="/vencimentos" element={<Vencimento />} />
         <Route path="/rotinas" element={<Rotinas/>} />
-        <Route path="/Fiado" element={<Fiado/>} />
+        <Route path="/Fiados" element={<Fiado/>} />
         <Route path="/leitor" element={<Leitor />} />
       </Routes>
     </BrowserRouter>
