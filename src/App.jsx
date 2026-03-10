@@ -16,6 +16,7 @@ import "./App.css";
 import Vencimento from "./Vencimento";
 import RotinaCard from "./components/RotinaCard/RotinaCard";
 import Rotinas from "./Rotinas";
+import Fiado from "./Fiado";
 import Leitor from "./components/Leitor/Leitor";
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
         <Route path="/fornecedores" element={<Fornecedor />} />
         <Route path="/vencimentos" element={<Vencimento />} />
         <Route path="/rotinas" element={<Rotinas/>} />
+        <Route path="/Fiados" element={<Fiado/>} />
         <Route path="/leitor" element={<Leitor />} />
       </Routes>
     </BrowserRouter>
