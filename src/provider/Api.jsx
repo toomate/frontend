@@ -3,8 +3,6 @@ import config from "../config";
 
 const baseURL = config.API_URL;
 
-// var token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJsdWNhcy5kZXYiLCJpYXQiOjE3NzI3NjMwNjMsImV4cCI6MTc3MzEyMzA2M30.E2oi-0wK0Vdfp1sbqyZ9EwjTwZRsKJvMUIpN6xTr5TzbplhbdEyqssQUxtTMUKgjfsUpE5knSoBaEGn1ujt4yQ"
-
 export const api = axios.create({
   baseURL,
 });
