@@ -320,15 +320,13 @@ export default function Fiado({ irPara }) {
             className={`view-toggle-btn ${visualizacao === "cards" ? "active" : ""}`}
             onClick={() => setVisualizacao("cards")}
             title="Visualização em cards"
-          >
-            <LayoutGrid size={20} />
+          > 
           </button>
           <button
             className={`view-toggle-btn ${visualizacao === "lista" ? "active" : ""}`}
             onClick={() => setVisualizacao("lista")}
             title="Visualização em lista"
-          >
-            <List size={20} />
+          >  
           </button>
         </div>
 
