@@ -11,6 +11,7 @@ import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 import HeaderPadrao from "./HeaderPadrao";
 import { CardRotina } from "./components/CardRotina/CardRotina";
+import { useNavigate } from "react-router-dom";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
@@ -22,6 +23,7 @@ export function Estoque() {
     const [cardRemocao, setCardRemocao] = useState(false);
     const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
+    const navigate = useNavigate();
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
@@ -163,10 +165,10 @@ export function Estoque() {
                 </div>
                 <div className="botoes-container">
                     <ButtonPlus />
-                    <Button texto="Rotinas" Icone={Bookmark} />
+                    <Button texto="Rotinas" Icone={Bookmark} onClick={() => {navigate("/rotinas")}} />
                     <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                     <div className="botoes-container-icon">
-                        <ScanBarcode color="black" size={30} />
+                        <ScanBarcode color="black" size={30} onClick={() => {navigate("/leitor")}} />
                     </div>
                 </div>
                 <div className="insumos-container">
