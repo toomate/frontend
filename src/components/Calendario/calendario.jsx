@@ -11,6 +11,8 @@ import HeaderPadrao from '../../HeaderPadrao';
 
 export default function Calendario() {
   const [selectedBoletos, setSelectedBoletos] = useState([]);
+  const location = useLocation();
+  const myEventsList = location.state?.myEventsList || [];
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -168,36 +170,6 @@ useEffect(() => {
       />
     </div>
   );
-  const [myEventsList, setMyEventsList] = useState([]);
-  useEffect(() => {
-    const fetchBoletos = async () => {
-      try {
-        const boletosData = await boletos.listarBoletos();
-        console.log('Boletos da API:', boletosData);
-        const events = Array.isArray(boletosData) ? boletosData.map(boleto => {
-          const startDate = new Date(
-            boleto.dataVencimento + 'T00:00:00'
-          );
-          console.log(`Boleto: ${boleto.descricao}, Data original: ${boleto.data_vencimento}, Data convertida: ${startDate}`);
-          return {
-            id: boleto.idBoleto,
-            title: boleto.descricao,
-            status: boleto.pago,
-            value: `R$ ${boleto.valor.toFixed(2)}`,
-            start: startDate,
-            end: startDate,
-          };
-        }) : [];
-        console.log('Events processados:', events);
-        setMyEventsList(events);
-      } catch (error) {
-        console.error('Erro ao buscar boletos:', error);
-        setMyEventsList([]);
-      }
-    };
-    fetchBoletos();
-
-  }, []);
 
   return (
     <div className="calendario-container">

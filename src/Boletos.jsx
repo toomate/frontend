@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
@@ -6,10 +6,39 @@ import { Menu, CalendarDays, Search } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 import Calendario from "./components/Calendario/calendario";
 import { BiFontSize } from "react-icons/bi";
+import { boletos } from './provider/Api';
 
 export default function Boletos({ irPara }) {
 const navigate = useNavigate();
-// const [abrirCalendario, setAbrirCalendario] = useState(false);
+const [boletoLista, setBoletos] = useState([]);
+  useEffect(() => {
+    const fetchBoletos = async () => {
+      try {
+        const boletosData = await boletos.listarBoletos();
+        const boletosJson = Array.isArray(boletosData) ? boletosData.map(boleto => {
+          const startDate = new Date(
+            boleto.dataVencimento + 'T00:00:00'
+          );
+          console.log(`Boleto: ${boleto.descricao}, Data original: ${boleto.data_vencimento}, Data convertida: ${startDate}`);
+          return {
+            id: boleto.idBoleto,
+            title: boleto.descricao,
+            status: boleto.pago,
+            value: `R$ ${boleto.valor.toFixed(2)}`,
+            start: startDate,
+            end: startDate,
+          };
+        }) : [];
+        console.log('Events processados:', boletosJson);
+        setBoletos(boletosJson);
+      } catch (error) {
+        console.error('Erro ao buscar boletos:', error);
+        setBoletos([]);
+      }
+    };
+    fetchBoletos();
+
+  }, []);
 
   return (
     <div className="boletos">
@@ -56,7 +85,7 @@ const navigate = useNavigate();
 
             <button 
               className="btn-calendario" 
-              onClick={() => navigate("/calendario")}
+              onClick={() => navigate("/calendario", { state: { myEventsList: boletoLista } })}
             >
                 <CalendarDays size={20} />
                 <h3> Painel</h3>
@@ -64,53 +93,27 @@ const navigate = useNavigate();
           </div>
 
           <div className="lista">
-            <div className="item-pagamento">
-              <div className="info-esquerda">
-                <div className="vencimento">Vencimento: 10/02/2026</div>
+            {boletoLista.map((boleto) => (
+              <div className="item-pagamento" key={boleto.id}>
+                <div className="info-esquerda">
+                  <div className="vencimento">Vencimento: {boleto.start.toLocaleDateString()}</div>
 
-                <div className="descricao">
-                  Aluguel
+                  <div className="descricao">
+                    {boleto.title}
+                  </div>
+
+                  <div className="valor">{boleto.value}</div>
                 </div>
 
-                <div className="valor">R$ 8.000,00</div>
-              </div>
-
-              <div className="lado-direito">
-                <button className="btn-pago">Pago ✓</button>
-              </div>
-            </div>
-            
-            <div className="item-pagamento">
-              <div className="info-esquerda">
-                <div className="vencimento">Vencimento: 15/02/2026</div>
-
-                <div className="descricao">
-                  Conta de Água
+                <div className="lado-direito">
+                  {boleto.status ? (
+                    <button className="btn-pago">Pago ✓</button>
+                  ) : (
+                    <button className="btn-pendente">Pendente</button>
+                  )}
                 </div>
-
-                <div className="valor">R$ 716,49</div>
               </div>
-
-              <div className="lado-direito">
-                <button className="btn-pago">Pago ✓</button>
-              </div>
-            </div>
-
-            <div className="item-pagamento">
-              <div className="info-esquerda">
-                <div className="vencimento">Vencimento: 20/02/2026</div>
-
-                <div className="descricao">
-                  Conta de Luz
-                </div>
-
-                <div className="valor">R$ 428,67</div>
-              </div>
-
-              <div className="lado-direito">
-                <button className="btn-pago">Pago ✓</button>
-              </div>
-            </div>
+            ))}
 
           </div>
         </div>
