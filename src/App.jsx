@@ -9,7 +9,7 @@ import CadastroBoleto from "./CadastroBoleto";
 import CadastroFiado from "./CadastroFiado";
 import CadastroInsumo from "./CadastroInsumo";
 import CadastroLote from "./CadastroLote";
-import Dashboard from "./Dashboard";
+import Dashboard from "./components/Dashboard/Dashboard";
 import Calendario from "./components/Calendario/calendario";
 import CalendarioDetail from "./components/Calendario/calendarioDetail";
 import "./App.css";

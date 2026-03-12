@@ -1,8 +1,9 @@
 ﻿import React from "react";
-import "./App.css";
-import HeaderPadrao from "./HeaderPadrao";
+import "./Dashboard.css";
+import HeaderPadrao from "../../HeaderPadrao";
 import { useNavigate } from "react-router-dom";
-import Kpi from "./components/Kpi/Kpi";
+import Kpi from "../Kpi/Kpi";
+import Grafico from "./Grafico";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -39,7 +40,9 @@ export default function Index() {
       <Kpi kpis={cards}/>
 
       <div className="container2">
-        <div className="grafico"></div>
+        <div className="grafico" id="chart">
+          <Grafico />
+        </div>
 
         <div className="notificacao">
           <h2 className="alerta-titulo">ALERTAS!</h2>
