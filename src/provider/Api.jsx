@@ -118,6 +118,19 @@ export class Lote {
       throw error;
     }
   }
+
+  static async listarLotes() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/lotes`,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar os lotes:", error);
+      throw error;
+    }
+  }
 }
 
 export class FornecedorApi {
