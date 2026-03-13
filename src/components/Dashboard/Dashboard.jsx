@@ -9,15 +9,6 @@ import { Lote } from "../../provider/Api";
 
 export default function Index() {
   const navigate = useNavigate();
-    const [lotes, setLotes] = useState([]);
-    async function fetchLotes() {
-    const lotesData = await Lote.listarLotes()
-    setLotes(lotesData);
-  }
-  useEffect(() => {
-    fetchLotes();
-    console.log(lotes);
-  }, []);
   const cards = [{
     nome: "Produtos Abaixo do Estoque Min.",
     valor: 8
