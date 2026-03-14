@@ -3,36 +3,7 @@ import ReactApexChart from "react-apexcharts";
 import { Lote } from "../../provider/Api";
 import { useEffect } from "react";
 
-export default function Grafico() {
-      const [lotes, setLotes] = useState([]);
-    async function fetchLotes() {
-    const lotesData = await Lote.listarLotes()
-    console.log(lotesData)
-    var lotesFormatados = []
-    for (const lote of lotesData) {
-      var loteFormatado = {
-        x: lote.marca.insumo.nome,
-        y: lote.quantidadeMedida,
-        goals: [
-          {
-            name: "Estoque Mínimo",
-            value: lote.marca.insumo.qtdMinima,
-            strokeHeight: 5,
-            strokeColor: "red"
-          }
-        ]
-      }
-      lotesFormatados.push(loteFormatado)
-    }
-    setLotes(lotesFormatados)
-  }
-  useEffect(() => {
-    fetchLotes();
-  }, []);
-    useEffect(() => {
-    console.log(lotes);
-
-  }, [lotes]);
+export default function Grafico({dados}) {
   const [state] = useState({
     series: [
       {
@@ -71,7 +42,7 @@ export default function Grafico() {
     <div id="chart">
       <ReactApexChart
         options={state.options}
-        series={[{ name: "Estoque", data: lotes }]}
+        series={[{ name: "Estoque", data: dados }]}
         type="bar"
         height={350}
       />
