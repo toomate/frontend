@@ -6,12 +6,14 @@ import Kpi from "../Kpi/Kpi";
 import Grafico from "./Grafico";
 import { useState } from "react";
 import { Lote } from "../../provider/Api";
+import { boletos } from "../../provider/Api";
 
 export default function Index() {
   const navigate = useNavigate();
+  const [kpisDados, setKpisDados] = useState([])
   const [lotesData, setlotesData] = useState([])
   const [dadosInsumo, setDadosInsumo] = useState([])
-  const [kpisDados, setKpisDados] = useState([])
+  const [boletosData, serBoletosData] = useState([])
   async function fetchLotes() {
     const lotesData = await Lote.listarLotes()
     setlotesData(lotesData)
@@ -36,27 +38,35 @@ export default function Index() {
   useEffect(() => {
     fetchLotes();
   }, []);
+  async function fetchBoletos(){
+    const boletosData = await boletos.listarBoletos()
+    console.log(boletosData)
+  }
   useEffect(() => {
     kpis();
   }, [lotesData])
 
   function kpis() {
-    var contador = 0
-    console.log(lotesData)
+    var contadorEstoqueMinimo = 0
+    var umaSemana = new Date(new Date().getTime() + 604800000)
+    var contadorInsumoValidade = 0
     for (const dado of lotesData) {
       if (dado.quantidadeMedida <= dado.marca.insumo.qtdMinima) {
-        contador++
+        contadorEstoqueMinimo++
       }
-              setKpisDados([contador])
+      if(new Date(dado.dataValidade) <= umaSemana){
+        contadorInsumoValidade++
+      }
     }
+                  setKpisDados([contadorEstoqueMinimo, contadorInsumoValidade])
   }
     const cards = [{
       nome: "Produtos Abaixo do Estoque Min.",
-      valor: kpisDados
+      valor: kpisDados[0]
     },
     {
       nome: "Produtos Perto da Data de Vencimento",
-      valor: 12
+      valor: kpisDados[1]
     },
     {
       nome: "Boletos Próximo ao Vencimento",
