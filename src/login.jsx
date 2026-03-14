@@ -23,7 +23,6 @@ export default function Login() {
       setErro("");
 
       const resposta = await AuthApi.login({ apelido: username.trim(), senha: senha.trim() });
-      console.log("AAAAAA", resposta)
       const token = resposta?.token;
 
       if (!token) {
@@ -33,7 +32,6 @@ export default function Login() {
 
       localStorage.setItem("token", token);
 
-      console.log("token",  resposta.token)
 
       if (resposta?.nome) {
         localStorage.setItem("usuarioNome", resposta.nome);
