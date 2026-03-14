@@ -3,6 +3,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
 import "./Login.css";
+import { Link } from "react-router-dom";
 
 export default function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -93,6 +94,21 @@ export default function Login() {
         <button className="auth-submit" onClick={entrar} disabled={carregando}>
           {carregando ? "Entrando..." : "Entrar"}
         </button>
+        
+        {/* <p className="auth-register-text">
+          Não possui acesso?{" "}
+          <a
+            href={`mailto:admin@toomate.com?subject=Solicitação de acesso&body=Olá, gostaria de solicitar a criação do meu acesso.%0A%0ACriar usuário em:%20${window.location.origin}/cadastro`}
+          >
+            Solicitar acesso
+          </a>
+        </p> */}
+        
+        {/* 
+        <p className="auth-register-text">
+          Não tem conta? <Link to="/cadastro">Cadastre-se</Link>
+        </p> */}
+        
       </div>
     </section>
   );

@@ -5,6 +5,7 @@
   background-color: white;
   color: black;
   margin: 0 auto;
+  background-image: url(./images/fundo-tela.png);
 }
 
 .header {
@@ -660,6 +661,8 @@ input {
   background-color: white;
   color: black;
   margin: 0 auto;
+  background-image: url(./images/fundo-tela.png);
+
 }
 
 .conteudo span {
