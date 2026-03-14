@@ -1,7 +1,7 @@
 ﻿import React, { useEffect } from "react";
 import "./Dashboard.css";
 import HeaderPadrao from "../../HeaderPadrao";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import Kpi from "../Kpi/Kpi";
 import Grafico from "./Grafico";
 import { useState } from "react";
@@ -19,29 +19,41 @@ export default function Index() {
   async function fetchLotes() {
     const lotesData = await Lote.listarLotes()
     setlotesData(lotesData)
-    var lotesFormatados = []
-    for (const lote of lotesData) {
-      var loteFormatado = {
-        x: lote.marca.insumo.nome,
-        y: lote.quantidadeMedida,
-        goals: [
-          {
-            name: "Estoque Mínimo",
-            value: lote.marca.insumo.qtdMinima,
-            strokeHeight: 5,
-            strokeColor: "red"
-          }
-        ]
-      }
-      lotesFormatados.push(loteFormatado)
+  }
+  function agruparDados(dados) {
+    var dadosAgrupados = []
+    var nomes = new Set()
+    for (const dado of dados) {
+      nomes.add(dado.marca.insumo.nome)
     }
-    setDadosInsumo(lotesFormatados)
+    for (const nome of nomes) {
+      var quantidade = 0
+      for (const dado of dados) {
+        if (dado.marca.insumo.nome == nome) {
+          quantidade += dado.quantidadeMedida
+          var loteFormatado = {
+            x: dado.marca.insumo.nome.split(" ")[0],
+            y: quantidade,
+            goals: [
+              {
+                name: "Estoque Mínimo",
+                value: dado.marca.insumo.qtdMinima,
+                strokeHeight: 5,
+                strokeColor: "red"
+              }
+            ]
+          }
+        }
+      }
+      dadosAgrupados.push(loteFormatado)
+    }
+    setDadosInsumo(dadosAgrupados)
   }
   async function fetchBoletos() {
     const boletosData = await boletos.listarBoletos()
     setBoletosData(boletosData)
   }
-    async function fetchClientes() {
+  async function fetchClientes() {
     const clientesData = await clientes.listarComDividasEmAberto()
     setClientesData(clientesData)
   }
@@ -51,19 +63,24 @@ export default function Index() {
     fetchClientes();
   }, []);
   useEffect(() => {
+    agruparDados(lotesData)
+  }, [lotesData])
+  useEffect(() => {
     kpis();
-  }, [lotesData, boletosData, clientesData])
+  }, [lotesData, boletosData, clientesData, dadosInsumo])
 
   function kpis() {
+    console.log(dadosInsumo)
     var umaSemana = new Date(new Date().getTime() + 604800000)
     var contadorEstoqueMinimo = 0
     var contadorInsumoValidade = 0
     var contadorBoletoVencimento = 0
-    console.log(clientesData)
-    for (const dado of lotesData) {
-      if (dado.quantidadeMedida <= dado.marca.insumo.qtdMinima) {
+    for (const dado of dadosInsumo) {
+      if (dado.y <= dado.goals[0].value) {
         contadorEstoqueMinimo++
       }
+    }
+    for (const dado of lotesData) {
       if (new Date(dado.dataValidade) <= umaSemana) {
         contadorInsumoValidade++
       }
