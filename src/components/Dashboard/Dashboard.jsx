@@ -5,8 +5,9 @@ import { useNavigate } from "react-router-dom";
 import Kpi from "../Kpi/Kpi";
 import Grafico from "./Grafico";
 import { useState } from "react";
-import { Lote } from "../../provider/Api";
+import { clientes, Lote } from "../../provider/Api";
 import { boletos } from "../../provider/Api";
+import { dividas } from "../../provider/Api";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function Index() {
   const [lotesData, setlotesData] = useState([])
   const [dadosInsumo, setDadosInsumo] = useState([])
   const [boletosData, setBoletosData] = useState([])
+  const [clientesData, setClientesData] = useState(0)
   async function fetchLotes() {
     const lotesData = await Lote.listarLotes()
     setlotesData(lotesData)
@@ -35,100 +37,106 @@ export default function Index() {
     }
     setDadosInsumo(lotesFormatados)
   }
-  useEffect(() => {
-    fetchLotes();
-    fetchBoletos();
-  }, []);
-  async function fetchBoletos(){
+  async function fetchBoletos() {
     const boletosData = await boletos.listarBoletos()
     setBoletosData(boletosData)
   }
+    async function fetchClientes() {
+    const clientesData = await clientes.listarComDividasEmAberto()
+    setClientesData(clientesData)
+  }
+  useEffect(() => {
+    fetchLotes();
+    fetchBoletos();
+    fetchClientes();
+  }, []);
   useEffect(() => {
     kpis();
-  }, [lotesData, boletosData])
+  }, [lotesData, boletosData, clientesData])
 
   function kpis() {
     var umaSemana = new Date(new Date().getTime() + 604800000)
     var contadorEstoqueMinimo = 0
     var contadorInsumoValidade = 0
     var contadorBoletoVencimento = 0
+    console.log(clientesData)
     for (const dado of lotesData) {
       if (dado.quantidadeMedida <= dado.marca.insumo.qtdMinima) {
         contadorEstoqueMinimo++
       }
-      if(new Date(dado.dataValidade) <= umaSemana){
+      if (new Date(dado.dataValidade) <= umaSemana) {
         contadorInsumoValidade++
       }
     }
-    for (const boleto of boletosData){
-      if(boleto.pago == false && new Date(boleto.dataVencimento) <= umaSemana){
+    for (const boleto of boletosData) {
+      if (boleto.pago == false && new Date(boleto.dataVencimento) <= umaSemana) {
         contadorBoletoVencimento++
       }
     }
-                  setKpisDados([contadorEstoqueMinimo, contadorInsumoValidade, contadorBoletoVencimento])
+    setKpisDados([contadorEstoqueMinimo, contadorInsumoValidade, contadorBoletoVencimento, clientesData])
   }
-    const cards = [{
-      nome: "Produtos Abaixo do Estoque Min.",
-      valor: kpisDados[0]
-    },
-    {
-      nome: "Produtos Perto da Data de Vencimento",
-      valor: kpisDados[1]
-    },
-    {
-      nome: "Boletos Próximo ao Vencimento",
-      valor: kpisDados[2]
-    },
-    {
-      nome: "Total de Clientes Devedores",
-      valor: 25
-    }
-    ]
-    return (
-      <div className="dashboard">
-        <HeaderPadrao />
+  const cards = [{
+    nome: "Produtos Abaixo do Estoque Min.",
+    valor: kpisDados[0]
+  },
+  {
+    nome: "Produtos Perto da Data de Vencimento",
+    valor: kpisDados[1]
+  },
+  {
+    nome: "Boletos Próximo ao Vencimento",
+    valor: kpisDados[2]
+  },
+  {
+    nome: "Total de Clientes Devedores",
+    valor: kpisDados[3]
+  }
+  ]
+  return (
+    <div className="dashboard">
+      <HeaderPadrao />
 
-        <nav className="menu">
-          <button onClick={() => navigate("/estoque")} className="btn">Estoque</button>
-          <button className="btn">Gastos</button>
-          <button onClick={() => navigate("/fornecedor")} className="btn">Fornecedores</button>
-          <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
-          <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
-          <button onClick={() => navigate("/Vencimentos")} className="btn">Vencimentos</button>
-        </nav>
+      <nav className="menu">
+        <button onClick={() => navigate("/estoque")} className="btn">Estoque</button>
+        <button className="btn">Gastos</button>
+        <button onClick={() => navigate("/fornecedor")} className="btn">Fornecedores</button>
+        <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
+        <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
+        <button onClick={() => navigate("/Vencimentos")} className="btn">Vencimentos</button>
+      </nav>
 
-        <Kpi kpis={cards} />
+      <Kpi kpis={cards} />
 
-        <div className="container2">
-          <div className="grafico" id="chart">
-            <Grafico dados={dadosInsumo} />
-          </div>
+      <div className="container2">
+        <div className="grafico" id="chart">
+          <Grafico dados={dadosInsumo} />
+        </div>
 
-          <div className="notificacao">
-            <h2 className="alerta-titulo">ALERTAS!</h2>
+        <div className="notificacao">
+          <h2 className="alerta-titulo">ALERTAS!</h2>
 
-            <button className="alerta-btn validade">
-              <span className="validade-icone"></span>
-              <span>Notificação de Validade!</span>
-            </button>
+          <button className="alerta-btn validade">
+            <span className="validade-icone"></span>
+            <span>Notificação de Validade!</span>
+          </button>
 
-            <button className="alerta-btn estoque">
-              <span className="estoque-icone"></span>
-              <span>Notificação de Estoque!</span>
-            </button>
+          <button className="alerta-btn estoque">
+            <span className="estoque-icone"></span>
+            <span>Notificação de Estoque!</span>
+          </button>
 
-            <button className="alerta-btn fornecedor">
-              <span className="fornecedor-icone"></span>
-              <span>Notificação de Fornecedor!</span>
-            </button>
+          <button className="alerta-btn fornecedor">
+            <span className="fornecedor-icone"></span>
+            <span>Notificação de Fornecedor!</span>
+          </button>
 
-            <button className="alerta-btn boleto">
-              <span className="boleto-icone"></span>
-              <span>Notificação de Boleto!</span>
-            </button>
-          </div>
+          <button className="alerta-btn boleto">
+            <span className="boleto-icone"></span>
+            <span>Notificação de Boleto!</span>
+          </button>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+}
 

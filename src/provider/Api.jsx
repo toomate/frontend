@@ -231,4 +231,34 @@ export class CategoriaApi {
   }
 }
 
+export class clientes{
+  static async listarComDividasEmAberto(){
+        try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/clientes/aberto`
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar clientes:", error);
+      throw error;
+    }
+  }
+}
+
+export class dividas{
+  static async listar(){
+        try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/dividas"
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar dividas:", error);
+      throw error;
+    }
+  }
+}
+
 export default api;
