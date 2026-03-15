@@ -2,7 +2,7 @@ import { Button } from "../Button/Button.jsx"
 import { Trash } from "lucide-react"
 import "./RotinaCard.css"
 
-export default function RotinaCard({nomeRotina}) {
+export default function RotinaCard({nomeRotina, excluir}) {
     return (
         <>
             <div className="rotina-card-container">
@@ -11,7 +11,7 @@ export default function RotinaCard({nomeRotina}) {
                 </div>
                 <div className="botoes-rotina-card">
                     <Button texto="Dar Baixa" />
-                    <Button texto="Excluir" Icone={Trash} />
+                    <Button texto="Excluir" onClick={excluir} Icone={Trash} />
                 </div>
             </div>
         </>

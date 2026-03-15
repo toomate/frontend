@@ -6,13 +6,20 @@ import HeaderPadrao from "./HeaderPadrao";
 import "./Rotinas.css"
 import { useEffect, useState } from "react";
 import { Rotinas as RotinasClass } from "./provider/Api";
+import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 
 export default function Rotinas() {
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [pesquisa, setPesquisa] = useState("")
+    const [cardRemocao, setCardRemocao] = useState(false)
     const [rotinas, setRotinas] = useState([])
+    const [idSelecionado, setIdSelecionado] = useState("")
 
+    const abrirCardRemocao = (id) => {
+        setCardRemocao(true)
+        setIdSelecionado(id)
+    }
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
@@ -21,6 +28,12 @@ export default function Rotinas() {
         }
     };
 
+    const excluirRotina = () => {
+        RotinasClass.excluirRotina(idSelecionado)
+        setCardRemocao(false)
+        setRotinas(rotinas.filter(rotina => rotina.id !== idSelecionado));
+    }
+
     useEffect(() => {
         RotinasClass.listar().then((response) => setRotinas(response));
     }, [])
@@ -28,6 +41,11 @@ export default function Rotinas() {
 
     return (
         <div className="rotinas-container-geral">
+            {cardRemocao && (
+                <div className="escurecer">
+                    <CardConfirmacao titulo={"Deseja excluir a rotina?"} confirmar={() => excluirRotina()} fecharCard={() => setCardRemocao(false)} />
+                </div>
+            )}
             <HeaderPadrao />
             <div className="rotinas-container">
                 <div className="nav-categorias-container">
@@ -36,14 +54,12 @@ export default function Rotinas() {
                 </div>
             </div>
             <div className="rotina-container">
-                <div className="rotina-grid">
-                    <div className="rotinas-linhas">
-                        {rotinas && (
-                            rotinas.map(atual => (
-                                <RotinaCard key={atual.id} nomeRotina={atual.titulo} />
-                            ))
-                        )}
-                    </div>
+                <div className="rotinas-linhas">
+                    {rotinas && (
+                        rotinas.map(atual => (
+                            <RotinaCard key={atual.id} nomeRotina={atual.titulo} excluir={() => abrirCardRemocao(atual.id)} />
+                        ))
+                    )}
                 </div>
             </div>
         </div>

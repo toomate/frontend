@@ -271,7 +271,20 @@ export class Rotinas {
 
       return response.data;
     } catch (err) {
-      console.error("Erro ao buscar rotinas:", err)
+      console.error("Erro ao buscar rotinas:", err.getMessage())
+      throw err;
+    }
+  }
+
+  static async excluirRotina(id) {
+    try {
+      await requestComFallback({
+        method: "delete",
+        url: `/rotinas/${id}`
+      })
+
+    } catch (err) {
+      console.log("Erro ao excluir rotina:", err)
       throw err;
     }
   }
