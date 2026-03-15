@@ -261,4 +261,20 @@ export class dividas{
   }
 }
 
+export class Rotinas {
+  static async listar(){
+    try{
+      const response = await requestComFallback({
+        method: "get",
+        url: "/rotinas"
+      })
+
+      return response.data;
+    } catch (err) {
+      console.error("Erro ao buscar rotinas:", err)
+      throw err;
+    }
+  }
+}
+
 export default api;

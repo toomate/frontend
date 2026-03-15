@@ -4,12 +4,14 @@ import RotinaCard from "./components/RotinaCard/RotinaCard"
 import { Search } from "./components/Search/Search";
 import HeaderPadrao from "./HeaderPadrao";
 import "./Rotinas.css"
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Rotinas as RotinasClass } from "./provider/Api";
 
 export default function Rotinas() {
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [pesquisa, setPesquisa] = useState("")
+    const [rotinas, setRotinas] = useState([])
 
 
     const pesquisar = (valor) => {
@@ -18,6 +20,10 @@ export default function Rotinas() {
             setCategoriaAtiva("Geral")
         }
     };
+
+    useEffect(() => {
+        RotinasClass.listar().then((response) => setRotinas(response));
+    }, [])
 
 
     return (
@@ -32,11 +38,11 @@ export default function Rotinas() {
             <div className="rotina-container">
                 <div className="rotina-grid">
                     <div className="rotinas-linhas">
-                        <RotinaCard nomeRotina="Rotina 1" />
-                        <RotinaCard nomeRotina="Rotina 2" />
-                        <RotinaCard nomeRotina="Rotina 2" />
-                        <RotinaCard nomeRotina="Rotina 3" />
-                        <RotinaCard nomeRotina="Rotina 3" />
+                        {rotinas && (
+                            rotinas.map(atual => (
+                                <RotinaCard key={atual.id} nomeRotina={atual.titulo} />
+                            ))
+                        )}
                     </div>
                 </div>
             </div>
