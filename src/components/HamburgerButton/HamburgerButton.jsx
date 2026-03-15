@@ -13,6 +13,7 @@ const itensMenu = [
   { to: "/cadastro-lote", label: "Cadastrar Lote" },
   { to: "/calendario", label: "Calendario" },
   { to: "/cadastro", label: "Cadastro de Usuario" },
+  { to: "/rotinas", label: "Rotinas" },
 ];
 
 export default function HamburgerButton({
