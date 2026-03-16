@@ -11,14 +11,14 @@ const itensMenu = [
   { to: "/fornecedor", label: "Fornecedores" },
   { to: "/cadastro-insumo", label: "Cadastrar Insumo" },
   { to: "/cadastro-lote", label: "Cadastrar Lote" },
-  { to: "/calendario", label: "Calendario" },
-  { to: "/cadastro", label: "Cadastro de Usuario" },
+  { to: "/calendario", label: "Calendário" },
+  { to: "/cadastro", label: "Cadastro de Usuário" },
 ];
 
 export default function HamburgerButton({
   size = 28,
   color = "#b88b09",
-  ariaLabel = "Abrir menu de navegacao",
+  ariaLabel = "Abrir menu de navegação",
   className = "",
 }) {
   const [menuAberto, setMenuAberto] = useState(false);
@@ -84,7 +84,7 @@ export default function HamburgerButton({
         role="menu"
       >
         <div className="cabecalho-painel">
-          <span>Navegacao</span>
+          <span>Navegação</span>
           <button
             type="button"
             className="botao-fechar-painel"
