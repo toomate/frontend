@@ -291,7 +291,7 @@ export class Rotinas {
 }
 
 export class insumos{
-    static async listar() {
+    static async listarUnidades() {
     try {
       const response = await requestComFallback({ method: "get", url: "/insumos/listarUnidades" });
       return response.data;

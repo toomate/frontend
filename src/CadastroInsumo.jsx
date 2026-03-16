@@ -2,24 +2,32 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { CategoriaApi } from "./provider/Api";
+import { CategoriaApi, insumos } from "./provider/Api";
 
 export default function CadastroInsumo() {
   const navigate = useNavigate();
   const [categorias, setCategorias] = useState([])
+  const [medidas, setMedidas] = useState([])
 
   async function fetchCategorias() {
     var categoriasData = await CategoriaApi.listar()
     setCategorias(categoriasData)
   }
 
+  async function fetchMedidas() {
+    var medidasData = await insumos.listarUnidades()
+    setMedidas(medidasData)
+  }
+
+
   useEffect(() => {
     fetchCategorias()
+    fetchMedidas()
   }, [])
 
   useEffect(() => {
     console.log(categorias)
-  }, [categorias])
+  }, [categorias, medidas])
 
 
   const [abrirModal, setAbrirModal] = useState(null);
@@ -42,7 +50,7 @@ export default function CadastroInsumo() {
           <div className="input-wrapper">
             <select className="selectCategoria">
               <option value={"0"}>Selecione</option>
-              {categorias.map((categoria) =>(
+              {categorias.map((categoria) => (
                 <option value={categoria.idCategoria}>{categoria.nome}</option>
               ))}
             </select>
