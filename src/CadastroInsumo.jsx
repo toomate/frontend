@@ -1,59 +1,75 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Plus,  Trash2, Save, CheckCircle  } from "lucide-react";
+import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { CategoriaApi } from "./provider/Api";
 
 export default function CadastroInsumo() {
   const navigate = useNavigate();
+  const [categorias, setCategorias] = useState([])
+
+  async function fetchCategorias() {
+    var categoriasData = await CategoriaApi.listar()
+    setCategorias(categoriasData)
+  }
+
+  useEffect(() => {
+    fetchCategorias()
+  }, [])
+
+  useEffect(() => {
+    console.log(categorias)
+  }, [categorias])
+
 
   const [abrirModal, setAbrirModal] = useState(null);
   const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);
   const [novoInsumo, setNovoInsumo] = useState("");
-  
+
   return (
     <div className="container">
       <div className="box">
 
         <span className="titulo">Cadastro de Insumo</span>
 
-      <div className="caixa">
+        <div className="caixa">
 
-        <span>Nome do Insumo</span>
-        <input type="text" placeholder="Ex: Arroz" />
+          <span>Nome do Insumo</span>
+          <input type="text" placeholder="Ex: Arroz" />
 
-        {/* Categoria */}
-        <span>Categoria do Insumo</span>
-        <div className="input-wrapper">
-          <select className="selectCategoria">
-            <option>Selecione</option>
-            <option>Alimentos</option>
-            <option>Bebidas</option>
-            <option>Limpeza</option>
-          </select>
+          {/* Categoria */}
+          <span>Categoria do Insumo</span>
+          <div className="input-wrapper">
+            <select className="selectCategoria">
+              <option value={"0"}>Selecione</option>
+              {categorias.map((categoria) =>(
+                <option value={categoria.idCategoria}>{categoria.nome}</option>
+              ))}
+            </select>
 
-          <button type="button" className="eye-btn1" onClick={() => setAbrirModal("categoria")}>
-            <Plus size={18} />
-          </button>
+            <button type="button" className="eye-btn1" onClick={() => setAbrirModal("categoria")}>
+              <Plus size={18} />
+            </button>
+          </div>
+
+          {/* Unidade */}
+          <span>Unidade de Medida</span>
+          <div className="input-wrapper">
+            <select className="selectUnidade">
+              <option>Selecione</option>
+              <option>Kg</option>
+              <option>Unidade</option>
+              <option>Litro</option>
+            </select>
+
+            <button type="button" className="eye-btn2" onClick={() => setAbrirModal("unidade")}>
+              <Plus size={18} />
+            </button>
+          </div>
+
+          <span>Quantidade</span>
+          <input type="number" placeholder="0" />
         </div>
-
-        {/* Unidade */}
-        <span>Unidade de Medida</span>
-        <div className="input-wrapper">
-          <select className="selectUnidade">
-            <option>Selecione</option>
-            <option>Kg</option>
-            <option>Unidade</option>
-            <option>Litro</option>
-          </select>
-
-          <button type="button" className="eye-btn2" onClick={() => setAbrirModal("unidade")}>
-            <Plus size={18} />
-          </button>
-        </div>
-
-        <span>Quantidade</span>
-        <input type="number" placeholder="0" />
-      </div>
 
         <div className="actions">
           <button className="btn btn-cancelar" onClick={() => navigate("/dashboard")}>
@@ -68,7 +84,7 @@ export default function CadastroInsumo() {
 
       {/* MODAL NOVO INSUMO */}
       {abrirModal && (
-        <div className="modal-overlay"> 
+        <div className="modal-overlay">
           <div className="modal">
 
             <span className="titulo">

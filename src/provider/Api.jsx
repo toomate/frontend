@@ -290,4 +290,16 @@ export class Rotinas {
   }
 }
 
+export class insumos{
+    static async listar() {
+    try {
+      const response = await requestComFallback({ method: "get", url: "/insumos/listarUnidades" });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar categorias:", error);
+      throw error;
+    }
+  }
+}
+
 export default api;
