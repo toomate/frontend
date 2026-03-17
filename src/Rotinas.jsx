@@ -13,6 +13,7 @@ export default function Rotinas() {
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [pesquisa, setPesquisa] = useState("")
     const [cardRemocao, setCardRemocao] = useState(false)
+    const [cardConfirmacao, setCardConfirmacao] = useState(false)
     const [rotinas, setRotinas] = useState([])
     const [idSelecionado, setIdSelecionado] = useState("")
 
@@ -28,6 +29,16 @@ export default function Rotinas() {
         }
     };
 
+    const abrirCard = (id) => {
+        setCardConfirmacao(true)
+        setIdSelecionado(id)
+    }
+
+    const darBaixa = () => {
+        RotinasClass.darBaixa(idSelecionado)
+        setCardConfirmacao(false)
+    }
+
     const excluirRotina = () => {
         RotinasClass.excluirRotina(idSelecionado)
         setCardRemocao(false)
@@ -41,6 +52,11 @@ export default function Rotinas() {
 
     return (
         <div className="rotinas-container-geral">
+            {cardConfirmacao && (
+                <div className="escurecer">
+                    <CardConfirmacao titulo={"Deseja realizar baixa?"} confirmar={() => darBaixa()} fecharCard={() => setCardConfirmacao(false)} />
+                </div>
+            )}
             {cardRemocao && (
                 <div className="escurecer">
                     <CardConfirmacao titulo={"Deseja excluir a rotina?"} confirmar={() => excluirRotina()} fecharCard={() => setCardRemocao(false)} />
@@ -57,7 +73,7 @@ export default function Rotinas() {
                 <div className="rotinas-linhas">
                     {rotinas && (
                         rotinas.map(atual => (
-                            <RotinaCard key={atual.id} nomeRotina={atual.titulo} excluir={() => abrirCardRemocao(atual.id)} />
+                            <RotinaCard key={atual.id} darBaixa={() => abrirCard(atual.id)} nomeRotina={atual.titulo} excluir={() => abrirCardRemocao(atual.id)} />
                         ))
                     )}
                 </div>

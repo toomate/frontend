@@ -231,9 +231,9 @@ export class CategoriaApi {
   }
 }
 
-export class clientes{
-  static async listarComDividasEmAberto(){
-        try {
+export class clientes {
+  static async listarComDividasEmAberto() {
+    try {
       const response = await requestComFallback({
         method: "get",
         url: `/clientes/aberto`
@@ -246,9 +246,9 @@ export class clientes{
   }
 }
 
-export class dividas{
-  static async listar(){
-        try {
+export class dividas {
+  static async listar() {
+    try {
       const response = await requestComFallback({
         method: "get",
         url: "/dividas"
@@ -262,8 +262,8 @@ export class dividas{
 }
 
 export class Rotinas {
-  static async listar(){
-    try{
+  static async listar() {
+    try {
       const response = await requestComFallback({
         method: "get",
         url: "/rotinas"
@@ -271,7 +271,12 @@ export class Rotinas {
 
       return response.data;
     } catch (err) {
-      console.error("Erro ao buscar rotinas:", err.getMessage())
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
       throw err;
     }
   }
@@ -284,14 +289,37 @@ export class Rotinas {
       })
 
     } catch (err) {
-      console.log("Erro ao excluir rotina:", err)
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
       throw err;
     }
   }
+
+  static async darBaixa(id) {
+    try {
+      await requestComFallback({
+        method: "put",
+        url: `/rotinas/baixa/${id}`
+      })
+    } catch (err) {
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
+      throw err;
+    }
+  }
+
 }
 
-export class insumos{
-    static async listarUnidades() {
+export class insumos {
+  static async listarUnidades() {
     try {
       const response = await requestComFallback({ method: "get", url: "/insumos/listarUnidades" });
       return response.data;
