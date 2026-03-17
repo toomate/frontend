@@ -24,9 +24,6 @@ export default function Rotinas() {
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
-        if (valor.length > 0) {
-            setCategoriaAtiva("Geral")
-        }
     };
 
     const abrirCard = (id) => {
@@ -34,8 +31,14 @@ export default function Rotinas() {
         setIdSelecionado(id)
     }
 
-    const darBaixa = () => {
-        RotinasClass.darBaixa(idSelecionado)
+    const darBaixa = async () => {
+        try {
+            await RotinasClass.darBaixa(idSelecionado)
+        } catch (err) {
+            if(err.status === 400){
+                alert(err.response.data.message)
+            }
+        }
         setCardConfirmacao(false)
     }
 
@@ -46,8 +49,8 @@ export default function Rotinas() {
     }
 
     useEffect(() => {
-        RotinasClass.listar().then((response) => setRotinas(response));
-    }, [])
+        RotinasClass.listar(pesquisa).then((response) => setRotinas(response));
+    }, [pesquisa])
 
 
     return (

@@ -262,11 +262,15 @@ export class dividas {
 }
 
 export class Rotinas {
-  static async listar() {
+  static async listar(busca) {
     try {
+      let parametro = "";
+      if(busca.length > 0){
+        parametro = `/search?titulo=${busca}`
+      }
       const response = await requestComFallback({
         method: "get",
-        url: "/rotinas"
+        url: `/rotinas${parametro}`
       })
 
       return response.data;
@@ -306,13 +310,15 @@ export class Rotinas {
         url: `/rotinas/baixa/${id}`
       })
     } catch (err) {
-      console.error("Erro:", {
-        message: err.message,
-        status: err.response?.status,
-        data: err.response?.data,
-        code: err.code
-      })
-      throw err;
+        console.error("Erro:", {
+          message: err.message,
+          status: err.response?.status,
+          data: err.response?.data,
+          code: err.code
+        })
+        throw err;
+
+
     }
   }
 
