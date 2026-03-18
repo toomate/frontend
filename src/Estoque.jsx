@@ -163,12 +163,14 @@ export function Estoque() {
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
                     <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                 </div>
-                <div className="botoes-container">
-                    <ButtonPlus />
-                    <Button texto="Rotinas" Icone={Bookmark} onClick={() => {navigate("/rotinas")}} />
-                    <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
-                    <div className="botoes-container-icon">
-                        <ScanBarcode color="black" size={30} onClick={() => {navigate("/leitor")}} />
+                <div className="button-secund">
+                    <div className="botoes-container">
+                        <ButtonPlus />
+                        <Button texto="Rotinas" Icone={Bookmark} onClick={() => {navigate("/rotinas")}} />
+                        <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
+                        <div className="botoes-container-icon">
+                            <ScanBarcode color="black" size={30} onClick={() => {navigate("/leitor")}} />
+                        </div>
                     </div>
                 </div>
                 <div className="insumos-container">

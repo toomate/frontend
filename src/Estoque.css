@@ -25,7 +25,7 @@
     width: 95%;
     align-items: center;
     height: 12vh;
-    justify-content: center;
+    justify-content: space-evenly;
 }
 
 .nav-categorias-container .search-container {
@@ -40,18 +40,28 @@
     width: calc(100% - 36px);
 }
 
+.button-secund {
+    display: flex;
+    align-items: center;
+    justify-self: flex-start;
+    height: auto;
+    width: 95%;
+    justify-content: space-between;
+}
+
 .botoes-container {
     display: flex;
     align-items: center;
+    justify-self: flex-start;
     height: 10vh;
-    width: 95%;
-    gap: 10px;
+    width: auto;
+    gap: 15px;
 }
 
 .botoes-container .button-container {
     height: 36px;
     border: 1px solid #6b4423;
-    border-radius: 999px;
+    border-radius: 5px;
     background: #f8ecc6;
     color: #6b4423;
     padding: 0 14px;
