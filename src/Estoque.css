@@ -139,7 +139,7 @@
 }
 
 
-@media (max-width: 990px) {
+@media (max-width: 768px) {
     #root {
         width: 100dvw;
         height: 120dvh;
@@ -150,13 +150,32 @@
     }
 
     .categoria-container {
+        width: 100%;
         height: 100%;
         display: flex;
+    }
+
+    .categoria-item {
+        width: 30px;
+    }
+
+    .button-secund {
+        flex-direction: column;
+        width: 100%;
+        height: auto;
+        gap: 10px;
+    }
+
+    .botoes-container {
+        flex-direction: column;
+        height: auto;
+        width: 30%;
     }
 
     .nav-categorias-container {
         display: flex;
         flex-direction: column;
+        width: 30%;
         height: 45%;
         padding-bottom: 2px;
         justify-content: space-around;
@@ -196,6 +215,11 @@
     .insumos-container .grupo-insumos-container .item-container {
         font-size: small;
     }
+
+    .linha-estoque.elemento-container {
+        margin-top: 10px;
+    }
+
 }
 
 @media (max-width: 480px) {
@@ -209,7 +233,8 @@
     }
 
     .nav-categorias-container {
-        height: auto;
+        width: 95%;
+        height: 45%;
     }
 
     .insumos-container .grupo-insumos-container .insumo-nome,
@@ -230,5 +255,8 @@
         width: 42px;
     }
 
+    .botoes-container {
+        width: 100%;
+    }
 
 }
