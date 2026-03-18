@@ -5,6 +5,7 @@ import "./HamburgerButton.css";
 
 const itensMenu = [
   { to: "/dashboard", label: "Dashboard" },
+  { to: "/admin", label: "Admin" },
   { to: "/boletos", label: "Boletos" },
   { to: "/vencimentos", label: "Vencimentos" },
   { to: "/estoque", label: "Estoque" },

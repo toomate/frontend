@@ -1,9 +1,8 @@
-ï»¿import { useState } from "react";
+import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
 import "./Login.css";
-import { Link } from "react-router-dom";
 
 export default function Login() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
@@ -41,7 +40,6 @@ export default function Login() {
       if (resposta?.userId) {
         localStorage.setItem("usuarioId", String(resposta.userId));
       }
-
       navigate("/dashboard");
     } catch (error) {
       const status = error?.response?.status;
@@ -96,9 +94,9 @@ export default function Login() {
         </button>
         
         {/* <p className="auth-register-text">
-          NÃ£o possui acesso?{" "}
+          Não possui acesso?{" "}
           <a
-            href={`mailto:admin@toomate.com?subject=SolicitaÃ§Ã£o de acesso&body=OlÃ¡, gostaria de solicitar a criaÃ§Ã£o do meu acesso.%0A%0ACriar usuÃ¡rio em:%20${window.location.origin}/cadastro`}
+            href={`mailto:admin@toomate.com?subject=Solicitação de acesso&body=Olá, gostaria de solicitar a criação do meu acesso.%0A%0ACriar usuário em:%20${window.location.origin}/cadastro`}
           >
             Solicitar acesso
           </a>
@@ -106,10 +104,11 @@ export default function Login() {
         
         {/* 
         <p className="auth-register-text">
-          NÃ£o tem conta? <Link to="/cadastro">Cadastre-se</Link>
+          Não tem conta? <Link to="/cadastro">Cadastre-se</Link>
         </p> */}
         
       </div>
     </section>
   );
 }
+

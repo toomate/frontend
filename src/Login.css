@@ -39,6 +39,10 @@
   width: min(470px, 100%);
 }
 
+.auth-card-cadastro {
+  width: min(470px, 100%);
+}
+
 .auth-brand {
   margin: 0;
   font-size: 30px;
@@ -68,12 +72,21 @@
   width: 100%;
 }
 
+.auth-page input,
+.auth-page select {
+  margin-bottom: 0;
+  font-family: inherit;
+}
+
 .auth-input {
   width: 100%;
   height: 44px;
+  min-height: 44px;
+  box-sizing: border-box;
   border: 1px solid #d4d4d4;
   border-radius: 10px;
-  padding: 0 42px 0 12px;
+  padding: 0 12px;
+  margin: 0;
   color: var(--auth-text);
   background: #fff;
   font-size: 14px;
@@ -85,10 +98,47 @@
   box-shadow: 0 0 0 3px rgba(184, 139, 9, 0.14);
 }
 
+.auth-input-senha,
+.auth-cadastro-input-senha {
+  padding-right: 42px;
+}
+
+.auth-cadastro-input {
+  width: 100%;
+}
+
+.auth-page-cadastro .auth-cadastro-input,
+.auth-page-cadastro .auth-cadastro-select {
+  width: 100%;
+  max-width: 100%;
+  height: 44px;
+  min-height: 44px;
+  line-height: normal;
+}
+
+.auth-cadastro-select {
+  display: block;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 36px;
+  background-image: linear-gradient(45deg, transparent 50%, #7f7f7f 50%),
+    linear-gradient(135deg, #7f7f7f 50%, transparent 50%);
+  background-position: calc(100% - 16px) 50%, calc(100% - 11px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
 .auth-eye-btn {
   position: absolute;
   right: 12px;
-  width: 60px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
   border: none;
   background: transparent !important;
   color: #ccc;
@@ -105,13 +155,13 @@
   margin: 0;
 }
 
-.actions {
+.auth-actions {
   display: flex !important;
   gap: 40px;
   justify-content: center;
 }
 
-.actions .auth-submit {
+.auth-actions .auth-submit {
   flex: 1;
   min-width: 0;
 }
@@ -155,9 +205,13 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 200px;
+    width: min(420px, 100%);
     padding: 20px 16px;
     border-radius: 14px;
+  }
+
+  .auth-card-cadastro {
+    width: min(470px, 100%);
   }
 
   .auth-brand {

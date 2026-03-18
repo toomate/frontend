@@ -9,6 +9,7 @@ export default function Cadastro() {
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
   const [nomeCompleto, setNomeCompleto] = useState("");
   const [username, setUsername] = useState("");
+  const [perfilAcesso, setPerfilAcesso] = useState("usuario");
   const [senha, setSenha] = useState("");
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [carregando, setCarregando] = useState(false);
@@ -21,8 +22,14 @@ export default function Cadastro() {
     const senhaFormatada = senha.trim();
     const confirmarFormatada = confirmarSenha.trim();
 
-    if (!nomeCompletoFormatado || !usernameFormatado || !senhaFormatada || !confirmarFormatada) {
-      setErro("Preencha nome, username, senha e confirmacao.");
+    if (
+      !nomeCompletoFormatado ||
+      !usernameFormatado ||
+      !senhaFormatada ||
+      !confirmarFormatada ||
+      !perfilAcesso
+    ) {
+      setErro("Preencha nome, username, perfil, senha e confirmacao.");
       return;
     }
 
@@ -44,9 +51,8 @@ export default function Cadastro() {
         nome: nomeCompletoFormatado,
         apelido: usernameFormatado,
         senha: senhaFormatada,
-        administrador: true,
+        administrador: perfilAcesso === "admin",
       });
-
       localStorage.setItem("usuarioNomeCompleto", nomeCompletoFormatado);
       navigate("/");
     } catch (error) {
@@ -69,30 +75,45 @@ export default function Cadastro() {
   }
 
   return (
-    <section className="auth-page">
-      <div className="auth-card">
+    <section className="auth-page auth-page-cadastro">
+      <div className="auth-card auth-card-cadastro">
         <h1 className="auth-brand">Toomate</h1>
-        <h2 className="auth-title">Cadastro de Usuário</h2>
-        <p className="auth-subtitle">Crie uma conta para começar a usar a plataforma.</p>
-
-        <input
-          className="auth-input"
-          type="text"
-          placeholder="Nome completo"
-          value={nomeCompleto}
-          onChange={(e) => setNomeCompleto(e.target.value)}
-        />
-
-        <input
-          className="auth-input"
-          type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
+        <h2 className="auth-title">Cadastro de Usuario</h2>
+        <p className="auth-subtitle">Crie uma conta para comecar a usar a plataforma.</p>
 
         <div className="auth-input-wrap">
-          <input className="auth-input"
+          <input
+            className="auth-input auth-cadastro-input"
+            type="text"
+            placeholder="Nome completo"
+            value={nomeCompleto}
+            onChange={(e) => setNomeCompleto(e.target.value)}
+          />
+        </div>
+
+        <div className="auth-input-wrap">
+          <input
+            className="auth-input auth-cadastro-input"
+            type="text"
+            placeholder="Username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+
+        <div className="auth-input-wrap">
+          <select
+            className="auth-input auth-cadastro-input auth-cadastro-select"
+            value={perfilAcesso}
+            onChange={(e) => setPerfilAcesso(e.target.value)}
+          >
+            <option value="usuario">Usuario comum</option>
+            <option value="admin">Administrador</option>
+          </select>
+        </div>
+
+        <div className="auth-input-wrap">
+          <input className="auth-input auth-cadastro-input auth-cadastro-input-senha"
             type={mostrarSenha ? "text" : "password"}
             placeholder="Senha"
             value={senha}
@@ -109,7 +130,7 @@ export default function Cadastro() {
 
         <div className="auth-input-wrap">
           <input
-            className="auth-input"
+            className="auth-input auth-cadastro-input auth-cadastro-input-senha"
             type={mostrarConfirmar ? "text" : "password"}
             placeholder="Confirmar senha"
             value={confirmarSenha}
@@ -129,7 +150,7 @@ export default function Cadastro() {
 
         {erro && <p className="auth-error">{erro}</p>}
 
-        <div className="actions">
+        <div className="auth-actions">
           <button
             className="auth-submit"
             onClick={() => navigate(-1)}
@@ -149,3 +170,6 @@ export default function Cadastro() {
     </section>
   );
 }
+
+
+

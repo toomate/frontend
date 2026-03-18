@@ -1,8 +1,8 @@
 ﻿import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import Login from "./Login";
+import Login from "./login";
 import Boletos from "./Boletos";
-import Cadastro from "./Cadastro";
+import Cadastro from "./cadastro";
 import { Estoque } from "./Estoque";
 import Fornecedor from "./Fornecedor";
 import CadastroBoleto from "./CadastroBoleto";
@@ -18,6 +18,7 @@ import RotinaCard from "./components/RotinaCard/RotinaCard";
 import Rotinas from "./Rotinas";
 import Fiado from "./Fiado";
 import Leitor from "./components/Leitor/Leitor";
+import Admin from "./Admin";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
         <Route path="/rotinas" element={<Rotinas/>} />
         <Route path="/Fiados" element={<Fiado/>} />
         <Route path="/leitor" element={<Leitor />} />
+        <Route path="/admin" element={<Admin />} />
       </Routes>
     </BrowserRouter>
   );
