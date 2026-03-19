@@ -349,7 +349,6 @@ input {
 @media (max-width: 1390px) {
 
   .container {
-    min-width: 991px;
     max-width: 1390px;
     min-height: 100vh;
   }
@@ -419,6 +418,15 @@ input {
 
 /* Tela menor que 768px */
 @media (max-width: 768px) {
+
+  .container {
+    justify-content: center;
+    align-items: center;
+  }
+
+  .box{
+    margin: 10px;
+  }
 
   .header {
     flex-wrap: wrap;
