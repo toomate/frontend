@@ -8,6 +8,7 @@ export default function CardResumoAdmin({
   rotuloAcao,
   aoClicarAcao,
   variacao,
+  rotuloVariacao = "vs mês anterior",
   children,
 }) {
   return (
@@ -27,7 +28,7 @@ export default function CardResumoAdmin({
         <p className={`admin-card-variation ${variacao < 0 ? "is-negative" : "is-positive"}`}>
           <span>{variacao < 0 ? <ArrowUpRight size={16} /> : <ArrowDownRight size={16} />}</span>
           {`${variacao > 0 ? "+" : ""}${variacao.toFixed(1)}%`}
-          <small>vs mês anterior</small>
+          <small>{rotuloVariacao}</small>
         </p>
       )}
 

@@ -159,18 +159,53 @@ function formatarHora(dataHoraIso) {
   });
 }
 
-function obterDataReferenciaMes(dataIso) {
-  const data = dataIso ? new Date(`${dataIso}T12:00:00`) : new Date();
-  if (Number.isNaN(data.getTime())) {
-    return new Date();
+function normalizarIntervaloDatas(dataInicialIso, dataFinalIso) {
+  const inicioPadrao = obterPrimeiroDiaMesAtualIso();
+  const fimPadrao = obterUltimoDiaMesAtualIso();
+
+  const inicioValido = /^\d{4}-\d{2}-\d{2}$/.test(String(dataInicialIso))
+    ? dataInicialIso
+    : inicioPadrao;
+  const fimValido = /^\d{4}-\d{2}-\d{2}$/.test(String(dataFinalIso))
+    ? dataFinalIso
+    : fimPadrao;
+
+  if (inicioValido <= fimValido) {
+    return { inicioIntervaloIso: inicioValido, fimIntervaloIso: fimValido };
   }
-  return data;
+
+  return { inicioIntervaloIso: fimValido, fimIntervaloIso: inicioValido };
 }
 
-function montarChaveMes(data) {
-  const ano = data.getFullYear();
-  const mes = String(data.getMonth() + 1).padStart(2, "0");
-  return `${ano}-${mes}`;
+function calcularIntervaloAnterior(inicioIso, fimIso) {
+  const inicio = new Date(`${inicioIso}T12:00:00`);
+  const fim = new Date(`${fimIso}T12:00:00`);
+
+  if (Number.isNaN(inicio.getTime()) || Number.isNaN(fim.getTime())) {
+    const inicioPadrao = obterPrimeiroDiaMesAtualIso();
+    const fimPadrao = obterUltimoDiaMesAtualIso();
+    return {
+      inicioAnteriorIso: inicioPadrao,
+      fimAnteriorIso: fimPadrao,
+    };
+  }
+
+  const umDiaMs = 24 * 60 * 60 * 1000;
+  const tamanhoIntervaloDias = Math.max(
+    1,
+    Math.floor((fim.getTime() - inicio.getTime()) / umDiaMs) + 1
+  );
+
+  const fimAnterior = new Date(inicio);
+  fimAnterior.setDate(fimAnterior.getDate() - 1);
+
+  const inicioAnterior = new Date(inicio);
+  inicioAnterior.setDate(inicioAnterior.getDate() - tamanhoIntervaloDias);
+
+  return {
+    inicioAnteriorIso: inicioAnterior.toISOString().slice(0, 10),
+    fimAnteriorIso: fimAnterior.toISOString().slice(0, 10),
+  };
 }
 
 function extrairLista(resposta, chavesFallback = []) {
@@ -244,6 +279,14 @@ function normalizarBooleano(valor) {
   return valor === true || valor === "true" || valor === 1 || valor === "1";
 }
 
+function normalizarTextoBusca(valor) {
+  return String(valor ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
 export default function Admin() {
   const navegar = useNavigate();
   const [itemAtivo, setItemAtivo] = useState("inicio");
@@ -259,6 +302,9 @@ export default function Admin() {
   const [filtroInsumosAberto, setFiltroInsumosAberto] = useState(false);
   const [filtroMarcasAberto, setFiltroMarcasAberto] = useState(false);
   const [filtroFornecedoresAberto, setFiltroFornecedoresAberto] = useState(false);
+  const [buscaInsumos, setBuscaInsumos] = useState("");
+  const [buscaMarcas, setBuscaMarcas] = useState("");
+  const [buscaFornecedores, setBuscaFornecedores] = useState("");
   const [dataInicial, setDataInicial] = useState(obterPrimeiroDiaMesAtualIso());
   const [dataFinal, setDataFinal] = useState(obterUltimoDiaMesAtualIso());
 
@@ -285,6 +331,18 @@ export default function Admin() {
       ).sort((a, b) => a.localeCompare(b, "pt-BR")),
     [lancamentosInsumos]
   );
+
+  const opcoesInsumoFiltradas = useMemo(() => {
+    const termoBusca = normalizarTextoBusca(buscaInsumos);
+
+    if (!termoBusca) {
+      return opcoesInsumoBase;
+    }
+
+    return opcoesInsumoBase.filter((insumo) =>
+      normalizarTextoBusca(insumo).includes(termoBusca)
+    );
+  }, [buscaInsumos, opcoesInsumoBase]);
 
   useEffect(() => {
     setInsumosSelecionados((insumosAtuais) => {
@@ -560,6 +618,18 @@ export default function Admin() {
     [lancamentosPeriodoInsumos]
   );
 
+  const opcoesMarcaFiltradas = useMemo(() => {
+    const termoBusca = normalizarTextoBusca(buscaMarcas);
+
+    if (!termoBusca) {
+      return opcoesMarcaDisponiveis;
+    }
+
+    return opcoesMarcaDisponiveis.filter((marca) =>
+      normalizarTextoBusca(marca).includes(termoBusca)
+    );
+  }, [buscaMarcas, opcoesMarcaDisponiveis]);
+
   useEffect(() => {
     setMarcasSelecionadas((marcasAtuais) => {
       if (opcoesMarcaDisponiveis.length === 0) {
@@ -600,6 +670,18 @@ export default function Admin() {
     [lancamentosPeriodoInsumosMarcas]
   );
 
+  const opcoesFornecedorFiltradas = useMemo(() => {
+    const termoBusca = normalizarTextoBusca(buscaFornecedores);
+
+    if (!termoBusca) {
+      return opcoesFornecedorDisponiveis;
+    }
+
+    return opcoesFornecedorDisponiveis.filter((fornecedor) =>
+      normalizarTextoBusca(fornecedor).includes(termoBusca)
+    );
+  }, [buscaFornecedores, opcoesFornecedorDisponiveis]);
+
   useEffect(() => {
     setFornecedoresSelecionados((fornecedoresAtuais) => {
       if (opcoesFornecedorDisponiveis.length === 0) {
@@ -636,27 +718,41 @@ export default function Admin() {
     [lancamentosPeriodoInsumosMarcas, fornecedoresSelecionados]
   );
 
+  const intervaloComparativo = useMemo(() => {
+    const { inicioIntervaloIso, fimIntervaloIso } = normalizarIntervaloDatas(
+      dataInicial,
+      dataFinal
+    );
+    const { inicioAnteriorIso, fimAnteriorIso } = calcularIntervaloAnterior(
+      inicioIntervaloIso,
+      fimIntervaloIso
+    );
+
+    return {
+      inicioIntervaloIso,
+      fimIntervaloIso,
+      inicioAnteriorIso,
+      fimAnteriorIso,
+    };
+  }, [dataFinal, dataInicial]);
+
   const { totalMesReferencia, variacaoMensalGastos } = useMemo(() => {
-    const dataReferencia = obterDataReferenciaMes(dataFinal);
-    const chaveMesReferencia = montarChaveMes(dataReferencia);
-
-    const dataMesAnterior = new Date(dataReferencia);
-    dataMesAnterior.setDate(1);
-    dataMesAnterior.setMonth(dataMesAnterior.getMonth() - 1);
-    const chaveMesAnterior = montarChaveMes(dataMesAnterior);
-
-    const lancamentosBaseComparacao = lancamentosInsumos;
-
     let totalAtual = 0;
     let totalAnterior = 0;
 
-    lancamentosBaseComparacao.forEach((lancamento) => {
-      const chaveMesLancamento = String(lancamento.dataIso || "").slice(0, 7);
+    lancamentosInsumos.forEach((lancamento) => {
+      const dataLancamentoIso = String(lancamento.dataIso || "");
       const valorLancamento = Number(lancamento.valorTotal) || 0;
 
-      if (chaveMesLancamento === chaveMesReferencia) {
+      if (
+        dataLancamentoIso >= intervaloComparativo.inicioIntervaloIso &&
+        dataLancamentoIso <= intervaloComparativo.fimIntervaloIso
+      ) {
         totalAtual += valorLancamento;
-      } else if (chaveMesLancamento === chaveMesAnterior) {
+      } else if (
+        dataLancamentoIso >= intervaloComparativo.inicioAnteriorIso &&
+        dataLancamentoIso <= intervaloComparativo.fimAnteriorIso
+      ) {
         totalAnterior += valorLancamento;
       }
     });
@@ -674,10 +770,7 @@ export default function Admin() {
       totalMesReferencia: totalAtual,
       variacaoMensalGastos: Number.isFinite(variacao) ? variacao : null,
     };
-  }, [
-    dataFinal,
-    lancamentosInsumos,
-  ]);
+  }, [intervaloComparativo, lancamentosInsumos]);
 
   const graficoInsumosPeriodo = useMemo(() => {
     const mapaInsumos = new Map();
@@ -920,6 +1013,45 @@ export default function Admin() {
     );
   }
 
+  function marcarTodosInsumos() {
+    if (opcoesInsumoBase.length === 0) return;
+
+    if (normalizarTextoBusca(buscaInsumos)) {
+      setInsumosSelecionados((selecionadosAtuais) =>
+        Array.from(new Set([...selecionadosAtuais, ...opcoesInsumoFiltradas]))
+      );
+      return;
+    }
+
+    setInsumosSelecionados(opcoesInsumoBase);
+  }
+
+  function marcarTodasMarcas() {
+    if (opcoesMarcaDisponiveis.length === 0) return;
+
+    if (normalizarTextoBusca(buscaMarcas)) {
+      setMarcasSelecionadas((selecionadasAtuais) =>
+        Array.from(new Set([...selecionadasAtuais, ...opcoesMarcaFiltradas]))
+      );
+      return;
+    }
+
+    setMarcasSelecionadas(opcoesMarcaDisponiveis);
+  }
+
+  function marcarTodosFornecedores() {
+    if (opcoesFornecedorDisponiveis.length === 0) return;
+
+    if (normalizarTextoBusca(buscaFornecedores)) {
+      setFornecedoresSelecionados((selecionadosAtuais) =>
+        Array.from(new Set([...selecionadosAtuais, ...opcoesFornecedorFiltradas]))
+      );
+      return;
+    }
+
+    setFornecedoresSelecionados(opcoesFornecedorDisponiveis);
+  }
+
   function limparFiltros() {
     setInsumosSelecionados(opcoesInsumoBase);
     setMarcasSelecionadas(opcoesMarcaBase);
@@ -929,6 +1061,9 @@ export default function Admin() {
     setFiltroInsumosAberto(false);
     setFiltroMarcasAberto(false);
     setFiltroFornecedoresAberto(false);
+    setBuscaInsumos("");
+    setBuscaMarcas("");
+    setBuscaFornecedores("");
   }
 
   return (
@@ -1036,11 +1171,12 @@ export default function Admin() {
           </CardResumoAdmin>
 
           <CardResumoAdmin
-            titulo="Controle de Gastos Mensal"
+            titulo="Controle de Gastos no Período"
             metrica={formatarMoeda(totalMesReferencia)}
             icone={Wallet}
             iconeCor="#f2994a"
             variacao={variacaoMensalGastos}
+            rotuloVariacao="vs período anterior"
           />
         </section>
 
@@ -1060,9 +1196,17 @@ export default function Admin() {
                 type="button"
                 className={`admin-filtro-dropdown-botao ${filtroInsumosAberto ? "aberto" : ""}`}
                 onClick={() => {
-                  setFiltroInsumosAberto((abertoAtual) => !abertoAtual);
+                  setFiltroInsumosAberto((abertoAtual) => {
+                    const proximoEstado = !abertoAtual;
+                    if (!proximoEstado) {
+                      setBuscaInsumos("");
+                    }
+                    return proximoEstado;
+                  });
                   setFiltroMarcasAberto(false);
                   setFiltroFornecedoresAberto(false);
+                  setBuscaMarcas("");
+                  setBuscaFornecedores("");
                 }}
               >
                 <span>{resumoFiltroInsumos}</span>
@@ -1071,23 +1215,35 @@ export default function Admin() {
 
               {filtroInsumosAberto && (
                 <div className="admin-filtro-dropdown-menu">
+                  <input
+                    type="text"
+                    className="admin-filtro-busca"
+                    placeholder="Buscar insumo..."
+                    value={buscaInsumos}
+                    onChange={(evento) => setBuscaInsumos(evento.target.value)}
+                  />
                   <div className="admin-filtro-checklist">
-                    {opcoesInsumoBase.map((insumo) => (
-                      <label key={insumo} className="admin-filtro-check-item">
-                        <input
-                          type="checkbox"
-                          checked={insumosSelecionados.includes(insumo)}
-                          onChange={() => alternarSelecaoInsumo(insumo)}
-                        />
-                        <span>{insumo}</span>
-                      </label>
-                    ))}
+                    {opcoesInsumoFiltradas.length > 0 ? (
+                      opcoesInsumoFiltradas.map((insumo) => (
+                        <label key={insumo} className="admin-filtro-check-item">
+                          <input
+                            type="checkbox"
+                            checked={insumosSelecionados.includes(insumo)}
+                            onChange={() => alternarSelecaoInsumo(insumo)}
+                          />
+                          <span>{insumo}</span>
+                        </label>
+                      ))
+                    ) : (
+                      <p className="admin-filtro-vazio">Nenhum insumo encontrado.</p>
+                    )}
                   </div>
                   <div className="admin-filtro-checklist-acoes">
                     <button
                       type="button"
                       className="admin-filtro-check-btn"
-                      onClick={() => setInsumosSelecionados(opcoesInsumoBase)}
+                      disabled={opcoesInsumoFiltradas.length === 0}
+                      onClick={marcarTodosInsumos}
                     >
                       Marcar todos
                     </button>
@@ -1111,9 +1267,17 @@ export default function Admin() {
                 type="button"
                 className={`admin-filtro-dropdown-botao ${filtroMarcasAberto ? "aberto" : ""}`}
                 onClick={() => {
-                  setFiltroMarcasAberto((abertoAtual) => !abertoAtual);
+                  setFiltroMarcasAberto((abertoAtual) => {
+                    const proximoEstado = !abertoAtual;
+                    if (!proximoEstado) {
+                      setBuscaMarcas("");
+                    }
+                    return proximoEstado;
+                  });
                   setFiltroInsumosAberto(false);
                   setFiltroFornecedoresAberto(false);
+                  setBuscaInsumos("");
+                  setBuscaFornecedores("");
                 }}
               >
                 <span>{resumoFiltroMarcas}</span>
@@ -1122,9 +1286,16 @@ export default function Admin() {
 
               {filtroMarcasAberto && (
                 <div className="admin-filtro-dropdown-menu">
+                  <input
+                    type="text"
+                    className="admin-filtro-busca"
+                    placeholder="Buscar marca..."
+                    value={buscaMarcas}
+                    onChange={(evento) => setBuscaMarcas(evento.target.value)}
+                  />
                   <div className="admin-filtro-checklist">
-                    {opcoesMarcaDisponiveis.length > 0 ? (
-                      opcoesMarcaDisponiveis.map((marca) => (
+                    {opcoesMarcaFiltradas.length > 0 ? (
+                      opcoesMarcaFiltradas.map((marca) => (
                         <label key={marca} className="admin-filtro-check-item">
                           <input
                             type="checkbox"
@@ -1135,15 +1306,15 @@ export default function Admin() {
                         </label>
                       ))
                     ) : (
-                      <p className="admin-empty-list">Sem marcas para o período.</p>
+                      <p className="admin-filtro-vazio">Nenhuma marca encontrada.</p>
                     )}
                   </div>
                   <div className="admin-filtro-checklist-acoes">
                     <button
                       type="button"
                       className="admin-filtro-check-btn"
-                      disabled={opcoesMarcaDisponiveis.length === 0}
-                      onClick={() => setMarcasSelecionadas(opcoesMarcaDisponiveis)}
+                      disabled={opcoesMarcaFiltradas.length === 0}
+                      onClick={marcarTodasMarcas}
                     >
                       Marcar todos
                     </button>
@@ -1169,9 +1340,17 @@ export default function Admin() {
                   filtroFornecedoresAberto ? "aberto" : ""
                 }`}
                 onClick={() => {
-                  setFiltroFornecedoresAberto((abertoAtual) => !abertoAtual);
+                  setFiltroFornecedoresAberto((abertoAtual) => {
+                    const proximoEstado = !abertoAtual;
+                    if (!proximoEstado) {
+                      setBuscaFornecedores("");
+                    }
+                    return proximoEstado;
+                  });
                   setFiltroInsumosAberto(false);
                   setFiltroMarcasAberto(false);
+                  setBuscaInsumos("");
+                  setBuscaMarcas("");
                 }}
               >
                 <span>{resumoFiltroFornecedores}</span>
@@ -1180,9 +1359,16 @@ export default function Admin() {
 
               {filtroFornecedoresAberto && (
                 <div className="admin-filtro-dropdown-menu">
+                  <input
+                    type="text"
+                    className="admin-filtro-busca"
+                    placeholder="Buscar fornecedor..."
+                    value={buscaFornecedores}
+                    onChange={(evento) => setBuscaFornecedores(evento.target.value)}
+                  />
                   <div className="admin-filtro-checklist">
-                    {opcoesFornecedorDisponiveis.length > 0 ? (
-                      opcoesFornecedorDisponiveis.map((fornecedor) => (
+                    {opcoesFornecedorFiltradas.length > 0 ? (
+                      opcoesFornecedorFiltradas.map((fornecedor) => (
                         <label key={fornecedor} className="admin-filtro-check-item">
                           <input
                             type="checkbox"
@@ -1193,17 +1379,15 @@ export default function Admin() {
                         </label>
                       ))
                     ) : (
-                      <p className="admin-empty-list">Sem fornecedores para o período.</p>
+                      <p className="admin-filtro-vazio">Nenhum fornecedor encontrado.</p>
                     )}
                   </div>
                   <div className="admin-filtro-checklist-acoes">
                     <button
                       type="button"
                       className="admin-filtro-check-btn"
-                      disabled={opcoesFornecedorDisponiveis.length === 0}
-                      onClick={() =>
-                        setFornecedoresSelecionados(opcoesFornecedorDisponiveis)
-                      }
+                      disabled={opcoesFornecedorFiltradas.length === 0}
+                      onClick={marcarTodosFornecedores}
                     >
                       Marcar todos
                     </button>
