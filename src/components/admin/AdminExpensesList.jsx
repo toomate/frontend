@@ -1,4 +1,8 @@
-﻿function formatarMoeda(valor) {
+import { useEffect, useMemo, useState } from "react";
+
+const LIMITE_INICIAL_LANCAMENTOS = 5;
+
+function formatarMoeda(valor) {
   return valor.toLocaleString("pt-BR", {
     style: "currency",
     currency: "BRL",
@@ -6,6 +10,22 @@
 }
 
 export default function ListaLancamentosAdmin({ titulo, subtitulo, lancamentos }) {
+  const [mostrarTodos, setMostrarTodos] = useState(false);
+
+  useEffect(() => {
+    setMostrarTodos(false);
+  }, [lancamentos]);
+
+  const lancamentosExibidos = useMemo(
+    () =>
+      mostrarTodos
+        ? lancamentos
+        : lancamentos.slice(0, LIMITE_INICIAL_LANCAMENTOS),
+    [lancamentos, mostrarTodos]
+  );
+
+  const possuiMaisLancamentos = lancamentos.length > LIMITE_INICIAL_LANCAMENTOS;
+
   const totalLista = lancamentos.reduce(
     (acumulado, lancamento) => acumulado + (Number(lancamento.valorTotal) || 0),
     0
@@ -15,16 +35,17 @@ export default function ListaLancamentosAdmin({ titulo, subtitulo, lancamentos }
     <article className="admin-card admin-expenses-card">
       <header className="admin-expenses-header">
         <h2>{titulo}</h2>
-        <p>{subtitulo}</p>
+        {subtitulo ? <p>{subtitulo}</p> : null}
       </header>
 
       <div className="admin-expenses-list">
         {lancamentos.length > 0 ? (
-          lancamentos.map((lancamento) => (
+          lancamentosExibidos.map((lancamento) => (
             <div className="admin-expense-item" key={lancamento.id}>
               <div className="admin-expense-left">
                 <h3>{lancamento.insumo}</h3>
                 <p className="admin-expense-extra">{lancamento.marca}</p>
+                <p className="admin-expense-meta">{lancamento.fornecedor}</p>
               </div>
 
               <div className="admin-expense-right">
@@ -43,10 +64,17 @@ export default function ListaLancamentosAdmin({ titulo, subtitulo, lancamentos }
         <strong>{formatarMoeda(totalLista)}</strong>
       </div>
 
-      <button type="button" className="admin-link-button">
-        Ver todos os lançamentos
-      </button>
+      {possuiMaisLancamentos ? (
+        <button
+          type="button"
+          className="admin-link-button"
+          onClick={() => setMostrarTodos((estadoAtual) => !estadoAtual)}
+        >
+          {mostrarTodos
+            ? "Mostrar menos"
+            : `Mostrar todos (${lancamentos.length})`}
+        </button>
+      ) : null}
     </article>
   );
 }
-

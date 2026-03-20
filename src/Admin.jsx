@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { Activity, FileText, Home, UserPlus, Users, Wallet } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import LayoutAdmin from "./components/admin/AdminLayout";
@@ -7,9 +7,11 @@ import TopoAdmin from "./components/admin/AdminTopbar";
 import CardResumoAdmin from "./components/admin/AdminStatCard";
 import CardGraficoAdmin from "./components/admin/AdminChartCard";
 import ListaLancamentosAdmin from "./components/admin/AdminExpensesList";
+import ComparativoPrecoUnitarioAdmin from "./components/admin/AdminComparativoPrecoUnitario";
 import GerenciamentoUsuariosAdmin from "./components/admin/AdminUsersManagement";
 import AdminLogsSistema from "./components/admin/AdminLogsSistema";
 import HeaderPadrao from "./HeaderPadrao";
+import { AdminApi, AuthApi, FornecedorApi, Lote } from "./provider/Api";
 import "./components/admin/Admin.css";
 
 const hoje = new Date();
@@ -147,19 +149,176 @@ const dadosMockAdmin = {
     { id: 6, nome: "Bruna Almeida", username: "bruna.almeida", ehAdmin: false, dataCadastroIso: "2026-03-10" },
   ],
   lancamentosInsumos: [
-    { id: 1, lote: "L-1001", insumo: "Tomate italiano", marca: "Campo Vivo", dataIso: montarDataIsoNoMesAtual(15), valorTotal: 1280 },
-    { id: 2, lote: "L-1002", insumo: "Tomate italiano", marca: "Campo Vivo", dataIso: montarDataIsoNoMesAtual(9), valorTotal: 960 },
-    { id: 3, lote: "L-1003", insumo: "Azeite extra virgem", marca: "Oliva Premium", dataIso: montarDataIsoNoMesAtual(14), valorTotal: 1740 },
-    { id: 4, lote: "L-1004", insumo: "Queijo mussarela", marca: "Serra", dataIso: montarDataIsoNoMesAtual(13), valorTotal: 990 },
-    { id: 5, lote: "L-1005", insumo: "Filé de salmão", marca: "Oceano Azul", dataIso: montarDataIsoNoMesAtual(11), valorTotal: 1560 },
-    { id: 6, lote: "L-1006", insumo: "Farinha de trigo", marca: "Moinho Central", dataIso: montarDataIsoNoMesAtual(12), valorTotal: 690 },
-    { id: 7, lote: "L-1007", insumo: "Tomate italiano", marca: "Horta Sul", dataIso: montarDataIsoNoMesAtual(8), valorTotal: 1120 },
-    { id: 8, lote: "L-1008", insumo: "Arroz arbóreo", marca: "Grão Nobre", dataIso: montarDataIsoNoMesAtual(10), valorTotal: 840 },
-    { id: 9, lote: "L-1009", insumo: "Azeite extra virgem", marca: "Sabor da Itália", dataIso: montarDataIsoNoMesAtual(7), valorTotal: 1580 },
-    { id: 10, lote: "L-1010", insumo: "Queijo mussarela", marca: "Láctea Real", dataIso: montarDataIsoNoMesAtual(6), valorTotal: 1020 },
-    { id: 11, lote: "L-1011", insumo: "Manjericão fresco", marca: "Verde Lar", dataIso: montarDataIsoNoMesAtual(16), valorTotal: 380 },
-    { id: 12, lote: "L-1012", insumo: "Filé de salmão", marca: "Mar do Norte", dataIso: montarDataIsoNoMesAtual(5), valorTotal: 1490 },
-    { id: 13, lote: "L-1013", insumo: "Farinha de trigo", marca: "Trigo Forte", dataIso: montarDataIsoNoMesAtual(4), valorTotal: 720 },
+    {
+      id: 1,
+      lote: "L-1001",
+      insumo: "Tomate italiano",
+      marca: "Campo Vivo",
+      fornecedor: "HortiMax Distribuidora",
+      dataIso: montarDataIsoNoMesAtual(15),
+      valorTotal: 1280,
+      precoUnitario: 8.5,
+    },
+    {
+      id: 2,
+      lote: "L-1002",
+      insumo: "Tomate italiano",
+      marca: "Campo Vivo",
+      fornecedor: "HortiMax Distribuidora",
+      dataIso: montarDataIsoNoMesAtual(9),
+      valorTotal: 960,
+      precoUnitario: 8,
+    },
+    {
+      id: 3,
+      lote: "L-1003",
+      insumo: "Azeite extra virgem",
+      marca: "Oliva Premium",
+      fornecedor: "Óleos do Sul",
+      dataIso: montarDataIsoNoMesAtual(14),
+      valorTotal: 1740,
+      precoUnitario: 39.9,
+    },
+    {
+      id: 4,
+      lote: "L-1004",
+      insumo: "Queijo mussarela",
+      marca: "Serra",
+      fornecedor: "Laticínios Serra Azul",
+      dataIso: montarDataIsoNoMesAtual(13),
+      valorTotal: 990,
+      precoUnitario: 34.5,
+    },
+    {
+      id: 5,
+      lote: "L-1005",
+      insumo: "Filé de salmão",
+      marca: "Oceano Azul",
+      fornecedor: "Pescados Atlântico",
+      dataIso: montarDataIsoNoMesAtual(11),
+      valorTotal: 1560,
+      precoUnitario: 52,
+    },
+    {
+      id: 6,
+      lote: "L-1006",
+      insumo: "Farinha de trigo",
+      marca: "Moinho Central",
+      fornecedor: "Central de Grãos",
+      dataIso: montarDataIsoNoMesAtual(12),
+      valorTotal: 690,
+      precoUnitario: 5.75,
+    },
+    {
+      id: 7,
+      lote: "L-1007",
+      insumo: "Tomate italiano",
+      marca: "Horta Sul",
+      fornecedor: "Verde Campo Alimentos",
+      dataIso: montarDataIsoNoMesAtual(8),
+      valorTotal: 1120,
+      precoUnitario: 7.6,
+    },
+    {
+      id: 8,
+      lote: "L-1008",
+      insumo: "Arroz arbóreo",
+      marca: "Grão Nobre",
+      fornecedor: "Cerealista Nacional",
+      dataIso: montarDataIsoNoMesAtual(10),
+      valorTotal: 840,
+      precoUnitario: 12,
+    },
+    {
+      id: 9,
+      lote: "L-1009",
+      insumo: "Azeite extra virgem",
+      marca: "Sabor da Itália",
+      fornecedor: "Importadora Donato",
+      dataIso: montarDataIsoNoMesAtual(7),
+      valorTotal: 1580,
+      precoUnitario: 36.9,
+    },
+    {
+      id: 10,
+      lote: "L-1010",
+      insumo: "Queijo mussarela",
+      marca: "Láctea Real",
+      fornecedor: "Lácteos Real",
+      dataIso: montarDataIsoNoMesAtual(6),
+      valorTotal: 1020,
+      precoUnitario: 31.9,
+    },
+    {
+      id: 11,
+      lote: "L-1011",
+      insumo: "Manjericão fresco",
+      marca: "Verde Lar",
+      fornecedor: "Horta Viva Supply",
+      dataIso: montarDataIsoNoMesAtual(16),
+      valorTotal: 380,
+      precoUnitario: 4.2,
+    },
+    {
+      id: 12,
+      lote: "L-1012",
+      insumo: "Filé de salmão",
+      marca: "Mar do Norte",
+      fornecedor: "Pescaria Nórdica",
+      dataIso: montarDataIsoNoMesAtual(5),
+      valorTotal: 1490,
+      precoUnitario: 49.5,
+    },
+    {
+      id: 13,
+      lote: "L-1013",
+      insumo: "Farinha de trigo",
+      marca: "Trigo Forte",
+      fornecedor: "Moinho São Lucas",
+      dataIso: montarDataIsoNoMesAtual(4),
+      valorTotal: 720,
+      precoUnitario: 6.1,
+    },
+    {
+      id: 14,
+      lote: "L-1014",
+      insumo: "Tomate italiano",
+      marca: "Campo Vivo",
+      fornecedor: "Feira Sul Atacado",
+      dataIso: montarDataIsoNoMesAtual(17),
+      valorTotal: 910,
+      precoUnitario: 7.2,
+    },
+    {
+      id: 15,
+      lote: "L-1015",
+      insumo: "Tomate italiano",
+      marca: "Campo Vivo",
+      fornecedor: "Feira Sul Atacado",
+      dataIso: montarDataIsoNoMesAtual(6),
+      valorTotal: 880,
+      precoUnitario: 7.5,
+    },
+    {
+      id: 16,
+      lote: "L-1016",
+      insumo: "Azeite extra virgem",
+      marca: "Oliva Premium",
+      fornecedor: "Casa do Chef",
+      dataIso: montarDataIsoNoMesAtual(13),
+      valorTotal: 1660,
+      precoUnitario: 37.4,
+    },
+    {
+      id: 17,
+      lote: "L-1017",
+      insumo: "Queijo mussarela",
+      marca: "Láctea Real",
+      fornecedor: "SuperFrios Distribuição",
+      dataIso: montarDataIsoNoMesAtual(12),
+      valorTotal: 980,
+      precoUnitario: 30.8,
+    },
   ],
 };
 
@@ -174,9 +333,25 @@ const acoesBarraLateral = [
   { id: "cadastro-usuario", rotulo: "Cadastro de usuário", icone: UserPlus },
 ];
 
-const opcoesInsumoBase = Array.from(
+const opcoesInsumoPadrao = Array.from(
   new Set(dadosMockAdmin.lancamentosInsumos.map((lancamento) => lancamento.insumo))
 ).sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+const opcoesMarcaPadrao = Array.from(
+  new Set(dadosMockAdmin.lancamentosInsumos.map((lancamento) => lancamento.marca))
+).sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+const opcoesFornecedorPadrao = Array.from(
+  new Set(dadosMockAdmin.lancamentosInsumos.map((lancamento) => lancamento.fornecedor))
+).sort((a, b) => a.localeCompare(b, "pt-BR"));
+
+function listasIguais(listaA, listaB) {
+  if (listaA.length !== listaB.length) {
+    return false;
+  }
+
+  return listaA.every((item, indice) => item === listaB[indice]);
+}
 
 function formatarMoeda(valor) {
   return valor.toLocaleString("pt-BR", {
@@ -192,15 +367,324 @@ function formatarHora(dataHoraIso) {
   });
 }
 
+function extrairLista(resposta, chavesFallback = []) {
+  if (Array.isArray(resposta)) {
+    return resposta;
+  }
+
+  for (const chave of chavesFallback) {
+    if (Array.isArray(resposta?.[chave])) {
+      return resposta[chave];
+    }
+  }
+
+  return [];
+}
+
+function converterDataParaIso(dataEntrada, dataPadrao) {
+  if (!dataEntrada) {
+    return dataPadrao;
+  }
+
+  const data = new Date(dataEntrada);
+  if (Number.isNaN(data.getTime())) {
+    return dataPadrao;
+  }
+
+  return data.toISOString().slice(0, 10);
+}
+
+function converterDataHoraParaIso(dataEntrada, dataPadrao = new Date().toISOString()) {
+  const data = new Date(dataEntrada || dataPadrao);
+
+  if (Number.isNaN(data.getTime())) {
+    return dataPadrao;
+  }
+
+  return data.toISOString();
+}
+
+function normalizarTexto(valor, fallback = "") {
+  const texto = String(valor ?? "").trim();
+  return texto || fallback;
+}
+
+function normalizarNumero(valor, fallback = 0) {
+  const numero = Number(valor);
+  return Number.isFinite(numero) ? numero : fallback;
+}
+
+function normalizarBooleano(valor) {
+  return valor === true || valor === "true" || valor === 1 || valor === "1";
+}
+
 export default function Admin() {
   const navegar = useNavigate();
   const [itemAtivo, setItemAtivo] = useState("inicio");
   const [menuLateralAberto, setMenuLateralAberto] = useState(false);
   const [usuariosSistema, setUsuariosSistema] = useState(dadosMockAdmin.usuariosSistema);
-  const [insumosSelecionados, setInsumosSelecionados] = useState(opcoesInsumoBase);
+  const [logsSistema, setLogsSistema] = useState(dadosMockAdmin.logs);
+  const [lancamentosInsumos, setLancamentosInsumos] = useState(
+    dadosMockAdmin.lancamentosInsumos
+  );
+  const [carregandoIntegracao, setCarregandoIntegracao] = useState(false);
+  const [erroIntegracao, setErroIntegracao] = useState("");
+  const [insumosSelecionados, setInsumosSelecionados] = useState(opcoesInsumoPadrao);
+  const [marcasSelecionadas, setMarcasSelecionadas] = useState(opcoesMarcaPadrao);
+  const [fornecedoresSelecionados, setFornecedoresSelecionados] =
+    useState(opcoesFornecedorPadrao);
   const [filtroInsumosAberto, setFiltroInsumosAberto] = useState(false);
+  const [filtroMarcasAberto, setFiltroMarcasAberto] = useState(false);
+  const [filtroFornecedoresAberto, setFiltroFornecedoresAberto] = useState(false);
   const [dataInicial, setDataInicial] = useState(obterPrimeiroDiaMesAtualIso());
   const [dataFinal, setDataFinal] = useState(obterUltimoDiaMesAtualIso());
+
+  const opcoesInsumoBase = useMemo(
+    () =>
+      Array.from(new Set(lancamentosInsumos.map((lancamento) => lancamento.insumo))).sort(
+        (a, b) => a.localeCompare(b, "pt-BR")
+      ),
+    [lancamentosInsumos]
+  );
+
+  const opcoesMarcaBase = useMemo(
+    () =>
+      Array.from(new Set(lancamentosInsumos.map((lancamento) => lancamento.marca))).sort(
+        (a, b) => a.localeCompare(b, "pt-BR")
+      ),
+    [lancamentosInsumos]
+  );
+
+  const opcoesFornecedorBase = useMemo(
+    () =>
+      Array.from(
+        new Set(lancamentosInsumos.map((lancamento) => lancamento.fornecedor))
+      ).sort((a, b) => a.localeCompare(b, "pt-BR")),
+    [lancamentosInsumos]
+  );
+
+  useEffect(() => {
+    setInsumosSelecionados((insumosAtuais) => {
+      if (opcoesInsumoBase.length === 0) {
+        return [];
+      }
+
+      const insumosValidos = insumosAtuais.filter((insumo) =>
+        opcoesInsumoBase.includes(insumo)
+      );
+
+      if (insumosValidos.length === 0) {
+        return opcoesInsumoBase;
+      }
+
+      if (listasIguais(insumosValidos, insumosAtuais)) {
+        return insumosAtuais;
+      }
+
+      return insumosValidos;
+    });
+  }, [opcoesInsumoBase]);
+
+  useEffect(() => {
+    let ativo = true;
+
+    async function carregarDadosAdmin() {
+      setCarregandoIntegracao(true);
+      setErroIntegracao("");
+
+      const [usuariosResposta, lotesResposta, fornecedoresResposta, logsResposta] =
+        await Promise.allSettled([
+          AuthApi.listarUsuarios(),
+          Lote.listarLotes(),
+          FornecedorApi.listar(),
+          AdminApi.listarLogs(),
+        ]);
+
+      if (!ativo) return;
+
+      const erros = [];
+
+      if (usuariosResposta.status === "fulfilled") {
+        const listaUsuarios = extrairLista(usuariosResposta.value, ["usuarios", "data"]);
+        const dataPadraoUsuario = obterPrimeiroDiaMesAtualIso();
+        const usuariosNormalizados = listaUsuarios.map((usuario, indice) => ({
+          id: normalizarNumero(usuario?.idUsuario ?? usuario?.id, indice + 1),
+          nome: normalizarTexto(
+            usuario?.nome ?? usuario?.nomeCompleto,
+            `Usuário ${indice + 1}`
+          ),
+          username: normalizarTexto(
+            usuario?.apelido ?? usuario?.username ?? usuario?.login,
+            `usuario.${indice + 1}`
+          ),
+          ehAdmin: normalizarBooleano(
+            usuario?.administrador ?? usuario?.ehAdmin ?? usuario?.admin
+          ),
+          dataCadastroIso: converterDataParaIso(
+            usuario?.dataCadastro ?? usuario?.createdAt ?? usuario?.dataCriacao,
+            dataPadraoUsuario
+          ),
+        }));
+
+        setUsuariosSistema(usuariosNormalizados);
+      } else {
+        erros.push("usuários");
+      }
+
+      const listaFornecedores =
+        fornecedoresResposta.status === "fulfilled"
+          ? extrairLista(fornecedoresResposta.value, ["fornecedores", "data"])
+          : [];
+
+      const mapaFornecedores = new Map(
+        listaFornecedores.map((fornecedor, indice) => [
+          String(
+            fornecedor?.idFornecedor ??
+              fornecedor?.id ??
+              fornecedor?.fkFornecedor ??
+              `f-${indice + 1}`
+          ),
+          normalizarTexto(
+            fornecedor?.razaoSocial ?? fornecedor?.nome,
+            `Fornecedor ${indice + 1}`
+          ),
+        ])
+      );
+
+      if (lotesResposta.status === "fulfilled") {
+        const listaLotes = extrairLista(lotesResposta.value, ["lotes", "data"]);
+        const dataPadraoLote = obterPrimeiroDiaMesAtualIso();
+
+        const lancamentosNormalizados = listaLotes
+          .map((lote, indice) => {
+            const idLote = normalizarNumero(
+              lote?.idLote ?? lote?.id ?? lote?.idLoteEstoque,
+              indice + 1
+            );
+            const insumo = normalizarTexto(
+              lote?.marca?.insumo?.nome ??
+                lote?.insumo?.nome ??
+                lote?.nomeInsumo ??
+                lote?.insumoNome
+            );
+            const marca = normalizarTexto(
+              lote?.marca?.nome ?? lote?.nomeMarca ?? lote?.marcaNome,
+              "Sem marca"
+            );
+            const idFornecedor = String(
+              lote?.idFornecedor ??
+                lote?.fkFornecedor ??
+                lote?.fornecedor?.idFornecedor ??
+                lote?.fornecedor?.id ??
+                lote?.marca?.idFornecedor ??
+                lote?.marca?.fkFornecedor ??
+                lote?.marca?.fornecedor?.idFornecedor ??
+                lote?.marca?.fornecedor?.id ??
+                ""
+            );
+
+            const fornecedor = normalizarTexto(
+              lote?.fornecedor?.razaoSocial ??
+                lote?.fornecedor?.nome ??
+                lote?.marca?.fornecedor?.razaoSocial ??
+                lote?.fornecedorNome ??
+                mapaFornecedores.get(idFornecedor),
+              "Fornecedor não informado"
+            );
+
+            const precoUnitario = normalizarNumero(
+              lote?.precoUnitario ??
+                lote?.valorUnitario ??
+                lote?.preco ??
+                lote?.custoUnitario ??
+                lote?.marca?.precoUnitario,
+              0
+            );
+
+            const quantidade = normalizarNumero(
+              lote?.quantidade ??
+                lote?.quantidadeMedida ??
+                lote?.qtd ??
+                lote?.estoque ??
+                lote?.unidades,
+              1
+            );
+
+            const valorTotal = normalizarNumero(
+              lote?.valorTotal ?? lote?.custoTotal ?? lote?.valor,
+              precoUnitario * quantidade
+            );
+
+            if (!insumo) {
+              return null;
+            }
+
+            return {
+              id: idLote,
+              lote: normalizarTexto(
+                lote?.codigoLote ?? lote?.lote ?? lote?.identificador,
+                `L-${idLote}`
+              ),
+              insumo,
+              marca,
+              fornecedor,
+              dataIso: converterDataParaIso(
+                lote?.dataCadastro ??
+                  lote?.dataEntrada ??
+                  lote?.createdAt ??
+                  lote?.dataCriacao ??
+                  lote?.data,
+                dataPadraoLote
+              ),
+              valorTotal,
+              precoUnitario,
+            };
+          })
+          .filter(Boolean);
+
+        setLancamentosInsumos(lancamentosNormalizados);
+      } else {
+        erros.push("lotes");
+      }
+
+      if (logsResposta.status === "fulfilled") {
+        const listaLogs = extrairLista(logsResposta.value, ["logs", "data"]);
+        const dataPadraoLog = new Date().toISOString();
+        const logsNormalizados = listaLogs
+          .map((log, indice) => ({
+            id: normalizarNumero(log?.idLog ?? log?.id, indice + 1),
+            dataHoraIso: converterDataHoraParaIso(
+              log?.dataHoraIso ?? log?.dataHora ?? log?.createdAt,
+              dataPadraoLog
+            ),
+            mensagem: normalizarTexto(
+              log?.mensagem ?? log?.acao ?? log?.descricao,
+              "Log sem mensagem"
+            ),
+            acao: normalizarTexto(log?.acao),
+          }))
+          .filter((log) => !Number.isNaN(new Date(log.dataHoraIso).getTime()));
+
+        setLogsSistema(logsNormalizados);
+      } else {
+        erros.push("logs");
+      }
+
+      if (erros.length > 0) {
+        setErroIntegracao(
+          `Falha ao integrar ${erros.join(", ")}. Exibindo dados de apoio onde necessário.`
+        );
+      }
+
+      setCarregandoIntegracao(false);
+    }
+
+    carregarDadosAdmin();
+
+    return () => {
+      ativo = false;
+    };
+  }, []);
 
   const usuariosRecentes = useMemo(
     () =>
@@ -219,14 +703,22 @@ export default function Admin() {
 
   const logsRecentesPainel = useMemo(
     () =>
-      [...dadosMockAdmin.logs]
+      [...logsSistema]
         .sort((a, b) => new Date(b.dataHoraIso).getTime() - new Date(a.dataHoraIso).getTime())
         .slice(0, 3),
-    []
+    [logsSistema]
   );
 
-  const lancamentosFiltrados = useMemo(() => {
-    return dadosMockAdmin.lancamentosInsumos
+  const totalLogsHoje = useMemo(() => {
+    const dataAtual = new Date().toLocaleDateString("pt-BR");
+
+    return logsSistema.filter(
+      (log) => new Date(log.dataHoraIso).toLocaleDateString("pt-BR") === dataAtual
+    ).length;
+  }, [logsSistema]);
+
+  const lancamentosPeriodoInsumos = useMemo(() => {
+    return lancamentosInsumos
       .filter((lancamento) => {
         if (!insumosSelecionados.includes(lancamento.insumo)) {
           return false;
@@ -241,13 +733,92 @@ export default function Admin() {
         }
 
         return true;
-      })
-      .map((lancamento) => ({
-        ...lancamento,
-        data: formatarDataBr(lancamento.dataIso),
-      }))
-      .sort((a, b) => b.dataIso.localeCompare(a.dataIso));
-  }, [dataFinal, dataInicial, insumosSelecionados]);
+      });
+  }, [dataFinal, dataInicial, insumosSelecionados, lancamentosInsumos]);
+
+  const opcoesMarcaDisponiveis = useMemo(
+    () =>
+      Array.from(
+        new Set(lancamentosPeriodoInsumos.map((lancamento) => lancamento.marca))
+      ).sort((a, b) => a.localeCompare(b, "pt-BR")),
+    [lancamentosPeriodoInsumos]
+  );
+
+  useEffect(() => {
+    setMarcasSelecionadas((marcasAtuais) => {
+      if (opcoesMarcaDisponiveis.length === 0) {
+        return marcasAtuais.length === 0 ? marcasAtuais : [];
+      }
+
+      const marcasValidas = marcasAtuais.filter((marca) =>
+        opcoesMarcaDisponiveis.includes(marca)
+      );
+
+      if (marcasValidas.length === 0) {
+        return opcoesMarcaDisponiveis;
+      }
+
+      if (listasIguais(marcasValidas, marcasAtuais)) {
+        return marcasAtuais;
+      }
+
+      return marcasValidas;
+    });
+  }, [opcoesMarcaDisponiveis]);
+
+  const lancamentosPeriodoInsumosMarcas = useMemo(
+    () =>
+      lancamentosPeriodoInsumos.filter((lancamento) =>
+        marcasSelecionadas.includes(lancamento.marca)
+      ),
+    [lancamentosPeriodoInsumos, marcasSelecionadas]
+  );
+
+  const opcoesFornecedorDisponiveis = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          lancamentosPeriodoInsumosMarcas.map((lancamento) => lancamento.fornecedor)
+        )
+      ).sort((a, b) => a.localeCompare(b, "pt-BR")),
+    [lancamentosPeriodoInsumosMarcas]
+  );
+
+  useEffect(() => {
+    setFornecedoresSelecionados((fornecedoresAtuais) => {
+      if (opcoesFornecedorDisponiveis.length === 0) {
+        return fornecedoresAtuais.length === 0 ? fornecedoresAtuais : [];
+      }
+
+      const fornecedoresValidos = fornecedoresAtuais.filter((fornecedor) =>
+        opcoesFornecedorDisponiveis.includes(fornecedor)
+      );
+
+      if (fornecedoresValidos.length === 0) {
+        return opcoesFornecedorDisponiveis;
+      }
+
+      if (listasIguais(fornecedoresValidos, fornecedoresAtuais)) {
+        return fornecedoresAtuais;
+      }
+
+      return fornecedoresValidos;
+    });
+  }, [opcoesFornecedorDisponiveis]);
+
+  const lancamentosFiltrados = useMemo(
+    () =>
+      lancamentosPeriodoInsumosMarcas
+        .filter((lancamento) =>
+          fornecedoresSelecionados.includes(lancamento.fornecedor)
+        )
+        .map((lancamento) => ({
+          ...lancamento,
+          data: formatarDataBr(lancamento.dataIso),
+        }))
+        .sort((a, b) => b.dataIso.localeCompare(a.dataIso)),
+    [lancamentosPeriodoInsumosMarcas, fornecedoresSelecionados]
+  );
 
   const totalGastosFiltrados = useMemo(
     () =>
@@ -299,7 +870,108 @@ export default function Admin() {
     }
 
     return `${insumosSelecionados.length} insumos selecionados`;
-  }, [insumosSelecionados]);
+  }, [insumosSelecionados, opcoesInsumoBase.length]);
+
+  const resumoFiltroMarcas = useMemo(() => {
+    if (opcoesMarcaDisponiveis.length === 0) {
+      return "Sem marcas disponíveis";
+    }
+
+    if (marcasSelecionadas.length === 0) {
+      return "Nenhuma marca selecionada";
+    }
+
+    if (marcasSelecionadas.length === opcoesMarcaDisponiveis.length) {
+      return "Todas as marcas";
+    }
+
+    if (marcasSelecionadas.length === 1) {
+      return marcasSelecionadas[0];
+    }
+
+    return `${marcasSelecionadas.length} marcas selecionadas`;
+  }, [marcasSelecionadas, opcoesMarcaDisponiveis]);
+
+  const resumoFiltroFornecedores = useMemo(() => {
+    if (opcoesFornecedorDisponiveis.length === 0) {
+      return "Sem fornecedores disponíveis";
+    }
+
+    if (fornecedoresSelecionados.length === 0) {
+      return "Nenhum fornecedor selecionado";
+    }
+
+    if (fornecedoresSelecionados.length === opcoesFornecedorDisponiveis.length) {
+      return "Todos os fornecedores";
+    }
+
+    if (fornecedoresSelecionados.length === 1) {
+      return fornecedoresSelecionados[0];
+    }
+
+    return `${fornecedoresSelecionados.length} fornecedores selecionados`;
+  }, [fornecedoresSelecionados, opcoesFornecedorDisponiveis]);
+
+  const comparativoPrecoUnitarioPorInsumo = useMemo(() => {
+    return [...insumosSelecionados]
+      .sort((a, b) => a.localeCompare(b, "pt-BR"))
+      .map((insumo) => {
+        const lancamentosDoInsumo = lancamentosFiltrados.filter(
+          (lancamento) => lancamento.insumo === insumo
+        );
+        const ultimosLotesPorMarcaFornecedor = new Map();
+
+        lancamentosDoInsumo.forEach((lancamento) => {
+          const chaveMarcaFornecedor = `${lancamento.marca}||${lancamento.fornecedor}`;
+          const loteAtual = ultimosLotesPorMarcaFornecedor.get(chaveMarcaFornecedor);
+
+          if (!loteAtual || lancamento.dataIso > loteAtual.dataIso) {
+            ultimosLotesPorMarcaFornecedor.set(chaveMarcaFornecedor, lancamento);
+          }
+        });
+
+        const ultimosLotes = Array.from(ultimosLotesPorMarcaFornecedor.values());
+
+        const fornecedoresPorMarca = new Map();
+        const menorPrecoPorMarca = new Map();
+
+        ultimosLotes.forEach((lancamento) => {
+          const fornecedores = fornecedoresPorMarca.get(lancamento.marca) ?? new Set();
+          fornecedores.add(lancamento.fornecedor);
+          fornecedoresPorMarca.set(lancamento.marca, fornecedores);
+
+          const precoAtual = Number(lancamento.precoUnitario || 0);
+          const menorAtual = menorPrecoPorMarca.get(lancamento.marca);
+
+          if (menorAtual === undefined || precoAtual < menorAtual) {
+            menorPrecoPorMarca.set(lancamento.marca, precoAtual);
+          }
+        });
+
+        const ranking = ultimosLotes
+          .sort(
+            (a, b) =>
+              Number(a.precoUnitario || 0) - Number(b.precoUnitario || 0) ||
+              a.marca.localeCompare(b.marca, "pt-BR") ||
+              a.fornecedor.localeCompare(b.fornecedor, "pt-BR")
+          )
+          .map((lancamento, indice) => ({
+            marca: lancamento.marca,
+            fornecedor: lancamento.fornecedor,
+            precoUnitario: lancamento.precoUnitario,
+            data: formatarDataBr(lancamento.dataIso),
+            melhorPreco: indice === 0,
+            maisBaratoDaMarca:
+              (fornecedoresPorMarca.get(lancamento.marca)?.size ?? 0) > 1 &&
+              Math.abs(
+                Number(lancamento.precoUnitario || 0) -
+                  Number(menorPrecoPorMarca.get(lancamento.marca) || 0)
+              ) < 0.00001,
+          }));
+
+        return { insumo, ranking };
+      });
+  }, [insumosSelecionados, lancamentosFiltrados]);
 
   function selecionarItemBarraLateral(id) {
     setItemAtivo(id);
@@ -315,12 +987,20 @@ export default function Admin() {
     }
   }
 
-  function salvarAlteracoesUsuario(idUsuario, dadosAtualizados) {
+  async function salvarAlteracoesUsuario(idUsuario, dadosAtualizados) {
     setUsuariosSistema((usuariosAtuais) =>
       usuariosAtuais.map((usuario) =>
         usuario.id === idUsuario ? { ...usuario, ...dadosAtualizados } : usuario
       )
     );
+
+    try {
+      await AuthApi.atualizarUsuario(idUsuario, dadosAtualizados);
+    } catch {
+      setErroIntegracao(
+        "Não foi possível salvar as alterações do usuário no backend."
+      );
+    }
   }
 
   function alternarSelecaoInsumo(insumo) {
@@ -331,11 +1011,31 @@ export default function Admin() {
     );
   }
 
+  function alternarSelecaoMarca(marca) {
+    setMarcasSelecionadas((selecionadasAtuais) =>
+      selecionadasAtuais.includes(marca)
+        ? selecionadasAtuais.filter((item) => item !== marca)
+        : [...selecionadasAtuais, marca]
+    );
+  }
+
+  function alternarSelecaoFornecedor(fornecedor) {
+    setFornecedoresSelecionados((selecionadosAtuais) =>
+      selecionadosAtuais.includes(fornecedor)
+        ? selecionadosAtuais.filter((item) => item !== fornecedor)
+        : [...selecionadosAtuais, fornecedor]
+    );
+  }
+
   function limparFiltros() {
     setInsumosSelecionados(opcoesInsumoBase);
+    setMarcasSelecionadas(opcoesMarcaBase);
+    setFornecedoresSelecionados(opcoesFornecedorBase);
     setDataInicial(obterPrimeiroDiaMesAtualIso());
     setDataFinal(obterUltimoDiaMesAtualIso());
     setFiltroInsumosAberto(false);
+    setFiltroMarcasAberto(false);
+    setFiltroFornecedoresAberto(false);
   }
 
   return (
@@ -367,7 +1067,7 @@ export default function Admin() {
             aoSalvarUsuario={salvarAlteracoesUsuario}
           />
         ) : exibindoLogsSistema ? (
-          <AdminLogsSistema logs={dadosMockAdmin.logs} />
+          <AdminLogsSistema logs={logsSistema} />
         ) : (
           <>
             <section className="admin-stat-grid">
@@ -423,7 +1123,7 @@ export default function Admin() {
 
           <CardResumoAdmin
             titulo="Logs do Sistema"
-            metrica={`${dadosMockAdmin.kpis.logsHoje.toLocaleString("pt-BR")} hoje`}
+            metrica={`${totalLogsHoje.toLocaleString("pt-BR")} hoje`}
             icone={Activity}
             iconeCor="#7d4ce0"
             rotuloAcao="Ver todos os logs"
@@ -443,13 +1143,21 @@ export default function Admin() {
           </CardResumoAdmin>
 
           <CardResumoAdmin
-            titulo="Controle de Gastos"
+            titulo="Controle de Gastos Mensal"
             metrica={formatarMoeda(totalGastosFiltrados)}
             icone={Wallet}
             iconeCor="#f2994a"
             variacao={dadosMockAdmin.kpis.variacaoGastos}
           />
         </section>
+
+        {carregandoIntegracao ? (
+          <p className="admin-integracao-status">Sincronizando dados do backend...</p>
+        ) : null}
+
+        {erroIntegracao ? (
+          <p className="admin-integracao-status is-error">{erroIntegracao}</p>
+        ) : null}
 
         <section className="admin-filtros" aria-label="Filtros dos lançamentos">
           <div className="admin-filtro-campo admin-filtro-campo-insumos">
@@ -458,7 +1166,11 @@ export default function Admin() {
               <button
                 type="button"
                 className={`admin-filtro-dropdown-botao ${filtroInsumosAberto ? "aberto" : ""}`}
-                onClick={() => setFiltroInsumosAberto((abertoAtual) => !abertoAtual)}
+                onClick={() => {
+                  setFiltroInsumosAberto((abertoAtual) => !abertoAtual);
+                  setFiltroMarcasAberto(false);
+                  setFiltroFornecedoresAberto(false);
+                }}
               >
                 <span>{resumoFiltroInsumos}</span>
                 <span className="admin-filtro-dropdown-seta" />
@@ -490,6 +1202,122 @@ export default function Admin() {
                       type="button"
                       className="admin-filtro-check-btn"
                       onClick={() => setInsumosSelecionados([])}
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="admin-filtro-campo admin-filtro-campo-marcas">
+            <label>Marcas</label>
+            <div className="admin-filtro-dropdown">
+              <button
+                type="button"
+                className={`admin-filtro-dropdown-botao ${filtroMarcasAberto ? "aberto" : ""}`}
+                onClick={() => {
+                  setFiltroMarcasAberto((abertoAtual) => !abertoAtual);
+                  setFiltroInsumosAberto(false);
+                  setFiltroFornecedoresAberto(false);
+                }}
+              >
+                <span>{resumoFiltroMarcas}</span>
+                <span className="admin-filtro-dropdown-seta" />
+              </button>
+
+              {filtroMarcasAberto && (
+                <div className="admin-filtro-dropdown-menu">
+                  <div className="admin-filtro-checklist">
+                    {opcoesMarcaDisponiveis.length > 0 ? (
+                      opcoesMarcaDisponiveis.map((marca) => (
+                        <label key={marca} className="admin-filtro-check-item">
+                          <input
+                            type="checkbox"
+                            checked={marcasSelecionadas.includes(marca)}
+                            onChange={() => alternarSelecaoMarca(marca)}
+                          />
+                          <span>{marca}</span>
+                        </label>
+                      ))
+                    ) : (
+                      <p className="admin-empty-list">Sem marcas para o período.</p>
+                    )}
+                  </div>
+                  <div className="admin-filtro-checklist-acoes">
+                    <button
+                      type="button"
+                      className="admin-filtro-check-btn"
+                      disabled={opcoesMarcaDisponiveis.length === 0}
+                      onClick={() => setMarcasSelecionadas(opcoesMarcaDisponiveis)}
+                    >
+                      Marcar todos
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-filtro-check-btn"
+                      onClick={() => setMarcasSelecionadas([])}
+                    >
+                      Limpar
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="admin-filtro-campo admin-filtro-campo-fornecedores">
+            <label>Fornecedores</label>
+            <div className="admin-filtro-dropdown">
+              <button
+                type="button"
+                className={`admin-filtro-dropdown-botao ${
+                  filtroFornecedoresAberto ? "aberto" : ""
+                }`}
+                onClick={() => {
+                  setFiltroFornecedoresAberto((abertoAtual) => !abertoAtual);
+                  setFiltroInsumosAberto(false);
+                  setFiltroMarcasAberto(false);
+                }}
+              >
+                <span>{resumoFiltroFornecedores}</span>
+                <span className="admin-filtro-dropdown-seta" />
+              </button>
+
+              {filtroFornecedoresAberto && (
+                <div className="admin-filtro-dropdown-menu">
+                  <div className="admin-filtro-checklist">
+                    {opcoesFornecedorDisponiveis.length > 0 ? (
+                      opcoesFornecedorDisponiveis.map((fornecedor) => (
+                        <label key={fornecedor} className="admin-filtro-check-item">
+                          <input
+                            type="checkbox"
+                            checked={fornecedoresSelecionados.includes(fornecedor)}
+                            onChange={() => alternarSelecaoFornecedor(fornecedor)}
+                          />
+                          <span>{fornecedor}</span>
+                        </label>
+                      ))
+                    ) : (
+                      <p className="admin-empty-list">Sem fornecedores para o período.</p>
+                    )}
+                  </div>
+                  <div className="admin-filtro-checklist-acoes">
+                    <button
+                      type="button"
+                      className="admin-filtro-check-btn"
+                      disabled={opcoesFornecedorDisponiveis.length === 0}
+                      onClick={() =>
+                        setFornecedoresSelecionados(opcoesFornecedorDisponiveis)
+                      }
+                    >
+                      Marcar todos
+                    </button>
+                    <button
+                      type="button"
+                      className="admin-filtro-check-btn"
+                      onClick={() => setFornecedoresSelecionados([])}
                     >
                       Limpar
                     </button>
@@ -541,10 +1369,18 @@ export default function Admin() {
             serie={graficoInsumosPeriodo.serie}
           />
 
-          <ListaLancamentosAdmin
-            titulo="Lançamentos por lote no período"
-            lancamentos={lancamentosFiltrados}
-          />
+          <div className="admin-bottom-coluna-direita">
+            <ComparativoPrecoUnitarioAdmin
+              titulo="Comparativo de preço unitário"
+              subtitulo="Ranking por insumo usando o último lote por marca e fornecedor"
+              comparativoPorInsumo={comparativoPrecoUnitarioPorInsumo}
+            />
+
+            <ListaLancamentosAdmin
+              titulo="Lançamentos por lote no período"
+              lancamentos={lancamentosFiltrados}
+            />
+          </div>
         </section>
           </>
         )}
@@ -552,6 +1388,7 @@ export default function Admin() {
     </div>
   );
 }
+
 
 
 

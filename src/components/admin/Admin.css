@@ -425,6 +425,12 @@
   align-items: start;
 }
 
+.admin-bottom-coluna-direita {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .admin-filtros {
   background: var(--admin-superficie);
   border: 1px solid var(--admin-borda);
@@ -432,9 +438,20 @@
   padding: 14px;
   margin-bottom: 12px;
   display: grid;
-  grid-template-columns: minmax(250px, 1.45fr) repeat(2, minmax(170px, 1fr)) max-content;
+  grid-template-columns: repeat(3, minmax(190px, 1fr)) repeat(2, minmax(160px, 1fr)) max-content;
   gap: 12px;
   align-items: start;
+}
+
+.admin-integracao-status {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: #6f6f6f;
+}
+
+.admin-integracao-status.is-error {
+  color: #af2727;
+  font-weight: 700;
 }
 
 .admin-filtro-campo {
@@ -457,6 +474,14 @@
 }
 
 .admin-filtro-campo-insumos {
+  min-width: 0;
+}
+
+.admin-filtro-campo-marcas {
+  min-width: 0;
+}
+
+.admin-filtro-campo-fornecedores {
   min-width: 0;
 }
 
@@ -577,6 +602,11 @@
 
 .admin-filtro-check-btn:hover {
   background: #f3e1b0;
+}
+
+.admin-filtro-check-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
 }
 
 .admin-filtro-input {
@@ -723,6 +753,12 @@
   font-size: 12px !important;
 }
 
+.admin-expense-meta {
+  margin-top: 2px !important;
+  font-size: 12px !important;
+  color: #7a7a7a !important;
+}
+
 .admin-expense-tag {
   display: inline-flex;
   align-items: center;
@@ -738,6 +774,8 @@
 
 .admin-expense-right {
   text-align: right;
+  min-width: 110px;
+  flex-shrink: 0;
 }
 
 .admin-expense-right strong {
@@ -785,6 +823,141 @@
 
 .admin-link-button:hover {
   background: var(--admin-marrom-escuro);
+}
+
+.admin-unit-price-card {
+  min-height: auto;
+}
+
+.admin-unit-price-header h2 {
+  margin: 0;
+  font-size: 22px;
+  color: var(--admin-marrom);
+}
+
+.admin-unit-price-header p {
+  margin: 6px 0 10px;
+  color: var(--admin-texto-suave);
+  font-size: 14px;
+}
+
+.admin-unit-price-blocos {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-unit-price-bloco {
+  border: 1px solid #ebdfc1;
+  border-radius: 10px;
+  background: #fffdfa;
+  padding: 10px;
+}
+
+.admin-unit-price-bloco h3 {
+  margin: 0 0 8px;
+  color: #1f2f3f;
+  font-size: 15px;
+}
+
+.admin-unit-price-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.admin-unit-price-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #f0e4c5;
+  border-radius: 8px;
+  background: #fff;
+  padding: 8px;
+}
+
+.admin-unit-price-item.melhor-preco {
+  border-color: #a9d9b8;
+  background: #f1faf4;
+}
+
+.admin-unit-price-marca {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.admin-unit-price-posicao {
+  min-width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--admin-marrom);
+  border: 1px solid #e2c883;
+  background: #fff6dd;
+  flex-shrink: 0;
+}
+
+.admin-unit-price-marca strong {
+  display: block;
+  color: #1f2f3f;
+  font-size: 13px;
+}
+
+.admin-unit-price-marca-linha {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.admin-unit-price-badge-marca {
+  display: inline-flex;
+  align-items: center;
+  min-height: 20px;
+  border-radius: 999px;
+  border: 1px solid #a9d9b8;
+  background: #eaf8ef;
+  color: #1b7d42;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 0 8px;
+  white-space: nowrap;
+}
+
+.admin-unit-price-marca small {
+  display: block;
+  color: #7a7a7a;
+  font-size: 12px;
+}
+
+.admin-unit-price-valor {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.admin-unit-price-valor strong {
+  display: block;
+  font-size: 14px;
+  color: #1f2f3f;
+}
+
+.admin-unit-price-valor small {
+  font-size: 12px;
+  color: #7a7a7a;
+}
+
+.admin-unit-price-vazio {
+  margin: 0;
 }
 
 .admin-users-card {
@@ -1216,7 +1389,7 @@
 
 @media (max-width: 1380px) {
   .admin-filtros {
-    grid-template-columns: minmax(210px, 1.35fr) repeat(2, minmax(150px, 1fr)) max-content;
+    grid-template-columns: repeat(3, minmax(165px, 1fr)) repeat(2, minmax(145px, 1fr)) max-content;
   }
 
   .admin-stat-grid {
@@ -1328,6 +1501,25 @@
 
   .admin-stat-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-expense-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-expense-right {
+    min-width: 0;
+    text-align: left;
+  }
+
+  .admin-unit-price-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .admin-unit-price-valor {
+    text-align: left;
   }
 
   .admin-topbar {

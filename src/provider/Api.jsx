@@ -81,6 +81,88 @@ export class AuthApi {
       throw error;
     }
   }
+
+  static async listarUsuarios() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/usuarios",
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar usuarios:", error);
+      throw error;
+    }
+  }
+
+  static async atualizarUsuario(idUsuario, payload) {
+    const idNormalizado = Number(idUsuario);
+
+    if (!Number.isFinite(idNormalizado) || idNormalizado <= 0) {
+      throw new Error("Id de usuario invalido para atualizacao.");
+    }
+
+    const corpo = {
+      nome: payload?.nome,
+      apelido: payload?.username ?? payload?.apelido,
+      administrador:
+        payload?.ehAdmin !== undefined
+          ? Boolean(payload.ehAdmin)
+          : payload?.administrador !== undefined
+          ? Boolean(payload.administrador)
+          : undefined,
+      senha: payload?.senha,
+    };
+
+    Object.keys(corpo).forEach((chave) => {
+      if (corpo[chave] === undefined || corpo[chave] === null || corpo[chave] === "") {
+        delete corpo[chave];
+      }
+    });
+
+    const tentativas = [
+      { method: "patch", url: `/usuarios/${idNormalizado}`, data: corpo },
+      { method: "put", url: `/usuarios/${idNormalizado}`, data: corpo },
+      { method: "patch", url: "/usuarios", data: { id: idNormalizado, ...corpo } },
+      { method: "put", url: "/usuarios", data: { id: idNormalizado, ...corpo } },
+    ];
+
+    let ultimoErro = null;
+
+    for (const tentativa of tentativas) {
+      try {
+        const response = await requestComFallback(tentativa);
+        return response.data;
+      } catch (error) {
+        ultimoErro = error;
+      }
+    }
+
+    console.error("Erro ao atualizar usuario:", ultimoErro);
+    throw ultimoErro;
+  }
+}
+
+export class AdminApi {
+  static async listarLogs() {
+    const rotasTentativa = ["/logs", "/logs/sistema", "/sistema/logs"];
+    let ultimoErro = null;
+
+    for (const rota of rotasTentativa) {
+      try {
+        const response = await requestComFallback({
+          method: "get",
+          url: rota,
+        });
+        return response.data;
+      } catch (error) {
+        ultimoErro = error;
+      }
+    }
+
+    console.error("Erro ao listar logs do sistema:", ultimoErro);
+    throw ultimoErro;
+  }
 }
 
 export class Lote {
