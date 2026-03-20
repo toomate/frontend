@@ -36,6 +36,7 @@
     height: 50vh;
     width: 95%;
     flex-direction: column;
+    margin: 5px;
 }
 
 .tabela-container .elemento-container {
@@ -56,10 +57,11 @@
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
     height: 90%;
+    margin-top: 5px;
 }
 
-/* ── 990px ── */
-@media (max-width: 990px) {
+/* ── 768 ── */
+@media (max-width: 768px) {
     .kpi-container-interior {
         height: auto;
         padding: 16px 0;
@@ -68,7 +70,7 @@
     }
 
     .tabela-container {
-        width: 100%;
+        width: 95%;
         height: auto;
         overflow-x: auto;
         /* tabela rola horizontalmente */
@@ -93,7 +95,7 @@
     }
 
     .tabela-container {
-        width: 96%;
+        width: 95%;
     }
 
     .tabela-interior {

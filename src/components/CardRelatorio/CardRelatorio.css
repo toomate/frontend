@@ -23,21 +23,39 @@
     background-color: white;
     color: black;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     flex-direction: column;
-    justify-content: space-evenly;
-    width: 45vw;
+    justify-content: flex-start;
+    width: 40vw;
     height: 50vh;
-    border-radius: 2px;
+    border-radius: 8px;
 }
 
 .titulo-relatorio {
-    width: 90%;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     font-size: 20px;
     font-weight: 600;
+    width: 100%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative;
+    padding: 10px;
+}
+
+.titulo-primario {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0 auto;
+}
+
+.icone-clicavel {
+    display: flex;
+    align-items: center;
+    width: 25px;
+    color: black;
+    position: relative !important;
 }
 
 .botoes,
@@ -75,6 +93,40 @@
     color: black;
     display: flex;
     justify-content: center;
+}
+
+@media (max-width: 700px) {
+  .container-card {
+    width: 98vw;
+    min-width: 0;
+    max-width: 100vw;
+    height: auto;
+    max-height: 98vh;
+    padding: 8px 2vw;
+    box-sizing: border-box;
+  }
+  .titulo-relatorio {
+    font-size: 16px;
+    padding: 8px 2vw;
+  }
+  .produto-linha {
+    grid-template-columns: 1fr 1fr 32px;
+    font-size: 13px;
+    padding: 0 2vw;
+    box-sizing: border-box;
+  }
+  .botoes {
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 2vw;
+  }
+  .icone-clicavel {
+    width: 22px;
+  }
+
+  .categoria-menu-btn {
+    margin-top: 10px;
+  }
 }
 
 @media (max-width: 480px) {
