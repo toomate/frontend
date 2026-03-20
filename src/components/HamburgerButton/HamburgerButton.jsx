@@ -1,6 +1,7 @@
-﻿import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Menu } from "lucide-react";
 import { NavLink, useNavigate } from "react-router-dom";
+import { limparSessaoAutenticacao } from "../../utils/sessao";
 import "./HamburgerButton.css";
 
 const itensMenu = [
@@ -57,6 +58,7 @@ export default function HamburgerButton({
 
   function sair() {
     fecharMenu();
+    limparSessaoAutenticacao();
     navigate("/");
   }
 
@@ -125,4 +127,3 @@ export default function HamburgerButton({
     </div>
   );
 }
-

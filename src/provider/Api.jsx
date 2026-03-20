@@ -1,4 +1,4 @@
-﻿import axios from "axios";
+import axios from "axios";
 import config from "../config";
 
 const baseURL = config.API_URL;
@@ -8,6 +8,18 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
+  const metodo = String(config?.method ?? "get").toLowerCase();
+  const urlBruta = String(config?.url ?? "");
+  const rotaSemApi = urlBruta.replace(/^\/api/, "");
+  const rotaSemQuery = rotaSemApi.split("?")[0];
+  const rota = rotaSemQuery.replace(/\/+$/, "");
+  const rotaPublicaSemToken =
+    metodo === "post" && (rota === "/usuarios/login" || rota === "/usuarios");
+
+  if (rotaPublicaSemToken) {
+    return config;
+  }
+
   const token =
     localStorage.getItem("token") ||
     localStorage.getItem("authToken") ||
@@ -55,11 +67,14 @@ export class boletos {
 
 export class AuthApi {
   static async login({ apelido, senha }) {
+    const apelidoLimpo = String(apelido ?? "").trim();
+    const senhaLimpa = String(senha ?? "").trim();
+
     try {
       const response = await requestComFallback({
         method: "post",
         url: "/usuarios/login",
-        data: { apelido, senha },
+        data: { apelido: apelidoLimpo, senha: senhaLimpa },
       });
       return response.data;
     } catch (error) {
@@ -69,11 +84,13 @@ export class AuthApi {
   }
 
   static async cadastrar({ nome, apelido, senha, administrador = true }) {
+    const apelidoFormatado = String(apelido ?? "").trim().toLowerCase();
+
     try {
       const response = await requestComFallback({
         method: "post",
         url: "/usuarios",
-        data: { nome, apelido, senha, administrador },
+        data: { nome, apelido: apelidoFormatado, senha, administrador },
       });
       return response.data;
     } catch (error) {
@@ -102,30 +119,79 @@ export class AuthApi {
       throw new Error("Id de usuario invalido para atualizacao.");
     }
 
-    const corpo = {
-      nome: payload?.nome,
-      apelido: payload?.username ?? payload?.apelido,
-      administrador:
-        payload?.ehAdmin !== undefined
-          ? Boolean(payload.ehAdmin)
-          : payload?.administrador !== undefined
-          ? Boolean(payload.administrador)
-          : undefined,
-      senha: payload?.senha,
-    };
+    const ehAdminNormalizado =
+      payload?.ehAdmin !== undefined
+        ? Boolean(payload.ehAdmin)
+        : payload?.administrador !== undefined
+        ? Boolean(payload.administrador)
+        : undefined;
 
-    Object.keys(corpo).forEach((chave) => {
-      if (corpo[chave] === undefined || corpo[chave] === null || corpo[chave] === "") {
-        delete corpo[chave];
-      }
-    });
+    const nome = String(payload?.nome ?? "").trim();
+    const apelido = String(payload?.username ?? payload?.apelido ?? "")
+      .trim()
+      .toLowerCase();
+    const senha = String(payload?.senha ?? "").trim();
 
-    const tentativas = [
-      { method: "patch", url: `/usuarios/${idNormalizado}`, data: corpo },
-      { method: "put", url: `/usuarios/${idNormalizado}`, data: corpo },
-      { method: "patch", url: "/usuarios", data: { id: idNormalizado, ...corpo } },
-      { method: "put", url: "/usuarios", data: { id: idNormalizado, ...corpo } },
-    ];
+    const atualizacaoCompleta =
+      payload?.nome !== undefined ||
+      payload?.username !== undefined ||
+      payload?.apelido !== undefined ||
+      payload?.senha !== undefined;
+
+    const tentativas = atualizacaoCompleta
+      ? [
+          {
+            method: "put",
+            url: `/usuarios/${idNormalizado}`,
+            data: {
+              id: idNormalizado,
+              nome,
+              apelido,
+              senha,
+              administrador: ehAdminNormalizado,
+            },
+          },
+          {
+            method: "put",
+            url: "/usuarios",
+            data: {
+              id: idNormalizado,
+              nome,
+              apelido,
+              senha,
+              administrador: ehAdminNormalizado,
+            },
+          },
+        ]
+      : [
+          {
+            method: "patch",
+            url: `/usuarios/${idNormalizado}`,
+            data: {
+              administrador: ehAdminNormalizado,
+              ehAdmin: ehAdminNormalizado,
+              admin: ehAdminNormalizado,
+              getadministrador: ehAdminNormalizado,
+            },
+          },
+          {
+            method: "patch",
+            url: "/usuarios",
+            data: {
+              id: idNormalizado,
+              administrador: ehAdminNormalizado,
+              ehAdmin: ehAdminNormalizado,
+              admin: ehAdminNormalizado,
+              getadministrador: ehAdminNormalizado,
+            },
+          },
+        ];
+
+    if (atualizacaoCompleta && (!nome || !apelido || !senha)) {
+      throw new Error(
+        "Para atualizar nome, apelido ou senha, preencha nome, apelido e senha."
+      );
+    }
 
     let ultimoErro = null;
 
@@ -138,7 +204,14 @@ export class AuthApi {
       }
     }
 
-    console.error("Erro ao atualizar usuario:", ultimoErro);
+    console.error("Erro ao atualizar usuario:", {
+      idUsuario: idNormalizado,
+      payload,
+      atualizacaoCompleta,
+      status: ultimoErro?.response?.status,
+      data: ultimoErro?.response?.data,
+      mensagem: ultimoErro?.message,
+    });
     throw ultimoErro;
   }
 }

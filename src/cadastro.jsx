@@ -4,6 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
 import "./Login.css";
 
+function normalizarUsername(valor) {
+  return String(valor ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
+
+function usernameEhValido(valor) {
+  return /^[a-z0-9]+$/.test(String(valor ?? ""));
+}
+
 export default function Cadastro() {
   const [mostrarSenha, setMostrarSenha] = useState(false);
   const [mostrarConfirmar, setMostrarConfirmar] = useState(false);
@@ -14,6 +24,7 @@ export default function Cadastro() {
   const [confirmarSenha, setConfirmarSenha] = useState("");
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
+  const [avisoUsername, setAvisoUsername] = useState("");
   const navigate = useNavigate();
 
   async function cadastrar() {
@@ -40,6 +51,13 @@ export default function Cadastro() {
 
     if (senhaFormatada !== confirmarFormatada) {
       setErro("As senhas nao coincidem.");
+      return;
+    }
+
+    if (!usernameEhValido(usernameFormatado)) {
+      setErro(
+        "Username deve conter apenas letras minusculas e numeros, sem espacos ou caracteres especiais."
+      );
       return;
     }
 
@@ -97,8 +115,23 @@ export default function Cadastro() {
             type="text"
             placeholder="Username"
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            autoCapitalize="none"
+            autoCorrect="off"
+            spellCheck={false}
+            onChange={(e) => {
+              const valorDigitado = e.target.value;
+              const valorNormalizado = normalizarUsername(valorDigitado);
+              setUsername(valorNormalizado);
+              setAvisoUsername(
+                valorDigitado !== valorNormalizado
+                  ? "Username deve conter apenas letras minusculas e numeros."
+                  : ""
+              );
+            }}
           />
+          {avisoUsername ? (
+            <p className="auth-warning">{avisoUsername}</p>
+          ) : null}
         </div>
 
         <div className="auth-input-wrap">

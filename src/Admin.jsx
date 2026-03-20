@@ -18,11 +18,6 @@ const hoje = new Date();
 const anoAtualNumero = hoje.getFullYear();
 const mesAtualNumero = hoje.getMonth() + 1;
 
-function montarDataIsoNoMesAtual(dia) {
-  const data = new Date(anoAtualNumero, mesAtualNumero - 1, dia);
-  return data.toISOString().slice(0, 10);
-}
-
 function montarDataHoraIsoNoMesAtual(dia, horario) {
   const [hora = "00", minuto = "00"] = String(horario).split(":");
   const data = new Date(
@@ -58,17 +53,6 @@ function formatarDataFiltro(dataIso) {
 }
 
 const dadosMockAdmin = {
-  kpis: {
-    usuarios: 248,
-    relatorios: 12,
-    logsHoje: 1247,
-    variacaoGastos: -6.2,
-  },
-  usuariosRecentes: [
-    { id: 1, nome: "João Silva", data: "15/03/2026" },
-    { id: 2, nome: "Maria Santos", data: "14/03/2026" },
-    { id: 3, nome: "Pedro Costa", data: "13/03/2026" },
-  ],
   tiposRelatorio: [
     { id: 1, nome: "Vendas mensais", cor: "#2f80ed" },
     { id: 2, nome: "Desempenho", cor: "#1ba968" },
@@ -140,186 +124,6 @@ const dadosMockAdmin = {
       origem: "Fornecedores",
     },
   ],
-  usuariosSistema: [
-    { id: 1, nome: "Joao Silva", username: "joao.silva", ehAdmin: true, dataCadastroIso: "2026-03-15" },
-    { id: 2, nome: "Maria Santos", username: "maria.santos", ehAdmin: false, dataCadastroIso: "2026-03-14" },
-    { id: 3, nome: "Pedro Costa", username: "pedro.costa", ehAdmin: false, dataCadastroIso: "2026-03-13" },
-    { id: 4, nome: "Ana Oliveira", username: "ana.oliveira", ehAdmin: true, dataCadastroIso: "2026-03-12" },
-    { id: 5, nome: "Lucas Ferreira", username: "lucas.ferreira", ehAdmin: false, dataCadastroIso: "2026-03-11" },
-    { id: 6, nome: "Bruna Almeida", username: "bruna.almeida", ehAdmin: false, dataCadastroIso: "2026-03-10" },
-  ],
-  lancamentosInsumos: [
-    {
-      id: 1,
-      lote: "L-1001",
-      insumo: "Tomate italiano",
-      marca: "Campo Vivo",
-      fornecedor: "HortiMax Distribuidora",
-      dataIso: montarDataIsoNoMesAtual(15),
-      valorTotal: 1280,
-      precoUnitario: 8.5,
-    },
-    {
-      id: 2,
-      lote: "L-1002",
-      insumo: "Tomate italiano",
-      marca: "Campo Vivo",
-      fornecedor: "HortiMax Distribuidora",
-      dataIso: montarDataIsoNoMesAtual(9),
-      valorTotal: 960,
-      precoUnitario: 8,
-    },
-    {
-      id: 3,
-      lote: "L-1003",
-      insumo: "Azeite extra virgem",
-      marca: "Oliva Premium",
-      fornecedor: "Óleos do Sul",
-      dataIso: montarDataIsoNoMesAtual(14),
-      valorTotal: 1740,
-      precoUnitario: 39.9,
-    },
-    {
-      id: 4,
-      lote: "L-1004",
-      insumo: "Queijo mussarela",
-      marca: "Serra",
-      fornecedor: "Laticínios Serra Azul",
-      dataIso: montarDataIsoNoMesAtual(13),
-      valorTotal: 990,
-      precoUnitario: 34.5,
-    },
-    {
-      id: 5,
-      lote: "L-1005",
-      insumo: "Filé de salmão",
-      marca: "Oceano Azul",
-      fornecedor: "Pescados Atlântico",
-      dataIso: montarDataIsoNoMesAtual(11),
-      valorTotal: 1560,
-      precoUnitario: 52,
-    },
-    {
-      id: 6,
-      lote: "L-1006",
-      insumo: "Farinha de trigo",
-      marca: "Moinho Central",
-      fornecedor: "Central de Grãos",
-      dataIso: montarDataIsoNoMesAtual(12),
-      valorTotal: 690,
-      precoUnitario: 5.75,
-    },
-    {
-      id: 7,
-      lote: "L-1007",
-      insumo: "Tomate italiano",
-      marca: "Horta Sul",
-      fornecedor: "Verde Campo Alimentos",
-      dataIso: montarDataIsoNoMesAtual(8),
-      valorTotal: 1120,
-      precoUnitario: 7.6,
-    },
-    {
-      id: 8,
-      lote: "L-1008",
-      insumo: "Arroz arbóreo",
-      marca: "Grão Nobre",
-      fornecedor: "Cerealista Nacional",
-      dataIso: montarDataIsoNoMesAtual(10),
-      valorTotal: 840,
-      precoUnitario: 12,
-    },
-    {
-      id: 9,
-      lote: "L-1009",
-      insumo: "Azeite extra virgem",
-      marca: "Sabor da Itália",
-      fornecedor: "Importadora Donato",
-      dataIso: montarDataIsoNoMesAtual(7),
-      valorTotal: 1580,
-      precoUnitario: 36.9,
-    },
-    {
-      id: 10,
-      lote: "L-1010",
-      insumo: "Queijo mussarela",
-      marca: "Láctea Real",
-      fornecedor: "Lácteos Real",
-      dataIso: montarDataIsoNoMesAtual(6),
-      valorTotal: 1020,
-      precoUnitario: 31.9,
-    },
-    {
-      id: 11,
-      lote: "L-1011",
-      insumo: "Manjericão fresco",
-      marca: "Verde Lar",
-      fornecedor: "Horta Viva Supply",
-      dataIso: montarDataIsoNoMesAtual(16),
-      valorTotal: 380,
-      precoUnitario: 4.2,
-    },
-    {
-      id: 12,
-      lote: "L-1012",
-      insumo: "Filé de salmão",
-      marca: "Mar do Norte",
-      fornecedor: "Pescaria Nórdica",
-      dataIso: montarDataIsoNoMesAtual(5),
-      valorTotal: 1490,
-      precoUnitario: 49.5,
-    },
-    {
-      id: 13,
-      lote: "L-1013",
-      insumo: "Farinha de trigo",
-      marca: "Trigo Forte",
-      fornecedor: "Moinho São Lucas",
-      dataIso: montarDataIsoNoMesAtual(4),
-      valorTotal: 720,
-      precoUnitario: 6.1,
-    },
-    {
-      id: 14,
-      lote: "L-1014",
-      insumo: "Tomate italiano",
-      marca: "Campo Vivo",
-      fornecedor: "Feira Sul Atacado",
-      dataIso: montarDataIsoNoMesAtual(17),
-      valorTotal: 910,
-      precoUnitario: 7.2,
-    },
-    {
-      id: 15,
-      lote: "L-1015",
-      insumo: "Tomate italiano",
-      marca: "Campo Vivo",
-      fornecedor: "Feira Sul Atacado",
-      dataIso: montarDataIsoNoMesAtual(6),
-      valorTotal: 880,
-      precoUnitario: 7.5,
-    },
-    {
-      id: 16,
-      lote: "L-1016",
-      insumo: "Azeite extra virgem",
-      marca: "Oliva Premium",
-      fornecedor: "Casa do Chef",
-      dataIso: montarDataIsoNoMesAtual(13),
-      valorTotal: 1660,
-      precoUnitario: 37.4,
-    },
-    {
-      id: 17,
-      lote: "L-1017",
-      insumo: "Queijo mussarela",
-      marca: "Láctea Real",
-      fornecedor: "SuperFrios Distribuição",
-      dataIso: montarDataIsoNoMesAtual(12),
-      valorTotal: 980,
-      precoUnitario: 30.8,
-    },
-  ],
 };
 
 const itensBarraLateral = [
@@ -332,18 +136,6 @@ const itensBarraLateral = [
 const acoesBarraLateral = [
   { id: "cadastro-usuario", rotulo: "Cadastro de usuário", icone: UserPlus },
 ];
-
-const opcoesInsumoPadrao = Array.from(
-  new Set(dadosMockAdmin.lancamentosInsumos.map((lancamento) => lancamento.insumo))
-).sort((a, b) => a.localeCompare(b, "pt-BR"));
-
-const opcoesMarcaPadrao = Array.from(
-  new Set(dadosMockAdmin.lancamentosInsumos.map((lancamento) => lancamento.marca))
-).sort((a, b) => a.localeCompare(b, "pt-BR"));
-
-const opcoesFornecedorPadrao = Array.from(
-  new Set(dadosMockAdmin.lancamentosInsumos.map((lancamento) => lancamento.fornecedor))
-).sort((a, b) => a.localeCompare(b, "pt-BR"));
 
 function listasIguais(listaA, listaB) {
   if (listaA.length !== listaB.length) {
@@ -365,6 +157,20 @@ function formatarHora(dataHoraIso) {
     hour: "2-digit",
     minute: "2-digit",
   });
+}
+
+function obterDataReferenciaMes(dataIso) {
+  const data = dataIso ? new Date(`${dataIso}T12:00:00`) : new Date();
+  if (Number.isNaN(data.getTime())) {
+    return new Date();
+  }
+  return data;
+}
+
+function montarChaveMes(data) {
+  const ano = data.getFullYear();
+  const mes = String(data.getMonth() + 1).padStart(2, "0");
+  return `${ano}-${mes}`;
 }
 
 function extrairLista(resposta, chavesFallback = []) {
@@ -404,6 +210,26 @@ function converterDataHoraParaIso(dataEntrada, dataPadrao = new Date().toISOStri
   return data.toISOString();
 }
 
+function resolverDataLote(lote, dataPadrao) {
+  return converterDataParaIso(
+    lote?.dataCadastro ??
+      lote?.dataEntrada ??
+      lote?.dataCompra ??
+      lote?.dataLancamento ??
+      lote?.dataMovimentacao ??
+      lote?.dataRegistro ??
+      lote?.dataCriacao ??
+      lote?.dtCompra ??
+      lote?.dtEntrada ??
+      lote?.dtLancamento ??
+      lote?.dtCriacao ??
+      lote?.createdAt ??
+      lote?.created_at ??
+      lote?.data,
+    dataPadrao
+  );
+}
+
 function normalizarTexto(valor, fallback = "") {
   const texto = String(valor ?? "").trim();
   return texto || fallback;
@@ -422,17 +248,14 @@ export default function Admin() {
   const navegar = useNavigate();
   const [itemAtivo, setItemAtivo] = useState("inicio");
   const [menuLateralAberto, setMenuLateralAberto] = useState(false);
-  const [usuariosSistema, setUsuariosSistema] = useState(dadosMockAdmin.usuariosSistema);
+  const [usuariosSistema, setUsuariosSistema] = useState([]);
   const [logsSistema, setLogsSistema] = useState(dadosMockAdmin.logs);
-  const [lancamentosInsumos, setLancamentosInsumos] = useState(
-    dadosMockAdmin.lancamentosInsumos
-  );
+  const [lancamentosInsumos, setLancamentosInsumos] = useState([]);
   const [carregandoIntegracao, setCarregandoIntegracao] = useState(false);
   const [erroIntegracao, setErroIntegracao] = useState("");
-  const [insumosSelecionados, setInsumosSelecionados] = useState(opcoesInsumoPadrao);
-  const [marcasSelecionadas, setMarcasSelecionadas] = useState(opcoesMarcaPadrao);
-  const [fornecedoresSelecionados, setFornecedoresSelecionados] =
-    useState(opcoesFornecedorPadrao);
+  const [insumosSelecionados, setInsumosSelecionados] = useState([]);
+  const [marcasSelecionadas, setMarcasSelecionadas] = useState([]);
+  const [fornecedoresSelecionados, setFornecedoresSelecionados] = useState([]);
   const [filtroInsumosAberto, setFiltroInsumosAberto] = useState(false);
   const [filtroMarcasAberto, setFiltroMarcasAberto] = useState(false);
   const [filtroFornecedoresAberto, setFiltroFornecedoresAberto] = useState(false);
@@ -628,14 +451,7 @@ export default function Admin() {
               insumo,
               marca,
               fornecedor,
-              dataIso: converterDataParaIso(
-                lote?.dataCadastro ??
-                  lote?.dataEntrada ??
-                  lote?.createdAt ??
-                  lote?.dataCriacao ??
-                  lote?.data,
-                dataPadraoLote
-              ),
+              dataIso: resolverDataLote(lote, dataPadraoLote),
               valorTotal,
               precoUnitario,
             };
@@ -820,14 +636,48 @@ export default function Admin() {
     [lancamentosPeriodoInsumosMarcas, fornecedoresSelecionados]
   );
 
-  const totalGastosFiltrados = useMemo(
-    () =>
-      lancamentosFiltrados.reduce(
-        (acumulado, lancamento) => acumulado + (Number(lancamento.valorTotal) || 0),
-        0
-      ),
-    [lancamentosFiltrados]
-  );
+  const { totalMesReferencia, variacaoMensalGastos } = useMemo(() => {
+    const dataReferencia = obterDataReferenciaMes(dataFinal);
+    const chaveMesReferencia = montarChaveMes(dataReferencia);
+
+    const dataMesAnterior = new Date(dataReferencia);
+    dataMesAnterior.setDate(1);
+    dataMesAnterior.setMonth(dataMesAnterior.getMonth() - 1);
+    const chaveMesAnterior = montarChaveMes(dataMesAnterior);
+
+    const lancamentosBaseComparacao = lancamentosInsumos;
+
+    let totalAtual = 0;
+    let totalAnterior = 0;
+
+    lancamentosBaseComparacao.forEach((lancamento) => {
+      const chaveMesLancamento = String(lancamento.dataIso || "").slice(0, 7);
+      const valorLancamento = Number(lancamento.valorTotal) || 0;
+
+      if (chaveMesLancamento === chaveMesReferencia) {
+        totalAtual += valorLancamento;
+      } else if (chaveMesLancamento === chaveMesAnterior) {
+        totalAnterior += valorLancamento;
+      }
+    });
+
+    if (totalAnterior <= 0) {
+      return {
+        totalMesReferencia: totalAtual,
+        variacaoMensalGastos: null,
+      };
+    }
+
+    const variacao = ((totalAnterior - totalAtual) / totalAnterior) * 100;
+
+    return {
+      totalMesReferencia: totalAtual,
+      variacaoMensalGastos: Number.isFinite(variacao) ? variacao : null,
+    };
+  }, [
+    dataFinal,
+    lancamentosInsumos,
+  ]);
 
   const graficoInsumosPeriodo = useMemo(() => {
     const mapaInsumos = new Map();
@@ -988,18 +838,61 @@ export default function Admin() {
   }
 
   async function salvarAlteracoesUsuario(idUsuario, dadosAtualizados) {
-    setUsuariosSistema((usuariosAtuais) =>
-      usuariosAtuais.map((usuario) =>
-        usuario.id === idUsuario ? { ...usuario, ...dadosAtualizados } : usuario
-      )
+    const usuariosAntes = usuariosSistema;
+    const usuarioAtual = usuariosSistema.find((usuario) => usuario.id === idUsuario);
+
+    if (!usuarioAtual) {
+      throw new Error("Usuário não encontrado para atualização.");
+    }
+
+    const usuarioDepoisDaEdicao = {
+      ...usuarioAtual,
+      ...(dadosAtualizados.nome !== undefined ? { nome: dadosAtualizados.nome } : {}),
+      ...(dadosAtualizados.username !== undefined
+        ? { username: dadosAtualizados.username }
+        : {}),
+      ...(dadosAtualizados.ehAdmin !== undefined
+        ? { ehAdmin: Boolean(dadosAtualizados.ehAdmin) }
+        : {}),
+    };
+
+    const usuariosDepois = usuariosSistema.map((usuario) =>
+      usuario.id === idUsuario ? usuarioDepoisDaEdicao : usuario
     );
 
+    const alterouNomeOuApelido =
+      dadosAtualizados.nome !== undefined || dadosAtualizados.username !== undefined;
+    const alterouSenha = Boolean(dadosAtualizados.senha);
+    const atualizarCompleto = alterouNomeOuApelido || alterouSenha;
+
+    const payloadApi = atualizarCompleto
+      ? {
+          nome: usuarioDepoisDaEdicao.nome,
+          username: usuarioDepoisDaEdicao.username,
+          ehAdmin: usuarioDepoisDaEdicao.ehAdmin,
+          ...(alterouSenha ? { senha: dadosAtualizados.senha } : {}),
+        }
+      : {
+          ehAdmin:
+            dadosAtualizados.ehAdmin !== undefined
+              ? Boolean(dadosAtualizados.ehAdmin)
+              : usuarioAtual.ehAdmin,
+        };
+
+    setUsuariosSistema(usuariosDepois);
+
     try {
-      await AuthApi.atualizarUsuario(idUsuario, dadosAtualizados);
-    } catch {
-      setErroIntegracao(
-        "Não foi possível salvar as alterações do usuário no backend."
-      );
+      await AuthApi.atualizarUsuario(idUsuario, payloadApi);
+      setErroIntegracao("");
+    } catch (erro) {
+      setUsuariosSistema(usuariosAntes);
+      const mensagemBackend =
+        erro?.response?.data?.mensagem ||
+        erro?.response?.data?.message ||
+        erro?.message ||
+        "Não foi possível salvar as alterações do usuário no backend.";
+      setErroIntegracao(mensagemBackend);
+      throw erro;
     }
   }
 
@@ -1102,7 +995,7 @@ export default function Admin() {
 
           <CardResumoAdmin
             titulo="Relatórios"
-            metrica={`${dadosMockAdmin.kpis.relatorios} disponíveis`}
+            metrica={`${dadosMockAdmin.tiposRelatorio.length} disponíveis`}
             icone={FileText}
             iconeCor="#2f80ed"
             rotuloAcao="Ver relatórios"
@@ -1144,10 +1037,10 @@ export default function Admin() {
 
           <CardResumoAdmin
             titulo="Controle de Gastos Mensal"
-            metrica={formatarMoeda(totalGastosFiltrados)}
+            metrica={formatarMoeda(totalMesReferencia)}
             icone={Wallet}
             iconeCor="#f2994a"
-            variacao={dadosMockAdmin.kpis.variacaoGastos}
+            variacao={variacaoMensalGastos}
           />
         </section>
 

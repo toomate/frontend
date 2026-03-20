@@ -3,6 +3,7 @@ import { ArrowLeft } from "lucide-react";
 import "./App.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import HamburgerButton from "./components/HamburgerButton/HamburgerButton";
+import { limparSessaoAutenticacao } from "./utils/sessao";
 
 export default function HeaderPadrao() {
   const navigate = useNavigate();
@@ -11,6 +12,7 @@ export default function HeaderPadrao() {
   const estaNaDashboard = location.pathname === "/dashboard";
 
   function handleLogout() {
+    limparSessaoAutenticacao();
     navigate("/");
   }
 

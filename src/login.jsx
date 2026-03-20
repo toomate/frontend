@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
+import { limparSessaoAutenticacao } from "./utils/sessao";
 import "./Login.css";
 
 export default function Login() {
@@ -30,6 +31,7 @@ export default function Login() {
         return;
       }
 
+      limparSessaoAutenticacao();
       localStorage.setItem("token", token);
 
 
@@ -94,9 +96,9 @@ export default function Login() {
         </button>
         
         {/* <p className="auth-register-text">
-          Não possui acesso?{" "}
+          NÃ£o possui acesso?{" "}
           <a
-            href={`mailto:admin@toomate.com?subject=Solicitação de acesso&body=Olá, gostaria de solicitar a criação do meu acesso.%0A%0ACriar usuário em:%20${window.location.origin}/cadastro`}
+            href={`mailto:admin@toomate.com?subject=SolicitaÃ§Ã£o de acesso&body=OlÃ¡, gostaria de solicitar a criaÃ§Ã£o do meu acesso.%0A%0ACriar usuÃ¡rio em:%20${window.location.origin}/cadastro`}
           >
             Solicitar acesso
           </a>
@@ -104,11 +106,10 @@ export default function Login() {
         
         {/* 
         <p className="auth-register-text">
-          Não tem conta? <Link to="/cadastro">Cadastre-se</Link>
+          NÃ£o tem conta? <Link to="/cadastro">Cadastre-se</Link>
         </p> */}
         
       </div>
     </section>
   );
 }
-

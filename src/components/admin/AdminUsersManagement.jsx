@@ -1,5 +1,15 @@
 ﻿import { useMemo, useState } from "react";
 
+function normalizarUsername(valor) {
+  return String(valor ?? "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "");
+}
+
+function usernameEhValido(valor) {
+  return /^[a-z0-9]+$/.test(String(valor ?? ""));
+}
+
 function montarDadosEdicao(usuario) {
   return {
     nome: usuario.nome ?? "",
@@ -20,6 +30,9 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
     confirmarSenha: "",
   });
   const [erroSenha, setErroSenha] = useState("");
+  const [erroSalvar, setErroSalvar] = useState("");
+  const [avisoUsername, setAvisoUsername] = useState("");
+  const [salvando, setSalvando] = useState(false);
 
   const totalAdmins = useMemo(
     () => usuarios.filter((usuario) => usuario.ehAdmin).length,
@@ -41,12 +54,26 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
       confirmarSenha: "",
     });
     setErroSenha("");
+    setErroSalvar("");
+    setAvisoUsername("");
+    setSalvando(false);
   }
 
   function atualizarCampo(campo, valor) {
+    let valorTratado = valor;
+
+    if (campo === "username") {
+      valorTratado = normalizarUsername(valor);
+      setAvisoUsername(
+        valorTratado !== valor
+          ? "Username deve conter apenas letras minusculas e numeros."
+          : ""
+      );
+    }
+
     setDadosEdicao((estadoAtual) => ({
       ...estadoAtual,
-      [campo]: valor,
+      [campo]: valorTratado,
     }));
 
     if (campo === "senha" || campo === "confirmarSenha") {
@@ -54,20 +81,38 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
     }
   }
 
-  function salvarEdicao() {
+  async function salvarEdicao() {
     if (!usuarioEmEdicao) return;
 
+    setErroSalvar("");
+    setErroSenha("");
+
+    const nomeDigitado = String(dadosEdicao.nome ?? "").trim();
+    const usernameDigitado = String(dadosEdicao.username ?? "").trim();
+    const senhaDigitada = String(dadosEdicao.senha ?? "").trim();
+    const confirmarSenhaDigitada = String(dadosEdicao.confirmarSenha ?? "").trim();
+
     const payloadAtualizacao = {
-      nome: String(dadosEdicao.nome ?? "").trim() || usuarioEmEdicao.nome,
-      username:
-        String(dadosEdicao.username ?? "").trim() || usuarioEmEdicao.username,
       ehAdmin: Boolean(dadosEdicao.ehAdmin),
     };
 
-    const senhaDigitada = String(dadosEdicao.senha ?? "").trim();
-    const confirmarSenhaDigitada = String(
-      dadosEdicao.confirmarSenha ?? ""
-    ).trim();
+    if (nomeDigitado && nomeDigitado !== usuarioEmEdicao.nome) {
+      payloadAtualizacao.nome = nomeDigitado;
+    }
+
+    if (usernameDigitado && usernameDigitado !== usuarioEmEdicao.username) {
+      if (!usernameEhValido(usernameDigitado)) {
+        setErroSenha(
+          "Username deve conter apenas letras minusculas e numeros, sem espacos ou caracteres especiais."
+        );
+        return;
+      }
+      payloadAtualizacao.username = usernameDigitado;
+    }
+
+    const alterouNomeOuApelido =
+      payloadAtualizacao.nome !== undefined ||
+      payloadAtualizacao.username !== undefined;
 
     if (senhaDigitada || confirmarSenhaDigitada) {
       if (senhaDigitada !== confirmarSenhaDigitada) {
@@ -76,12 +121,33 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
       }
     }
 
+    if (alterouNomeOuApelido && !senhaDigitada) {
+      setErroSenha("Para alterar nome ou apelido, informe e confirme a senha.");
+      return;
+    }
+
     if (senhaDigitada) {
       payloadAtualizacao.senha = senhaDigitada;
     }
 
-    aoSalvarUsuario(usuarioEmEdicao.id, payloadAtualizacao);
-    fecharModalEdicao();
+    if (
+      payloadAtualizacao.nome === undefined &&
+      payloadAtualizacao.username === undefined &&
+      payloadAtualizacao.senha === undefined &&
+      payloadAtualizacao.ehAdmin === usuarioEmEdicao.ehAdmin
+    ) {
+      fecharModalEdicao();
+      return;
+    }
+
+    try {
+      setSalvando(true);
+      await aoSalvarUsuario(usuarioEmEdicao.id, payloadAtualizacao);
+      fecharModalEdicao();
+    } catch {
+      setErroSalvar("Não foi possível salvar as alterações. Tente novamente.");
+      setSalvando(false);
+    }
   }
 
   return (
@@ -171,10 +237,16 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
                   type="text"
                   className="admin-users-input"
                   value={dadosEdicao.username}
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  spellCheck={false}
                   onChange={(evento) =>
                     atualizarCampo("username", evento.target.value)
                   }
                 />
+                {avisoUsername ? (
+                  <small className="admin-users-aviso-username">{avisoUsername}</small>
+                ) : null}
               </label>
 
               <label className="admin-users-form-campo">
@@ -224,11 +296,18 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
               </p>
             ) : null}
 
+            {erroSalvar ? (
+              <p className="admin-users-erro-senha" role="alert">
+                {erroSalvar}
+              </p>
+            ) : null}
+
             <div className="admin-users-modal-actions">
               <button
                 type="button"
                 className="admin-users-btn-cancelar"
                 onClick={fecharModalEdicao}
+                disabled={salvando}
               >
                 Cancelar
               </button>
@@ -236,8 +315,9 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
                 type="button"
                 className="admin-users-btn-salvar"
                 onClick={salvarEdicao}
+                disabled={salvando}
               >
-                Salvar alterações
+                {salvando ? "Salvando..." : "Salvar alterações"}
               </button>
             </div>
           </div>
@@ -246,4 +326,6 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
     </>
   );
 }
+
+
 
