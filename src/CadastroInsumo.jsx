@@ -45,7 +45,9 @@ export default function CadastroInsumo() {
   const [abrirModalCategoria, setAbrirModalCategoria] = useState(false);
   const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);
   const [novaCategoriaNome, setNovaCategoriaNome] = useState("");
-  const [novaCategoriaRotatividade, setNovaCategoriaRotatividade] = useState("0");
+  const [novaCategoriaRotatividade, setNovaCategoriaRotatividade] = useState("false");
+  const [erroModalCategoria, setErroModalCategoria] = useState("");
+  const [isCadastrandoCategoria, setIsCadastrandoCategoria] = useState(false);
 
   async function cadastrarInsumo(event) {
     event.preventDefault();
@@ -149,7 +151,15 @@ export default function CadastroInsumo() {
               ))}
             </select>
 
-            <button type="button" className="eye-btn1" onClick={() => setAbrirModalCategoria(true)}>
+            <button
+              type="button"
+              className="eye-btn1"
+              onClick={() => {
+                setErroModalCategoria("");
+                setNovaCategoriaRotatividade("false");
+                setAbrirModalCategoria(true);
+              }}
+            >
               <Plus size={18} />
             </button>
           </div>
@@ -195,15 +205,29 @@ export default function CadastroInsumo() {
       <FormModal
         open={abrirModalCategoria}
         title="Nova Categoria de Insumo"
-        onClose={() => setAbrirModalCategoria(false)}
+        onClose={() => {
+          setErroModalCategoria("");
+          setAbrirModalCategoria(false);
+        }}
+        isSaving={isCadastrandoCategoria}
+        errorMessage={erroModalCategoria}
         onSave={async () => {
+          setErroModalCategoria("");
           const nome = novaCategoriaNome.trim();
           const rotatividade = novaCategoriaRotatividade;
 
-          if (!nome) return;
-          if (rotatividade !== "false" && rotatividade !== "true") return;
+          if (!nome) {
+            setErroModalCategoria("Informe o nome da categoria.");
+            return;
+          }
+
+          if (rotatividade !== "false" && rotatividade !== "true") {
+            setErroModalCategoria("Selecione uma rotatividade valida.");
+            return;
+          }
 
           try {
+            setIsCadastrandoCategoria(true);
             await CategoriaApi.criar({
               nome,
               rotatividade: rotatividade === "true",
@@ -214,7 +238,9 @@ export default function CadastroInsumo() {
             setNovaCategoriaRotatividade("false");
             setAbrirModalSucesso(true);
           } catch {
-            setErroFormulario("Nao foi possivel cadastrar a categoria.");
+            setErroModalCategoria("Nao foi possivel cadastrar a categoria.");
+          } finally {
+            setIsCadastrandoCategoria(false);
           }
         }}
       >
