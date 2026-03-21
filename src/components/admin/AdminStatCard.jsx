@@ -5,6 +5,7 @@ export default function CardResumoAdmin({
   metrica,
   icone: Icone,
   iconeCor,
+  className = "",
   rotuloAcao,
   aoClicarAcao,
   variacao,
@@ -12,7 +13,7 @@ export default function CardResumoAdmin({
   children,
 }) {
   return (
-    <article className="admin-card">
+    <article className={`admin-card ${className}`.trim()}>
       <div className="admin-card-head">
         <h2>{titulo}</h2>
         {Icone && (

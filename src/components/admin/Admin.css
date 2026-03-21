@@ -431,6 +431,112 @@
   gap: 12px;
 }
 
+.admin-relatorios-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-relatorios-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.admin-relatorios-topo h2 {
+  margin: 0;
+  color: var(--admin-marrom);
+  font-size: 24px;
+}
+
+.admin-relatorios-topo p {
+  margin: 6px 0 0;
+  color: var(--admin-texto-suave);
+  font-size: 14px;
+}
+
+.admin-relatorios-periodo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.admin-relatorios-periodo-btn {
+  height: 34px;
+  border: 1px solid var(--admin-marrom);
+  border-radius: 8px;
+  background: var(--admin-creme);
+  color: var(--admin-marrom);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 0 12px;
+  cursor: pointer;
+}
+
+.admin-relatorios-periodo-btn.is-active {
+  background: var(--admin-marrom);
+  color: var(--admin-creme);
+}
+
+.admin-relatorios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  align-items: stretch;
+}
+
+.admin-relatorio-card {
+  min-height: 206px;
+  padding: 14px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.admin-relatorio-card .admin-card-head {
+  margin-bottom: 10px;
+}
+
+.admin-relatorio-card .admin-card-head h2 {
+  font-size: 17px;
+}
+
+.admin-relatorio-card .admin-card-metric {
+  margin-bottom: 8px;
+  line-height: 1.1;
+}
+
+.admin-relatorio-card .admin-card-content {
+  margin-bottom: 10px;
+}
+
+.admin-relatorio-card .admin-card-button {
+  margin-top: auto;
+  width: 100%;
+}
+
+.admin-relatorio-card.is-active {
+  border-color: var(--admin-marrom);
+  background: #fffaf0;
+  box-shadow: 0 10px 20px rgba(107, 68, 35, 0.18);
+  transform: translateY(-1px);
+}
+
+.admin-relatorio-detalhe {
+  min-height: auto;
+  padding: 18px;
+}
+
+.admin-relatorio-detalhe h3 {
+  margin: 0 0 8px;
+  color: var(--admin-marrom);
+}
+
+.admin-relatorio-detalhe p {
+  margin: 0;
+  color: var(--admin-texto);
+}
+
 .admin-filtros {
   background: var(--admin-superficie);
   border: 1px solid var(--admin-borda);
@@ -1428,6 +1534,10 @@
   }
 
   .admin-bottom-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-relatorios-grid {
     grid-template-columns: 1fr;
   }
 

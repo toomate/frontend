@@ -10,6 +10,7 @@ import ListaLancamentosAdmin from "./components/admin/AdminExpensesList";
 import ComparativoPrecoUnitarioAdmin from "./components/admin/AdminComparativoPrecoUnitario";
 import GerenciamentoUsuariosAdmin from "./components/admin/AdminUsersManagement";
 import AdminLogsSistema from "./components/admin/AdminLogsSistema";
+import AdminRelatorios from "./components/admin/AdminRelatorios";
 import HeaderPadrao from "./HeaderPadrao";
 import { AdminApi, AuthApi, FornecedorApi, Lote } from "./provider/Api";
 import "./components/admin/Admin.css";
@@ -54,9 +55,8 @@ function formatarDataFiltro(dataIso) {
 
 const dadosMockAdmin = {
   tiposRelatorio: [
-    { id: 1, nome: "Vendas mensais", cor: "#2f80ed" },
-    { id: 2, nome: "Desempenho", cor: "#1ba968" },
-    { id: 3, nome: "Análise financeira", cor: "#f2994a" },
+    { id: 1, nome: "Custo total de compras", cor: "#2f80ed" },
+    { id: 2, nome: "Itens perdidos por validade", cor: "#c92c2c" },
   ],
   logs: [
     {
@@ -223,13 +223,43 @@ function extrairLista(resposta, chavesFallback = []) {
 }
 
 function converterDataParaIso(dataEntrada, dataPadrao) {
+  const dataIso = extrairDataIsoFlexivel(dataEntrada);
+  return dataIso || dataPadrao;
+}
+
+function converterDataParaIsoOpcional(dataEntrada) {
+  return extrairDataIsoFlexivel(dataEntrada);
+}
+
+function extrairDataIsoFlexivel(dataEntrada) {
   if (!dataEntrada) {
-    return dataPadrao;
+    return "";
   }
 
-  const data = new Date(dataEntrada);
+  const valorData = String(dataEntrada).trim();
+  if (!valorData) {
+    return "";
+  }
+
+  const valorSemHora = valorData.split("T")[0].split(" ")[0];
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(valorSemHora)) {
+    return valorSemHora;
+  }
+
+  if (/^\d{4}\/\d{2}\/\d{2}$/.test(valorSemHora)) {
+    return valorSemHora.replace(/\//g, "-");
+  }
+
+  const dataBrOuHifen = valorSemHora.match(/^(\d{2})[/.-](\d{2})[/.-](\d{4})$/);
+  if (dataBrOuHifen) {
+    const [, dia, mes, ano] = dataBrOuHifen;
+    return `${ano}-${mes}-${dia}`;
+  }
+
+  const data = new Date(valorData);
   if (Number.isNaN(data.getTime())) {
-    return dataPadrao;
+    return "";
   }
 
   return data.toISOString().slice(0, 10);
@@ -262,6 +292,21 @@ function resolverDataLote(lote, dataPadrao) {
       lote?.created_at ??
       lote?.data,
     dataPadrao
+  );
+}
+
+function resolverDataValidadeLote(lote) {
+  return converterDataParaIsoOpcional(
+    lote?.dataValidade ??
+      lote?.dataVencimento ??
+      lote?.dataVenc ??
+      lote?.validade ??
+      lote?.dtValidade ??
+      lote?.dtVenc ??
+      lote?.dataVencimento ??
+      lote?.dtVencimento ??
+      lote?.vencimento ??
+      lote?.venc
   );
 }
 
@@ -484,11 +529,27 @@ export default function Admin() {
 
             const quantidade = normalizarNumero(
               lote?.quantidade ??
+                lote?.quantidadeInicial ??
                 lote?.quantidadeMedida ??
                 lote?.qtd ??
                 lote?.estoque ??
                 lote?.unidades,
               1
+            );
+
+            const quantidadeEstoque = normalizarNumero(
+              lote?.quantidadeMedida ??
+                lote?.quantidadeAtual ??
+                lote?.quantidadeEmEstoque ??
+                lote?.quantidadeDisponivel ??
+                lote?.quantidadeEstoque ??
+                lote?.estoqueAtual ??
+                lote?.estoque ??
+                lote?.saldo ??
+                lote?.qtdEstoque ??
+                lote?.quantidade ??
+                lote?.unidades,
+              0
             );
 
             const valorTotal = normalizarNumero(
@@ -510,6 +571,8 @@ export default function Admin() {
               marca,
               fornecedor,
               dataIso: resolverDataLote(lote, dataPadraoLote),
+              dataValidadeIso: resolverDataValidadeLote(lote),
+              quantidadeEstoque,
               valorTotal,
               precoUnitario,
             };
@@ -573,6 +636,7 @@ export default function Admin() {
   );
 
   const exibindoGestaoUsuarios = itemAtivo === "usuarios";
+  const exibindoRelatorios = itemAtivo === "relatorios";
   const exibindoLogsSistema = itemAtivo === "logs";
 
   const logsRecentesPainel = useMemo(
@@ -1094,6 +1158,8 @@ export default function Admin() {
             usuarios={usuariosSistema}
             aoSalvarUsuario={salvarAlteracoesUsuario}
           />
+        ) : exibindoRelatorios ? (
+          <AdminRelatorios lancamentosInsumos={lancamentosInsumos} />
         ) : exibindoLogsSistema ? (
           <AdminLogsSistema logs={logsSistema} />
         ) : (
@@ -1134,6 +1200,7 @@ export default function Admin() {
             icone={FileText}
             iconeCor="#2f80ed"
             rotuloAcao="Ver relatórios"
+            aoClicarAcao={() => setItemAtivo("relatorios")}
           >
             {dadosMockAdmin.tiposRelatorio.length > 0 ? (
               <ul className="admin-bullet-list">
