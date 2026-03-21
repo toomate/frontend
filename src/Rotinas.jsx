@@ -13,6 +13,7 @@ export default function Rotinas() {
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [pesquisa, setPesquisa] = useState("")
     const [cardRemocao, setCardRemocao] = useState(false)
+    const [cardConfirmacao, setCardConfirmacao] = useState(false)
     const [rotinas, setRotinas] = useState([])
     const [idSelecionado, setIdSelecionado] = useState("")
 
@@ -23,10 +24,23 @@ export default function Rotinas() {
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
-        if (valor.length > 0) {
-            setCategoriaAtiva("Geral")
-        }
     };
+
+    const abrirCard = (id) => {
+        setCardConfirmacao(true)
+        setIdSelecionado(id)
+    }
+
+    const darBaixa = async () => {
+        try {
+            await RotinasClass.darBaixa(idSelecionado)
+        } catch (err) {
+            if(err.status === 400){
+                alert(err.response.data.message)
+            }
+        }
+        setCardConfirmacao(false)
+    }
 
     const excluirRotina = () => {
         RotinasClass.excluirRotina(idSelecionado)
@@ -35,12 +49,17 @@ export default function Rotinas() {
     }
 
     useEffect(() => {
-        RotinasClass.listar().then((response) => setRotinas(response));
-    }, [])
+        RotinasClass.listar(pesquisa).then((response) => setRotinas(response));
+    }, [pesquisa])
 
 
     return (
         <div className="rotinas-container-geral">
+            {cardConfirmacao && (
+                <div className="escurecer">
+                    <CardConfirmacao titulo={"Deseja realizar baixa?"} confirmar={() => darBaixa()} fecharCard={() => setCardConfirmacao(false)} />
+                </div>
+            )}
             {cardRemocao && (
                 <div className="escurecer">
                     <CardConfirmacao titulo={"Deseja excluir a rotina?"} confirmar={() => excluirRotina()} fecharCard={() => setCardRemocao(false)} />
@@ -57,7 +76,7 @@ export default function Rotinas() {
                 <div className="rotinas-linhas">
                     {rotinas && (
                         rotinas.map(atual => (
-                            <RotinaCard key={atual.id} nomeRotina={atual.titulo} excluir={() => abrirCardRemocao(atual.id)} />
+                            <RotinaCard key={atual.id} darBaixa={() => abrirCard(atual.id)} nomeRotina={atual.titulo} excluir={() => abrirCardRemocao(atual.id)} />
                         ))
                     )}
                 </div>
