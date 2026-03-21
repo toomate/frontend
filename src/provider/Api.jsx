@@ -682,6 +682,24 @@ export class Vencimentos {
       throw err;
     }
   }
+
+  static async buscarKpis(){
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/lotes/estoque/kpis"
+      })
+      return response.data
+    } catch (err) {
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
+      throw err;
+    }
+  }
 }
 
 export default api;

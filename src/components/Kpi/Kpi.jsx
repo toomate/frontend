@@ -5,9 +5,9 @@ export default function Kpi(props) {
     return (
         <>
             <div className="status">
-                {props.kpis?.map((kpi) => <React.Fragment key={kpi.nome}>
+                {props.kpis?.map((kpi) => <React.Fragment key={kpi.id}>
                     <div className="card">
-                        <span>{kpi.nome}</span>
+                        <span>{kpi.titulo}</span>
                         <span className="numero">{kpi.valor}</span>
                     </div>
                 </React.Fragment>)}

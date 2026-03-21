@@ -67,6 +67,7 @@ export function Estoque() {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
                     novaQtd = operacao === 'somar' ? atual.quantidadeMedida + 1 : atual.quantidadeMedida - 1
+                    if(novaQtd < 0) novaQtd = 0;
                     nomeProduto = atual.nomeMarca
 
                     return {

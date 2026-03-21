@@ -4,12 +4,17 @@ export default function LinhaTabela(props) {
     console.log(props)    
     return (
         <>
+<<<<<<< HEAD
             {props && (props.elementos.map((atual, index) =>
                 <div
                     key={`${atual.insumo}-${atual.marca}-${atual.dtVencimento}-${index}`}
                     className="tabela-insumo-container"
                     id={atual.status === "Vencido" ? "vencido" : ""}
                 >
+=======
+            {props && (props.elementos.map((atual) =>
+                <div key={atual.id} className="tabela-insumo-container" id={atual.status === "Vencido" ? "vencido" : ""}>
+>>>>>>> eb82114 (adicionando integração das kpis de vencimento)
                         <div className="linha-tabela linha-estoque">
                             {atual.insumo}
                         </div>
@@ -17,7 +22,7 @@ export default function LinhaTabela(props) {
                             {atual.marca}
                         </div>
                         <div className="linha-tabela linha-estoque">
-                            {atual.estoque}
+                            {atual.estoqueAtual}
                         </div>
                         <div className="linha-tabela linha-estoque">
                             {atual.dtVencimento}
