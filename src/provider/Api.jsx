@@ -1,4 +1,4 @@
-import axios from "axios";
+﻿import axios from "axios";
 import config from "../config";
 
 const baseURL = config.API_URL;
@@ -568,7 +568,7 @@ export class Rotinas {
   static async listar(busca) {
     try {
       let parametro = "";
-      if(busca.length > 0){
+      if (busca.length > 0) {
         parametro = `/search?titulo=${busca}`
       }
       const response = await requestComFallback({
@@ -613,13 +613,13 @@ export class Rotinas {
         url: `/rotinas/baixa/${id}`
       })
     } catch (err) {
-        console.error("Erro:", {
-          message: err.message,
-          status: err.response?.status,
-          data: err.response?.data,
-          code: err.code
-        })
-        throw err;
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
+      throw err;
 
 
     }
@@ -659,6 +659,27 @@ export class insumos {
     } catch (error) {
       console.error("Erro ao buscar categorias:", error);
       throw error;
+    }
+  }
+}
+
+export class Vencimentos {
+  static async buscarEstoque() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/lotes/estoque/vencimentos"
+      })
+
+      return response.data
+    } catch (err) {
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
+      throw err;
     }
   }
 }

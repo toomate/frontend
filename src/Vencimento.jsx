@@ -5,6 +5,7 @@ import LinhaTabela from "./components/LinhaTabela/LinhaTabela";
 import HeaderPadrao from "./HeaderPadrao";
 import { Lote } from "./provider/Api";
 import "./Vencimento.css"
+import { Vencimentos } from "./provider/Api";
 
 export default function Vencimento() {
 
@@ -106,7 +107,7 @@ export default function Vencimento() {
                     <div className="tabela-container">
                         <Cabecalho elementos={["Insumo", "Marca", "Estoque Atual", "Data De Vencimento", "Dias Restantes", "Status"]} />
                         <div className="tabela-interior">
-                            <LinhaTabela elementos={insumos} />
+                            <LinhaTabela elementos={vencimento} />
                         </div>
                     </div>
                 </div>
