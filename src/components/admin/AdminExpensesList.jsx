@@ -9,22 +9,28 @@ function formatarMoeda(valor) {
   });
 }
 
-export default function ListaLancamentosAdmin({ titulo, subtitulo, lancamentos }) {
-  const [mostrarTodos, setMostrarTodos] = useState(false);
+export default function ListaLancamentosAdmin({
+  titulo,
+  subtitulo,
+  lancamentos,
+  limiteInicial = LIMITE_INICIAL_LANCAMENTOS,
+  mostrarTodosInicialmente = false,
+  ocultarBotaoMostrarTodos = false,
+  className = "",
+}) {
+  const [mostrarTodos, setMostrarTodos] = useState(mostrarTodosInicialmente);
 
   useEffect(() => {
-    setMostrarTodos(false);
-  }, [lancamentos]);
+    setMostrarTodos(mostrarTodosInicialmente);
+  }, [lancamentos, mostrarTodosInicialmente]);
 
   const lancamentosExibidos = useMemo(
-    () =>
-      mostrarTodos
-        ? lancamentos
-        : lancamentos.slice(0, LIMITE_INICIAL_LANCAMENTOS),
-    [lancamentos, mostrarTodos]
+    () => (mostrarTodos ? lancamentos : lancamentos.slice(0, limiteInicial)),
+    [lancamentos, limiteInicial, mostrarTodos]
   );
 
-  const possuiMaisLancamentos = lancamentos.length > LIMITE_INICIAL_LANCAMENTOS;
+  const possuiMaisLancamentos =
+    !ocultarBotaoMostrarTodos && lancamentos.length > limiteInicial;
 
   const totalLista = lancamentos.reduce(
     (acumulado, lancamento) => acumulado + (Number(lancamento.valorTotal) || 0),
@@ -32,7 +38,7 @@ export default function ListaLancamentosAdmin({ titulo, subtitulo, lancamentos }
   );
 
   return (
-    <article className="admin-card admin-expenses-card">
+    <article className={`admin-card admin-expenses-card ${className}`.trim()}>
       <header className="admin-expenses-header">
         <h2>{titulo}</h2>
         {subtitulo ? <p>{subtitulo}</p> : null}

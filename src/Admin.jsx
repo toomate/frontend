@@ -1,16 +1,16 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import { Activity, FileText, Home, UserPlus, Users, Wallet } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Activity, FileText, Home, List, UserPlus, Users, Wallet } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 import LayoutAdmin from "./components/admin/AdminLayout";
 import BarraLateralAdmin from "./components/admin/AdminSidebar";
 import TopoAdmin from "./components/admin/AdminTopbar";
 import CardResumoAdmin from "./components/admin/AdminStatCard";
 import CardGraficoAdmin from "./components/admin/AdminChartCard";
-import ListaLancamentosAdmin from "./components/admin/AdminExpensesList";
 import ComparativoPrecoUnitarioAdmin from "./components/admin/AdminComparativoPrecoUnitario";
 import GerenciamentoUsuariosAdmin from "./components/admin/AdminUsersManagement";
 import AdminLogsSistema from "./components/admin/AdminLogsSistema";
 import AdminRelatorios from "./components/admin/AdminRelatorios";
+import AdminLancamentos from "./components/admin/AdminLancamentos";
 import HeaderPadrao from "./HeaderPadrao";
 import { AdminApi, AuthApi, FornecedorApi, Lote } from "./provider/Api";
 import "./components/admin/Admin.css";
@@ -128,6 +128,7 @@ const dadosMockAdmin = {
 
 const itensBarraLateral = [
   { id: "inicio", rotulo: "Início", icone: Home },
+  { id: "lancamentos", rotulo: "Lançamentos", icone: List },
   { id: "usuarios", rotulo: "Usuários", icone: Users },
   { id: "relatorios", rotulo: "Relatórios", icone: FileText },
   { id: "logs", rotulo: "Logs do sistema", icone: Activity },
@@ -136,6 +137,14 @@ const itensBarraLateral = [
 const acoesBarraLateral = [
   { id: "cadastro-usuario", rotulo: "Cadastro de usuário", icone: UserPlus },
 ];
+
+const abasAdminDisponiveis = new Set([
+  "inicio",
+  "lancamentos",
+  "usuarios",
+  "relatorios",
+  "logs",
+]);
 
 function listasIguais(listaA, listaB) {
   if (listaA.length !== listaB.length) {
@@ -334,6 +343,7 @@ function normalizarTextoBusca(valor) {
 
 export default function Admin() {
   const navegar = useNavigate();
+  const localizacao = useLocation();
   const [itemAtivo, setItemAtivo] = useState("inicio");
   const [menuLateralAberto, setMenuLateralAberto] = useState(false);
   const [usuariosSistema, setUsuariosSistema] = useState([]);
@@ -352,6 +362,19 @@ export default function Admin() {
   const [buscaFornecedores, setBuscaFornecedores] = useState("");
   const [dataInicial, setDataInicial] = useState(obterPrimeiroDiaMesAtualIso());
   const [dataFinal, setDataFinal] = useState(obterUltimoDiaMesAtualIso());
+
+  useEffect(() => {
+    const abaQuery = new URLSearchParams(localizacao.search).get("aba");
+
+    if (!abaQuery) {
+      setItemAtivo("inicio");
+      return;
+    }
+
+    if (abasAdminDisponiveis.has(abaQuery)) {
+      setItemAtivo(abaQuery);
+    }
+  }, [localizacao.search]);
 
   const opcoesInsumoBase = useMemo(
     () =>
@@ -636,6 +659,7 @@ export default function Admin() {
   );
 
   const exibindoGestaoUsuarios = itemAtivo === "usuarios";
+  const exibindoLancamentos = itemAtivo === "lancamentos";
   const exibindoRelatorios = itemAtivo === "relatorios";
   const exibindoLogsSistema = itemAtivo === "logs";
 
@@ -983,6 +1007,17 @@ export default function Admin() {
   function selecionarItemBarraLateral(id) {
     setItemAtivo(id);
     setMenuLateralAberto(false);
+
+    if (!abasAdminDisponiveis.has(id)) {
+      return;
+    }
+
+    if (id === "inicio") {
+      navegar("/admin", { replace: true });
+      return;
+    }
+
+    navegar(`/admin?aba=${id}`, { replace: true });
   }
 
   function selecionarAcaoBarraLateral(id) {
@@ -1130,6 +1165,254 @@ export default function Admin() {
     setBuscaFornecedores("");
   }
 
+  const filtrosLancamentos = (
+    <section className="admin-filtros" aria-label="Filtros dos lançamentos">
+      <div className="admin-filtro-campo admin-filtro-campo-insumos">
+        <label>Insumos</label>
+        <div className="admin-filtro-dropdown">
+          <button
+            type="button"
+            className={`admin-filtro-dropdown-botao ${filtroInsumosAberto ? "aberto" : ""}`}
+            onClick={() => {
+              setFiltroInsumosAberto((abertoAtual) => {
+                const proximoEstado = !abertoAtual;
+                if (!proximoEstado) {
+                  setBuscaInsumos("");
+                }
+                return proximoEstado;
+              });
+              setFiltroMarcasAberto(false);
+              setFiltroFornecedoresAberto(false);
+              setBuscaMarcas("");
+              setBuscaFornecedores("");
+            }}
+          >
+            <span>{resumoFiltroInsumos}</span>
+            <span className="admin-filtro-dropdown-seta" />
+          </button>
+
+          {filtroInsumosAberto && (
+            <div className="admin-filtro-dropdown-menu">
+              <input
+                type="text"
+                className="admin-filtro-busca"
+                placeholder="Buscar insumo..."
+                value={buscaInsumos}
+                onChange={(evento) => setBuscaInsumos(evento.target.value)}
+              />
+              <div className="admin-filtro-checklist">
+                {opcoesInsumoFiltradas.length > 0 ? (
+                  opcoesInsumoFiltradas.map((insumo) => (
+                    <label key={insumo} className="admin-filtro-check-item">
+                      <input
+                        type="checkbox"
+                        checked={insumosSelecionados.includes(insumo)}
+                        onChange={() => alternarSelecaoInsumo(insumo)}
+                      />
+                      <span>{insumo}</span>
+                    </label>
+                  ))
+                ) : (
+                  <p className="admin-filtro-vazio">Nenhum insumo encontrado.</p>
+                )}
+              </div>
+              <div className="admin-filtro-checklist-acoes">
+                <button
+                  type="button"
+                  className="admin-filtro-check-btn"
+                  disabled={opcoesInsumoFiltradas.length === 0}
+                  onClick={marcarTodosInsumos}
+                >
+                  Marcar todos
+                </button>
+                <button
+                  type="button"
+                  className="admin-filtro-check-btn"
+                  onClick={() => setInsumosSelecionados([])}
+                >
+                  Limpar
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="admin-filtro-campo admin-filtro-campo-marcas">
+        <label>Marcas</label>
+        <div className="admin-filtro-dropdown">
+          <button
+            type="button"
+            className={`admin-filtro-dropdown-botao ${filtroMarcasAberto ? "aberto" : ""}`}
+            onClick={() => {
+              setFiltroMarcasAberto((abertoAtual) => {
+                const proximoEstado = !abertoAtual;
+                if (!proximoEstado) {
+                  setBuscaMarcas("");
+                }
+                return proximoEstado;
+              });
+              setFiltroInsumosAberto(false);
+              setFiltroFornecedoresAberto(false);
+              setBuscaInsumos("");
+              setBuscaFornecedores("");
+            }}
+          >
+            <span>{resumoFiltroMarcas}</span>
+            <span className="admin-filtro-dropdown-seta" />
+          </button>
+
+          {filtroMarcasAberto && (
+            <div className="admin-filtro-dropdown-menu">
+              <input
+                type="text"
+                className="admin-filtro-busca"
+                placeholder="Buscar marca..."
+                value={buscaMarcas}
+                onChange={(evento) => setBuscaMarcas(evento.target.value)}
+              />
+              <div className="admin-filtro-checklist">
+                {opcoesMarcaFiltradas.length > 0 ? (
+                  opcoesMarcaFiltradas.map((marca) => (
+                    <label key={marca} className="admin-filtro-check-item">
+                      <input
+                        type="checkbox"
+                        checked={marcasSelecionadas.includes(marca)}
+                        onChange={() => alternarSelecaoMarca(marca)}
+                      />
+                      <span>{marca}</span>
+                    </label>
+                  ))
+                ) : (
+                  <p className="admin-filtro-vazio">Nenhuma marca encontrada.</p>
+                )}
+              </div>
+              <div className="admin-filtro-checklist-acoes">
+                <button
+                  type="button"
+                  className="admin-filtro-check-btn"
+                  disabled={opcoesMarcaFiltradas.length === 0}
+                  onClick={marcarTodasMarcas}
+                >
+                  Marcar todos
+                </button>
+                <button
+                  type="button"
+                  className="admin-filtro-check-btn"
+                  onClick={() => setMarcasSelecionadas([])}
+                >
+                  Limpar
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="admin-filtro-campo admin-filtro-campo-fornecedores">
+        <label>Fornecedores</label>
+        <div className="admin-filtro-dropdown">
+          <button
+            type="button"
+            className={`admin-filtro-dropdown-botao ${filtroFornecedoresAberto ? "aberto" : ""}`}
+            onClick={() => {
+              setFiltroFornecedoresAberto((abertoAtual) => {
+                const proximoEstado = !abertoAtual;
+                if (!proximoEstado) {
+                  setBuscaFornecedores("");
+                }
+                return proximoEstado;
+              });
+              setFiltroInsumosAberto(false);
+              setFiltroMarcasAberto(false);
+              setBuscaInsumos("");
+              setBuscaMarcas("");
+            }}
+          >
+            <span>{resumoFiltroFornecedores}</span>
+            <span className="admin-filtro-dropdown-seta" />
+          </button>
+
+          {filtroFornecedoresAberto && (
+            <div className="admin-filtro-dropdown-menu">
+              <input
+                type="text"
+                className="admin-filtro-busca"
+                placeholder="Buscar fornecedor..."
+                value={buscaFornecedores}
+                onChange={(evento) => setBuscaFornecedores(evento.target.value)}
+              />
+              <div className="admin-filtro-checklist">
+                {opcoesFornecedorFiltradas.length > 0 ? (
+                  opcoesFornecedorFiltradas.map((fornecedor) => (
+                    <label key={fornecedor} className="admin-filtro-check-item">
+                      <input
+                        type="checkbox"
+                        checked={fornecedoresSelecionados.includes(fornecedor)}
+                        onChange={() => alternarSelecaoFornecedor(fornecedor)}
+                      />
+                      <span>{fornecedor}</span>
+                    </label>
+                  ))
+                ) : (
+                  <p className="admin-filtro-vazio">Nenhum fornecedor encontrado.</p>
+                )}
+              </div>
+              <div className="admin-filtro-checklist-acoes">
+                <button
+                  type="button"
+                  className="admin-filtro-check-btn"
+                  disabled={opcoesFornecedorFiltradas.length === 0}
+                  onClick={marcarTodosFornecedores}
+                >
+                  Marcar todos
+                </button>
+                <button
+                  type="button"
+                  className="admin-filtro-check-btn"
+                  onClick={() => setFornecedoresSelecionados([])}
+                >
+                  Limpar
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="admin-filtro-campo">
+        <label htmlFor="filtro-data-inicial">Data inicial</label>
+        <input
+          id="filtro-data-inicial"
+          type="date"
+          className="admin-filtro-input"
+          value={dataInicial}
+          onChange={(evento) => setDataInicial(evento.target.value)}
+        />
+      </div>
+
+      <div className="admin-filtro-campo">
+        <label htmlFor="filtro-data-final">Data final</label>
+        <input
+          id="filtro-data-final"
+          type="date"
+          className="admin-filtro-input"
+          value={dataFinal}
+          onChange={(evento) => setDataFinal(evento.target.value)}
+        />
+      </div>
+
+      <div className="admin-filtro-campo admin-filtro-campo-acoes">
+        <span className="admin-filtro-label-fantasma" aria-hidden="true">
+          Ações
+        </span>
+        <button type="button" className="admin-filtro-limpar" onClick={limparFiltros}>
+          Limpar filtros
+        </button>
+      </div>
+    </section>
+  );
+
   return (
     <div className="admin-page">
       <HeaderPadrao />
@@ -1158,6 +1441,12 @@ export default function Admin() {
             usuarios={usuariosSistema}
             aoSalvarUsuario={salvarAlteracoesUsuario}
           />
+        ) : exibindoLancamentos ? (
+          <>
+            {filtrosLancamentos}
+
+            <AdminLancamentos lancamentos={lancamentosFiltrados} />
+          </>
         ) : exibindoRelatorios ? (
           <AdminRelatorios lancamentosInsumos={lancamentosInsumos} />
         ) : exibindoLogsSistema ? (
@@ -1255,253 +1544,7 @@ export default function Admin() {
           <p className="admin-integracao-status is-error">{erroIntegracao}</p>
         ) : null}
 
-        <section className="admin-filtros" aria-label="Filtros dos lançamentos">
-          <div className="admin-filtro-campo admin-filtro-campo-insumos">
-            <label>Insumos</label>
-            <div className="admin-filtro-dropdown">
-              <button
-                type="button"
-                className={`admin-filtro-dropdown-botao ${filtroInsumosAberto ? "aberto" : ""}`}
-                onClick={() => {
-                  setFiltroInsumosAberto((abertoAtual) => {
-                    const proximoEstado = !abertoAtual;
-                    if (!proximoEstado) {
-                      setBuscaInsumos("");
-                    }
-                    return proximoEstado;
-                  });
-                  setFiltroMarcasAberto(false);
-                  setFiltroFornecedoresAberto(false);
-                  setBuscaMarcas("");
-                  setBuscaFornecedores("");
-                }}
-              >
-                <span>{resumoFiltroInsumos}</span>
-                <span className="admin-filtro-dropdown-seta" />
-              </button>
-
-              {filtroInsumosAberto && (
-                <div className="admin-filtro-dropdown-menu">
-                  <input
-                    type="text"
-                    className="admin-filtro-busca"
-                    placeholder="Buscar insumo..."
-                    value={buscaInsumos}
-                    onChange={(evento) => setBuscaInsumos(evento.target.value)}
-                  />
-                  <div className="admin-filtro-checklist">
-                    {opcoesInsumoFiltradas.length > 0 ? (
-                      opcoesInsumoFiltradas.map((insumo) => (
-                        <label key={insumo} className="admin-filtro-check-item">
-                          <input
-                            type="checkbox"
-                            checked={insumosSelecionados.includes(insumo)}
-                            onChange={() => alternarSelecaoInsumo(insumo)}
-                          />
-                          <span>{insumo}</span>
-                        </label>
-                      ))
-                    ) : (
-                      <p className="admin-filtro-vazio">Nenhum insumo encontrado.</p>
-                    )}
-                  </div>
-                  <div className="admin-filtro-checklist-acoes">
-                    <button
-                      type="button"
-                      className="admin-filtro-check-btn"
-                      disabled={opcoesInsumoFiltradas.length === 0}
-                      onClick={marcarTodosInsumos}
-                    >
-                      Marcar todos
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-filtro-check-btn"
-                      onClick={() => setInsumosSelecionados([])}
-                    >
-                      Limpar
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="admin-filtro-campo admin-filtro-campo-marcas">
-            <label>Marcas</label>
-            <div className="admin-filtro-dropdown">
-              <button
-                type="button"
-                className={`admin-filtro-dropdown-botao ${filtroMarcasAberto ? "aberto" : ""}`}
-                onClick={() => {
-                  setFiltroMarcasAberto((abertoAtual) => {
-                    const proximoEstado = !abertoAtual;
-                    if (!proximoEstado) {
-                      setBuscaMarcas("");
-                    }
-                    return proximoEstado;
-                  });
-                  setFiltroInsumosAberto(false);
-                  setFiltroFornecedoresAberto(false);
-                  setBuscaInsumos("");
-                  setBuscaFornecedores("");
-                }}
-              >
-                <span>{resumoFiltroMarcas}</span>
-                <span className="admin-filtro-dropdown-seta" />
-              </button>
-
-              {filtroMarcasAberto && (
-                <div className="admin-filtro-dropdown-menu">
-                  <input
-                    type="text"
-                    className="admin-filtro-busca"
-                    placeholder="Buscar marca..."
-                    value={buscaMarcas}
-                    onChange={(evento) => setBuscaMarcas(evento.target.value)}
-                  />
-                  <div className="admin-filtro-checklist">
-                    {opcoesMarcaFiltradas.length > 0 ? (
-                      opcoesMarcaFiltradas.map((marca) => (
-                        <label key={marca} className="admin-filtro-check-item">
-                          <input
-                            type="checkbox"
-                            checked={marcasSelecionadas.includes(marca)}
-                            onChange={() => alternarSelecaoMarca(marca)}
-                          />
-                          <span>{marca}</span>
-                        </label>
-                      ))
-                    ) : (
-                      <p className="admin-filtro-vazio">Nenhuma marca encontrada.</p>
-                    )}
-                  </div>
-                  <div className="admin-filtro-checklist-acoes">
-                    <button
-                      type="button"
-                      className="admin-filtro-check-btn"
-                      disabled={opcoesMarcaFiltradas.length === 0}
-                      onClick={marcarTodasMarcas}
-                    >
-                      Marcar todos
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-filtro-check-btn"
-                      onClick={() => setMarcasSelecionadas([])}
-                    >
-                      Limpar
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="admin-filtro-campo admin-filtro-campo-fornecedores">
-            <label>Fornecedores</label>
-            <div className="admin-filtro-dropdown">
-              <button
-                type="button"
-                className={`admin-filtro-dropdown-botao ${
-                  filtroFornecedoresAberto ? "aberto" : ""
-                }`}
-                onClick={() => {
-                  setFiltroFornecedoresAberto((abertoAtual) => {
-                    const proximoEstado = !abertoAtual;
-                    if (!proximoEstado) {
-                      setBuscaFornecedores("");
-                    }
-                    return proximoEstado;
-                  });
-                  setFiltroInsumosAberto(false);
-                  setFiltroMarcasAberto(false);
-                  setBuscaInsumos("");
-                  setBuscaMarcas("");
-                }}
-              >
-                <span>{resumoFiltroFornecedores}</span>
-                <span className="admin-filtro-dropdown-seta" />
-              </button>
-
-              {filtroFornecedoresAberto && (
-                <div className="admin-filtro-dropdown-menu">
-                  <input
-                    type="text"
-                    className="admin-filtro-busca"
-                    placeholder="Buscar fornecedor..."
-                    value={buscaFornecedores}
-                    onChange={(evento) => setBuscaFornecedores(evento.target.value)}
-                  />
-                  <div className="admin-filtro-checklist">
-                    {opcoesFornecedorFiltradas.length > 0 ? (
-                      opcoesFornecedorFiltradas.map((fornecedor) => (
-                        <label key={fornecedor} className="admin-filtro-check-item">
-                          <input
-                            type="checkbox"
-                            checked={fornecedoresSelecionados.includes(fornecedor)}
-                            onChange={() => alternarSelecaoFornecedor(fornecedor)}
-                          />
-                          <span>{fornecedor}</span>
-                        </label>
-                      ))
-                    ) : (
-                      <p className="admin-filtro-vazio">Nenhum fornecedor encontrado.</p>
-                    )}
-                  </div>
-                  <div className="admin-filtro-checklist-acoes">
-                    <button
-                      type="button"
-                      className="admin-filtro-check-btn"
-                      disabled={opcoesFornecedorFiltradas.length === 0}
-                      onClick={marcarTodosFornecedores}
-                    >
-                      Marcar todos
-                    </button>
-                    <button
-                      type="button"
-                      className="admin-filtro-check-btn"
-                      onClick={() => setFornecedoresSelecionados([])}
-                    >
-                      Limpar
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="admin-filtro-campo">
-            <label htmlFor="filtro-data-inicial">Data inicial</label>
-            <input
-              id="filtro-data-inicial"
-              type="date"
-              className="admin-filtro-input"
-              value={dataInicial}
-              onChange={(evento) => setDataInicial(evento.target.value)}
-            />
-          </div>
-
-          <div className="admin-filtro-campo">
-            <label htmlFor="filtro-data-final">Data final</label>
-            <input
-              id="filtro-data-final"
-              type="date"
-              className="admin-filtro-input"
-              value={dataFinal}
-              onChange={(evento) => setDataFinal(evento.target.value)}
-            />
-          </div>
-
-          <div className="admin-filtro-campo admin-filtro-campo-acoes">
-            <span className="admin-filtro-label-fantasma" aria-hidden="true">
-              Ações
-            </span>
-            <button type="button" className="admin-filtro-limpar" onClick={limparFiltros}>
-              Limpar filtros
-            </button>
-          </div>
-        </section>
+        {filtrosLancamentos}
 
         <section className="admin-bottom-grid">
           <CardGraficoAdmin
@@ -1513,18 +1556,11 @@ export default function Admin() {
             serie={graficoInsumosPeriodo.serie}
           />
 
-          <div className="admin-bottom-coluna-direita">
-            <ComparativoPrecoUnitarioAdmin
-              titulo="Comparativo de preço unitário"
-              subtitulo="Ranking por insumo usando o último lote por marca e fornecedor"
-              comparativoPorInsumo={comparativoPrecoUnitarioPorInsumo}
-            />
-
-            <ListaLancamentosAdmin
-              titulo="Lançamentos por lote no período"
-              lancamentos={lancamentosFiltrados}
-            />
-          </div>
+          <ComparativoPrecoUnitarioAdmin
+            titulo="Comparativo de preço unitário"
+            subtitulo="Ranking por insumo usando o último lote por marca e fornecedor"
+            comparativoPorInsumo={comparativoPrecoUnitarioPorInsumo}
+          />
         </section>
           </>
         )}

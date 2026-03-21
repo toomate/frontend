@@ -27,7 +27,7 @@ export default function HeaderPadrao() {
   return (
     <header className="header">
       <div className="lado-esquerdo">
-        <HamburgerButton />
+        <HamburgerButton size={24} color="#6b4423" className="header-hamburguer-btn" />
 
         <div className="logo-circulo"></div>
 

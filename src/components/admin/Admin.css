@@ -111,6 +111,16 @@
   transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
+.admin-sidebar-item svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.1;
+  flex-shrink: 0;
+}
+
 .admin-sidebar-item:hover {
   background: rgba(248, 236, 198, 0.12);
   border-color: rgba(248, 236, 198, 0.2);
@@ -835,6 +845,28 @@
 
 .admin-expenses-card {
   min-height: 460px;
+}
+
+.admin-lancamentos-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-lancamentos-topo h2 {
+  margin: 0;
+  color: var(--admin-marrom);
+  font-size: 24px;
+}
+
+.admin-lancamentos-topo p {
+  margin: 6px 0 0;
+  color: var(--admin-texto-suave);
+  font-size: 14px;
+}
+
+.admin-lancamentos-card {
+  min-height: auto;
 }
 
 .admin-expenses-header h2 {

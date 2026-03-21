@@ -11,6 +11,15 @@
   opacity: 0.85;
 }
 
+.botao-hamburguer svg {
+  width: 28px;
+  height: 28px;
+  display: block;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2.2;
+}
+
 .menu-hamburguer-wrap {
   position: relative;
   display: inline-flex;
@@ -97,9 +106,79 @@
 .lista-links-painel {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
   flex: 1;
   overflow-y: auto;
+}
+
+.menu-secao {
+  border: 1px solid #efe4c6;
+  border-radius: 10px;
+  background: #fffaf0;
+  padding: 6px;
+}
+
+.menu-secao-cabecalho {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.link-menu-principal {
+  font-weight: 700;
+  background: #fff3d5;
+  border-color: #ecd8a4;
+  font-size: 13px;
+  padding: 10px;
+  flex: 1;
+}
+
+.submenu-painel {
+  margin-top: 0;
+  padding-left: 10px;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.22s ease, margin-top 0.2s ease;
+}
+
+.submenu-painel.aberto {
+  margin-top: 6px;
+  max-height: 320px;
+}
+
+.submenu-conteudo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.link-menu-sub {
+  font-size: 12px;
+  padding: 9px 10px;
+  background: #fff;
+}
+
+.botao-expansao-secao {
+  width: 30px;
+  height: 30px;
+  border: 1.5px solid #ecd8a4;
+  border-radius: 8px;
+  background: #fff8e7;
+  color: #6b4423;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.botao-expansao-secao:hover {
+  background: #fff1cf;
+}
+
+.botao-expansao-secao.aberto {
+  transform: rotate(180deg);
 }
 
 .lista-links-painel::-webkit-scrollbar {
@@ -117,7 +196,7 @@
 .link-menu {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 8px;
   width: 100%;
   margin-top: 0;
@@ -140,6 +219,24 @@
   border-color: #b88b09;
   background-color: #fff4cc;
   color: #b88b09;
+}
+
+.link-menu-icone {
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.link-menu-icone svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 2.1;
+  fill: none;
 }
 
 .link-menu.ativo {

@@ -1,32 +1,114 @@
 import { useEffect, useRef, useState } from "react";
-import { Menu } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
+import {
+  Activity,
+  Boxes,
+  Building2,
+  CalendarDays,
+  ChevronDown,
+  CircleDollarSign,
+  FileText,
+  Handshake,
+  Home,
+  List,
+  Menu,
+  Package,
+  QrCode,
+  Receipt,
+  Shield,
+  UserPlus,
+  Wallet,
+} from "lucide-react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { limparSessaoAutenticacao } from "../../utils/sessao";
 import "./HamburgerButton.css";
 
-const itensMenu = [
-  { to: "/dashboard", label: "Dashboard" },
-  { to: "/admin", label: "Admin" },
-  { to: "/boletos", label: "Boletos" },
-  { to: "/vencimentos", label: "Vencimentos" },
-  { to: "/estoque", label: "Estoque" },
-  { to: "/fornecedor", label: "Fornecedores" },
-  { to: "/cadastro-insumo", label: "Cadastrar Insumo" },
-  { to: "/cadastro-lote", label: "Cadastrar Lote" },
-  { to: "/calendario", label: "Calendario" },
-  { to: "/cadastro", label: "Cadastro de Usuario" },
-  { to: "/rotinas", label: "Rotinas" },
+const secoesMenu = [
+  { id: "home", titulo: "Home", to: "/dashboard", icone: Home },
+  {
+    id: "estoque",
+    titulo: "Estoque",
+    to: "/estoque",
+    icone: Boxes,
+    subitens: [
+      { to: "/cadastro-insumo", label: "Cadastro de Insumo", icone: Package },
+      { to: "/cadastro-lote", label: "Cadastro de Lote", icone: Boxes },
+      { to: "/cadastro-fornecedor", label: "Cadastro de Fornecedor", icone: Building2 },
+      { to: "/rotinas", label: "Rotinas", icone: List },
+      { to: "/leitor", label: "Leitor de Código de Barras", icone: QrCode },
+    ],
+  },
+  {
+    id: "fornecedores",
+    titulo: "Fornecedores",
+    to: "/fornecedores",
+    icone: Building2,
+    subitens: [
+      { to: "/cadastro-boleto", label: "Cadastro de Boleto", icone: CircleDollarSign },
+      { to: "/fornecedores", label: "Lista de Fornecedores", icone: Building2 },
+    ],
+  },
+  { id: "vencimentos", titulo: "Vencimentos", to: "/vencimentos", icone: CalendarDays },
+  {
+    id: "boletos",
+    titulo: "Boletos",
+    to: "/boletos",
+    icone: Receipt,
+    subitens: [
+      { to: "/cadastro-boleto", label: "Cadastro de Boletos", icone: CircleDollarSign },
+      { to: "/boletos", label: "Lista de Boletos", icone: Receipt },
+    ],
+  },
+  {
+    id: "fiados",
+    titulo: "Fiados",
+    to: "/fiados",
+    icone: Handshake,
+    subitens: [
+      { to: "/cadastro-fiado", label: "Cadastro de Fiados", icone: CircleDollarSign },
+      { to: "/fiados", label: "Lista de Fiados", icone: Handshake },
+    ],
+  },
+  {
+    id: "admin",
+    titulo: "Admin",
+    to: "/admin",
+    icone: Shield,
+    subitens: [
+      { to: "/admin?aba=lancamentos", label: "Controle de Gastos", icone: Wallet },
+      { to: "/admin?aba=usuarios", label: "Cadastro de Usuários", icone: UserPlus },
+      { to: "/admin?aba=logs", label: "Logs de Mudança", icone: Activity },
+      { to: "/admin?aba=relatorios", label: "Relatório do Sistema", icone: FileText },
+    ],
+  },
 ];
+
+function normalizarCaminho(caminho) {
+  const caminhoNormalizado = String(caminho || "").replace(/\/+$/, "");
+  return caminhoNormalizado || "/";
+}
+
+function extrairPartesUrl(caminho) {
+  const url = new URL(caminho, "http://localhost");
+
+  return {
+    pathname: normalizarCaminho(url.pathname),
+    search: url.search || "",
+  };
+}
 
 export default function HamburgerButton({
   size = 28,
   color = "#b88b09",
-  ariaLabel = "Abrir menu de navegacao",
+  ariaLabel = "Abrir menu de navegação",
   className = "",
 }) {
   const [menuAberto, setMenuAberto] = useState(false);
+  const [secoesAbertas, setSecoesAbertas] = useState({});
   const navigate = useNavigate();
+  const localizacao = useLocation();
   const referenciaPainel = useRef(null);
+  const caminhoAtual = normalizarCaminho(localizacao.pathname);
+  const buscaAtual = localizacao.search || "";
 
   useEffect(() => {
     if (!menuAberto) return;
@@ -62,17 +144,47 @@ export default function HamburgerButton({
     navigate("/");
   }
 
+  function itemEstaAtivo(caminho, considerarSubrotas = false) {
+    const destino = extrairPartesUrl(caminho);
+
+    if (destino.search) {
+      return caminhoAtual === destino.pathname && buscaAtual === destino.search;
+    }
+
+    if (considerarSubrotas) {
+      return caminhoAtual === destino.pathname || caminhoAtual.startsWith(`${destino.pathname}/`);
+    }
+
+    return caminhoAtual === destino.pathname;
+  }
+
+  function secaoEstaAberta(idSecao, estaAtiva) {
+    if (secoesAbertas[idSecao] !== undefined) {
+      return secoesAbertas[idSecao];
+    }
+
+    return estaAtiva;
+  }
+
+  function alternarSecao(idSecao) {
+    setSecoesAbertas((estadoAtual) => ({
+      ...estadoAtual,
+      [idSecao]: !secaoEstaAberta(idSecao, false),
+    }));
+  }
+
   return (
     <div className="menu-hamburguer-wrap">
       <button
         type="button"
         className={`botao-hamburguer ${className}`}
         onClick={() => setMenuAberto((estadoAnterior) => !estadoAnterior)}
+        style={{ color }}
         aria-label={ariaLabel}
         aria-expanded={menuAberto}
         aria-controls="menu-lateral-toomate"
       >
-        <Menu size={size} color={color} />
+        <Menu size={size} strokeWidth={2.25} />
       </button>
 
       <div
@@ -101,25 +213,73 @@ export default function HamburgerButton({
 
         <div className="conteudo-painel">
           <div className="lista-links-painel">
-            {itensMenu.map((itemMenu) => (
-              <NavLink
-                key={itemMenu.to}
-                to={itemMenu.to}
-                onClick={fecharMenu}
-                className={({ isActive: estaAtivo }) =>
-                  `link-menu ${estaAtivo ? "ativo" : ""}`
-                }
-              >
-                {itemMenu.label}
-              </NavLink>
-            ))}
+            {secoesMenu.map((secao) => {
+              const secaoAtiva =
+                itemEstaAtivo(secao.to, true) ||
+                (secao.subitens || []).some((subitem) => itemEstaAtivo(subitem.to));
+              const IconeSecao = secao.icone;
+
+              const secaoTemSubitens = Boolean(secao.subitens?.length);
+              const secaoAberta = secaoEstaAberta(secao.id, secaoAtiva);
+
+              return (
+                <div key={secao.id} className="menu-secao">
+                  <div className="menu-secao-cabecalho">
+                    <Link
+                      to={secao.to}
+                      onClick={fecharMenu}
+                      className={`link-menu link-menu-principal ${secaoAtiva ? "ativo" : ""}`}
+                    >
+                      {IconeSecao ? (
+                        <span className="link-menu-icone" aria-hidden="true">
+                          <IconeSecao size={15} />
+                        </span>
+                      ) : null}
+                      {secao.titulo}
+                    </Link>
+
+                    {secaoTemSubitens ? (
+                      <button
+                        type="button"
+                        className={`botao-expansao-secao ${secaoAberta ? "aberto" : ""}`}
+                        onClick={() => alternarSecao(secao.id)}
+                        aria-label={`Alternar subtópicos de ${secao.titulo}`}
+                        aria-expanded={secaoAberta}
+                      >
+                        <ChevronDown size={14} />
+                      </button>
+                    ) : null}
+                  </div>
+
+                  {secaoTemSubitens ? (
+                    <div className={`submenu-painel ${secaoAberta ? "aberto" : ""}`}>
+                      <div className="submenu-conteudo">
+                        {secao.subitens.map((subitem) => (
+                          <Link
+                            key={`${secao.id}-${subitem.to}-${subitem.label}`}
+                            to={subitem.to}
+                            onClick={fecharMenu}
+                            className={`link-menu link-menu-sub ${
+                              itemEstaAtivo(subitem.to) ? "ativo" : ""
+                            }`}
+                          >
+                            {subitem.icone ? (
+                              <span className="link-menu-icone" aria-hidden="true">
+                                <subitem.icone size={14} />
+                              </span>
+                            ) : null}
+                            {subitem.label}
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
+                </div>
+              );
+            })}
           </div>
 
-          <button
-            type="button"
-            className="botao-sair-menu"
-            onClick={sair}
-          >
+          <button type="button" className="botao-sair-menu" onClick={sair}>
             Sair
           </button>
         </div>
