@@ -284,6 +284,20 @@ export class Lote {
       throw error;
     }
   }
+
+  static async criar({payload}) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: `/lotes`,
+        data: payload
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao cadastrar os lotes:", error);
+      throw error;
+    }
+  }
 }
 
 export class FornecedorApi {
@@ -386,6 +400,32 @@ export class CategoriaApi {
   }
 }
 
+export class MarcaApi {
+  static async listar() {
+    try {
+      const response = await requestComFallback({ method: "get", url: "/marcas" });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar marcas:", error);
+      throw error;
+    }
+  }
+
+  static async criar(payload) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/marcas",
+        data: payload,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao cadastrar marca:", error);
+      throw error;
+    }
+  }
+}
+
 export class clientes {
   static async listarComDividasEmAberto() {
     try {
@@ -480,6 +520,16 @@ export class Rotinas {
 }
 
 export class insumos {
+  static async listar() {
+    try {
+      const response = await requestComFallback({ method: "get", url: "/insumos" });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar insumos:", error);
+      throw error;
+    }
+  }
+
   static async criar(payload) {
     try {
       const response = await requestComFallback({

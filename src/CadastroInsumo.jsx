@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
+import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import AutocompleteInput from "./components/common/AutocompleteInput";
+import FormModal from "./components/common/FormModal";
 import { CategoriaApi, insumos } from "./provider/Api";
 
 export default function CadastroInsumo() {
@@ -11,7 +13,6 @@ export default function CadastroInsumo() {
   const [nomeInsumo, setNomeInsumo] = useState("");
   const [idCategoria, setIdCategoria] = useState("0");
   const [unidadeMedida, setUnidadeMedida] = useState("");
-  const [mostrarSugestoesUnidade, setMostrarSugestoesUnidade] = useState(false);
   const [qtdMinima, setQtdMinima] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
   const [isCadastrando, setIsCadastrando] = useState(false);
@@ -112,10 +113,10 @@ export default function CadastroInsumo() {
     )
   );
 
-  const termoUnidade = unidadeMedida.trim().toLowerCase();
-  const sugestoesUnidade = medidasNormalizadas
-    .filter((medida) => medida.toLowerCase().includes(termoUnidade))
-    .slice(0, 6);
+  const opcoesUnidade = medidasNormalizadas.map((medida) => ({
+    id: medida,
+    label: medida,
+  }));
 
   return (
     <div className="container">
@@ -155,61 +156,14 @@ export default function CadastroInsumo() {
 
           {/* Unidade */}
           <span>Unidade de Medida</span>
-          <div className="input-wrapper" style={{ position: "relative" }}>
-            <input
-              className="selectUnidade"
-              placeholder="Selecione ou digite"
-              value={unidadeMedida}
-              onFocus={() => setMostrarSugestoesUnidade(true)}
-              onBlur={() => {
-                setTimeout(() => setMostrarSugestoesUnidade(false), 120);
-              }}
-              onChange={(e) => {
-                setUnidadeMedida(e.target.value);
-                setMostrarSugestoesUnidade(true);
-              }}
-            />
-
-            {mostrarSugestoesUnidade && sugestoesUnidade.length > 0 && (
-              <div
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  left: 0,
-                  right: 0,
-                  backgroundColor: "#fff",
-                  border: "1px solid #d9d9d9",
-                  borderTop: "none",
-                  borderRadius: "0 0 8px 8px",
-                  boxShadow: "0 6px 14px rgba(0, 0, 0, 0.08)",
-                  maxHeight: "180px",
-                  overflowY: "auto",
-                  zIndex: 20,
-                }}
-              >
-                {sugestoesUnidade.map((medida) => (
-                  <button
-                    key={medida}
-                    type="button"
-                    onMouseDown={() => {
-                      setUnidadeMedida(medida);
-                      setMostrarSugestoesUnidade(false);
-                    }}
-                    style={{
-                      width: "100%",
-                      textAlign: "left",
-                      padding: "10px 12px",
-                      border: "none",
-                      background: "transparent",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {medida}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
+          <AutocompleteInput
+            options={opcoesUnidade}
+            value={unidadeMedida}
+            onValueChange={setUnidadeMedida}
+            onSelect={() => {}}
+            placeholder="Selecione ou digite"
+            className="selectUnidade"
+          />
 
           <span>Quantidade Mínima</span>
           <input
@@ -238,69 +192,49 @@ export default function CadastroInsumo() {
       </div>
 
       {/* MODAL NOVA CATEGORIA */}
-      {abrirModalCategoria && (
-        <div className="modal-overlay">
-          <div className="modal">
+      <FormModal
+        open={abrirModalCategoria}
+        title="Nova Categoria de Insumo"
+        onClose={() => setAbrirModalCategoria(false)}
+        onSave={async () => {
+          const nome = novaCategoriaNome.trim();
+          const rotatividade = novaCategoriaRotatividade;
 
-            <span className="titulo">
-              Nova Categoria de Insumo
-            </span>
+          if (!nome) return;
+          if (rotatividade !== "false" && rotatividade !== "true") return;
 
-            <input
-              className="modal-input"
-              type="text"
-              placeholder="Nome da categoria"
-              value={novaCategoriaNome}
-              onChange={(e) => setNovaCategoriaNome(e.target.value)}
-            />
+          try {
+            await CategoriaApi.criar({
+              nome,
+              rotatividade: rotatividade === "true",
+            });
+            await fetchCategorias();
+            setAbrirModalCategoria(false);
+            setNovaCategoriaNome("");
+            setNovaCategoriaRotatividade("false");
+            setAbrirModalSucesso(true);
+          } catch {
+            setErroFormulario("Nao foi possivel cadastrar a categoria.");
+          }
+        }}
+      >
+        <input
+          className="modal-input"
+          type="text"
+          placeholder="Nome da categoria"
+          value={novaCategoriaNome}
+          onChange={(e) => setNovaCategoriaNome(e.target.value)}
+        />
 
-            <select
-              className="modal-input"
-              value={novaCategoriaRotatividade}
-              onChange={(e) => setNovaCategoriaRotatividade(e.target.value)}
-            >
-              <option value="false">Rotatividade baixa</option>
-              <option value="true">Rotatividade alta</option>
-            </select>
-
-            <div className="modal-actions">
-              <button
-                className="btn btn-cancelar"
-                onClick={() => setAbrirModalCategoria(false)}
-              >
-                Cancelar <Trash2 size={14} />
-              </button>
-
-              <button
-                className="btn"
-                onClick={async () => {
-                  const nome = novaCategoriaNome.trim();
-                  const rotatividade = novaCategoriaRotatividade;
-
-                  if (!nome) return;
-                  if (rotatividade !== "false" && rotatividade !== "true") return;
-
-                  try {
-                    await CategoriaApi.criar({
-                      nome,
-                      rotatividade: rotatividade === "true",
-                    });
-                    await fetchCategorias();
-                    setAbrirModalCategoria(false);
-                    setNovaCategoriaNome("");
-                    setNovaCategoriaRotatividade("false");
-                    setAbrirModalSucesso(true);
-                  } catch {
-                    setErroFormulario("Nao foi possivel cadastrar a categoria.");
-                  }
-                }}
-              >
-                Salvar <Save size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        <select
+          className="modal-input"
+          value={novaCategoriaRotatividade}
+          onChange={(e) => setNovaCategoriaRotatividade(e.target.value)}
+        >
+          <option value="false">Rotatividade baixa</option>
+          <option value="true">Rotatividade alta</option>
+        </select>
+      </FormModal>
 
       {/* MODAL SUCESSO */}
       {abrirModalSucesso && (
