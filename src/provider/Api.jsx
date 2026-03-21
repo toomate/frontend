@@ -480,6 +480,20 @@ export class Rotinas {
 }
 
 export class insumos {
+  static async criar(payload) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/insumos",
+        data: payload,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao cadastrar insumo:", error);
+      throw error;
+    }
+  }
+
   static async listarUnidades() {
     try {
       const response = await requestComFallback({ method: "get", url: "/insumos/listarUnidades" });
