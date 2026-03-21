@@ -17,7 +17,7 @@ import "./App.css";
 import Vencimento from "./Vencimento";
 import RotinaCard from "./components/RotinaCard/RotinaCard";
 import Rotinas from "./Rotinas";
-import Fiado from "./Fiado";
+import Fiado from "./components/Fiado/Fiado";
 import Leitor from "./components/Leitor/Leitor";
 import Admin from "./Admin";
 
