@@ -7,10 +7,10 @@ import {
   List,
   FileText,
 } from "lucide-react";
-import { FiadoCard } from "./components/FiadoCard/FiadoCard";
-import { FiadoModal } from "./components/FiadoModal/FiadoModal";
+import { FiadoCard } from "../FiadoCard/FiadoCard";
+import { FiadoModal } from "../FiadoModal/FiadoModal";
 import "./fiado.css";
-import HeaderPadrao from './HeaderPadrao';
+import HeaderPadrao from '../../HeaderPadrao';
 
 // Dados mock alinhados com a modelagem: cliente + divida
 const CLIENTES_MOCK = [
