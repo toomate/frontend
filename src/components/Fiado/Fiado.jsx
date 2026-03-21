@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 import { FiadoCard } from "../FiadoCard/FiadoCard";
 import { FiadoModal } from "../FiadoModal/FiadoModal";
-import "./fiado.css";
+import "./Fiado.css";
 import HeaderPadrao from '../../HeaderPadrao';
 
 // Dados mock alinhados com a modelagem: cliente + divida
