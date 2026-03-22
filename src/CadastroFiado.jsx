@@ -102,7 +102,7 @@ export default function CadastroFiado() {
 
     try {
       setIsCadastrandoCliente(true);
-      await clientes.criar({
+      const clienteCriado = await clientes.criar({
         nome,
         telefone,
         cep: cep || null,
@@ -110,9 +110,25 @@ export default function CadastroFiado() {
         bairro: bairro || null,
       });
 
-      await carregarClientes();
-      setNomeCliente(nome);
-      setClienteSelecionado(null);
+      const clientesData = await clientes.listar();
+      const clientesAtualizados = Array.isArray(clientesData) ? clientesData : [];
+      setListaClientes(clientesAtualizados);
+
+      const idClienteCriado = clienteCriado?.idCliente;
+      const clienteSelecionadoNovo =
+        clientesAtualizados.find(
+          (cliente) =>
+            idClienteCriado && Number(cliente?.idCliente) === Number(idClienteCriado)
+        ) ??
+        clientesAtualizados.find(
+          (cliente) =>
+            String(cliente?.nome ?? "").trim().toLowerCase() === nome.toLowerCase() &&
+            String(cliente?.telefone ?? "").trim() === telefone
+        ) ??
+        null;
+
+      setClienteSelecionado(clienteSelecionadoNovo);
+      setNomeCliente(clienteSelecionadoNovo?.nome ?? nome);
       setNovoCliente({ nome: "", telefone: "", cep: "", logradouro: "", bairro: "" });
       setAbrirModalCliente(false);
     } catch {
