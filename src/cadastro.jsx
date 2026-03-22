@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
 import "./Login.css";
@@ -25,6 +25,7 @@ export default function Cadastro() {
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
   const [avisoUsername, setAvisoUsername] = useState("");
+  const [sucessoCadastro, setSucessoCadastro] = useState(false);
   const navigate = useNavigate();
 
   async function cadastrar() {
@@ -72,7 +73,7 @@ export default function Cadastro() {
         administrador: perfilAcesso === "admin",
       });
       localStorage.setItem("usuarioNomeCompleto", nomeCompletoFormatado);
-      navigate("/");
+      setSucessoCadastro(true);
     } catch (error) {
       const status = error?.response?.status;
 
@@ -200,6 +201,23 @@ export default function Cadastro() {
           </button>
         </div>
       </div>
+
+      {sucessoCadastro && (
+        <div className="modal-overlay">
+          <div className="modal modal-sucesso">
+            <CheckCircle size={80} className="icone-sucesso" />
+            <span className="titulo">
+              Cadastro realizado com sucesso!
+            </span>
+            <button
+              className="btn"
+              onClick={() => navigate("/admin?aba=usuarios")}
+            >
+              OK
+            </button>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
