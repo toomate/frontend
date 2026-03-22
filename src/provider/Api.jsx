@@ -427,6 +427,33 @@ export class MarcaApi {
 }
 
 export class clientes {
+  static async listar() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/clientes",
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar clientes:", error);
+      throw error;
+    }
+  }
+
+  static async criar(payload) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/clientes",
+        data: payload,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao cadastrar cliente:", error);
+      throw error;
+    }
+  }
+
   static async listarComDividasEmAberto() {
     try {
       const response = await requestComFallback({
@@ -451,6 +478,33 @@ export class dividas {
       return response.data;
     } catch (error) {
       console.error("Erro ao listar dividas:", error);
+      throw error;
+    }
+  }
+
+  static async listarPedidos() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/dividas/pedidos",
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar pedidos de dividas:", error);
+      throw error;
+    }
+  }
+
+  static async criar(payload) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/dividas",
+        data: payload,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao cadastrar divida:", error);
       throw error;
     }
   }
