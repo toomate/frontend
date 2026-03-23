@@ -440,6 +440,19 @@ export class clientes {
     }
   }
 
+  static async listarComDividas() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/clientes/com-dividas",
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar clientes com dívidas:", error);
+      throw error;
+    }
+  }
+
   static async criar(payload) {
     try {
       const response = await requestComFallback({
@@ -478,6 +491,19 @@ export class dividas {
       return response.data;
     } catch (error) {
       console.error("Erro ao listar dividas:", error);
+      throw error;
+    }
+  }
+
+  static async atualizarEstado(idDivida) {
+    try {
+      const response = await requestComFallback({
+        method: "put",
+        url: `/dividas/atualizarEstado/${idDivida}`,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao atualizar estado da divida:", error);
       throw error;
     }
   }

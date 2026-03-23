@@ -11,94 +11,7 @@ import { FiadoCard } from "../FiadoCard/FiadoCard";
 import { FiadoModal } from "../FiadoModal/FiadoModal";
 import "./Fiado.css";
 import HeaderPadrao from '../../HeaderPadrao';
-
-// Dados mock alinhados com a modelagem: cliente + divida
-const CLIENTES_MOCK = [
-  {
-    idCliente: 1,
-    nome: "João da Silva",
-    telefone: "(11) 99999-1234",
-    cep: "01001-000",
-    logradouro: "Rua das Flores, 123",
-    bairro: "Centro",
-    dividas: [
-      { idDivida: 1, valor: 45.00, dataCompra: "2026-03-01T12:00:00", dataPagamento: null, pedido: "Almoço executivo", pago: 0, fkCliente: 1 },
-      { idDivida: 2, valor: 35.50, dataCompra: "2026-03-05T12:00:00", dataPagamento: null, pedido: "Marmitex grande", pago: 0, fkCliente: 1 },
-      { idDivida: 3, valor: 42.00, dataCompra: "2026-03-10T12:00:00", dataPagamento: "2026-03-12T10:00:00", pedido: "Suco natural + prato feito", pago: 1, fkCliente: 1 },
-      { idDivida: 4, valor: 55.00, dataCompra: "2026-03-15T12:00:00", dataPagamento: null, pedido: "Feijoada completa", pago: 0, fkCliente: 1 },
-      { idDivida: 5, valor: 18.00, dataCompra: "2026-03-20T12:00:00", dataPagamento: null, pedido: "Sobremesa + café", pago: 0, fkCliente: 1 },
-      { idDivida: 6, valor: 50.00, dataCompra: "2026-03-25T12:00:00", dataPagamento: null, pedido: "Marmitex média", pago: 0, fkCliente: 1 },
-    ],
-  },
-  {
-    idCliente: 2,
-    nome: "Maria Oliveira",
-    telefone: "(11) 98888-5678",
-    cep: "04001-000",
-    logradouro: "Av. Brasil, 456",
-    bairro: "Jardins",
-    dividas: [
-      { idDivida: 7, valor: 38.00, dataCompra: "2026-03-02T12:00:00", dataPagamento: null, pedido: "Prato do dia", pago: 0, fkCliente: 2 },
-      { idDivida: 8, valor: 32.00, dataCompra: "2026-03-08T12:00:00", dataPagamento: "2026-03-10T09:00:00", pedido: "Salada especial", pago: 1, fkCliente: 2 },
-      { idDivida: 9, valor: 55.00, dataCompra: "2026-03-14T12:00:00", dataPagamento: null, pedido: "Frango grelhado", pago: 0, fkCliente: 2 },
-      { idDivida: 10, valor: 55.00, dataCompra: "2026-03-22T12:00:00", dataPagamento: null, pedido: "Marmitex pequena", pago: 0, fkCliente: 2 },
-    ],
-  },
-  {
-    idCliente: 3,
-    nome: "Carlos Santos",
-    telefone: "(11) 97777-9012",
-    cep: "01310-000",
-    logradouro: "Rua Augusta, 789",
-    bairro: "Consolação",
-    dividas: [
-      { idDivida: 11, valor: 89.00, dataCompra: "2026-03-03T12:00:00", dataPagamento: null, pedido: "Rodízio completo", pago: 0, fkCliente: 3 },
-      { idDivida: 12, valor: 65.00, dataCompra: "2026-03-12T12:00:00", dataPagamento: null, pedido: "Porção + bebidas", pago: 0, fkCliente: 3 },
-      { idDivida: 13, valor: 90.00, dataCompra: "2026-03-18T12:00:00", dataPagamento: null, pedido: "Almoço executivo x2", pago: 0, fkCliente: 3 },
-      { idDivida: 14, valor: 76.00, dataCompra: "2026-03-28T12:00:00", dataPagamento: null, pedido: "Jantar especial", pago: 0, fkCliente: 3 },
-    ],
-  },
-  {
-    idCliente: 4,
-    nome: "Ana Pereira",
-    telefone: "(11) 96666-3456",
-    cep: "01301-000",
-    logradouro: "Rua Consolação, 321",
-    bairro: "Consolação",
-    dividas: [
-      { idDivida: 15, valor: 42.00, dataCompra: "2026-03-07T12:00:00", dataPagamento: "2026-03-09T11:00:00", pedido: "Marmitex + suco", pago: 1, fkCliente: 4 },
-      { idDivida: 16, valor: 53.00, dataCompra: "2026-03-19T12:00:00", dataPagamento: "2026-03-20T15:00:00", pedido: "Prato feito", pago: 1, fkCliente: 4 },
-    ],
-  },
-  {
-    idCliente: 5,
-    nome: "Pedro Almeida",
-    telefone: "(11) 95555-7890",
-    cep: "01311-000",
-    logradouro: "Rua Paulista, 1010",
-    bairro: "Bela Vista",
-    dividas: [
-      { idDivida: 17, valor: 68.00, dataCompra: "2026-03-01T12:00:00", dataPagamento: null, pedido: "Almoço completo", pago: 0, fkCliente: 5 },
-      { idDivida: 18, valor: 145.00, dataCompra: "2026-03-09T12:00:00", dataPagamento: null, pedido: "Jantar p/ 2", pago: 0, fkCliente: 5 },
-      { idDivida: 19, valor: 52.75, dataCompra: "2026-03-16T12:00:00", dataPagamento: null, pedido: "Sobremesas variadas", pago: 0, fkCliente: 5 },
-      { idDivida: 20, valor: 75.00, dataCompra: "2026-03-23T12:00:00", dataPagamento: null, pedido: "Feijoada + caipirinha", pago: 0, fkCliente: 5 },
-      { idDivida: 21, valor: 70.00, dataCompra: "2026-03-27T12:00:00", dataPagamento: null, pedido: "Marmitex grande x2", pago: 0, fkCliente: 5 },
-    ],
-  },
-  {
-    idCliente: 6,
-    nome: "Lucia Ferreira",
-    telefone: "(11) 94444-1122",
-    cep: "01020-000",
-    logradouro: "Rua XV de Novembro, 55",
-    bairro: "Sé",
-    dividas: [
-      { idDivida: 22, valor: 38.00, dataCompra: "2026-03-04T12:00:00", dataPagamento: null, pedido: "Salada + wrap", pago: 0, fkCliente: 6 },
-      { idDivida: 23, valor: 42.00, dataCompra: "2026-03-11T12:00:00", dataPagamento: "2026-03-13T10:00:00", pedido: "Prato do dia", pago: 1, fkCliente: 6 },
-      { idDivida: 24, valor: 70.00, dataCompra: "2026-03-21T12:00:00", dataPagamento: null, pedido: "Marmitex + sobremesa", pago: 0, fkCliente: 6 },
-    ],
-  },
-];
+import { clientes, dividas } from "../../provider/Api";
 
 export default function Fiado({ irPara }) {
   const [fiados, setFiados] = useState([]);
@@ -120,12 +33,27 @@ export default function Fiado({ irPara }) {
   });
 
   useEffect(() => {
-    // Substituir por chamada à API futuramente
-    const timer = setTimeout(() => {
-      setFiados(CLIENTES_MOCK);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    const carregarClientesComDividas = async () => {
+      setLoading(true);
+      try {
+        const clientesComDividas = await clientes.listarComDividas();
+        const clientesNormalizados = Array.isArray(clientesComDividas)
+          ? clientesComDividas.map((cliente) => ({
+              ...cliente,
+              dividas: Array.isArray(cliente.dividas) ? cliente.dividas : [],
+            }))
+          : [];
+
+        setFiados(clientesNormalizados);
+      } catch (error) {
+        console.error("Erro ao carregar clientes com dívidas:", error);
+        setFiados([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    carregarClientesComDividas();
   }, []);
 
   // Calcula valor em aberto de um cliente
@@ -177,59 +105,61 @@ export default function Fiado({ irPara }) {
     setFiadoSelecionado(null);
   };
 
-  // Marcar uma dívida como paga
-  const pagarDivida = (idCliente, idDivida) => {
-    const agora = new Date().toISOString();
-    setFiados((prev) =>
-      prev.map((c) => {
-        if (c.idCliente !== idCliente) return c;
-        return {
-          ...c,
-          dividas: c.dividas.map((d) =>
-            d.idDivida === idDivida
-              ? { ...d, pago: 1, dataPagamento: agora }
-              : d
-          ),
-        };
-      })
-    );
-    // Atualiza o modal se está aberto
-    setFiadoSelecionado((prev) => {
-      if (!prev || prev.idCliente !== idCliente) return prev;
+  const atualizarDividaNoEstado = (listaClientes, idCliente, idsDividas, dataPagamento) =>
+    listaClientes.map((cliente) => {
+      if (cliente.idCliente !== idCliente) return cliente;
+
       return {
-        ...prev,
-        dividas: prev.dividas.map((d) =>
-          d.idDivida === idDivida
-            ? { ...d, pago: 1, dataPagamento: agora }
-            : d
+        ...cliente,
+        dividas: cliente.dividas.map((divida) =>
+          idsDividas.includes(divida.idDivida)
+            ? { ...divida, pago: true, dataPagamento }
+            : divida
         ),
       };
     });
+
+  // Marca apenas a dívida clicada como paga
+  const pagarDivida = async (idCliente, idDivida) => {
+    try {
+      await dividas.atualizarEstado(idDivida);
+
+      const agora = new Date().toISOString();
+      setFiados((prev) => atualizarDividaNoEstado(prev, idCliente, [idDivida], agora));
+
+      setFiadoSelecionado((prev) => {
+        if (!prev || prev.idCliente !== idCliente) return prev;
+        const atualizado = atualizarDividaNoEstado([prev], idCliente, [idDivida], agora);
+        return atualizado[0];
+      });
+    } catch (error) {
+      console.error("Erro ao pagar dívida:", error);
+    }
   };
 
-  // Marcar todas as dívidas de um cliente como pagas
-  const pagarTodas = (idCliente) => {
-    const agora = new Date().toISOString();
-    setFiados((prev) =>
-      prev.map((c) => {
-        if (c.idCliente !== idCliente) return c;
-        return {
-          ...c,
-          dividas: c.dividas.map((d) =>
-            d.pago ? d : { ...d, pago: 1, dataPagamento: agora }
-          ),
-        };
-      })
-    );
-    setFiadoSelecionado((prev) => {
-      if (!prev || prev.idCliente !== idCliente) return prev;
-      return {
-        ...prev,
-        dividas: prev.dividas.map((d) =>
-          d.pago ? d : { ...d, pago: 1, dataPagamento: agora }
-        ),
-      };
-    });
+  // Marca todas as dívidas em aberto do cliente como pagas
+  const pagarTodas = async (idCliente) => {
+    const cliente = fiados.find((c) => c.idCliente === idCliente);
+    const idsDividasEmAberto = (cliente?.dividas || [])
+      .filter((divida) => !divida.pago)
+      .map((divida) => divida.idDivida);
+
+    if (idsDividasEmAberto.length === 0) return;
+
+    try {
+      await Promise.all(idsDividasEmAberto.map((idDivida) => dividas.atualizarEstado(idDivida)));
+
+      const agora = new Date().toISOString();
+      setFiados((prev) => atualizarDividaNoEstado(prev, idCliente, idsDividasEmAberto, agora));
+
+      setFiadoSelecionado((prev) => {
+        if (!prev || prev.idCliente !== idCliente) return prev;
+        const atualizado = atualizarDividaNoEstado([prev], idCliente, idsDividasEmAberto, agora);
+        return atualizado[0];
+      });
+    } catch (error) {
+      console.error("Erro ao pagar todas as dívidas:", error);
+    }
   };
 
   const handleNovoFiadoChange = (campo, valor) => {
