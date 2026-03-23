@@ -63,6 +63,34 @@ export class boletos {
       throw error;
     }
   };
+
+  static async listarCategorias() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/boletos/categorias",
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar categorias de boletos:", error);
+      throw error;
+    }
+  }
+
+  static async criar(payload) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/boletos",
+        data: payload,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao criar boleto:", error);
+      throw error;
+    }
+  }
+
 }
 
 export class AuthApi {
