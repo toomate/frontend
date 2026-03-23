@@ -42,7 +42,7 @@ export default function CadastroBoleto() {
         </div>
 
         <div className="actions">
-          <button className="btn btn-cancelar" onClick={() => navigate("/dashboard")}>
+          <button className="btn btn-cancelar" onClick={() => navigate(-1)}>
             Cancelar
           </button>
 
@@ -101,7 +101,7 @@ export default function CadastroBoleto() {
 
             <button
               className="btn"
-              onClick={() => setAbrirModalSucesso(false)}
+              onClick={() => navigate(-1)}
             >
               OK
             </button>

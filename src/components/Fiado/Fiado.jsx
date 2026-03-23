@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Filter,
   Plus,
@@ -14,23 +15,13 @@ import HeaderPadrao from '../../HeaderPadrao';
 import { clientes, dividas } from "../../provider/Api";
 
 export default function Fiado({ irPara }) {
+  const navigate = useNavigate();
   const [fiados, setFiados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
   const [ordenacao, setOrdenacao] = useState(null);
   const [visualizacao, setVisualizacao] = useState("cards");
   const [fiadoSelecionado, setFiadoSelecionado] = useState(null);
-  const [modalNovo, setModalNovo] = useState(false);
-
-  const [novoFiado, setNovoFiado] = useState({
-    nome: "",
-    telefone: "",
-    cep: "",
-    logradouro: "",
-    bairro: "",
-    pedido: "",
-    valor: "",
-  });
 
   useEffect(() => {
     const carregarClientesComDividas = async () => {
@@ -162,48 +153,6 @@ export default function Fiado({ irPara }) {
     }
   };
 
-  const handleNovoFiadoChange = (campo, valor) => {
-    setNovoFiado((prev) => ({ ...prev, [campo]: valor }));
-  };
-
-  const salvarNovoFiado = () => {
-    if (!novoFiado.nome.trim()) return;
-
-    const novoCliente = {
-      idCliente: Date.now(),
-      nome: novoFiado.nome,
-      telefone: novoFiado.telefone,
-      cep: novoFiado.cep,
-      logradouro: novoFiado.logradouro,
-      bairro: novoFiado.bairro,
-      dividas: novoFiado.pedido
-        ? [
-            {
-              idDivida: Date.now() + 1,
-              valor: Number(novoFiado.valor) || 0,
-              dataCompra: new Date().toISOString(),
-              dataPagamento: null,
-              pedido: novoFiado.pedido,
-              pago: 0,
-              fkCliente: Date.now(),
-            },
-          ]
-        : [],
-    };
-
-    setFiados((prev) => [...prev, novoCliente]);
-    setNovoFiado({
-      nome: "",
-      telefone: "",
-      cep: "",
-      logradouro: "",
-      bairro: "",
-      pedido: "",
-      valor: "",
-    });
-    setModalNovo(false);
-  };
-
   const formatarData = (dataStr) => {
     if (!dataStr) return "—";
     const d = new Date(dataStr);
@@ -241,7 +190,7 @@ export default function Fiado({ irPara }) {
           <Filter size={18} />
         </button>
 
-        <button className="add-btn" onClick={() => setModalNovo(true)}>
+        <button className="add-btn" onClick={() => navigate("/cadastro-fiado")}>
           <Plus size={20} color="#fff" />
         </button>
 
@@ -337,118 +286,6 @@ export default function Fiado({ irPara }) {
           onPagarDivida={pagarDivida}
           onPagarTodas={pagarTodas}
         />
-      )}
-
-      {/* Modal de novo fiado */}
-      {modalNovo && (
-        <div className="fiado-modal-overlay" onClick={() => setModalNovo(false)}>
-          <div
-            className="novo-fiado-modal"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <h2>Novo Fiado</h2>
-            <div className="novo-fiado-form">
-              <label>
-                Nome do cliente
-                <input
-                  type="text"
-                  value={novoFiado.nome}
-                  onChange={(e) => handleNovoFiadoChange("nome", e.target.value)}
-                  placeholder="Ex: João da Silva"
-                />
-              </label>
-
-              <div className="novo-fiado-form-row">
-                <label>
-                  Telefone
-                  <input
-                    type="text"
-                    value={novoFiado.telefone}
-                    onChange={(e) =>
-                      handleNovoFiadoChange("telefone", e.target.value)
-                    }
-                    placeholder="(11) 99999-0000"
-                  />
-                </label>
-                <label>
-                  CEP
-                  <input
-                    type="text"
-                    value={novoFiado.cep}
-                    onChange={(e) =>
-                      handleNovoFiadoChange("cep", e.target.value)
-                    }
-                    placeholder="00000-000"
-                  />
-                </label>
-              </div>
-
-              <div className="novo-fiado-form-row">
-                <label>
-                  Logradouro
-                  <input
-                    type="text"
-                    value={novoFiado.logradouro}
-                    onChange={(e) =>
-                      handleNovoFiadoChange("logradouro", e.target.value)
-                    }
-                    placeholder="Rua exemplo, 123"
-                  />
-                </label>
-                <label>
-                  Bairro
-                  <input
-                    type="text"
-                    value={novoFiado.bairro}
-                    onChange={(e) =>
-                      handleNovoFiadoChange("bairro", e.target.value)
-                    }
-                    placeholder="Centro"
-                  />
-                </label>
-              </div>
-
-              <div className="novo-fiado-form-row">
-                <label>
-                  Descrição do pedido
-                  <input
-                    type="text"
-                    value={novoFiado.pedido}
-                    onChange={(e) =>
-                      handleNovoFiadoChange("pedido", e.target.value)
-                    }
-                    placeholder="Ex: Almoço executivo"
-                  />
-                </label>
-                <label>
-                  Valor (R$)
-                  <input
-                    type="number"
-                    value={novoFiado.valor}
-                    onChange={(e) =>
-                      handleNovoFiadoChange("valor", e.target.value)
-                    }
-                    placeholder="0.00"
-                    min="0"
-                    step="0.01"
-                  />
-                </label>
-              </div>
-
-              <div className="novo-fiado-actions">
-                <button
-                  className="btn-cancelar"
-                  onClick={() => setModalNovo(false)}
-                >
-                  Cancelar
-                </button>
-                <button className="btn-salvar" onClick={salvarNovoFiado}>
-                  Salvar
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );

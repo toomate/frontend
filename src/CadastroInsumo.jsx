@@ -189,7 +189,7 @@ export default function CadastroInsumo() {
           )}
 
           <div className="actions">
-            <button type="button" className="btn btn-cancelar" onClick={() => navigate("/dashboard")}>
+            <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
               Cancelar
             </button>
 
@@ -275,7 +275,7 @@ export default function CadastroInsumo() {
 
             <button
               className="btn"
-              onClick={() => setAbrirModalSucesso(false)}
+              onClick={() => navigate(-1)}
             >
               OK
             </button>

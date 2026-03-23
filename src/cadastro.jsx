@@ -211,7 +211,7 @@ export default function Cadastro() {
             </span>
             <button
               className="btn"
-              onClick={() => navigate("/admin?aba=usuarios")}
+              onClick={() => navigate(-1)}
             >
               OK
             </button>
