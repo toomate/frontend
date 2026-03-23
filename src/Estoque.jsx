@@ -128,7 +128,7 @@ export function Estoque() {
         return (
             <div className="plus-container">
                 <div className="plus-icon-container">
-                    <div className="plus-icon"><Plus color="#F8ECC6" /></div>
+                    <div className="plus-icon"><Plus color="#F8ECC6" onClick={()=>{navigate("/cadastro-insumo")}}/></div>
                 </div>
             </div>
         )
