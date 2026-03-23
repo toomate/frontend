@@ -4,8 +4,12 @@ export default function LinhaTabela(props) {
     console.log(props)    
     return (
         <>
-            {props && (props.elementos.map((atual) =>
-                <div className="tabela-insumo-container" id={atual.status === "Vencido" ? "vencido" : ""}>
+            {props && (props.elementos.map((atual, index) =>
+                <div
+                    key={`${atual.insumo}-${atual.marca}-${atual.dtVencimento}-${index}`}
+                    className="tabela-insumo-container"
+                    id={atual.status === "Vencido" ? "vencido" : ""}
+                >
                         <div className="linha-tabela linha-estoque">
                             {atual.insumo}
                         </div>

@@ -1,10 +1,41 @@
+import { useEffect, useState } from "react";
 import { Cabecalho } from "./components/Cabecalho/Cabecalho";
 import Kpi from "./components/Kpi/Kpi";
 import LinhaTabela from "./components/LinhaTabela/LinhaTabela";
 import HeaderPadrao from "./HeaderPadrao";
+import { Lote } from "./provider/Api";
 import "./Vencimento.css"
 
 export default function Vencimento() {
+
+    const listaInsumos = Lote.listarLotes();
+    const [insumos, setInsumos] = useState([]);
+
+    async function carregarInsumos() {
+        try {
+            const lotesData = await Lote.listarLotes();
+            setInsumos(lotesData);
+            var insumos = []
+            lotesData.map((lote) => {
+                var insumo = {
+                    insumo: lote.marca.insumo.nome,
+                    marca: lote.marca.nome,
+                    estoque: lote.quantidadeMedida,
+                    dtVencimento: lote.dataValidade,
+                    diasRestantes: (Math.ceil((new Date(lote.dataValidade) - new Date()) / (1000 * 60 * 60 * 24)).toLocaleString()) < 1 ? 0 : Math.ceil((new Date(lote.dataValidade) - new Date()) / (1000 * 60 * 60 * 24)).toLocaleString(),
+                    status: lote.dataValidade < new Date() ? "Vencido" : new Date(lote.dataValidade) - new Date() <= 7 * 24 * 60 * 60 * 1000 ? "Vence Logo" : "Dentro do Prazo"
+                }
+                insumos.push(insumo);
+            });
+            setInsumos(insumos);
+        } catch (error) {
+            console.error("Erro ao carregar insumos:", error);
+        }
+    }
+
+    useEffect(() => {
+        carregarInsumos();
+    }, []);
 
     const cards = [{
         nome: "Insumos Vencidos",
@@ -17,24 +48,6 @@ export default function Vencimento() {
     {
         nome: "Próximos 7 Dias",
         valor: 1
-    }
-    ]
-
-    const insumos = [{
-        insumo: "Arroz Tipo 1",
-        marca: "Camil",
-        estoque: 4,
-        dtVencimento: "28/02/2026",
-        diasRestantes: 0,
-        status: "Vencido"
-    },
-    {
-        insumo: "Feijão Carioca",
-        marca: "Camil",
-        estoque: 8,
-        dtVencimento: "20/03/2026",
-        diasRestantes: 3,
-        status: "Vence Logo"
     }
     ]
 
