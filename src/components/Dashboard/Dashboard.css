@@ -1,19 +1,23 @@
 .dashboard {
   font-family: "Arial", sans-serif;
-  height: 100%;
+  height: 100dvh;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: white;
   color: black;
   margin: 0 auto;
+  overflow: hidden;
 }
 
-.menu {
+.dashboard .menu {
   display: flex;
   justify-content: space-between;
   padding: 20px 10px;
+  flex-shrink: 0;
 }
 
-.menu button {
+.dashboard .menu button {
   flex: 1;
   text-align: center;
   margin: 0 10px;
@@ -28,7 +32,7 @@
   transition: 0.3s;
 }
 
-.btn {
+.dashboard .btn {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -40,20 +44,21 @@
   padding: 10px;
 }
 
-.menu button:hover,
-.btn:hover {
+.dashboard .menu button:hover,
+.dashboard .btn:hover {
   border: 1.5px solid blue;
   opacity: 0.9;
 }
 
-.container2 {
+.dashboard .container2 {
   display: flex;
-  margin-top: 10px;
-  gap: 20px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
   padding: 5px 20px;
 }
 
-.grafico {
+.dashboard .grafico {
   flex: 3;
   background-color: white;
   border-radius: 5px;
@@ -62,11 +67,14 @@
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  min-height: 200px;
-  max-height: 350px;
+  min-height: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
 }
 
-.notificacao {
+.dashboard .notificacao {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,11 +83,12 @@
   border-radius: 5px;
   padding: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.40);
-  min-height: 200px;
-  max-height: 350px;
+  min-height: 0;
+  height: 100%;
+  overflow-y: auto;
 }
 
-.alerta-titulo {
+.dashboard .alerta-titulo {
   text-align: center;
   font-size: 22px;
   font-weight: bold;
@@ -88,7 +97,7 @@
   margin-bottom: 15px;
 }
 
-.alerta-btn {
+.dashboard .alerta-btn {
   display: flex;
   align-items: center;
   gap: 20px;
@@ -102,13 +111,16 @@
   background-color: white;
   color: black;
   margin-bottom: 12px;
+  word-wrap: break-word;
+  overflow: hidden;
 }
 
-.validade,
-.estoque,
-.fornecedor,
-.boleto {
-  background-color: #ffeaea;
+.dashboard .alerta-btn.validade,
+.dashboard .alerta-btn.estoque,
+.dashboard .alerta-btn.fornecedor,
+.dashboard .alerta-btn.boleto {
+  background-color: #c92c2c;
+  color: white;
 }
 
 .validade-icone,
@@ -136,4 +148,8 @@
 
 .boleto-icone {
   background-image: url(./images/boleto.png);
+}
+
+.alerta-btn{
+  background-color: #c92c2c;
 }

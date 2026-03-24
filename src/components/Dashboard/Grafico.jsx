@@ -16,7 +16,8 @@ export default function Grafico({dados}) {
     options: {
       chart: {
         type: "bar",
-        height: 350
+        height: "100%",
+        width: "100%"
       },
       plotOptions: {
         bar: {
@@ -39,12 +40,13 @@ export default function Grafico({dados}) {
   });
 
   return (
-    <div id="chart">
+    <div id="chart" style={{ width: "100%", height: "100%" }}>
       <ReactApexChart
         options={state.options}
         series={[{ name: "Estoque", data: dados }]}
         type="bar"
-        height={350}
+        width="100%"
+        height="100%"
       />
     </div>
   );
