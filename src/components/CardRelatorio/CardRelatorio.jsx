@@ -13,9 +13,9 @@ export function CardRelatorio({ props = [], fechar, salvarAlteracoes, abrirCardR
             <div className="produtos">
                 {props && props.length > 0 ? (props.map(atual => <React.Fragment key={atual.id}>
                     <div className="produto-linha">
-                        <div className="produto">{atual.produto}</div><div className="info-linha">{atual.quantidadeMedida > 0
-                            ? `Adicionar ${atual.quantidadeMedida}${atual.unidadeMedida}`
-                            : `Remoção ${Math.abs(atual.quantidadeMedida)}${atual.unidadeMedida}`}</div>
+                        <div className="produto">{atual.produto}</div><div className="info-linha">{atual.diferenca > 0
+                            ? `Adicionar ${atual.diferenca}`
+                            : `Remoção ${Math.abs(atual.diferenca)}`}</div>
                         <div className="icone-linha"><X id={atual.id} onClick={() => abrirCardRemocao(atual.id)} className="icone-clicavel" />
                         </div></div>
                 </React.Fragment>)) :

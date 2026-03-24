@@ -291,7 +291,7 @@ export class Lote {
       const response = await requestComFallback({
         method: "patch",
         url: "/lotes",
-        data: mudancas,
+        data: mudancas
       });
       return response.data;
     } catch (error) {

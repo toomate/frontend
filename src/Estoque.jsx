@@ -78,6 +78,7 @@ export function Estoque() {
             await Lote.atualizarQuantidade(mudancas)
             await Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res))
             setExibirRelatorio(false)
+            setMudancas([])
         } catch (error) {
             console.error("Erro ao salvar alterações:", error)
             throw error;
@@ -94,17 +95,17 @@ export function Estoque() {
         let novaQtd = null;
         let nomeProduto = null;
         let idInsumo = null;
-        let qtdFinal = null;
+        let diferenca = null;
         const novoGrupo = grupo.map(item => {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
-                    novaQtd = operacao === 'somar' 
-                    ? atual.quantidadeMedida + 1 
-                    : atual.quantidadeMedida - 1
+                    novaQtd = operacao === 'somar'
+                        ? atual.quantidadeMedida + 1
+                        : atual.quantidadeMedida - 1
 
                     if (novaQtd < 0) novaQtd = 0;
 
-                    qtdFinal = novaQtd - atual.quantidadeMedida
+                    diferenca = novaQtd - atual.quantidadeMedida 
                     nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
 
@@ -126,7 +127,9 @@ export function Estoque() {
             if (existente) {
                 return prev.map(m =>
                     m.id === idLote
-                        ? { ...m, quantidadeMedida: m.quantidadeMedida + qtdFinal }
+                        ? { ...m, quantidadeMedida: novaQtd,
+                            diferenca: m.diferenca + diferenca
+                        }
                         : m
                 )
             }
@@ -137,7 +140,8 @@ export function Estoque() {
                     id: idLote,
                     insumoId: idInsumo,
                     produto: nomeProduto,
-                    quantidadeMedida: qtdFinal
+                    quantidadeMedida: novaQtd,
+                    diferenca: diferenca
                 }
             ]
         })

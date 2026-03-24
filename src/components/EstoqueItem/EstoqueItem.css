@@ -13,6 +13,10 @@
     justify-content: space-evenly;
 }
 
+#active {
+    background-color: black;
+}
+
 .item-nome {
     display: flex;
     align-items: center;

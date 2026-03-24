@@ -1,7 +1,6 @@
 import "./LinhaTabela.css"
 
 export default function LinhaTabela(props) {
-    console.log(props)    
     return (
         <>
 <<<<<<< HEAD

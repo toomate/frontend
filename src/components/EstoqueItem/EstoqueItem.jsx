@@ -5,7 +5,7 @@ import React from "react";
 export function EstoqueItem(props) {
     return (
         <>{props.elementos.map((atual) => <React.Fragment key={atual.idInsumo}>
-            <div className="linha-estoque item-container">
+            <div className="linha-estoque item-container" id={atual.quantidadeMedida < 3 ? "vencido" : ""}>
                 <div className="insumo-grupo">
                     <div className="icone"></div>
                     <div className="item-nome">{atual.nomeMarca}</div>
