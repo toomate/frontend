@@ -10,6 +10,46 @@ export default function Vencimento() {
 
     const listaInsumos = Lote.listarLotes();
     const [insumos, setInsumos] = useState([]);
+    const [insumosVencidos, setInsumosVencidos] = useState(0);
+    const [insumosVencemHoje, setInsumosVencemHoje] = useState(0);
+    const [insumosVencem7Dias, setInsumosVencem7Dias] = useState(0);
+
+    function calcularStatus(dataValidade) {
+        const hoje = new Date();
+        const dataVencimento = new Date(dataValidade);
+        const diasRestantes = Math.ceil((dataVencimento - hoje) / (1000 * 60 * 60 * 24));
+        if (diasRestantes < 0) {
+            return "Vencido";
+        } 
+        else if (diasRestantes === 0) {
+            return "Vence Hoje";
+        }
+        else if (diasRestantes <= 7) {
+            return "Vence em 7 Dias";
+        } else {
+            return "Dentro do Prazo";
+        }
+    }
+
+    function calcularKpis(insumos) {
+        let vencidos = 0;
+        let vencemHoje = 0;
+        let vencem7Dias = 0;
+
+        insumos.forEach((insumo) => {
+            if (insumo.status === "Vencido") {
+                vencidos++;
+            } else if (insumo.status === "Vence Hoje") {
+                vencemHoje++;
+            } else if (insumo.status === "Vence em 7 Dias") {
+                vencem7Dias++;
+            }
+        });
+
+        setInsumosVencidos(vencidos);
+        setInsumosVencemHoje(vencemHoje);
+        setInsumosVencem7Dias(vencem7Dias);
+    }
 
     async function carregarInsumos() {
         try {
@@ -23,7 +63,7 @@ export default function Vencimento() {
                     estoque: lote.quantidadeMedida,
                     dtVencimento: lote.dataValidade,
                     diasRestantes: (Math.ceil((new Date(lote.dataValidade) - new Date()) / (1000 * 60 * 60 * 24)).toLocaleString()) < 1 ? 0 : Math.ceil((new Date(lote.dataValidade) - new Date()) / (1000 * 60 * 60 * 24)).toLocaleString(),
-                    status: lote.dataValidade < new Date() ? "Vencido" : new Date(lote.dataValidade) - new Date() <= 7 * 24 * 60 * 60 * 1000 ? "Vence Logo" : "Dentro do Prazo"
+                    status: calcularStatus(lote.dataValidade)
                 }
                 insumos.push(insumo);
             });
@@ -37,17 +77,21 @@ export default function Vencimento() {
         carregarInsumos();
     }, []);
 
+    useEffect(() => {
+        calcularKpis(insumos);
+    }, [insumos]);
+
     const cards = [{
         nome: "Insumos Vencidos",
-        valor: 1
+        valor: insumosVencidos
     },
     {
         nome: "Vencem Hoje",
-        valor: 1
+        valor: insumosVencemHoje
     },
     {
         nome: "Próximos 7 Dias",
-        valor: 1
+        valor: insumosVencem7Dias
     }
     ]
 
