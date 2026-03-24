@@ -30,9 +30,9 @@ export default function Fiado({ irPara }) {
         const clientesComDividas = await clientes.listarComDividas();
         const clientesNormalizados = Array.isArray(clientesComDividas)
           ? clientesComDividas.map((cliente) => ({
-              ...cliente,
-              dividas: Array.isArray(cliente.dividas) ? cliente.dividas : [],
-            }))
+            ...cliente,
+            dividas: Array.isArray(cliente.dividas) ? cliente.dividas : [],
+          }))
           : [];
 
         setFiados(clientesNormalizados);
@@ -199,26 +199,28 @@ export default function Fiado({ irPara }) {
             className={`view-toggle-btn ${visualizacao === "cards" ? "active" : ""}`}
             onClick={() => setVisualizacao("cards")}
             title="Visualização em cards"
-          > 
+          >
+            <LayoutGrid size={18} className="fiado-grid-icon" />
           </button>
           <button
             className={`view-toggle-btn ${visualizacao === "lista" ? "active" : ""}`}
             onClick={() => setVisualizacao("lista")}
             title="Visualização em lista"
-          >  
+          >
+            <List size={18} className="fiado-list-icon" />
           </button>
         </div>
 
         <div className="fiado-search-wrapper">
-          <div className="fiado-search-box">
+          <div className="fiado-search-box fiado-search-input">
             <input
-              className="fiado-search-input"
+              className="fiado-search-field"
               type="text"
               placeholder="Pesquisar..."
               value={pesquisa}
               onChange={(e) => setPesquisa(e.target.value)}
             />
-            <Search size={18} className="fiado-search-icon" />
+                        <Search size={18} className="fiado-search-icon" />
           </div>
         </div>
       </div>

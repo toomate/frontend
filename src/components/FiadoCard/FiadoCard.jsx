@@ -16,22 +16,25 @@ export function FiadoCard({ fiado, onAbrir }) {
       </div>
 
       <div className="fiado-card-info">
-        <div className="info-group">
+        <div className="info-group info-group-valor-total">
           <span className="label">Valor Total:</span>
           <span className="valor-bar">
             R$ {totalAberto.toFixed(2)}
           </span>
         </div>
-        <div className="info-group">
-          <span className="label">Telefone:</span>
-          <span className="valor-bar">{fiado.telefone}</span>
+        <div className="info-group info-group-status">
+          <span className="label">Status:</span>
+          <span className={`status-badge ${todasPagas ? "pago" : "aberto"}`}>
+            {todasPagas ? "Pago" : "Em aberto"}
+          </span>
         </div>
       </div>
 
       <div className="fiado-card-pedidos">
-        <span className={`status-badge ${todasPagas ? "pago" : "aberto"}`}>
-          {todasPagas ? "Pago" : "Em aberto"}
-        </span>
+        <div className="fiado-card-telefone">
+          <span className="label">Telefone:</span>
+          <span className="valor-bar telefone-bar">{fiado.telefone}</span>
+        </div>
         <button className="fiado-card-abrir-btn" onClick={() => onAbrir(fiado)}>
           Abrir
         </button>

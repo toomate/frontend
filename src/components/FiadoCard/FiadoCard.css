@@ -1,27 +1,27 @@
 .fiado-card {
-  background: #f8ecc6;
-  border: 0.0625em solid #6b4423;
-  border-radius: 1.2em;
-  padding: 1.25em 1.5em;
+  background: #fff;
+  border-radius: 0.8em;
+  padding: 1em 1.2em;
   display: flex;
   flex-direction: column;
-  gap: 0.75em;
+  gap: 0.6em;
   min-height: 0;
   position: relative;
   box-sizing: border-box;
+  box-shadow: #6b4423 0px 4px 10px;
 }
 
 /* Linha do nome */
 .fiado-card-nome {
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.2em;
   min-width: 0;
 }
 
 .fiado-card-nome .label {
   font-weight: 600;
-  font-size: clamp(0.8rem, 1.1vw, 1.1rem);
+  font-size: clamp(0.9rem, 1.2vw, 1.2rem);
   color: #6b4423;
   white-space: nowrap;
   flex-shrink: 0;
@@ -30,14 +30,13 @@
 .fiado-card-nome .valor-bar {
   flex: 1;
   min-width: 0;
-  height: 2em;
-  background: #6b4423;
+  height: 2.2em;
   border-radius: 0.375em;
   display: flex;
   align-items: center;
-  padding: 0 0.75em;
-  color: #fff;
-  font-size: clamp(0.7rem, 1vw, 1rem);
+  padding: 0 0.6em;
+  color: #000;
+  font-size: clamp(0.82rem, 1.05vw, 1.08rem);
   font-weight: 400;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -48,7 +47,7 @@
 .fiado-card-info {
   display: flex;
   align-items: center;
-  gap: 0.75em;
+  gap: 0.6em;
   flex-wrap: wrap;
   min-width: 0;
 }
@@ -56,28 +55,82 @@
 .fiado-card-info .info-group {
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.2em;
   flex: 1;
   min-width: 0;
+  overflow: hidden;
+}
+
+.fiado-card-info .info-group-valor-total {
+  flex: 1.35;
+}
+
+.fiado-card-info .info-group-valor-total .valor-bar {
+  min-width: 8.5em;
 }
 
 .fiado-card-info .label {
   font-weight: 600;
-  font-size: clamp(0.75rem, 1vw, 1rem);
+  font-size: clamp(0.85rem, 1.1vw, 1.08rem);
   color: #6b4423;
   white-space: nowrap;
   flex-shrink: 0;
 }
 
 .fiado-card-info .valor-bar {
-  height: 2em;
-  background: #6b4423;
+  height: 2.2em;
   border-radius: 0.375em;
   display: flex;
   align-items: center;
-  padding: 0 0.75em;
-  color: #fff;
-  font-size: clamp(0.7rem, 1vw, 1rem);
+  padding: 0 0.6em;
+  color: #000;
+  font-size: clamp(0.82rem, 1.05vw, 1.08rem);
+  font-weight: 400;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.fiado-card-info .info-group-status {
+  justify-content: flex-start;
+  flex: 0 0 auto;
+}
+
+/* Linha Pedidos + Botão abrir */
+.fiado-card-pedidos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.3em;
+  margin-top: auto;
+  min-width: 0;
+}
+
+.fiado-card-pedidos .label {
+  font-weight: 600;
+  font-size: clamp(0.85rem, 1.1vw, 1.1rem);
+  color: #6b4423;
+}
+
+.fiado-card-telefone {
+  display: flex;
+  align-items: center;
+  gap: 0.2em;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.fiado-card-telefone .valor-bar {
+  height: 2.2em;
+  border-radius: 0.375em;
+  display: flex;
+  align-items: center;
+  padding: 0 0.6em;
+  color: #000;
+  font-size: clamp(0.82rem, 1.05vw, 1.08rem);
   font-weight: 400;
   flex: 1;
   min-width: 0;
@@ -86,39 +139,25 @@
   white-space: nowrap;
 }
 
-/* Linha Pedidos + Botão abrir */
-.fiado-card-pedidos {
-  display: flex;
-  align-items: center;
-  gap: 0.5em;
-  margin-top: auto;
-  flex-wrap: wrap;
-  min-width: 0;
-}
-
-.fiado-card-pedidos .label {
-  font-weight: 600;
-  font-size: clamp(0.8rem, 1.1vw, 1.1rem);
-  color: #6b4423;
+.fiado-card-telefone .telefone-bar {
+  width: 100%;
 }
 
 .fiado-card-abrir-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 0.3em 1.25em;
+  padding: 0.25em 1em;
   background: #f8ecc6;
   border: 0.0625em solid #6b4423;
-  border-radius: 999em;
   font-family: 'Arial', sans-serif;
   font-weight: 600;
-  font-size: clamp(0.75rem, 1vw, 1rem);
+  font-size: clamp(0.85rem, 1.05vw, 1.08rem);
   color: #6b4423;
   cursor: pointer;
   transition: all 0.2s;
   white-space: nowrap;
   flex-shrink: 0;
-  margin-left: auto;
 }
 
 .fiado-card-abrir-btn:hover {
@@ -130,7 +169,7 @@
   border: black 1px sol;
   display: flex;
   align-items: center;
-  gap: 0.5em;
+  gap: 0.3em;
 }
 
 .fiado-card-status .label {
@@ -141,9 +180,9 @@
 
 .fiado-card .status-badge {
   display: inline-block;
-  padding: 0.25em 0.75em;
+  padding: 0.2em 0.65em;
   border-radius: 999em;
-  font-size: clamp(0.65rem, 0.9vw, 0.9rem);
+  font-size: clamp(0.75rem, 1vw, 1rem);
   font-weight: 600;
   white-space: nowrap;
   flex-shrink: 0;
@@ -164,7 +203,7 @@
 /* Responsivo */
 @media (max-width: 48em) {
   .fiado-card {
-    padding: 1em 1.25em;
+    padding: 0.85em 1em;
     border-radius: 1em;
     height: fit-content;
   }
@@ -172,7 +211,7 @@
   .fiado-card-info {
     flex-direction: column;
     align-items: stretch;
-    gap: 0.5em;
+    gap: 0.3em;
   }
 
   .fiado-card-info .info-group {
@@ -180,12 +219,16 @@
   }
 
   .fiado-card-pedidos {
-    flex-wrap: wrap;
-    gap: 0.5em;
+    grid-template-columns: 1fr;
+    gap: 0.3em;
   }
 
   .fiado-card-abrir-btn {
-    padding: 0.3em 1em;
+    justify-self: end;
+  }
+
+  .fiado-card-abrir-btn {
+    padding: 0. 1em;
     font-size: clamp(0.7rem, 3vw, 0.9rem);
   }
 }

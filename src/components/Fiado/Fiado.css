@@ -26,17 +26,20 @@
   background: #ffffff;
   box-sizing: border-box;
   flex-wrap: wrap;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.fiado-filtros {
+  --fiado-control-height: 2.65em;
 }
 
 .filtro-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.5em;
-  height: 2.25em;
+  height: var(--fiado-control-height);
   padding: 0 0.875em;
   background: #f8ecc6;
-  border-radius: 999em;
   border: 0.0625em solid #6b4423;
   cursor: pointer;
   font-family: 'Arial', sans-serif;
@@ -60,10 +63,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.25em;
+  height: var(--fiado-control-height);
   padding: 0 0.875em;
   background: #6b4423;
-  border-radius: 999em;
+  border-radius: 12px;
   border: 0.0625em solid #6b4423;
   cursor: pointer;
   transition: background 0.2s;
@@ -85,8 +88,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.25em;
-  height: 2.25em;
+  width: var(--fiado-control-height);
+  height: var(--fiado-control-height);
   border: 0.0625em solid transparent;
   border-radius: 0.4em;
   cursor: pointer;
@@ -115,45 +118,89 @@
 
 /* ===== Search ===== */
 .fiado-search-wrapper {
-  flex: 1;
-  max-width: 35%;
-  min-width: 12em;
+  flex: 0 1 16em;
+  max-width: 20em;
+  min-width: 13em;
+  height: calc(var(--fiado-control-height) - 0.4em);
+  margin-left: 0.25em;
+  padding: 0;
+  display: flex;
+  align-items: stretch;
 }
 
 .fiado-search-box {
   position: relative;
   width: 100%;
+  height: 100%;
+  min-height: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
 }
 
 .fiado-search-input {
   width: 100%;
-  height: 2.625em;
-  padding: 0 12% 0 4%;
+  height: 100%;
+  padding: 0 0.75em;
   background: #fffdf4;
   border-radius: 0.375em;
   border: 0.0625em solid #6b4423;
-  font-family: 'Arial', sans-serif;
-  font-size: clamp(0.75rem, 1.1vw, 1rem);
-  color: #000;
   box-sizing: border-box;
+  display: flex;
+  align-items: center;
 }
 
-.fiado-search-input::placeholder {
+.fiado-search-field {
+  width: 100%;
+  height: 100%;
+  padding: 0 2.2em 0 0;
+  margin: 0;
+  display: block;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: 'Arial', sans-serif;
+  font-size: clamp(0.75rem, 1.1vw, 1rem);
+  line-height: 1.2;
+  color: #000;
+}
+
+.fiado-page .fiado-filtros .fiado-search-box {
+  height: 100%;
+  min-height: 100%;
+}
+
+.fiado-page .fiado-filtros .fiado-search-input {
+  height: 100%;
+  min-height: 100%;
+}
+
+.fiado-page .fiado-filtros .fiado-search-field {
+  height: 100%;
+  margin: 0;
+  border: none;
+  background: transparent;
+}
+
+.fiado-search-field::placeholder {
   color: #999;
 }
 
-.fiado-search-input:focus {
-  outline: none;
+.fiado-search-input:focus-within {
   box-shadow: 0 0 0 0.15em rgba(107, 68, 35, 0.25);
 }
 
 .fiado-search-icon {
   position: absolute;
-  right: 3%;
+  right: 0.75em;
   top: 50%;
   transform: translateY(-50%);
   color: #6b4423;
   pointer-events: none;
+  z-index: 2;
+  width: 1.05em;
+  height: 1.05em;
+  line-height: 1;
 }
 
 /* ===== Card Grid ===== */
