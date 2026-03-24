@@ -8,6 +8,10 @@ import { limparSessaoAutenticacao } from "./utils/sessao";
 export default function HeaderPadrao() {
   const navigate = useNavigate();
   const location = useLocation();
+  const nomeUsuarioLogado =
+    localStorage.getItem("usuarioNomeCompleto") ||
+    localStorage.getItem("usuarioNome") ||
+    "Usuario";
 
   const estaNaDashboard = location.pathname === "/dashboard";
 
@@ -33,7 +37,7 @@ export default function HeaderPadrao() {
 
         <div className="restaurante">
           <div className="restaurante-name">Toomate Bistrô</div>
-          <div className="restaurante-subnome">Kaio</div>
+          <div className="restaurante-subnome">{nomeUsuarioLogado}</div>
         </div>
       </div>
 

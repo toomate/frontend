@@ -30,9 +30,9 @@
   width: 40px;
   height: 40px;
   min-width: 40px;
-  border: 1.5px solid #d9bf80 !important;
-  border-radius: 8px;
-  background: #fff8e7 !important;
+  border: none !important;
+  border-radius: 0;
+  background: transparent !important;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -41,8 +41,8 @@
 
 .header-hamburguer-btn:hover,
 .header-hamburguer-btn:focus-visible {
-  border-color: #b88b09 !important;
-  background: #fff1cf !important;
+  border: none !important;
+  background: transparent !important;
 }
 
 .header-hamburguer-btn svg {
