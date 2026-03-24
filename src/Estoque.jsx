@@ -24,7 +24,6 @@ export function Estoque() {
     const [cardRemocao, setCardRemocao] = useState(false);
     const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
-    const [idCriado, setIdCriado] = useState("")
     const [titulo, setTitulo] = useState("")
 
     const navigate = useNavigate();
