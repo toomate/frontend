@@ -12,6 +12,7 @@ import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 import HeaderPadrao from "./HeaderPadrao";
 import { CardRotina } from "./components/CardRotina/CardRotina";
 import { useNavigate } from "react-router-dom";
+import { Rotinas } from "./provider/Api";
 
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
@@ -23,6 +24,9 @@ export function Estoque() {
     const [cardRemocao, setCardRemocao] = useState(false);
     const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
+    const [idCriado, setIdCriado] = useState("")
+    const [titulo, setTitulo] = useState("")
+
     const navigate = useNavigate();
 
     const pesquisar = (valor) => {
@@ -41,6 +45,33 @@ export function Estoque() {
         setCardRemocao(true)
         setIdSelecionado(id)
     }
+
+    const abrirCardRotina = () => {
+        if (mudancas.length <= 0) {
+            alert("nenhuma mudança")
+            return
+        }
+
+        setCardRotina(true)
+    }
+
+    const criarRotina = async (titulo) => {
+        try {
+            const res = await Rotinas.criar(titulo)
+            const id = res.id;
+            const insumosRotina = mudancas.map(atual => ({
+                insumoId: atual.insumoId,
+                quantidadeMedida: atual.quantidadeMedida
+            }))
+            await Rotinas.associarInsumos(id, insumosRotina)
+            setCardRotina(false)
+            setExibirRelatorio(false)
+        } catch (err) {
+            console.error(err)
+            throw error;
+        }
+    }
+
 
     const salvarAlteracoes = async () => {
         try {
@@ -62,13 +93,20 @@ export function Estoque() {
     const alterarQuantidade = (idLote, operacao) => {
         let novaQtd = null;
         let nomeProduto = null;
-
+        let idInsumo = null;
+        let qtdFinal = null;
         const novoGrupo = grupo.map(item => {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
-                    novaQtd = operacao === 'somar' ? atual.quantidadeMedida + 1 : atual.quantidadeMedida - 1
-                    if(novaQtd < 0) novaQtd = 0;
+                    novaQtd = operacao === 'somar' 
+                    ? atual.quantidadeMedida + 1 
+                    : atual.quantidadeMedida - 1
+
+                    if (novaQtd < 0) novaQtd = 0;
+
+                    qtdFinal = novaQtd - atual.quantidadeMedida
                     nomeProduto = atual.nomeMarca
+                    idInsumo = atual.idInsumo
 
                     return {
                         ...atual,
@@ -78,16 +116,17 @@ export function Estoque() {
                 }
                 return atual
             })
+
             return { ...item, itens: itensAtualizados }
         })
         setGrupo(novoGrupo)
-
         setMudancas(prev => {
             const existente = prev.find(m => m.id === idLote)
+
             if (existente) {
                 return prev.map(m =>
                     m.id === idLote
-                        ? { ...m, quantidadeMedida: novaQtd }
+                        ? { ...m, quantidadeMedida: m.quantidadeMedida + qtdFinal }
                         : m
                 )
             }
@@ -96,8 +135,9 @@ export function Estoque() {
                 ...prev,
                 {
                     id: idLote,
+                    insumoId: idInsumo,
                     produto: nomeProduto,
-                    quantidadeMedida: novaQtd
+                    quantidadeMedida: qtdFinal
                 }
             ]
         })
@@ -141,7 +181,7 @@ export function Estoque() {
             {exibirRelatorio && (
                 <div className="escurecer">
                     <CardRelatorio props={mudancas}
-                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={() => setCardRotina(true)} />
+                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={abrirCardRotina} />
                 </div>
             )}
             {cardRemocao && (
@@ -152,7 +192,7 @@ export function Estoque() {
 
             {cardRotina && (
                 <div className="escurecer">
-                    <CardRotina fecharCard={() => { setCardRotina(false) }} />
+                    <CardRotina setTitulo={setTitulo} salvarRotina={() => { criarRotina(titulo) }} fecharCard={() => { setCardRotina(false) }} />
                 </div>
             )}
             <div className="nav-header">
@@ -167,10 +207,10 @@ export function Estoque() {
                 <div className="button-secund">
                     <div className="botoes-container">
                         <ButtonPlus />
-                        <Button texto="Rotinas" Icone={Bookmark} onClick={() => {navigate("/rotinas")}} />
+                        <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
                         <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                         <div className="botoes-container-icon">
-                            <ScanBarcode color="black" size={30} onClick={() => {navigate("/leitor")}} />
+                            <ScanBarcode color="black" size={30} onClick={() => { navigate("/leitor") }} />
                         </div>
                     </div>
                 </div>

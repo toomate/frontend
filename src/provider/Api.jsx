@@ -565,6 +565,51 @@ export class dividas {
 }
 
 export class Rotinas {
+  static async criar(titulo) {
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: "/rotinas",
+        data: {
+          titulo: titulo
+        }
+      })
+      return response.data;
+    } catch (err) {
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
+    }
+  }
+
+  static async associarInsumos(id, insumos) {
+    let data = {"data": {
+      fkRotina: Number(id),
+      insumos: insumos
+    }}
+    try {
+      const response = await requestComFallback({
+        method: "put",
+        url: "/rotinas/associar-rotina-insumo",
+        data: {
+          fkRotina: Number(id),
+          insumos: insumos
+        }
+      })
+      return response.data
+    } catch (err) {
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
+    }
+  }
+
   static async listar(busca) {
     try {
       let parametro = "";
@@ -683,7 +728,7 @@ export class Vencimentos {
     }
   }
 
-  static async buscarKpis(){
+  static async buscarKpis() {
     try {
       const response = await requestComFallback({
         method: "get",

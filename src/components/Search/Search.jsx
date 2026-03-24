@@ -9,7 +9,7 @@ export function Search({Icone, pesquisar, value}) {
             {Icone &&
                 <div className="search-icon"><Icone size={28} color={"#6B4423"} strokeWidth={1}/></div>
             }
-        </div>
+        </div> 
 
     )
 }
