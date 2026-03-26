@@ -11,6 +11,50 @@ import { boletos } from './provider/Api';
 export default function Boletos({ irPara }) {
 const navigate = useNavigate();
 const [boletoLista, setBoletos] = useState([]);
+const [filtroMes, setFiltroMes] = useState("proximo");
+
+  function obterDataInicialCalendario() {
+    if (boletosFiltrados.length > 0) {
+      return boletosFiltrados[0].start.toISOString();
+    }
+
+    const hoje = new Date();
+
+    if (filtroMes === "proximo") {
+      const dataProximoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 1);
+      return dataProximoMes.toISOString();
+    }
+
+    const mesSelecionado = Number(filtroMes);
+    if (Number.isFinite(mesSelecionado)) {
+      const dataMesSelecionado = new Date(hoje.getFullYear(), mesSelecionado, 1);
+      return dataMesSelecionado.toISOString();
+    }
+
+    return hoje.toISOString();
+  }
+
+  const boletosFiltrados = boletoLista.filter((boleto) => {
+    if (!(boleto.start instanceof Date) || Number.isNaN(boleto.start.getTime())) {
+      return false;
+    }
+
+    const mesBoleto = boleto.start.getMonth();
+    const anoBoleto = boleto.start.getFullYear();
+
+    if (filtroMes === "proximo") {
+      const hoje = new Date();
+      const proximoMes = (hoje.getMonth() + 1) % 12;
+      const anoProximoMes = hoje.getMonth() === 11 ? hoje.getFullYear() + 1 : hoje.getFullYear();
+      return mesBoleto === proximoMes && anoBoleto === anoProximoMes;
+    }
+
+    const mesSelecionado = Number(filtroMes);
+    if (!Number.isFinite(mesSelecionado)) return true;
+
+    return mesBoleto === mesSelecionado;
+  });
+
   useEffect(() => {
     const fetchBoletos = async () => {
       try {
@@ -49,20 +93,20 @@ const [boletoLista, setBoletos] = useState([]);
         <br />
         <div className="card-pagamentos">
           <div className="filtros">
-            <select>
-              <option>Próximo mês</option>
-              <option>Janeiro</option>
-              <option>Fevereiro</option>
-              <option>Março</option>
-              <option>Abril</option>
-              <option>Maio</option>
-              <option>Junho</option>
-              <option>Julho</option>
-              <option>Agosto</option>
-              <option>Setembro</option>
-              <option>Outubro</option>
-              <option>Novembro</option>
-              <option>Dezembro</option>
+            <select value={filtroMes} onChange={(e) => setFiltroMes(e.target.value)}>
+              <option value="proximo">Próximo mês</option>
+              <option value="0">Janeiro</option>
+              <option value="1">Fevereiro</option>
+              <option value="2">Março</option>
+              <option value="3">Abril</option>
+              <option value="4">Maio</option>
+              <option value="5">Junho</option>
+              <option value="6">Julho</option>
+              <option value="7">Agosto</option>
+              <option value="8">Setembro</option>
+              <option value="9">Outubro</option>
+              <option value="10">Novembro</option>
+              <option value="11">Dezembro</option>
             </select>
 
             <select>
@@ -85,7 +129,14 @@ const [boletoLista, setBoletos] = useState([]);
 
             <button 
               className="btn-calendario" 
-              onClick={() => navigate("/calendario", { state: { myEventsList: boletoLista } })}
+              onClick={() =>
+                navigate("/calendario", {
+                  state: {
+                    myEventsList: boletoLista,
+                    initialDate: obterDataInicialCalendario(),
+                  },
+                })
+              }
             >
                 <CalendarDays size={20} />
                 <h3> Painel</h3>
@@ -93,7 +144,7 @@ const [boletoLista, setBoletos] = useState([]);
           </div>
 
           <div className="lista">
-            {boletoLista.map((boleto) => (
+            {boletosFiltrados.map((boleto) => (
               <div className="item-pagamento" key={boleto.id}>
                 <div className="info-esquerda">
                   <div className="vencimento">Vencimento: {boleto.start.toLocaleDateString()}</div>

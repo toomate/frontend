@@ -13,6 +13,7 @@ export default function Calendario() {
   const [selectedBoletos, setSelectedBoletos] = useState([]);
   const location = useLocation();
   const myEventsList = location.state?.myEventsList || [];
+  const initialDate = location.state?.initialDate ? new Date(location.state.initialDate) : undefined;
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -136,8 +137,9 @@ useEffect(() => {
         startAccessor="start"
         endAccessor="end"
         views={['month']}
+        defaultDate={initialDate}
         style={{ height: '100%' }}
-        toolbar={false}
+        toolbar={true}
         components={{
           event: (props) => (
             <EventComponent

@@ -231,6 +231,17 @@ input {
   height: 40px;
   border-radius: 5px;
   border: 1.5px solid rgb(175, 175, 175);
+  background-color: #fff;
+  color: #1f2937;
+}
+
+.selectNome::placeholder,
+.selectMarca::placeholder,
+.selectCategoria::placeholder,
+.selectUnidade::placeholder,
+.selectCategoriaBoleto::placeholder,
+.selectPedido::placeholder {
+  color: #6b7280;
 }
 
 .input-wrapper input {
