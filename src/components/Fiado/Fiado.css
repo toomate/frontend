@@ -207,8 +207,9 @@
 .fiado-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3% 2%;
+  gap: 0.5% 2%;
   padding: 1.5% 2.5%;
+  auto-rows: 1fr;
 }
 
 /* ===== Tabela / Lista ===== */
