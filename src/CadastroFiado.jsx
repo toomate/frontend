@@ -398,7 +398,7 @@ export default function CadastroFiado() {
 
             <button
               className="btn"
-              onClick={() => navigate(-1)}
+              onClick={() => setAbrirModalSucesso(false)}
             >
               OK
             </button>

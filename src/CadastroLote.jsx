@@ -373,7 +373,7 @@ export default function CadastroLote() {
 
             <button
               className="btn"
-              onClick={() => navigate(-1)}
+              onClick={() => setAbrirModalSucesso(false)}
             >
               OK
             </button>

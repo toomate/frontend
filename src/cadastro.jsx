@@ -211,7 +211,7 @@ export default function Cadastro() {
             </span>
             <button
               className="btn"
-              onClick={() => navigate(-1)}
+              onClick={() => setSucessoCadastro(false)}
             >
               OK
             </button>
