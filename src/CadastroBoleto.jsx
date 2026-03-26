@@ -115,7 +115,7 @@ export default function CadastroBoleto() {
             </div>
 
             <span>Valor</span>
-            <input type="number" placeholder="R$ XXX,XX" value={valor} onChange={(e) => setValor(e.target.value)} />
+            <input type="number" step="1" placeholder="R$ XXX,XX" value={valor} onChange={(e) => setValor(e.target.value)} />
             
             <span>Data de Vencimento</span>
             <input type="date" value={dataVencimento} onChange={(e) => setDataVencimento(e.target.value)} />

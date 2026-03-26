@@ -279,7 +279,7 @@ export default function CadastroFiado() {
             value={valor}
             onChange={(e) => setValor(e.target.value)}
             min="0"
-            step="0.01"
+            step="1"
           />
           
           <span>Data do pedido</span>

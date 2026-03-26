@@ -273,7 +273,7 @@ export default function CadastroLote() {
           <span>Preço unitário</span>
           <input
             type="number"
-            step="0.01"
+            step="1"
             min="0"
             placeholder="R$ XXX,XX"
             value={precoUnitario}
@@ -286,7 +286,7 @@ export default function CadastroLote() {
           <span>Quantidade</span>
           <input
             type="number"
-            step="0.01"
+            step="1"
             min="0"
             placeholder="0"
             value={quantidade}

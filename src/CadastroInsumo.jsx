@@ -178,6 +178,7 @@ export default function CadastroInsumo() {
           <span>Quantidade Mínima</span>
           <input
             type="number"
+            step="1"
             min="0"
             placeholder="0"
             value={qtdMinima}
