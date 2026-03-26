@@ -3,7 +3,8 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
 }
 
 .kpi-container {
@@ -33,7 +34,8 @@
     display: flex;
     background-color: white;
     align-items: center;
-    height: 50vh;
+    min-height: 50vh;
+    height: auto;
     width: 95%;
     flex-direction: column;
     margin: 5px;
@@ -56,7 +58,7 @@
     border: 1px solid black;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    height: 90%;
+    height: auto;
     margin-top: 5px;
 }
 
