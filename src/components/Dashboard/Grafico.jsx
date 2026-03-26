@@ -35,6 +35,13 @@ export default function Grafico({dados}) {
         markers: {
           fillColors: ["green", "red"]
         }
+      },
+      yaxis: {
+        labels: {
+          formatter: function(val) {
+            return Math.floor(val);
+          }
+        }
       }
     }
   });
