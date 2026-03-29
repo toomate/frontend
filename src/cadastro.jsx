@@ -93,6 +93,10 @@ export default function Cadastro() {
     }
   }
 
+  useEffect(() => {
+      document.title = "Cadastro";
+    }, []);
+
   return (
     <section className="auth-page auth-page-cadastro">
       <div className="auth-card auth-card-cadastro">

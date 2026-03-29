@@ -84,6 +84,10 @@ const [filtroMes, setFiltroMes] = useState("proximo");
 
   }, []);
 
+  useEffect(() => {
+      document.title = "Boletos";
+    }, []);
+
   return (
     <div className="boletos">
       <HeaderPadrao/>

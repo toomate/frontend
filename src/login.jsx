@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { AuthApi } from "./provider/Api";
@@ -12,6 +12,10 @@ export default function Login() {
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.title = "Login - Toomate";
+  }, []);
 
   async function entrar() {
     if (!username.trim() || !senha.trim()) {

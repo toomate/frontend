@@ -610,15 +610,18 @@ export class Rotinas {
     }
   }
 
-  static async listar(busca) {
+  static async listar(busca, pagina, tamanho) {
     try {
-      let parametro = "";
+      let url = `/rotinas`;
       if (busca.length > 0) {
-        parametro = `/search?titulo=${busca}`
+        url = `/rotinas/search?titulo=${busca}`
+      }
+      if(pagina !== undefined && tamanho !== undefined){
+         url = `/rotinas?pagina=${pagina}&tamanho=${tamanho}`;
       }
       const response = await requestComFallback({
         method: "get",
-        url: `/rotinas${parametro}`
+        url: url
       })
 
       return response.data;

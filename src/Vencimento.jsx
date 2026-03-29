@@ -16,6 +16,10 @@ export default function Vencimento() {
         Vencimentos.buscarKpis().then((res) => setKpis(res));
     }, [])
 
+    useEffect(() => {
+        document.title = "Vencimentos";
+      }, []);
+
     return (
         <>
             <div className="vencimento-container">

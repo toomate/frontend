@@ -99,6 +99,10 @@ export default function Fornecedor() {
   const [toast, setToast] = useState({ visivel: false, tipo: "sucesso", mensagem: "" });
   const toastTimerRef = useRef(null);
 
+  useEffect(() => {
+    document.title = "Fornecedores";
+  }, []);
+
   function exibirToast(mensagem, tipo = "sucesso") {
     setToast({ visivel: true, tipo, mensagem });
     if (toastTimerRef.current) {

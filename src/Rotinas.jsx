@@ -12,6 +12,8 @@ export default function Rotinas() {
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [pesquisa, setPesquisa] = useState("")
+    const [pagina, setPagina] = useState(0)
+    const [tamanho, setTamanho] = useState(16)
     const [cardRemocao, setCardRemocao] = useState(false)
     const [cardConfirmacao, setCardConfirmacao] = useState(false)
     const [rotinas, setRotinas] = useState([])
@@ -49,8 +51,12 @@ export default function Rotinas() {
     }
 
     useEffect(() => {
-        RotinasClass.listar(pesquisa).then((response) => setRotinas(response));
+        RotinasClass.listar(pesquisa, pagina, tamanho).then((response) => setRotinas(response.conteudo));
     }, [pesquisa])
+
+    useEffect(() => {
+        document.title = "Rotinas";
+      }, []);
 
 
     return (

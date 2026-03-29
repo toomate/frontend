@@ -60,7 +60,7 @@ export function Estoque() {
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
                 insumoId: atual.insumoId,
-                quantidadeMedida: atual.quantidadeMedida
+                quantidadeMedida: atual.diferenca
             }))
             await Rotinas.associarInsumos(id, insumosRotina)
             setCardRotina(false)
@@ -145,6 +145,10 @@ export function Estoque() {
             ]
         })
     }
+
+    useEffect(() => {
+        document.title = "Estoque";
+    }, []);
 
     useEffect(() => {
         Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
