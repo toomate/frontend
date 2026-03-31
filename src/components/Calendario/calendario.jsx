@@ -139,7 +139,7 @@ useEffect(() => {
         views={['month']}
         defaultDate={initialDate}
         style={{ height: '100%' }}
-        toolbar={true}
+        toolbar={false}
         components={{
           event: (props) => (
             <EventComponent
