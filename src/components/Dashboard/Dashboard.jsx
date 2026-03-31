@@ -90,7 +90,10 @@ export default function Index() {
         contadorBoletoVencimento++
       }
     }
-    setKpisDados([contadorEstoqueMinimo, contadorInsumoValidade, contadorBoletoVencimento, clientesData])
+    const totalClientesDevedores = Array.isArray(clientesData)
+      ? clientesData.length
+      : Number(clientesData) || 0
+    setKpisDados([contadorEstoqueMinimo, contadorInsumoValidade, contadorBoletoVencimento, totalClientesDevedores])
   }
   const cards = [{
     nome: "Produtos Abaixo do Estoque Min.",
