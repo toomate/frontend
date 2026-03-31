@@ -94,17 +94,23 @@ useEffect(() => {
 
   const primeiraPalavra = event.title?.split(' ')[0];
 
-  return (
-    <div className="event-content">
-      {eventosDoDia.length > 1 && ehPrimeiroDoDia && (
+  if (eventosDoDia.length > 1) {
+    if (!ehPrimeiroDoDia) return null;
+
+    return (
+      <div className="event-content">
         <button
           className="ver-dia-btn"
           onClick={() => detalharPorData(event.start)}
         >
           Ver boletos do dia ({eventosDoDia.length})
         </button>
-      )}
+      </div>
+    );
+  }
 
+  return (
+    <div className="event-content">
       <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
         <span
           style={{
