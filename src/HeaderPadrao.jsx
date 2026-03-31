@@ -33,7 +33,7 @@ export default function HeaderPadrao() {
       <div className="lado-esquerdo">
         <HamburgerButton size={24} color="#6b4423" className="header-hamburguer-btn" />
 
-        <div className="logo-circulo"></div>
+        <div className="logo-circulo" onClick={() => {navigate("/dashboard")}}></div>
 
         <div className="restaurante">
           <div className="restaurante-name">Toomate Bistrô</div>
