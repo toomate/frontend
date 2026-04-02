@@ -34,7 +34,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Deploy on EC2 (pull + docker run)
+            - name: Deploy on EC2 (pull + docker run)
         uses: appleboy/ssh-action@v1.2.0
         env:
           DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -49,16 +49,15 @@ jobs:
 
             IMAGE="lucaspaessptech/toomate:frontend"
 
-            # Se o repo no Docker Hub for privado, isso é obrigatório.
-            # Se for público, não faz mal manter.
+            # se repo for privado, precisa
             echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
 
             docker pull "$IMAGE"
 
             docker rm -f frontend || true
 
-            docker run -d \
+            docker run --env-file /etc/toomate/frontend.env \
               --name frontend \
-              --restart unless-stopped \
               -p 80:80 \
-              "$IMAGE"
+              --restart unless-stopped \
+              -d "$IMAGE"
