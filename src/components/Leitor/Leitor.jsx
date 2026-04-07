@@ -80,36 +80,54 @@ export default function Leitor() {
             src={camera}
             alt="Leitor de código"
             className="leitor-image"
-            onClick={() => setMostrarCamera(true)}
+            onClick={() => {
+              setMostrarCamera(true);
+              setMostrarInput(false);
+            }}
           />
         )}
 
-        <div>
+        <div className="leitor-conteudo">
 
-          {mostrarCamera && (
-            <button onClick={() => setMostrarCamera(false)}>
-              Desativar câmera
-            </button>
-          )}
-
-          {mostrarCamera && (
+          {mostrarCamera && !mostrarInput && (
             <div className="scanner-container">
               <BarcodeScanner onResult={handleCodigo} />
             </div>
           )}
 
+          {mostrarCamera && (
+            <button className="desativar-camera" onClick={() => setMostrarCamera(false)}>
+              Desativar câmera
+            </button>
+          )}
+
           {barcode && <p>Código Lido: {barcode}</p>}
 
-          <p>Toque no ícone para ativar a câmera</p>
-          <p>ou</p>
-          <p>Digite o código manualmente</p>
+          {!mostrarCamera && (
+            <div>
+            <p>Toque no ícone para ativar a câmera</p>
+            <p>ou</p>
+            <p>Digite o código manualmente</p>
+            </div>
+          )}
 
-          <button
-            className="input-button"
-            onClick={() => setMostrarInput(true)}
-          >
-            Digitar Código
-          </button>
+          {mostrarCamera && !mostrarInput && (
+            <p>Não está conseguindo ler?</p>
+          )}
+
+          
+
+          {mostrarInput || (
+            <button
+              className="input-button"
+              onClick={() => {
+                setMostrarInput(true);
+                setMostrarCamera(false);
+              }}
+            >
+              Digitar Código
+            </button>
+          )}
 
           {mostrarInput && (
             <>
