@@ -1,59 +1,81 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactApexChart from "react-apexcharts";
-import { Lote } from "../../provider/Api";
-import { useEffect } from "react";
 
-export default function Grafico({dados}) {
-  const [state] = useState({
-    series: [
+export default function Grafico({ dados }) {
+  const options = {
+    chart: {
+      type: "bar",
+      height: 380,
+      width: "100%",
+      redrawOnParentResize: true,
+      redrawOnWindowResize: true,
+      toolbar: {
+        show: false,
+      },
+    },
+    plotOptions: {
+      bar: {
+        columnWidth: "52%",
+        borderRadius: 4,
+      },
+    },
+    colors: ["green"],
+    dataLabels: {
+      enabled: false,
+    },
+    legend: {
+      show: true,
+      showForSingleSeries: true,
+      customLegendItems: ["Atual", "Esperado"],
+      markers: {
+        fillColors: ["green", "red"],
+      },
+    },
+    yaxis: {
+      labels: {
+        formatter: function (val) {
+          return Math.floor(val);
+        },
+      },
+    },
+    responsive: [
       {
-        name: "Actual",
-        data: [
-          { x: "2011", y: 1292, goals: [{ name: "Expected", value: 1400, strokeHeight: 5, strokeColor: "red" }] }
-        ]
-      }
+        breakpoint: 768,
+        options: {
+          chart: {
+            height: 380,
+          },
+          plotOptions: {
+            bar: {
+              columnWidth: "72%",
+            },
+          },
+        },
+      },
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            height: 380,
+          },
+          plotOptions: {
+            bar: {
+              columnWidth: "82%",
+            },
+          },
+        },
+      },
     ],
-    options: {
-      chart: {
-        type: "bar",
-        height: "100%",
-        width: "100%"
-      },
-      plotOptions: {
-        bar: {
-          columnWidth: "60%"
-        }
-      },
-      colors: ["green"],
-      dataLabels: {
-        enabled: false
-      },
-      legend: {
-        show: true,
-        showForSingleSeries: true,
-        customLegendItems: ["Atual", "Esperado"],
-        markers: {
-          fillColors: ["green", "red"]
-        }
-      },
-      yaxis: {
-        labels: {
-          formatter: function(val) {
-            return Math.floor(val);
-          }
-        }
-      }
-    }
-  });
+  };
 
   return (
-    <div id="chart" style={{ width: "100%", height: "100%" }}>
+    <div id="chart" style={{ width: "100%", height: "100%", minHeight: "380px" }}>
       <ReactApexChart
-        options={state.options}
+        options={options}
         series={[{ name: "Estoque", data: dados }]}
         type="bar"
         width="100%"
-        height="100%"
+        height={380}
       />
     </div>
   );

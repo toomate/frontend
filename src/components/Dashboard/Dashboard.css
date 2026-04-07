@@ -224,6 +224,18 @@
     padding: 8px 10px;
   }
 
+  .dashboard .grafico {
+    width: 100%;
+    min-height: 380px;
+    flex: none;
+    padding: 10px;
+  }
+
+  .dashboard .notificacao {
+    width: 100%;
+    min-height: 320px;
+  }
+
   .dashboard .alerta-btn {
     font-size: 16px;
     padding: 11px 12px 11px 16px;
