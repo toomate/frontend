@@ -34,14 +34,53 @@
 
 .dashboard .btn {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   height: 35px;
   background: #c92c2c;
   color: white;
   border-radius: 5px;
   font-weight: bold;
-  padding: 10px;
+  padding: 10px 12px;
+  gap: 10px;
+}
+
+.dashboard .btn-menu {
+  position: relative;
+}
+
+.dashboard .menu-icone {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  display: inline-block;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.estoque-menu-icone {
+  background-image: url(../../images/estoque.png);
+}
+
+.gastos-menu-icone {
+  background-image: url(../../images/gastos.png);
+}
+
+.fornecedor-menu-icone {
+  background-image: url(../../images/fornecedor.png);
+}
+
+.boleto-menu-icone {
+  background-image: url(../../images/boleto.png);
+}
+
+.fiado-menu-icone {
+  background-image: url(../../images/fiados.png);
+}
+
+.vencimentos-menu-icone {
+  background-image: url(../../images/validade.png);
 }
 
 .dashboard .menu button:hover,
@@ -218,6 +257,12 @@
   .dashboard .menu button {
     margin: 0;
     min-width: calc(50% - 4px);
+  }
+
+  .dashboard .menu-icone {
+    width: 18px;
+    min-width: 18px;
+    height: 18px;
   }
 
   .dashboard .container2 {

@@ -4,6 +4,7 @@ import HeaderPadrao from "../../HeaderPadrao";
 import { data, useNavigate } from "react-router-dom";
 import Kpi from "../Kpi/Kpi";
 import Grafico from "./Grafico";
+import fiadosIcon from "../../images/fiados.png";
 import { useState } from "react";
 import { clientes, Lote } from "../../provider/Api";
 import { boletos } from "../../provider/Api";
@@ -117,12 +118,33 @@ export default function Index() {
       <HeaderPadrao />
 
       <nav className="menu">
-        <button onClick={() => navigate("/estoque")} className="btn">Estoque</button>
-        <button className="btn">Gastos</button>
-        <button onClick={() => navigate("/fornecedor")} className="btn">Fornecedores</button>
-        <button onClick={() => navigate("/Boletos")} className="btn">Boletos</button>
-        <button onClick={() => navigate("/Fiados")} className="btn">Fiados</button>
-        <button onClick={() => navigate("/Vencimentos")} className="btn">Vencimentos</button>
+        <button onClick={() => navigate("/estoque")} className="btn btn-menu estoque-menu">
+          <span className="menu-icone estoque-menu-icone"></span>
+          <span>Estoque</span>
+        </button>
+                <button onClick={() => navigate("/Vencimentos")} className="btn btn-menu vencimentos-menu">
+          <span className="menu-icone vencimentos-menu-icone"></span>
+          <span>Vencimentos</span>
+        </button>
+        <button className="btn btn-menu gastos-menu">
+          <span className="menu-icone gastos-menu-icone"></span>
+          <span>Gastos</span>
+        </button>
+        <button onClick={() => navigate("/fornecedor")} className="btn btn-menu fornecedor-menu">
+          <span className="menu-icone fornecedor-menu-icone"></span>
+          <span>Fornecedores</span>
+        </button>
+        <button onClick={() => navigate("/Boletos")} className="btn btn-menu boleto-menu">
+          <span className="menu-icone boleto-menu-icone"></span>
+          <span>Boletos</span>
+        </button>
+        <button onClick={() => navigate("/Fiados")} className="btn btn-menu fiado-menu">
+          <span
+            className="menu-icone fiado-menu-icone"
+            style={{ backgroundImage: `url(${fiadosIcon})` }}
+          ></span>
+          <span>Fiados</span>
+        </button>
       </nav>
 
       <Kpi kpis={cards} />

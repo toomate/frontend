@@ -41,6 +41,8 @@ export default function HeaderPadrao() {
         </div>
       </div>
 
+      <div className="titulo-tela"></div>
+
       <div style={{ display: "flex", gap: "10px" }}>
         {estaNaDashboard ? (
           <button onClick={handleLogout} className="btn">
