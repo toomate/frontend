@@ -35,11 +35,6 @@ export function NovaCategoriaModal({ aberto, aoFechar, aoSalvar, form, aoMudar, 
             }
           }}
         />
-
-        <select name="rotatividade" value={form.rotatividade} onChange={aoMudar}>
-          <option value="true">Alta rotatividade</option>
-          <option value="false">Baixa rotatividade</option>
-        </select>
       </div>
     </BaseModal>
   );

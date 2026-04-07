@@ -367,10 +367,12 @@ export class Lote {
 }
 
 export class FornecedorApi {
-  static async listar({ razaoSocial = "" } = {}) {
+  static async listar({ razaoSocial = "", pagina = 0, tamanho = 9 } = {}) {
     try {
       const params = {
         razaoSocial: razaoSocial || undefined,
+        pagina,
+        tamanho,
       };
 
       const response = await requestComFallback({
@@ -385,11 +387,12 @@ export class FornecedorApi {
     }
   }
 
-  static async listarPorCategoria(idCategoria) {
+  static async listarPorCategoria(idCategoria, { pagina = 0, tamanho = 9 } = {}) {
     try {
       const response = await requestComFallback({
         method: "get",
         url: `/categorias/${idCategoria}/fornecedores`,
+        params: { pagina, tamanho },
       });
       return response.data;
     } catch (error) {

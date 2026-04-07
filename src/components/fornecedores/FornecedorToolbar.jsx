@@ -11,7 +11,7 @@ export function FornecedorToolbar({
 }) {
   return (
     <div className="fornecedores-toolbar">
-      <div className="fornecedores-toolbar-acoes">
+      <div className="fornecedores-toolbar-esquerda">
         <button
           type="button"
           className="fornecedores-btn-add"
@@ -32,17 +32,19 @@ export function FornecedorToolbar({
         </button>
       </div>
 
-      <select
-        className="fornecedores-select"
-        value={ordenacao}
-        onChange={(e) => aoMudarOrdenacao(e.target.value)}
-      >
-        <option value="alfabetica">Ordenar por A-Z</option>
-        <option value="alfabetica_desc">Ordenar por Z-A</option>
-      </select>
+      <div className="fornecedores-toolbar-direita">
+        <div className="fornecedores-busca">
+          <CampoBusca Icone={Search} pesquisar={aoBuscar} value={busca} />
+        </div>
 
-      <div className="fornecedores-busca">
-        <CampoBusca Icone={Search} pesquisar={aoBuscar} value={busca} />
+        <select
+          className="fornecedores-select"
+          value={ordenacao}
+          onChange={(e) => aoMudarOrdenacao(e.target.value)}
+        >
+          <option value="alfabetica">A → Z</option>
+          <option value="alfabetica_desc">Z → A</option>
+        </select>
       </div>
     </div>
   );

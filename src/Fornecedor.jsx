@@ -4,11 +4,14 @@ import HeaderPadrao from "./HeaderPadrao";
 import { FornecedorToolbar } from "./components/fornecedores/FornecedorToolbar";
 import { FiltroCategoriaFornecedor } from "./components/fornecedores/FiltroCategoriaFornecedor";
 import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
+import { PaginacaoFornecedor } from "./components/fornecedores/PaginacaoFornecedor";
 import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
 import { NovaCategoriaModal } from "./components/fornecedores/NovaCategoriaModal";
 import { BaseModal } from "./components/common/BaseModal";
 import { CategoriaApi, FornecedorApi } from "./provider/Api";
 import "./Fornecedor.css";
+
+const ITENS_POR_PAGINA = 9;
 
 const estadoInicialForm = {
   razaoSocial: "",
@@ -17,22 +20,7 @@ const estadoInicialForm = {
 
 const estadoInicialCategoriaForm = {
   nome: "",
-  rotatividade: "true",
 };
-
-const categoriaTodas = { id: "todas", nome: "Todas" };
-
-function parseRotatividadeBinaria(valor) {
-  if (valor === true || valor === "true") {
-    return true;
-  }
-
-  if (valor === false || valor === "false") {
-    return false;
-  }
-
-  return null;
-}
 
 function mapearCategorias(response) {
   const lista = Array.isArray(response) ? response : response?.categorias ?? [];
@@ -40,19 +28,14 @@ function mapearCategorias(response) {
   const categorias = lista
     .map((item) => {
       if (typeof item === "string") {
-        return { id: item, nome: item, rotatividade: null };
+        return { id: item, nome: item };
       }
 
       const id = item?.idCategoria ?? item?.id;
       const nome = item?.nome ?? item?.categoria ?? item?.descricao ?? "";
       if (!id || !String(nome).trim()) return null;
 
-      const rotatividade =
-        parseRotatividadeBinaria(item?.rotatividade) ??
-        parseRotatividadeBinaria(item?.altaRotatividade) ??
-        parseRotatividadeBinaria(item?.giroRapido);
-
-      return { id: String(id), nome: String(nome).trim(), rotatividade };
+      return { id: String(id), nome: String(nome).trim() };
     })
     .filter(Boolean);
 
@@ -65,7 +48,7 @@ function mapearCategorias(response) {
     }
   });
 
-  return [categoriaTodas, ...unicas];
+  return unicas;
 }
 
 function mapearFornecedor(item) {
@@ -81,8 +64,9 @@ function mapearFornecedor(item) {
 export default function Fornecedor() {
   const [fornecedores, setFornecedores] = useState([]);
   const [busca, setBusca] = useState("");
-  const [categorias, setCategorias] = useState([categoriaTodas]);
-  const [categoriaSelecionada, setCategoriaSelecionada] = useState(categoriaTodas.id);
+  const [categorias, setCategorias] = useState([]);
+  const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
+  const [paginaAtual, setPaginaAtual] = useState(0);
   const [ordenacao, setOrdenacao] = useState("alfabetica");
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -103,6 +87,10 @@ export default function Fornecedor() {
     document.title = "Fornecedores";
   }, []);
 
+  useEffect(() => {
+    setPaginaAtual(0);
+  }, [busca, categoriasSelecionadas]);
+
   function exibirToast(mensagem, tipo = "sucesso") {
     setToast({ visivel: true, tipo, mensagem });
     if (toastTimerRef.current) {
@@ -116,10 +104,9 @@ export default function Fornecedor() {
   const carregarCategorias = useCallback(async () => {
     try {
       const response = await CategoriaApi.listar();
-      const lista = mapearCategorias(response);
-      setCategorias(lista.length > 0 ? lista : [categoriaTodas]);
+      setCategorias(mapearCategorias(response));
     } catch {
-      setCategorias([categoriaTodas]);
+      setCategorias([]);
     }
   }, []);
 
@@ -128,20 +115,35 @@ export default function Fornecedor() {
       setCarregando(true);
       setErro("");
 
-      const response =
-        categoriaSelecionada === categoriaTodas.id
-          ? await FornecedorApi.listar()
-          : await FornecedorApi.listarPorCategoria(categoriaSelecionada);
+      let itens;
 
-      const lista = Array.isArray(response) ? response : response?.fornecedores ?? [];
-      setFornecedores(lista.map(mapearFornecedor));
-    } catch (error) {
+      if (categoriasSelecionadas.length === 0) {
+        const response = await FornecedorApi.listar({ tamanho: 999 });
+        itens = Array.isArray(response) ? response : response?.conteudo ?? response?.fornecedores ?? [];
+      } else {
+        const respostas = await Promise.all(
+          categoriasSelecionadas.map((id) => FornecedorApi.listarPorCategoria(id, { tamanho: 999 }))
+        );
+        const todos = respostas.flatMap((r) =>
+          Array.isArray(r) ? r : r?.conteudo ?? r?.fornecedores ?? []
+        );
+        const vistos = new Set();
+        itens = todos.filter((item) => {
+          const id = item.idFornecedor ?? item.id;
+          if (vistos.has(id)) return false;
+          vistos.add(id);
+          return true;
+        });
+      }
+
+      setFornecedores(itens.map(mapearFornecedor));
+    } catch {
       setErro("Nao foi possivel carregar os fornecedores.");
       setFornecedores([]);
     } finally {
       setCarregando(false);
     }
-  }, [categoriaSelecionada]);
+  }, [categoriasSelecionadas]);
 
   useEffect(() => {
     carregarCategorias();
@@ -159,8 +161,14 @@ export default function Fornecedor() {
     };
   }, []);
 
-  function onBuscar(valor) {
-    setBusca(valor);
+  function aoToggleCategoria(id) {
+    setCategoriasSelecionadas((prev) =>
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+    );
+  }
+
+  function aoLimparCategorias() {
+    setCategoriasSelecionadas([]);
   }
 
   function limparForm() {
@@ -244,7 +252,7 @@ export default function Fornecedor() {
 
       fecharModal();
       await carregarFornecedores();
-    } catch (error) {
+    } catch {
       setErro(
         modoModal === "editar"
           ? "Nao foi possivel atualizar o fornecedor."
@@ -257,15 +265,9 @@ export default function Fornecedor() {
 
   async function salvarCategoria() {
     const nomeCategoria = formCategoria.nome.trim();
-    const rotatividade = parseRotatividadeBinaria(formCategoria.rotatividade);
 
     if (!nomeCategoria) {
       setErro("Informe o nome da categoria.");
-      return;
-    }
-
-    if (rotatividade === null) {
-      setErro("Selecione a rotatividade da categoria.");
       return;
     }
 
@@ -273,11 +275,11 @@ export default function Fornecedor() {
       setSalvandoCategoria(true);
       setErro("");
 
-      await CategoriaApi.criar({ nome: nomeCategoria, rotatividade });
+      await CategoriaApi.criar({ nome: nomeCategoria });
       fecharModalCategoria();
       await carregarCategorias();
       exibirToast("Categoria cadastrada com sucesso.");
-    } catch (error) {
+    } catch {
       setErro("Nao foi possivel cadastrar a categoria.");
     } finally {
       setSalvandoCategoria(false);
@@ -296,29 +298,37 @@ export default function Fornecedor() {
       await FornecedorApi.excluir(fornecedorSelecionado.id);
       fecharConfirmacaoExclusao();
       await carregarFornecedores();
-    } catch (error) {
+    } catch {
       setErro("Nao foi possivel excluir o fornecedor.");
     } finally {
       setExcluindo(false);
     }
   }
 
-  const fornecedoresRender = useMemo(() => {
-    const termo = busca.trim().toLowerCase();
+  const { fornecedoresPagina, totalPaginas } = useMemo(() => {
     let lista = [...fornecedores];
 
+    const termo = busca.trim().toLowerCase();
     if (termo) {
-      lista = lista.filter((fornecedor) =>
-        fornecedor.razaoSocial.toLowerCase().includes(termo)
+      lista = lista.filter(
+        (f) =>
+          f.razaoSocial.toLowerCase().includes(termo) ||
+          f.telefone.replace(/\D/g, "").includes(termo.replace(/\D/g, ""))
       );
     }
 
     if (ordenacao === "alfabetica_desc") {
-      return lista.sort((a, b) => b.razaoSocial.localeCompare(a.razaoSocial));
+      lista.sort((a, b) => b.razaoSocial.localeCompare(a.razaoSocial));
+    } else {
+      lista.sort((a, b) => a.razaoSocial.localeCompare(b.razaoSocial));
     }
 
-    return lista.sort((a, b) => a.razaoSocial.localeCompare(b.razaoSocial));
-  }, [fornecedores, busca, ordenacao]);
+    const totalPaginas = Math.max(1, Math.ceil(lista.length / ITENS_POR_PAGINA));
+    const pagina = Math.min(paginaAtual, totalPaginas - 1);
+    const fornecedoresPagina = lista.slice(pagina * ITENS_POR_PAGINA, (pagina + 1) * ITENS_POR_PAGINA);
+
+    return { fornecedoresPagina, totalPaginas };
+  }, [fornecedores, busca, ordenacao, paginaAtual]);
 
   return (
     <div className="fornecedores-page">
@@ -329,7 +339,7 @@ export default function Fornecedor() {
       <main className="fornecedores-content">
         <FornecedorToolbar
           busca={busca}
-          aoBuscar={onBuscar}
+          aoBuscar={setBusca}
           ordenacao={ordenacao}
           aoMudarOrdenacao={setOrdenacao}
           aoAdicionar={abrirModalCriacao}
@@ -338,17 +348,18 @@ export default function Fornecedor() {
 
         <FiltroCategoriaFornecedor
           categorias={categorias}
-          categoriaSelecionada={categoriaSelecionada}
-          aoMudarCategoria={setCategoriaSelecionada}
+          categoriasSelecionadas={categoriasSelecionadas}
+          aoToggleCategoria={aoToggleCategoria}
+          aoLimparCategorias={aoLimparCategorias}
         />
 
         {erro && <p className="fornecedores-erro">{erro}</p>}
 
         {carregando ? (
           <p className="fornecedores-mensagem">Carregando fornecedores...</p>
-        ) : fornecedoresRender.length > 0 ? (
+        ) : fornecedoresPagina.length > 0 ? (
           <section className="fornecedores-grid">
-            {fornecedoresRender.map((fornecedor) => (
+            {fornecedoresPagina.map((fornecedor) => (
               <FornecedorCard
                 key={fornecedor.id ?? fornecedor.razaoSocial}
                 fornecedor={fornecedor}
@@ -369,6 +380,12 @@ export default function Fornecedor() {
             </p>
           </section>
         )}
+
+        <PaginacaoFornecedor
+          paginaAtual={paginaAtual}
+          totalPaginas={totalPaginas}
+          aoMudarPagina={setPaginaAtual}
+        />
       </main>
 
       <NovoFornecedorModal
