@@ -1,0 +1,150 @@
+.header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 5px 25px;
+  background-color: white;
+  border-bottom: 3px solid black;
+  flex-shrink: 0;
+}
+
+.logo-circulo {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background-image: url(./images/LogoToomate.png);
+  background-size: cover;
+  background-position: center;
+}
+
+.lado-esquerdo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 30px;
+}
+
+.header-hamburguer-btn {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border: none !important;
+  border-radius: 0;
+  background: transparent !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+}
+
+.header-hamburguer-btn:hover,
+.header-hamburguer-btn:focus-visible {
+  border: none !important;
+  background: transparent !important;
+}
+
+.header-hamburguer-btn svg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.restaurante {
+  display: flex;
+  flex-direction: column;
+}
+
+.restaurante-name {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.restaurante-subnome {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #555;
+}
+
+.titulo-tela {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: calc(100% - 320px);
+  text-align: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #6b4423;
+  padding: 0 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+}
+
+@media (max-width: 1390px) {
+  .logo-circulo {
+    width: 55px;
+    height: 55px;
+  }
+
+  .restaurante-name {
+    font-size: 18px;
+  }
+
+  .restaurante-subnome {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-wrap: wrap;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .lado-esquerdo {
+    width: 70%;
+    justify-content: flex-start;
+    gap: 15px;
+  }
+
+  .logo-circulo {
+    width: 45px;
+    height: 45px;
+  }
+
+  .restaurante-name {
+    font-size: 18px;
+  }
+
+  .restaurante-subnome {
+    font-size: 12px;
+  }
+
+  .header-right {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: white;
+  }
+
+  .restaurante-name {
+    font-size: 16px;
+  }
+
+  .logo-circulo {
+    height: 40px;
+  }
+}

@@ -1,9 +1,61 @@
 import React from "react";
 import { ArrowLeft } from "lucide-react";
 import "./App.css";
+import "./HeaderPadrao.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import HamburgerButton from "./components/HamburgerButton/HamburgerButton";
 import { limparSessaoAutenticacao } from "./utils/sessao";
+
+const titulosPorRota = {
+  "/dashboard": "Dashboard",
+  "/boletos": "Boletos",
+  "/cadastro": "Cadastro de Usuário",
+  "/estoque": "Estoque",
+  "/fornecedor": "Fornecedor",
+  "/fornecedores": "Fornecedores",
+  "/cadastro-insumo": "Cadastro de Insumo",
+  "/cadastro-fornecedor": "Cadastro de Fornecedor",
+  "/cadastro-boleto": "Cadastro de Boleto",
+  "/cadastro-fiado": "Cadastro de Fiado",
+  "/cadastro-lote": "Cadastro de Lote",
+  "/calendario": "Calendário",
+  "/calendariodetalhes": "Detalhes do Calendário",
+  "/vencimentos": "Vencimentos",
+  "/rotinas": "Rotinas",
+  "/fiados": "Fiados",
+  "/leitor": "Leitor de Código de Barras",
+  "/admin": "Admin",
+};
+
+function normalizarCaminho(caminho) {
+  return String(caminho || "").replace(/\/+$/, "").toLowerCase() || "/";
+}
+
+function formatarTituloDaUrl(caminho) {
+  const caminhoNormalizado = normalizarCaminho(caminho);
+
+  if (titulosPorRota[caminhoNormalizado]) {
+    return titulosPorRota[caminhoNormalizado];
+  }
+
+  const partes = caminhoNormalizado.split("/").filter(Boolean);
+
+  if (!partes.length) {
+    return "";
+  }
+
+  return partes
+    .map((parte) =>
+      parte
+        .replace(/[-_]/g, " ")
+        .replace(/([a-z])([A-Z])/g, "$1 $2")
+        .split(" ")
+        .filter(Boolean)
+        .map((palavra) => palavra.charAt(0).toUpperCase() + palavra.slice(1))
+        .join(" "),
+    )
+    .join(" /");
+}
 
 export default function HeaderPadrao() {
   const navigate = useNavigate();
@@ -13,7 +65,8 @@ export default function HeaderPadrao() {
     localStorage.getItem("usuarioNome") ||
     "Usuario";
 
-  const estaNaDashboard = location.pathname === "/dashboard";
+  const estaNaDashboard = normalizarCaminho(location.pathname) === "/dashboard";
+  const tituloTela = formatarTituloDaUrl(location.pathname);
 
   function handleLogout() {
     limparSessaoAutenticacao();
@@ -41,7 +94,7 @@ export default function HeaderPadrao() {
         </div>
       </div>
 
-      <div className="titulo-tela"></div>
+      <div className="titulo-tela">{tituloTela}</div>
 
       <div style={{ display: "flex", gap: "10px" }}>
         {estaNaDashboard ? (
