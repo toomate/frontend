@@ -4,15 +4,14 @@ import { useState, useEffect } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendario.css';
 import CalendarioDetail from './calendarioDetail';
-import { boletos } from '../../provider/Api';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import HeaderPadrao from '../../HeaderPadrao';
 
 
 export default function Calendario() {
   const [selectedBoletos, setSelectedBoletos] = useState([]);
   const location = useLocation();
-  const myEventsList = location.state?.myEventsList || [];
+  const [myEventsList, setMyEventsList] = useState(location.state?.myEventsList || []);
   const initialDate = location.state?.initialDate ? new Date(location.state.initialDate) : undefined;
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -25,6 +24,38 @@ useEffect(() => {
   window.addEventListener('resize', handleResize);
   return () => window.removeEventListener('resize', handleResize);
 }, []);
+
+useEffect(() => {
+  setMyEventsList(location.state?.myEventsList || []);
+}, [location.state]);
+
+useEffect(() => {
+  const idSelecionado = location.state?.selectedBoletoId;
+
+  if (idSelecionado === undefined || idSelecionado === null) {
+    return;
+  }
+
+  const boletosEncontrados = myEventsList.filter((boleto) => boleto.id === idSelecionado);
+
+  if (boletosEncontrados.length > 0) {
+    setSelectedBoletos(boletosEncontrados);
+  }
+}, [location.state, myEventsList]);
+
+  function atualizarStatusBoleto(idBoleto, pago) {
+    setMyEventsList((estadoAtual) =>
+      estadoAtual.map((boleto) =>
+        boleto.id === idBoleto ? { ...boleto, status: pago } : boleto,
+      ),
+    );
+
+    setSelectedBoletos((estadoAtual) =>
+      estadoAtual.map((boleto) =>
+        boleto.id === idBoleto ? { ...boleto, status: pago } : boleto,
+      ),
+    );
+  }
 
   function detalhar(id) {
     const boletosEncontrados = myEventsList.filter(
@@ -195,6 +226,7 @@ useEffect(() => {
             <CalendarioDetail
               boletos={selectedBoletos}
               onClose={() => setSelectedBoletos([])}
+              onStatusAtualizado={atualizarStatusBoleto}
             />
           </div>
         </div>

@@ -91,6 +91,44 @@ export class boletos {
     }
   }
 
+  static async buscarPorId(idBoleto) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/boletos/${idBoleto}`,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar boleto por id:", error);
+      throw error;
+    }
+  }
+
+  static async atualizar(idBoleto, payload) {
+    try {
+      const response = await requestComFallback({
+        method: "put",
+        url: `/boletos/${idBoleto}`,
+        data: payload,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao atualizar boleto:", error);
+      throw error;
+    }
+  }
+
+  static async marcarComoPago(idBoleto) {
+    const boletoAtual = await boletos.buscarPorId(idBoleto);
+    const payload = {
+      ...boletoAtual,
+      pago: true,
+      dataPagamento: new Date().toISOString().slice(0, 10),
+    };
+
+    return boletos.atualizar(idBoleto, payload);
+  }
+
 }
 
 export class AuthApi {

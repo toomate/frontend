@@ -6,6 +6,7 @@
 
 /* Container principal (card/modal) */
 .event-item {
+    box-sizing: border-box;
     width: 100%;
     max-width: 500px;
     margin: 0 auto;
@@ -24,6 +25,7 @@
     font-size: 1.3em;
     font-weight: bold;
     color: white;
+    overflow-wrap: anywhere;
 }
 
 /* Corpo do card */
@@ -38,9 +40,12 @@
 .event-row {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    min-width: 0;
     gap: 10px;
     color: #444;
     font-size: 0.95em;
+    overflow-wrap: anywhere;
 }
 
 /* Valor */
@@ -51,6 +56,41 @@
 /* Data */
 .event-data {
     color: #666;
+}
+
+.event-actions {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.event-action-button {
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.event-action-button.is-pending {
+    background: #b32323;
+    color: #fff;
+}
+
+.event-action-button.is-paid {
+    background: #1e7a35;
+    color: #fff;
+}
+
+.event-action-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.event-action-error {
+    color: #b32323;
+    font-size: 0.85em;
 }
 
 /* Link inferior */
@@ -94,6 +134,7 @@
     width: 95%;
     max-width: 520px;
     max-height: 90vh;
+    overflow-x: hidden;
     overflow-y: auto;
 }
 
@@ -121,12 +162,14 @@
 
 .detail-wrapper {
     position: relative;
+    width: 100%;
+    overflow-x: hidden;
 }
 
 .modal-close-inside {
     position: absolute;
-    top: -10px;
-    right: -10px;
+    top: 10px;
+    right: 10px;
 
     background: white;
     border: 1px solid #ccc;
@@ -140,6 +183,7 @@
     font-size: 16px;
 
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    z-index: 2;
 }
 
 .modal-close-inside:hover {

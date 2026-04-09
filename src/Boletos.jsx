@@ -2,16 +2,34 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import "./App.css";
-import { Menu, CalendarDays, Search } from "lucide-react";
+import { CalendarDays, Search } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
-import Calendario from "./components/Calendario/calendario";
-import { BiFontSize } from "react-icons/bi";
+import CalendarioDetail from "./components/Calendario/calendarioDetail";
 import { boletos } from './provider/Api';
 
 export default function Boletos({ irPara }) {
 const navigate = useNavigate();
 const [boletoLista, setBoletos] = useState([]);
 const [filtroMes, setFiltroMes] = useState("proximo");
+const [selectedBoletos, setSelectedBoletos] = useState([]);
+
+  function abrirModalBoleto(boleto) {
+    setSelectedBoletos([boleto]);
+  }
+
+  function atualizarStatusBoleto(idBoleto, pago) {
+    setBoletos((estadoAtual) =>
+      estadoAtual.map((boleto) =>
+        boleto.id === idBoleto ? { ...boleto, status: pago } : boleto,
+      ),
+    );
+
+    setSelectedBoletos((estadoAtual) =>
+      estadoAtual.map((boleto) =>
+        boleto.id === idBoleto ? { ...boleto, status: pago } : boleto,
+      ),
+    );
+  }
 
   function obterDataInicialCalendario() {
     if (boletosFiltrados.length > 0) {
@@ -162,9 +180,13 @@ const [filtroMes, setFiltroMes] = useState("proximo");
 
                 <div className="lado-direito">
                   {boleto.status ? (
-                    <button className="btn-pago">Pago ✓</button>
+                    <button className="btn-pago" onClick={() => abrirModalBoleto(boleto)}>
+                      Pago ✓
+                    </button>
                   ) : (
-                    <button className="btn-pendente">Pendente</button>
+                    <button className="btn-pendente" onClick={() => abrirModalBoleto(boleto)}>
+                      Pendente
+                    </button>
                   )}
                 </div>
               </div>
@@ -176,6 +198,18 @@ const [filtroMes, setFiltroMes] = useState("proximo");
           </div>
         </div>
       </div>
+
+      {selectedBoletos.length > 0 && (
+        <div className="modal-overlay" onClick={() => setSelectedBoletos([])}>
+          <div className="modal-container" onClick={(e) => e.stopPropagation()}>
+            <CalendarioDetail
+              boletos={selectedBoletos}
+              onClose={() => setSelectedBoletos([])}
+              onStatusAtualizado={atualizarStatusBoleto}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
   
