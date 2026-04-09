@@ -1,0 +1,155 @@
+.boletos {
+  display: flex;
+  flex-direction: column;
+  font-family: "Arial", sans-serif;
+  min-height: 100dvh;
+  width: 100%;
+  background-color: white;
+  color: black;
+  margin: 0 auto;
+  background-image: url(../../images/fundo-tela.png);
+}
+
+.boletos .conteudo span {
+  display: flex;
+  align-items: flex-start;
+  font-size: 35px;
+  font-weight: bold;
+  margin: 20px;
+}
+
+.card-pagamentos {
+  height: auto;
+  overflow: visible;
+  padding: 0 20px 0 20px;
+}
+
+.boletos .filtros {
+  --filtro-altura: 38px;
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.boletos .filtros select {
+  height: var(--filtro-altura);
+  color: black;
+  background-color: #ccc;
+  border-color: transparent;
+  padding: 0 8px;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+.boletos .busca {
+  display: flex;
+  align-items: center;
+  width: 340px;
+  min-width: 340px;
+  height: var(--filtro-altura);
+  padding: 0 10px;
+  gap: 5px;
+  border-radius: 6px;
+  background-color: #ccc !important;
+  box-sizing: border-box;
+}
+
+.boletos .busca input {
+  background-color: transparent;
+  width: 100%;
+  min-width: 0;
+  height: 100%;
+  color: black;
+  border: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.boletos .busca input::placeholder {
+  color: black !important;
+}
+
+.btn-calendario {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 150px;
+  height: var(--filtro-altura);
+  background: #ccc;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  color: black;
+  box-sizing: border-box;
+}
+
+.item-pagamento {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: auto;
+  border-top: 1px solid #ccc;
+}
+
+.vencimento {
+  text-align: left;
+  padding: 5px 0 5px 0;
+}
+
+.descricao {
+  background-color: rgb(240, 238, 238) !important;
+  width: auto;
+  padding: 5px;
+  border-radius: 6px;
+  margin: 10px;
+}
+
+.valor {
+  background: #ccc;
+  padding: 5px;
+  border-radius: 6px;
+  width: 120px;
+  margin: 10px;
+}
+
+.btn-pago {
+  background: green;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+@media (max-width: 480px) {
+  .boletos .busca {
+    width: 100%;
+  }
+
+  .btn-pago {
+    width: 100%;
+  }
+
+  .vencimento {
+    font-size: 12px;
+  }
+
+  .descricao {
+    width: 80%;
+    font-size: 12px;
+  }
+
+  .valor {
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .btn-pago {
+    width: 70px;
+    padding: 6px 12px;
+    border-radius: 6px;
+  }
+}

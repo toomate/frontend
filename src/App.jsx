@@ -1,7 +1,7 @@
 ﻿import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import Login from "./login";
-import Boletos from "./Boletos";
+import Boletos from "./components/Boletos/Boletos";
 import Cadastro from "./cadastro";
 import { Estoque } from "./Estoque";
 import Fornecedor from "./Fornecedor";

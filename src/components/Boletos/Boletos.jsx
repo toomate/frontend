@@ -1,17 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
-import "./App.css";
+import "./Boletos.css";
 import { CalendarDays, Search } from "lucide-react";
-import HeaderPadrao from "./HeaderPadrao";
-import BoletoDetail from "./components/Calendario/boletoDetail";
-import { boletos } from './provider/Api';
+import HeaderPadrao from "../../HeaderPadrao";
+import BoletoDetail from "../Calendario/boletoDetail";
+import { boletos } from '../../provider/Api';
+import { Plus } from 'lucide-react';
 
-export default function Boletos({ irPara }) {
-const navigate = useNavigate();
-const [boletoLista, setBoletos] = useState([]);
-const [filtroMes, setFiltroMes] = useState("proximo");
-const [selectedBoletos, setSelectedBoletos] = useState([]);
+export default function Boletos() {
+  const navigate = useNavigate();
+  const [boletoLista, setBoletos] = useState([]);
+  const [filtroMes, setFiltroMes] = useState("proximo");
+  const [selectedBoletos, setSelectedBoletos] = useState([]);
 
   function abrirModalBoleto(boleto) {
     setSelectedBoletos([boleto]);
@@ -77,21 +78,19 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
     const fetchBoletos = async () => {
       try {
         const boletosData = await boletos.listarBoletos();
-        const boletosJson = Array.isArray(boletosData) ? boletosData.map(boleto => {
-          const startDate = new Date(
-            boleto.dataVencimento + 'T00:00:00'
-          );
-          console.log(`Boleto: ${boleto.descricao}, Data original: ${boleto.data_vencimento}, Data convertida: ${startDate}`);
-          return {
-            id: boleto.idBoleto,
-            title: boleto.descricao,
-            status: boleto.pago,
-            value: `R$ ${boleto.valor.toFixed(2)}`,
-            start: startDate,
-            end: startDate,
-          };
-        }) : [];
-        console.log('Events processados:', boletosJson);
+        const boletosJson = Array.isArray(boletosData)
+          ? boletosData.map((boleto) => {
+            const startDate = new Date(boleto.dataVencimento + 'T00:00:00');
+            return {
+              id: boleto.idBoleto,
+              title: boleto.descricao,
+              status: boleto.pago,
+              value: `R$ ${boleto.valor.toFixed(2)}`,
+              start: startDate,
+              end: startDate,
+            };
+          })
+          : [];
         setBoletos(boletosJson);
       } catch (error) {
         console.error('Erro ao buscar boletos:', error);
@@ -99,17 +98,16 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
       }
     };
     fetchBoletos();
-
   }, []);
 
   useEffect(() => {
-      document.title = "Boletos";
-    }, []);
+    document.title = "Boletos";
+  }, []);
 
   return (
     <div className="boletos">
-      <HeaderPadrao/>
-      
+      <HeaderPadrao />
+
       <div className="conteudo">
         <span>Pagamentos</span>
         <br />
@@ -149,8 +147,8 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
               <input placeholder="Busca por nome" />
             </div>
 
-            <button 
-              className="btn-calendario" 
+            <button
+              className="btn-calendario"
               onClick={() =>
                 navigate("/calendario", {
                   state: {
@@ -160,9 +158,13 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
                 })
               }
             >
-                <CalendarDays size={20} />
-                <h3> Painel</h3>
+              <CalendarDays size={20} />
+              <h3>Painel</h3>
             </button>
+            <button className="add-btn" onClick={() => navigate("/cadastro-boleto")}>
+              <Plus size={20} color="#fff" />
+            </button>
+
           </div>
 
           <div className="lista">
@@ -171,9 +173,7 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
                 <div className="info-esquerda">
                   <div className="vencimento">Vencimento: {boleto.start.toLocaleDateString()}</div>
 
-                  <div className="descricao">
-                    {boleto.title}
-                  </div>
+                  <div className="descricao">{boleto.title}</div>
 
                   <div className="valor">{boleto.value}</div>
                 </div>
@@ -194,7 +194,6 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
             {boletosFiltrados.length === 0 && (
               <div className="sem-resultados">Nenhum boleto encontrado para os filtros selecionados.</div>
             )}
-
           </div>
         </div>
       </div>
@@ -212,5 +211,4 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
       )}
     </div>
   );
-  
 }
