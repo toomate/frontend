@@ -93,6 +93,53 @@
     font-size: 0.85em;
 }
 
+.event-confirmacao-box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.event-confirmacao-texto {
+    margin: 0;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.event-confirmacao-acoes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.event-confirmacao-acoes .event-action-button,
+.event-confirmacao-acoes .event-file-button {
+    width: 200px;
+    height: 40px;
+    box-sizing: border-box;
+}
+
+.event-file-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.9em;
+    font-weight: 600;
+    cursor: pointer;
+    background: #d7a231;
+    color: #1f1302;
+}
+
+.event-file-input {
+    display: none;
+}
+
+.event-file-name {
+    font-size: 0.85em;
+    color: #555;
+}
+
 /* Link inferior */
 .event-link {
     text-align: right;

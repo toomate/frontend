@@ -5,6 +5,8 @@ import { boletos as BoletosApi } from '../../provider/Api';
 export default function CalendarioDetail({ boletos, onClose, onStatusAtualizado }){
   const [carregandoPorId, setCarregandoPorId] = useState({});
   const [erroPorId, setErroPorId] = useState({});
+  const [confirmacaoPorId, setConfirmacaoPorId] = useState({});
+  const [comprovantePorId, setComprovantePorId] = useState({});
 
   console.log('Boletos recebidos em CalendarioDetail:', boletos);
 
@@ -37,6 +39,36 @@ export default function CalendarioDetail({ boletos, onClose, onStatusAtualizado 
         [boleto.id]: false,
       }));
     }
+  }
+
+  function abrirConfirmacaoPagamento(idBoleto) {
+    setConfirmacaoPorId((estadoAtual) => ({
+      ...estadoAtual,
+      [idBoleto]: true,
+    }));
+  }
+
+  function fecharConfirmacaoPagamento(idBoleto) {
+    setConfirmacaoPorId((estadoAtual) => ({
+      ...estadoAtual,
+      [idBoleto]: false,
+    }));
+  }
+
+  async function anexarComprovanteEAtualizarStatus(boleto, eventoArquivo) {
+    const arquivo = eventoArquivo.target.files?.[0];
+
+    if (!arquivo) {
+      return;
+    }
+
+    setComprovantePorId((estadoAtual) => ({
+      ...estadoAtual,
+      [boleto.id]: arquivo.name,
+    }));
+
+    await marcarComoPago(boleto);
+    fecharConfirmacaoPagamento(boleto.id);
   }
 
   return (
@@ -83,18 +115,59 @@ export default function CalendarioDetail({ boletos, onClose, onStatusAtualizado 
               </div>
 
               <div className="event-row event-actions">
-                <button
-                  type="button"
-                  className={`event-action-button ${boleto.status ? 'is-paid' : 'is-pending'}`}
-                  onClick={() => marcarComoPago(boleto)}
-                  disabled={boleto.status || carregandoPorId[boleto.id]}
-                >
-                  {boleto.status
-                    ? 'Pago ✓'
-                    : carregandoPorId[boleto.id]
-                    ? 'Atualizando...'
-                    : 'Marcar como pago'}
-                </button>
+                {boleto.status ? (
+                  <button
+                    type="button"
+                    className="event-action-button is-paid"
+                    disabled
+                  >
+                    Pago ✓
+                  </button>
+                ) : confirmacaoPorId[boleto.id] ? (
+                  <div className="event-confirmacao-box">
+                    <p className="event-confirmacao-texto">
+                      Tem certeza que deseja mudar o status sem acrescentar o comprovante?
+                    </p>
+
+                    <div className="event-confirmacao-acoes">
+                      <button
+                        type="button"
+                        className="event-action-button is-pending"
+                        onClick={async () => {
+                          await marcarComoPago(boleto);
+                          fecharConfirmacaoPagamento(boleto.id);
+                        }}
+                        disabled={carregandoPorId[boleto.id]}
+                      >
+                        {carregandoPorId[boleto.id] ? 'Atualizando...' : 'Sim'}
+                      </button>
+
+                      <label className="event-file-button" htmlFor={`comprovante-${boleto.id}`}>
+                        Acrescentar comprovante
+                      </label>
+                      <input
+                        id={`comprovante-${boleto.id}`}
+                        type="file"
+                        accept="image/*,.pdf"
+                        className="event-file-input"
+                        onChange={(eventoArquivo) => anexarComprovanteEAtualizarStatus(boleto, eventoArquivo)}
+                      />
+                    </div>
+
+                    {comprovantePorId[boleto.id] && (
+                      <span className="event-file-name">Arquivo selecionado: {comprovantePorId[boleto.id]}</span>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="event-action-button is-pending"
+                    onClick={() => abrirConfirmacaoPagamento(boleto.id)}
+                    disabled={carregandoPorId[boleto.id]}
+                  >
+                    Pagar
+                  </button>
+                )}
                 {erroPorId[boleto.id] && (
                   <span className="event-action-error">{erroPorId[boleto.id]}</span>
                 )}
