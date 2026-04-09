@@ -169,6 +169,9 @@ const [filtroMes, setFiltroMes] = useState("proximo");
                 </div>
               </div>
             ))}
+            {boletosFiltrados.length === 0 && (
+              <div className="sem-resultados">Nenhum boleto encontrado para os filtros selecionados.</div>
+            )}
 
           </div>
         </div>
