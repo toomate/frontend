@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useState, useEffect } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendario.css';
-import CalendarioDetail from './calendarioDetail';
+import BoletoDetail from './boletoDetail';
 import { useLocation } from 'react-router-dom';
 import HeaderPadrao from '../../HeaderPadrao';
 
@@ -223,7 +223,7 @@ useEffect(() => {
             className="modal-container"
             onClick={(e) => e.stopPropagation()}
           >
-            <CalendarioDetail
+            <BoletoDetail
               boletos={selectedBoletos}
               onClose={() => setSelectedBoletos([])}
               onStatusAtualizado={atualizarStatusBoleto}

@@ -12,7 +12,7 @@ import CadastroInsumo from "./CadastroInsumo";
 import CadastroLote from "./CadastroLote";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Calendario from "./components/Calendario/calendario";
-import CalendarioDetail from "./components/Calendario/calendarioDetail";
+import BoletoDetail from "./components/Calendario/boletoDetail";
 import "./App.css";
 import Vencimento from "./Vencimento";
 import RotinaCard from "./components/RotinaCard/RotinaCard";
@@ -39,7 +39,7 @@ function App() {
           <Route path="/cadastro-lote" element={<CadastroLote />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calendario" element={<Calendario />} />
-          <Route path="/calendarioDetalhes" element={<CalendarioDetail />} />
+          <Route path="/calendarioDetalhes" element={<BoletoDetail />} />
           <Route path="/fornecedores" element={<Fornecedor />} />
           <Route path="/vencimentos" element={<Vencimento />} />
           <Route path="/rotinas" element={<Rotinas />} />

@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import './calendarioDetail.css';
+import './boletoDetail.css';
 import { boletos as BoletosApi } from '../../provider/Api';
 
-export default function CalendarioDetail({ boletos, onClose, onStatusAtualizado }){
+export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
   const [carregandoPorId, setCarregandoPorId] = useState({});
   const [erroPorId, setErroPorId] = useState({});
   const [confirmacaoPorId, setConfirmacaoPorId] = useState({});
   const [comprovantePorId, setComprovantePorId] = useState({});
 
-  console.log('Boletos recebidos em CalendarioDetail:', boletos);
+  console.log('Boletos recebidos em BoletoDetail:', boletos);
 
   async function marcarComoPago(boleto) {
     if (boleto.status || carregandoPorId[boleto.id]) {

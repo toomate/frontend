@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import "./App.css";
 import { CalendarDays, Search } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
-import CalendarioDetail from "./components/Calendario/calendarioDetail";
+import BoletoDetail from "./components/Calendario/boletoDetail";
 import { boletos } from './provider/Api';
 
 export default function Boletos({ irPara }) {
@@ -202,7 +202,7 @@ const [selectedBoletos, setSelectedBoletos] = useState([]);
       {selectedBoletos.length > 0 && (
         <div className="modal-overlay" onClick={() => setSelectedBoletos([])}>
           <div className="modal-container" onClick={(e) => e.stopPropagation()}>
-            <CalendarioDetail
+            <BoletoDetail
               boletos={selectedBoletos}
               onClose={() => setSelectedBoletos([])}
               onStatusAtualizado={atualizarStatusBoleto}
