@@ -648,14 +648,15 @@ export class Rotinas {
     }
   }
 
-  static async listar(busca, pagina, tamanho) {
+  static async listar(pesquisa, pagina, tamanho) {
     try {
-      let url = `/rotinas`;
-      if (busca.length > 0) {
-        url = `/rotinas/search?titulo=${busca}`
-      }
+      let url = `/rotinas?`;
       if(pagina !== undefined && tamanho !== undefined){
-         url = `/rotinas?pagina=${pagina}&tamanho=${tamanho}`;
+        url += `pagina=${pagina}&tamanho=${tamanho}`;
+      }
+      
+      if (pesquisa.length > 0) {
+        url += `&titulo=${pesquisa}`
       }
       const response = await requestComFallback({
         method: "get",
