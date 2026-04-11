@@ -29,14 +29,14 @@ export default function Rotinas() {
     }
 
     const voltarPag = () => {
-        if(pagina > 0){
+        if (pagina > 0) {
             let pag = pagina - 1;
             setPagina(pag)
         }
     }
-    
+
     const avancarPag = () => {
-        if(pagina <= totalPaginas){
+        if (pagina <= totalPaginas) {
             let pag = pagina + 1;
             setPagina(pag)
         }
@@ -68,10 +68,13 @@ export default function Rotinas() {
         setCardConfirmacao(false)
     }
 
-    const excluirRotina = () => {
-        RotinasClass.excluirRotina(idSelecionado)
+    const excluirRotina = async () => {
+        await RotinasClass.excluirRotina(idSelecionado)
         setCardRemocao(false)
-        setRotinas(rotinas.filter(rotina => rotina.id !== idSelecionado));
+        const response = await RotinasClass.listar(busca, pagina, tamanho);
+
+        setRotinas(response.conteudo);
+        setTotalPaginas(response.totalPaginas);
     }
 
     useEffect(() => {
@@ -79,7 +82,7 @@ export default function Rotinas() {
             setRotinas(response.conteudo);
             setTotalPaginas(response.totalPaginas)
         });
-    }, [pesquisa, pagina])
+    }, [pesquisa, pagina, rotinas])
 
     useEffect(() => {
         document.title = "Rotinas";
