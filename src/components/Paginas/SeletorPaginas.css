@@ -1,0 +1,13 @@
+.seletor-container {
+    display: flex;
+}
+
+.icone-left,
+.icone-right,
+.icone-circulo {
+    cursor: pointer;
+}
+
+#ativa svg {
+    fill: black;
+}

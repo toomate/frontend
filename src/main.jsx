@@ -18,8 +18,6 @@ import CadastroLote from './CadastroLote.jsx'
 import { CardRotina } from "./components/CardRotina/CardRotina.jsx"
 import Vencimento from './Vencimento.jsx'
 import LinhaTabela from './components/LinhaTabela/LinhaTabela.jsx'
-import RotinaCard from './components/RotinaCard/RotinaCard.jsx'
-
 
 
 
@@ -27,6 +25,5 @@ createRoot(document.getElementById('root')).render(
   
   <StrictMode>
     <App />
-    {/* <RotinaCard nomeRotina="Rotina 1"></RotinaCard> */}
   </StrictMode>,
 )

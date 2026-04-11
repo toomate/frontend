@@ -9,12 +9,14 @@ import { Rotinas as RotinasClass } from "./provider/Api";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 import { Button } from "./components/Button/Button";
 import { useNavigate } from "react-router-dom";
+import SeletorPaginas from "./components/Paginas/SeletorPaginas";
 
 export default function Rotinas() {
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [pesquisa, setPesquisa] = useState("")
     const [pagina, setPagina] = useState(0)
+    const [totalPaginas, setTotalPaginas] = useState(0)
     const [tamanho, setTamanho] = useState(16)
     const [cardRemocao, setCardRemocao] = useState(false)
     const [cardConfirmacao, setCardConfirmacao] = useState(false)
@@ -24,6 +26,24 @@ export default function Rotinas() {
     const abrirCardRemocao = (id) => {
         setCardRemocao(true)
         setIdSelecionado(id)
+    }
+
+    const voltarPag = () => {
+        if(pagina > 0){
+            let pag = pagina - 1;
+            setPagina(pag)
+        }
+    }
+    
+    const avancarPag = () => {
+        if(pagina <= totalPaginas){
+            let pag = pagina + 1;
+            setPagina(pag)
+        }
+    }
+
+    const selecionarPag = (numPag) => {
+        setPagina(numPag);
     }
 
     const navigate = useNavigate();
@@ -55,8 +75,11 @@ export default function Rotinas() {
     }
 
     useEffect(() => {
-        RotinasClass.listar(pesquisa, pagina, tamanho).then((response) => setRotinas(response.conteudo));
-    }, [pesquisa])
+        RotinasClass.listar(pesquisa, pagina, tamanho).then((response) => {
+            setRotinas(response.conteudo);
+            setTotalPaginas(response.totalPaginas)
+        });
+    }, [pesquisa, pagina])
 
     useEffect(() => {
         document.title = "Rotinas";
@@ -97,6 +120,9 @@ export default function Rotinas() {
                         ))
                     )}
                 </div>
+            </div>
+            <div className="rotina-seletor">
+                <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={pagina} selecionar={selecionarPag}></SeletorPaginas>
             </div>
         </div>
     )
