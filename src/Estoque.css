@@ -58,7 +58,7 @@
     gap: 15px;
 }
 
-.botoes-container .button-container {
+.botoes-container .button-container  {
     height: 36px;
     border: 1px solid #6b4423;
     border-radius: 5px;
@@ -99,19 +99,11 @@
 }
 
 .plus-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border-radius: 4px;
-    width: 10%;
-    height: 5.5vh;
-    background-color: #6B4423;
-    color: black;
-    cursor: pointer;
     height: 36px;
     border: 1px solid #6b4423;
-    border-radius: 999px;
-    color: #6b4423;
+    border-radius: 5px;
+    background: #6b4423;
+    color: #f8ecc6;
     padding: 0 14px;
     font-weight: 600;
     cursor: pointer;

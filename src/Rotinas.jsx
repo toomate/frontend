@@ -1,4 +1,4 @@
-import { SearchIcon } from "lucide-react";
+import { ArrowLeft, SearchIcon } from "lucide-react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import RotinaCard from "./components/RotinaCard/RotinaCard"
 import { Search } from "./components/Search/Search";
@@ -7,6 +7,8 @@ import "./Rotinas.css"
 import { useEffect, useState } from "react";
 import { Rotinas as RotinasClass } from "./provider/Api";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
+import { Button } from "./components/Button/Button";
+import { useNavigate } from "react-router-dom";
 
 export default function Rotinas() {
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
@@ -24,6 +26,8 @@ export default function Rotinas() {
         setIdSelecionado(id)
     }
 
+    const navigate = useNavigate();
+
     const pesquisar = (valor) => {
         setPesquisa(valor)
     };
@@ -37,7 +41,7 @@ export default function Rotinas() {
         try {
             await RotinasClass.darBaixa(idSelecionado)
         } catch (err) {
-            if(err.status === 400){
+            if (err.status === 400) {
                 alert(err.response.data.message)
             }
         }
@@ -56,7 +60,7 @@ export default function Rotinas() {
 
     useEffect(() => {
         document.title = "Rotinas";
-      }, []);
+    }, []);
 
 
     return (
@@ -74,8 +78,15 @@ export default function Rotinas() {
             <HeaderPadrao />
             <div className="rotinas-container">
                 <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
-                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
+                    <div className="botao-voltar">
+                        <Button Icone={ArrowLeft} texto={"Voltar"} onClick={() => { navigate("/estoque") }} />
+                    </div>
+                    <div className="nav-categorias">
+                        <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
+                    </div>
+                    <div className="ipt-pesquisar">
+                        <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
+                    </div>
                 </div>
             </div>
             <div className="rotina-container">

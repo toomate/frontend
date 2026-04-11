@@ -15,6 +15,41 @@
     margin-top: 10px;
 }
 
+.rotinas-container .nav-categorias-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+.nav-categorias-container .nav-categorias {
+    display: flex;
+}
+
+.ipt-pesquisar {
+    display: flex;
+    width: 50%;
+}
+
+.ipt-pesquisar .search-container {
+    width: 100%;
+}
+
+.botao-voltar {
+    display: flex;
+    justify-content: center;
+}
+
+.botao-voltar .button-container {
+    height: 40px;
+    border-radius: 5px;
+    background: #f8ecc6;
+    color: #6b4423;
+}
+
+.botao-voltar .button-value {
+    font-size: 16px;
+}
+
+
 .rotina-container {
     display: flex;
     gap: 10px;
@@ -69,6 +104,7 @@
     .search-container {
         margin-top: 10px;
     }
+
     .rotina-toolbar .search-container {
         width: 100%;
     }
