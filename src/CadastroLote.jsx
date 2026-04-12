@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AutocompleteInput from "./components/common/AutocompleteInput";
 import FormModal from "./components/common/FormModal";
 import { FornecedorApi, Lote, MarcaApi, insumos } from "./provider/Api";
+import { useLocation } from "react-router-dom";
 
 export default function CadastroLote() {
   const navigate = useNavigate();
@@ -29,6 +30,17 @@ export default function CadastroLote() {
   const [novoIdFornecedorMarca, setNovoIdFornecedorMarca] = useState("0");
   const [erroModalMarca, setErroModalMarca] = useState("");
   const [isCadastrandoMarca, setIsCadastrandoMarca] = useState(false);
+
+  const location = useLocation();
+
+  const dados = location.state?.insumo;
+  useEffect(() => {
+    if (dados) {
+      setInsumoSelecionado(dados.atual.insumo)
+      setIdMarcaSelecionada(dados.atual.marca)
+    }
+  }, [dados])
+ 
 
   async function fetchInsumos() {
     try {

@@ -6,7 +6,7 @@ export function NavCategorias({
   categoriaAtual,
   aoMudarCategoria,
   categorias = categoriasPadrao,
-  maxCategoriasFixas = 4,
+  maxCategoriasFixas = 10,
 }) {
   const listaCategorias = categorias?.length ? categorias : categoriasPadrao;
   const [menuAberto, setMenuAberto] = useState(false);
@@ -26,6 +26,9 @@ export function NavCategorias({
       <div className="categorias-toolbar">
         <button
           type="button"
+          style={{
+            display: categorias.length < maxCategoriasFixas ? "none" : "block",
+          }}
           className={`categoria-menu-btn ${menuAberto ? "active" : ""}`}
           onClick={() => setMenuAberto((prev) => !prev)}
           aria-label="Mostrar todas as categorias"

@@ -106,10 +106,7 @@ export default function Rotinas() {
                 <div className="nav-categorias-container">
                     <div className="botao-voltar">
                         <Button Icone={ArrowLeft} texto={"Voltar"} onClick={() => { navigate("/estoque") }} />
-                    </div>
-                    <div className="nav-categorias">
-                        <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
-                    </div>
+                    </div>   
                     <div className="ipt-pesquisar">
                         <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                     </div>

@@ -14,6 +14,7 @@ import { CardRotina } from "./components/CardRotina/CardRotina";
 import { useNavigate } from "react-router-dom";
 import { Rotinas } from "./provider/Api";
 
+
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
@@ -25,6 +26,13 @@ export function Estoque() {
     const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
+    const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
+
+
+    const abrirDropdown = (idLote) => {
+        setDropdownAbertoId(prev => prev === idLote ? null : idLote);
+    }
+
 
     const navigate = useNavigate();
 
@@ -104,7 +112,7 @@ export function Estoque() {
 
                     if (novaQtd < 0) novaQtd = 0;
 
-                    diferenca = novaQtd - atual.quantidadeMedida 
+                    diferenca = novaQtd - atual.quantidadeMedida
                     nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
 
@@ -126,7 +134,8 @@ export function Estoque() {
             if (existente) {
                 return prev.map(m =>
                     m.id === idLote
-                        ? { ...m, quantidadeMedida: novaQtd,
+                        ? {
+                            ...m, quantidadeMedida: novaQtd,
                             diferenca: m.diferenca + diferenca
                         }
                         : m
@@ -172,11 +181,25 @@ export function Estoque() {
             });
     }, [])
 
+    useEffect(() => {
+        function handleClickFora(event) {
+            if (!event.target.closest(".botao-cadastrar")) {
+                setDropdownAbertoId(null);
+            }
+        }
+
+        document.addEventListener("mousedown", handleClickFora);
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickFora);
+        };
+    }, []);
+
     function ButtonPlus() {
         return (
             <div className="plus-container">
                 <div className="plus-icon-container">
-                    <div className="plus-icon"><Plus color="#F8ECC6" onClick={()=>{navigate("/cadastro-insumo")}}/></div>
+                    <div className="plus-icon"><Plus color="#F8ECC6" onClick={() => { navigate("/cadastro-insumo") }} /></div>
                 </div>
             </div>
         )
@@ -209,23 +232,29 @@ export function Estoque() {
 
                 <div className="nav-categorias-container">
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
-                    <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                 </div>
                 <div className="button-secund">
                     <div className="botoes-container">
-                        <ButtonPlus />
-                        <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
-                        <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
-                        <div className="botoes-container-icon">
-                            <ScanBarcode color="black" size={30} onClick={() => { navigate("/leitor") }} />
+                        <div className="botoes-container">
+                            <ButtonPlus />
+                            <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
+                            <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
+                            <div className="botoes-container-icon">
+                                <ScanBarcode color="black" size={30} onClick={() => { navigate("/leitor") }} />
+                            </div>
+                            <div className="container-search">
+                                <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div className="insumos-container">
-                    <Cabecalho elementos={["Insumo", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
+                    <Cabecalho elementos={["Insumo", "Qtd. Mínima", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
                     <div className="grupo-insumos-container">
                         {grupo.length > 0 ? grupo.map(atual => (
-                            <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} />
+                            <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}
+                            dropdownAbertoId={dropdownAbertoId}
+                            />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>
                 </div>

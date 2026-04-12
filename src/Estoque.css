@@ -28,17 +28,23 @@
     justify-content: space-evenly;
 }
 
-.nav-categorias-container .search-container {
+.nav-categorias-container .categorias-container .categoria-item{
+    font-size: 18px;
+}
+
+.container-search {
     width: 100%;
     height: 42px;
     border: 1px solid #6b4423;
     border-radius: 6px;
     background: #fffdf4;
+    display: flex;
+    justify-content: end;
 }
 
-.nav-categorias-container .search {
-    width: calc(100% - 36px);
-}
+ .search {
+     width: calc(100% - 36px);
+ }
 
 .button-secund {
     display: flex;
@@ -54,11 +60,11 @@
     align-items: center;
     justify-self: flex-start;
     height: 10vh;
-    width: auto;
+    width: 100%;
     gap: 15px;
 }
 
-.botoes-container .button-container  {
+.botoes-container .button-container {
     height: 36px;
     border: 1px solid #6b4423;
     border-radius: 5px;
@@ -74,7 +80,7 @@
 }
 
 .botoes-container .button-value {
-    font-size: medium;
+    font-size: 18px;
 }
 
 .insumos-container {

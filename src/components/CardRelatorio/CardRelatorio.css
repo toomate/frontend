@@ -69,6 +69,13 @@
     flex-direction: column;
 }
 
+.info-linha {
+    display: flex;
+    align-items: center;
+    width: 60%;
+    justify-content: center;
+}
+
 .produto-linha {
     display: grid;
     grid-template-columns: 150px 10fr 1fr;

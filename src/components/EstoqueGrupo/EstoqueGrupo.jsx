@@ -1,12 +1,24 @@
 import { React, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { Beef, BottleWine, ChevronDown, Leaf, Milk, Package, Wheat } from "lucide-react";
 import "./EstoqueGrupo.css"
 import { EstoqueItem } from "../EstoqueItem/EstoqueItem";
 import { useEffect } from "react";
 
-export function EstoqueGrupo({ grupo, alterarValor}) {
+export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId}) {
     const [expandido, setExpandido] = useState(false);
-    
+    console.log("asdasd", grupo)
+
+    const pegarIcone = (categoria) => {
+        switch (categoria.toLowerCase()) {
+            case ("proteínas" || "proteinas") : return <Beef size={32} />;
+            case ("laticínios" || "laticinios") : return <Milk size={32} />;
+            case "hortifruti": return <Leaf size={32} style={{color: "green"}}/>;
+            case ("grãos e secos" || "grãos"): return <Wheat size={32} style={{ color: "#a8987a"}}/>;
+            case ("bebidas" || "bebida") : return <BottleWine size={32}/>
+            default: return <Package size={30} />;
+        }
+    };
+
     const formatarData = (data) => {
         if (!data) return '';
         const d = new Date(data);
@@ -22,11 +34,15 @@ export function EstoqueGrupo({ grupo, alterarValor}) {
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
             }} /></div>
-                <div className="insumo-nome">{grupo.insumo}</div>
-            </div> <div className="qtd-total">{Math.floor(grupo.qtdTotal)}</div> <div className="medida">{grupo.medida}</div> <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
+                <div className="insumo-nome"><div className="insumo-icon">{pegarIcone(grupo.categoria)}</div></div>
+            </div>
+            <div className="qtdMinima">{grupo.qtdMinima}</div> 
+            <div className="qtd-total">{Math.floor(grupo.qtdTotal)}</div>
+            <div className="medida">{grupo.medida}</div> 
+            <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
         </div>
         {expandido && (
-            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} />
+            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId}/>
         )}
     </div>
 

@@ -2,15 +2,18 @@
     border-bottom: 1px solid black;
     background-color: white;
     color: black;
-    font-size: medium;
-    font-weight: 500;
     min-height: 35px;
+    position: relative;
     width: 100%;
+    font-size: 18px;
+    height: 6vh;
 }
 
 .insumo-grupo {
+    font-size: 18px;
     display: flex;
-    justify-content: space-evenly;
+    width: 95%;
+    justify-content: flex-end;
 }
 
 #active {
@@ -21,10 +24,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid black;
-    border-radius: 5px;
+    border-radius: 10px;
+    border: 1px solid #e2c87a;
     height: 80%;
-    width: 75%;
+    background-color: #f5edd8;
+    width: 100%;
+    gap: 10px;
+    font-size: 16px;
+}
+
+.icone-insumo {
+    position: relative;
+    left: 5%;
 }
 
 
@@ -46,4 +57,14 @@
     align-items: center;
     width: 30%;
     justify-content: space-around;
+}
+
+.botao-cadastrar {
+    position: relative;
+}
+
+.botao-cadastrar .button-container{
+    background-color: white;
+    border: 0;
+    width: 100%;
 }
