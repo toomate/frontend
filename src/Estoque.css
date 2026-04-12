@@ -28,7 +28,7 @@
     justify-content: space-evenly;
 }
 
-.nav-categorias-container .categorias-container .categoria-item{
+.nav-categorias-container .categorias-container .categoria-item {
     font-size: 18px;
 }
 
@@ -42,9 +42,9 @@
     justify-content: end;
 }
 
- .search {
-     width: calc(100% - 36px);
- }
+.search {
+    width: calc(100% - 36px);
+}
 
 .button-secund {
     display: flex;
@@ -223,7 +223,6 @@
 @media (max-width: 480px) {
     #root {
         width: 100dvw;
-        height: 120dvh;
     }
 
     .categoria-container .insumos-container .elemento-container {
@@ -232,7 +231,44 @@
 
     .nav-categorias-container {
         width: 95%;
-        height: 45%;
+        height: 10%;
+    }
+
+    .button-secund .botoes-container .button-container {
+        width: 30%;
+        justify-content: center;
+    }
+
+    .button-secund .botoes-container .button-container .button-value {
+        font-size: 12px;
+    }
+
+    .button-secund .botoes-container .button-container .icon-container .button-icon svg {
+        height: 20px;
+    }
+
+    .container-search {
+        flex-wrap: wrap;
+    }
+
+    .button-secund .botoes-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .botoes-container .container-search {
+        display: flex;
+        justify-content: center;
+        width: 90%;
+        align-items: center;
+        border: 0;
+    }
+
+    .botoes-container .container-search .search-container {
+        width: 100%;
+        height: 85%;
     }
 
     .insumos-container .grupo-insumos-container .insumo-nome,
@@ -244,13 +280,60 @@
         font-size: 10px;
     }
 
+    .linha-estoque .insumo .insumo-nome .insumo-icon svg {
+        height: 20px;
+    }
+
+    .linha-estoque .insumo .insumo-nome .insumo-icon {
+        width: 70%;
+        height: 70%;
+    }
+
+    .linha-estoque .insumo-grupo {
+        height: 100%;
+        width: 100%;
+    }
+
+    .linha-estoque .insumo-grupo .item-nome {
+        justify-content: center;
+        flex-direction: row-reverse;
+        border: 1px solid rebeccapurple;
+        gap: 0px;
+        width: 70%;
+        height: 70%;
+    }
+
+    .linha-estoque .insumo-grupo .item-nome svg {
+        display: none;
+    }
+
+    .linha-estoque .insumo-grupo .item-nome {
+        font-size: 10px;
+        text-overflow: ellipsis;
+    }
+
     .grupo-container .insumo-icone-value {
         height: 20px;
     }
 
-    .controle .circle-minus-icon,
-    .circle-plus-icon {
-        width: 42px;
+    .linha-estoque .controle-container .controle svg {
+        height: 14px;
+    }
+    
+    .linha-estoque .botao-cadastrar {
+        height: 50%;
+        width: 50%;
+        justify-self: flex-end;
+        background-color: transparent;
+    }
+
+    .linha-estoque .botao-cadastrar .button-container {
+        background-color: transparent;
+    }
+    
+    .linha-estoque .botao-cadastrar svg {
+        background-color: transparent;
+        height: 16px;
     }
 
     .botoes-container {

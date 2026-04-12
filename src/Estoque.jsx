@@ -27,6 +27,7 @@ export function Estoque() {
     const [idSelecionado, setIdSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
+    const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
 
 
     const abrirDropdown = (idLote) => {
@@ -205,7 +206,23 @@ export function Estoque() {
         )
     }
 
-    console.log(grupo)
+    useEffect(() => {
+        const mobile = window.matchMedia("(max-width: 480px)");
+
+        const update = () => {
+            if (mobile.matches) setMaxCategoriasFixas(0);
+            else setMaxCategoriasFixas(10);
+        };
+
+        update();
+
+        mobile.addEventListener("change", update);
+
+        return () => {
+            mobile.removeEventListener("change", update);
+        };
+    }, []);
+
     return (
         <div className="estoque-container">
             {exibirRelatorio && (
@@ -231,7 +248,7 @@ export function Estoque() {
             <div className="categoria-container">
 
                 <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} />
+                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
                 </div>
                 <div className="button-secund">
                     <div className="botoes-container">
@@ -253,7 +270,7 @@ export function Estoque() {
                     <div className="grupo-insumos-container">
                         {grupo.length > 0 ? grupo.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}
-                            dropdownAbertoId={dropdownAbertoId}
+                                dropdownAbertoId={dropdownAbertoId}
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>

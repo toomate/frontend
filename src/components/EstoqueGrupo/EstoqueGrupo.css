@@ -64,9 +64,9 @@
 @media (max-width: 480px) {
     .linha-estoque {
         display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 12px;
+        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 25px;
         align-items: center;
         justify-items: stretch;
-        width: 95%;
+        width: 100%;
     }
 }

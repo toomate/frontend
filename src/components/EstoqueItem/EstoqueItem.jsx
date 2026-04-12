@@ -6,6 +6,7 @@ import { PiDotsThree } from "react-icons/pi";
 import DropdownEstoque from "../Dropdown/DropdownEstoque";
 
 export function EstoqueItem(props) {
+    console.log("ablubleblau", props.elementos)
 
     const formatarData = (data) => {
         if (!data) return '';
@@ -47,7 +48,7 @@ export function EstoqueItem(props) {
                     <Button onClick={() => props.abrirDropdown(atual.idLote)} texto={<PiDotsThree size={30} />} />
 
                     {props.dropdownAbertoId === atual.idLote && (
-                        <DropdownEstoque atual={{insumo: props.nomeInsumo, marca: atual.idMarca}}/>
+                        <DropdownEstoque atual={{insumoId: atual.idInsumo, insumoNome: props.nomeInsumo, marca: atual.idMarca}}/>
                     )}
                 </div>
             </div>

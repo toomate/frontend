@@ -6,7 +6,7 @@ export function NavCategorias({
   categoriaAtual,
   aoMudarCategoria,
   categorias = categoriasPadrao,
-  maxCategoriasFixas = 10,
+  maxCategoriasFixas,
 }) {
   const listaCategorias = categorias?.length ? categorias : categoriasPadrao;
   const [menuAberto, setMenuAberto] = useState(false);

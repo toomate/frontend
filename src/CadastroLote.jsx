@@ -36,7 +36,9 @@ export default function CadastroLote() {
   const dados = location.state?.insumo;
   useEffect(() => {
     if (dados) {
-      setInsumoSelecionado(dados.atual.insumo)
+      console.log(dados)
+      setInsumoSelecionado(dados.atual.insumoNome)
+      setIdInsumoSelecionado(dados.atual.insumoId)
       setIdMarcaSelecionada(dados.atual.marca)
     }
   }, [dados])
