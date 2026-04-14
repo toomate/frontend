@@ -16,6 +16,7 @@ import {
   Receipt,
   Shield,
   UserPlus,
+  Users,
   Wallet,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -66,7 +67,8 @@ const secoesMenu = [
     icone: Shield,
     subitens: [
       { to: "/admin?aba=lancamentos", label: "Controle de Gastos", icone: Wallet },
-      { to: "/admin?aba=usuarios", label: "Cadastro de Usuários", icone: UserPlus },
+      { to: "/admin?aba=usuarios", label: "Gerenciamento de Usuários", icone: Users },
+      { to: "/cadastro", label: "Cadastro de Usuários", icone: UserPlus },
       { to: "/admin?aba=logs", label: "Logs de Mudança", icone: Activity },
       { to: "/admin?aba=relatorios", label: "Relatório do Sistema", icone: FileText },
     ],

@@ -8,7 +8,8 @@
   --admin-borda: #d9bf80;
   --admin-texto: #1f1f1f;
   --admin-texto-suave: #5f5f5f;
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   color: var(--admin-texto);
   font-family: "Arial", sans-serif;
   background: #ffffff;
@@ -253,6 +254,8 @@
 
 .admin-content {
   padding: 12px;
+  flex: 1;
+  overflow-y: auto;
 }
 
 .admin-stat-grid {
@@ -861,6 +864,18 @@
 
 .admin-lancamentos-card {
   min-height: auto;
+  display: flex;
+  flex-direction: column;
+  max-height: 520px;
+}
+
+.admin-lancamentos-card .admin-expenses-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.admin-lancamentos-card .admin-expense-total {
+  flex-shrink: 0;
 }
 
 .admin-expenses-header h2 {

@@ -1,4 +1,8 @@
 ﻿import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SeletorPaginas from "../Paginas/SeletorPaginas";
+
+const USUARIOS_POR_PAGINA = 7;
 
 function normalizarUsername(valor) {
   return String(valor ?? "")
@@ -21,6 +25,7 @@ function montarDadosEdicao(usuario) {
 }
 
 export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }) {
+  const navigate = useNavigate();
   const [usuarioEmEdicao, setUsuarioEmEdicao] = useState(null);
   const [dadosEdicao, setDadosEdicao] = useState({
     nome: "",
@@ -33,11 +38,19 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
   const [erroSalvar, setErroSalvar] = useState("");
   const [avisoUsername, setAvisoUsername] = useState("");
   const [salvando, setSalvando] = useState(false);
+  const [paginaAtual, setPaginaAtual] = useState(0);
 
   const totalAdmins = useMemo(
     () => usuarios.filter((usuario) => usuario.ehAdmin).length,
     [usuarios]
   );
+
+  const totalPaginas = Math.max(1, Math.ceil(usuarios.length / USUARIOS_POR_PAGINA));
+
+  const usuariosPaginados = useMemo(() => {
+    const inicio = paginaAtual * USUARIOS_POR_PAGINA;
+    return usuarios.slice(inicio, inicio + USUARIOS_POR_PAGINA);
+  }, [usuarios, paginaAtual]);
 
   function abrirModalEdicao(usuario) {
     setUsuarioEmEdicao(usuario);
@@ -161,6 +174,13 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
           <div className="admin-users-resumo">
             <span>{usuarios.length} usuários</span>
             <span>{totalAdmins} admins</span>
+            <button
+              type="button"
+              className="admin-users-btn-salvar"
+              onClick={() => navigate("/cadastro")}
+            >
+              Cadastrar usuário
+            </button>
           </div>
         </header>
 
@@ -175,7 +195,7 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
               </tr>
             </thead>
             <tbody>
-              {usuarios.map((usuario) => (
+              {usuariosPaginados.map((usuario) => (
                 <tr key={usuario.id}>
                   <td>{usuario.nome}</td>
                   <td>{usuario.username}</td>
@@ -202,6 +222,14 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
             </tbody>
           </table>
         </div>
+
+        <SeletorPaginas
+          avancar={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas - 1))}
+          voltar={() => setPaginaAtual((p) => Math.max(p - 1, 0))}
+          selecionar={setPaginaAtual}
+          numPages={totalPaginas}
+          paginaSelecionada={paginaAtual}
+        />
       </section>
 
       {usuarioEmEdicao ? (

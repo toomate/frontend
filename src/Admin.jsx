@@ -852,9 +852,9 @@ export default function Admin() {
       mapaInsumos.set(lancamento.insumo, valorAcumulado + lancamento.valorTotal);
     });
 
-    const insumosOrdenados = Array.from(mapaInsumos.entries()).sort(
-      (a, b) => b[1] - a[1]
-    );
+    const insumosOrdenados = Array.from(mapaInsumos.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
     const categorias = insumosOrdenados.map(([insumo]) => insumo);
     const valores = insumosOrdenados.map(([, valor]) => valor);
 
