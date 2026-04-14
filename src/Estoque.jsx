@@ -28,6 +28,7 @@ export function Estoque() {
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
     const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
+    const [loading, setLoading] = useState({rotina: false, relatorio: false});
 
 
     const abrirDropdown = (idLote) => {
@@ -65,6 +66,7 @@ export function Estoque() {
 
     const criarRotina = async (titulo) => {
         try {
+            setLoading({rotina: true})
             const res = await Rotinas.criar(titulo)
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
@@ -76,12 +78,15 @@ export function Estoque() {
         } catch (err) {
             console.error(err)
             throw error;
+        } finally {
+            setLoading({ rotina: false })
         }
     }
 
 
     const salvarAlteracoes = async () => {
         try {
+            setLoading({relatorio: true})
             await Lote.atualizarQuantidade(mudancas)
             await Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res))
             setExibirRelatorio(false)
@@ -89,6 +94,8 @@ export function Estoque() {
         } catch (error) {
             console.error("Erro ao salvar alterações:", error)
             throw error;
+        } finally {
+            setLoading({ relatorio: false })
         }
     }
 
@@ -226,7 +233,7 @@ export function Estoque() {
             {exibirRelatorio && (
                 <div className="escurecer">
                     <CardRelatorio props={mudancas}
-                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={abrirCardRotina} />
+                        fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} loading={loading.relatorio} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={abrirCardRotina} />
                 </div>
             )}
             {cardRemocao && (
@@ -237,7 +244,7 @@ export function Estoque() {
 
             {cardRotina && (
                 <div className="escurecer">
-                    <CardRotina setTitulo={setTitulo} salvarRotina={() => { criarRotina(titulo) }} fecharCard={() => { setCardRotina(false) }} />
+                    <CardRotina setTitulo={setTitulo} salvarRotina={() => { criarRotina(titulo) }} loading={loading.rotina} fecharCard={() => { setCardRotina(false) }} />
                 </div>
             )}
             <div className="nav-header">

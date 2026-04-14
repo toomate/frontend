@@ -2,7 +2,7 @@ import { Button } from "../Button/Button";
 import "./CardRotina.css"
 
 
-export function CardRotina({fecharCard, setTitulo, salvarRotina}) {
+export function CardRotina({fecharCard, setTitulo, salvarRotina, loading}) {
     return (
         <div className="container-card-rotina">
             <div className="titulo-card-rotina">
@@ -15,7 +15,7 @@ export function CardRotina({fecharCard, setTitulo, salvarRotina}) {
                 </div>
             </div>
             <div className="botoes">
-                <Button onClick={salvarRotina} texto="Salvar" />
+                <Button onClick={salvarRotina} disabled={loading} texto={loading ? "Salvando..." : "Salvar"} />
                 <Button onClick={fecharCard} texto="Cancelar" />
             </div>
         </div>

@@ -1,9 +1,9 @@
 import { Bookmark } from "lucide-react";
 import "./Button.css"
 
-export function Button({ texto, Icone, onClick }) {
+export function Button({ texto, Icone, onClick, disabled }) {
     return (
-        <div className="button-container" onClick={onClick}>
+        <button className="button-container" disabled={disabled} onClick={onClick}>
             {texto && (
                 <div className={`button-value ${!Icone ? "no-icon" : ""}`}>
                     {texto}
@@ -14,6 +14,6 @@ export function Button({ texto, Icone, onClick }) {
                     <div className="button-icon"><Icone className="button-icon-value" /></div>
                 </div>
             )}
-        </div>
+        </button>
     )
 }
