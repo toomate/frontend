@@ -529,13 +529,45 @@
   transform: translateY(-1px);
 }
 
+.admin-relatorios-acoes {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.admin-relatorios-pdf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 14px;
+  border: 1px solid var(--admin-marrom);
+  border-radius: 8px;
+  background: var(--admin-marrom);
+  color: var(--admin-creme);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .admin-relatorio-detalhe {
   min-height: auto;
   padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.admin-relatorio-detalhe-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .admin-relatorio-detalhe h3 {
-  margin: 0 0 8px;
+  margin: 0 0 4px;
   color: var(--admin-marrom);
 }
 
@@ -1869,3 +1901,104 @@
   color: var(--admin-texto-suave);
 }
 
+
+.admin-relatorio-metricas {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.admin-relatorio-metrica-item {
+  flex: 1;
+  min-width: 130px;
+  background: #f9f5ed;
+  border: 1px solid #e8d9b0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.admin-relatorio-metrica-item span {
+  font-size: 12px;
+  color: var(--admin-texto-suave);
+}
+
+.admin-relatorio-metrica-item strong {
+  font-size: 16px;
+  color: #1f2f3f;
+}
+
+.admin-relatorio-metrica-alerta {
+  color: #c92c2c !important;
+}
+
+.admin-relatorio-subtitulo {
+  margin: 0;
+  font-size: 14px;
+  color: var(--admin-marrom);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.admin-relatorio-tabela-wrapper {
+  overflow-x: auto;
+}
+
+.admin-relatorio-tabela {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.admin-relatorio-tabela th {
+  text-align: left;
+  padding: 8px 10px;
+  background: #f3e9d2;
+  color: var(--admin-marrom);
+  font-weight: 600;
+  border-bottom: 2px solid #e8d9b0;
+}
+
+.admin-relatorio-tabela td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #f0e8d5;
+  color: #364759;
+}
+
+.admin-relatorio-tabela tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.admin-relatorio-rank {
+  color: var(--admin-texto-suave);
+  font-weight: 700;
+  width: 28px;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  .admin-relatorio-detalhe,
+  .admin-relatorio-detalhe * {
+    visibility: visible;
+  }
+
+  .admin-relatorio-detalhe {
+    position: fixed;
+    inset: 0;
+    padding: 32px;
+    background: #fff;
+    box-shadow: none;
+    border: none;
+  }
+
+  .admin-relatorios-pdf-btn {
+    display: none;
+  }
+}
