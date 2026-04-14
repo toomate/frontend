@@ -69,11 +69,10 @@ export function Estoque() {
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
                 insumoId: atual.insumoId,
-                quantidadeMedida: atual.diferenca
+                quantidadeMedida: Math.abs(atual.diferenca)
             }))
             await Rotinas.associarInsumos(id, insumosRotina)
             setCardRotina(false)
-            setExibirRelatorio(false)
         } catch (err) {
             console.error(err)
             throw error;
@@ -178,7 +177,6 @@ export function Estoque() {
                 }
             })
             .catch(() => {
-                // Mantem fallback local caso a API de categorias falhe.
             });
     }, [])
 

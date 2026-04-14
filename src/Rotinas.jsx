@@ -59,7 +59,8 @@ export default function Rotinas() {
 
     const darBaixa = async () => {
         try {
-            await RotinasClass.darBaixa(idSelecionado)
+            const res = await RotinasClass.darBaixa(idSelecionado)
+            console.log("resposta", res)
         } catch (err) {
             if (err.status === 400) {
                 alert(err.response.data.message)

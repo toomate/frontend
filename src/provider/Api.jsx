@@ -624,10 +624,6 @@ export class Rotinas {
   }
 
   static async associarInsumos(id, insumos) {
-    let data = {"data": {
-      fkRotina: Number(id),
-      insumos: insumos
-    }}
     try {
       const response = await requestComFallback({
         method: "put",
