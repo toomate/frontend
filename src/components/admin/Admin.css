@@ -11,13 +11,7 @@
   min-height: 100vh;
   color: var(--admin-texto);
   font-family: "Arial", sans-serif;
-  background-image: linear-gradient(
-      rgba(248, 236, 198, 0.82),
-      rgba(248, 236, 198, 0.82)
-    ),
-    url("../../images/fundo-tela.png");
-  background-size: cover;
-  background-position: center;
+  background: #ffffff;
   display: flex;
   flex-direction: column;
 }
@@ -989,6 +983,10 @@
 
 .admin-unit-price-card {
   min-height: auto;
+  height: 460px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .admin-unit-price-header h2 {
@@ -1007,6 +1005,8 @@
   display: flex;
   flex-direction: column;
   gap: 10px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .admin-unit-price-bloco {

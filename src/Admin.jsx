@@ -1,9 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import { Activity, FileText, Home, List, UserPlus, Users, Wallet } from "lucide-react";
-import { useLocation, useNavigate } from "react-router-dom";
-import LayoutAdmin from "./components/admin/AdminLayout";
-import BarraLateralAdmin from "./components/admin/AdminSidebar";
-import TopoAdmin from "./components/admin/AdminTopbar";
+import { Activity, FileText, Users, Wallet } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import CardResumoAdmin from "./components/admin/AdminStatCard";
 import CardGraficoAdmin from "./components/admin/AdminChartCard";
 import ComparativoPrecoUnitarioAdmin from "./components/admin/AdminComparativoPrecoUnitario";
@@ -126,17 +123,6 @@ const dadosMockAdmin = {
   ],
 };
 
-const itensBarraLateral = [
-  { id: "inicio", rotulo: "Início", icone: Home },
-  { id: "lancamentos", rotulo: "Lançamentos", icone: List },
-  { id: "usuarios", rotulo: "Usuários", icone: Users },
-  { id: "relatorios", rotulo: "Relatórios", icone: FileText },
-  { id: "logs", rotulo: "Logs do sistema", icone: Activity },
-];
-
-const acoesBarraLateral = [
-  { id: "cadastro-usuario", rotulo: "Cadastro de usuário", icone: UserPlus },
-];
 
 const abasAdminDisponiveis = new Set([
   "inicio",
@@ -342,10 +328,8 @@ function normalizarTextoBusca(valor) {
 }
 
 export default function Admin() {
-  const navegar = useNavigate();
   const localizacao = useLocation();
   const [itemAtivo, setItemAtivo] = useState("inicio");
-  const [menuLateralAberto, setMenuLateralAberto] = useState(false);
   const [usuariosSistema, setUsuariosSistema] = useState([]);
   const [logsSistema, setLogsSistema] = useState(dadosMockAdmin.logs);
   const [lancamentosInsumos, setLancamentosInsumos] = useState([]);
@@ -1004,30 +988,6 @@ export default function Admin() {
       });
   }, [insumosSelecionados, lancamentosFiltrados]);
 
-  function selecionarItemBarraLateral(id) {
-    setItemAtivo(id);
-    setMenuLateralAberto(false);
-
-    if (!abasAdminDisponiveis.has(id)) {
-      return;
-    }
-
-    if (id === "inicio") {
-      navegar("/admin", { replace: true });
-      return;
-    }
-
-    navegar(`/admin?aba=${id}`, { replace: true });
-  }
-
-  function selecionarAcaoBarraLateral(id) {
-    setItemAtivo(id);
-    setMenuLateralAberto(false);
-
-    if (id === "cadastro-usuario") {
-      navegar("/cadastro");
-    }
-  }
 
   async function salvarAlteracoesUsuario(idUsuario, dadosAtualizados) {
     const usuariosAntes = usuariosSistema;
@@ -1416,26 +1376,7 @@ export default function Admin() {
   return (
     <div className="admin-page">
       <HeaderPadrao />
-      <LayoutAdmin
-        menuLateralAberto={menuLateralAberto}
-        aoFecharMenuLateral={() => setMenuLateralAberto(false)}
-        barraLateral={
-          <BarraLateralAdmin
-            itens={itensBarraLateral}
-            acoes={acoesBarraLateral}
-            itemAtivo={itemAtivo}
-            aoSelecionar={selecionarItemBarraLateral}
-            aoSelecionarAcao={selecionarAcaoBarraLateral}
-          />
-        }
-        topo={
-          <TopoAdmin
-            aoAlternarSidebar={() =>
-              setMenuLateralAberto((menuAbertoAnterior) => !menuAbertoAnterior)
-            }
-          />
-        }
-      >
+      <div className="admin-content">
         {exibindoGestaoUsuarios ? (
           <GerenciamentoUsuariosAdmin
             usuarios={usuariosSistema}
@@ -1564,7 +1505,7 @@ export default function Admin() {
         </section>
           </>
         )}
-      </LayoutAdmin>
+      </div>
     </div>
   );
 }

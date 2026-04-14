@@ -37,16 +37,7 @@ const secoesMenu = [
       { to: "/leitor", label: "Leitor de Código de Barras", icone: QrCode },
     ],
   },
-  {
-    id: "fornecedores",
-    titulo: "Fornecedores",
-    to: "/fornecedores",
-    icone: Building2,
-    subitens: [
-      { to: "/cadastro-boleto", label: "Cadastro de Boleto", icone: CircleDollarSign },
-      { to: "/fornecedores", label: "Lista de Fornecedores", icone: Building2 },
-    ],
-  },
+  { id: "fornecedores", titulo: "Fornecedores", to: "/fornecedores", icone: Building2 },
   { id: "vencimentos", titulo: "Vencimentos", to: "/vencimentos", icone: CalendarDays },
   {
     id: "boletos",

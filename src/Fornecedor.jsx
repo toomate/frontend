@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { SearchX, TriangleAlert } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 import { FornecedorToolbar } from "./components/fornecedores/FornecedorToolbar";
-import { FiltroCategoriaFornecedor } from "./components/fornecedores/FiltroCategoriaFornecedor";
 import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
 import { PaginacaoFornecedor } from "./components/fornecedores/PaginacaoFornecedor";
 import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
@@ -308,13 +307,17 @@ export default function Fornecedor() {
   const { fornecedoresPagina, totalPaginas } = useMemo(() => {
     let lista = [...fornecedores];
 
-    const termo = busca.trim().toLowerCase();
+    const normalizar = (s) =>
+      String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const termo = normalizar(busca.trim());
     if (termo) {
-      lista = lista.filter(
-        (f) =>
-          f.razaoSocial.toLowerCase().includes(termo) ||
-          f.telefone.replace(/\D/g, "").includes(termo.replace(/\D/g, ""))
-      );
+      const termoDigitos = termo.replace(/\D/g, "");
+      lista = lista.filter((f) => {
+        if (normalizar(f.razaoSocial).includes(termo)) return true;
+        if (termoDigitos.length > 0 && f.telefone.replace(/\D/g, "").includes(termoDigitos)) return true;
+        return false;
+      });
     }
 
     if (ordenacao === "alfabetica_desc") {
@@ -344,9 +347,6 @@ export default function Fornecedor() {
           aoMudarOrdenacao={setOrdenacao}
           aoAdicionar={abrirModalCriacao}
           aoAdicionarCategoria={abrirModalCategoria}
-        />
-
-        <FiltroCategoriaFornecedor
           categorias={categorias}
           categoriasSelecionadas={categoriasSelecionadas}
           aoToggleCategoria={aoToggleCategoria}

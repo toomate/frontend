@@ -1,5 +1,5 @@
 import { Plus, Search, Tag } from "lucide-react";
-import { Search as CampoBusca } from "../Search/Search";
+import { FiltroCategoriaFornecedor } from "./FiltroCategoriaFornecedor";
 
 export function FornecedorToolbar({
   busca,
@@ -8,6 +8,10 @@ export function FornecedorToolbar({
   aoMudarOrdenacao,
   aoAdicionar,
   aoAdicionarCategoria,
+  categorias,
+  categoriasSelecionadas,
+  aoToggleCategoria,
+  aoLimparCategorias,
 }) {
   return (
     <div className="fornecedores-toolbar">
@@ -32,19 +36,31 @@ export function FornecedorToolbar({
         </button>
       </div>
 
-      <div className="fornecedores-toolbar-direita">
-        <div className="fornecedores-busca">
-          <CampoBusca Icone={Search} pesquisar={aoBuscar} value={busca} />
-        </div>
+      <select
+        className="fornecedores-select"
+        value={ordenacao}
+        onChange={(e) => aoMudarOrdenacao(e.target.value)}
+      >
+        <option value="alfabetica">A → Z</option>
+        <option value="alfabetica_desc">Z → A</option>
+      </select>
 
-        <select
-          className="fornecedores-select"
-          value={ordenacao}
-          onChange={(e) => aoMudarOrdenacao(e.target.value)}
-        >
-          <option value="alfabetica">A → Z</option>
-          <option value="alfabetica_desc">Z → A</option>
-        </select>
+      <FiltroCategoriaFornecedor
+        categorias={categorias}
+        categoriasSelecionadas={categoriasSelecionadas}
+        aoToggleCategoria={aoToggleCategoria}
+        aoLimparCategorias={aoLimparCategorias}
+      />
+
+      <div className="fornecedores-busca">
+        <Search size={16} className="fornecedores-busca-icone" />
+        <input
+          className="fornecedores-busca-input"
+          type="text"
+          placeholder="Pesquisar..."
+          value={busca}
+          onChange={(e) => aoBuscar(e.target.value)}
+        />
       </div>
     </div>
   );

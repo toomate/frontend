@@ -12,8 +12,10 @@
 .fornecedores-content {
   padding: 30px;
   width: 100%;
-  height: 100%;
+  flex: 1;
+  overflow-y: auto;
   background-image: url(./images/fundo-tela.png);
+  box-sizing: border-box;
 }
 
 .fornecedores-toast {
@@ -55,10 +57,7 @@
 }
 
 .fornecedores-toolbar-direita {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
+  display: contents;
 }
 
 .fornecedores-btn-add {
@@ -94,38 +93,43 @@
 
 .fornecedores-busca {
   flex: 1;
-}
-
-.fornecedores-busca .search-container {
-  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   height: 42px;
   border: 1px solid #6b4423;
   border-radius: 6px;
   background: #fffdf4;
+  padding: 0 12px;
 }
 
-.fornecedores-busca .search {
-  width: calc(100% - 36px);
+.fornecedores-busca-icone {
+  color: #6b4423;
+  flex-shrink: 0;
 }
 
-.fornecedores-busca .search-input {
-  width: 100%;
+.fornecedores-busca-input {
+  flex: 1;
+  border: none;
+  background: transparent;
   font-size: 14px;
-}
-
-.fornecedores-busca .search-icon {
-  width: 36px;
-  justify-content: center;
+  color: #1f1f1f;
+  outline: none;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  line-height: normal;
+  vertical-align: middle;
 }
 
 .filtro-categoria-container {
   position: relative;
-  margin: 6px 0 12px;
   display: inline-block;
+  flex-shrink: 0;
 }
 
 .filtro-categoria-toggle {
-  height: 36px;
+  height: 42px;
   border: 1px solid #6b4423;
   border-radius: 8px;
   background: #f8ecc6;
@@ -495,35 +499,46 @@
 }
 
 @media (max-width: 768px) {
+  .fornecedores-content {
+    padding: 16px;
+  }
+
   .fornecedores-toolbar {
-    grid-template-columns: 112px 1fr;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filtro-categoria-toggle {
+    min-width: 0;
+    flex: 1;
   }
 
   .fornecedores-busca {
-    grid-column: 1 / -1;
+    order: 3;
+    width: 100%;
+    flex: unset;
+  }
+
+  .fornecedores-select {
+    width: auto;
   }
 
   .fornecedores-grid {
-    grid-template-columns: repeat(2, minmax(180px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (max-width: 620px) {
+@media (max-width: 480px) {
   .fornecedores-toolbar {
-    grid-template-columns: 1fr;
-  }
-
-  .fornecedores-toolbar-acoes {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .fornecedores-btn-add,
-  .fornecedores-select,
-  .fornecedores-busca .search-container {
-    width: 100%;
+    gap: 6px;
   }
 
   .fornecedores-grid {
     grid-template-columns: 1fr;
+  }
+
+  .filtro-categoria-toggle {
+    font-size: 13px;
+    padding: 0 10px;
   }
 }
