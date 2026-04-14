@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { Menu } from "lucide-react";
+import { Beef, BottleWine, Menu, Leaf, Milk, Package, Wheat } from "lucide-react";
+
 import "./NavCategorias.css";
 
 export function NavCategorias({
@@ -10,6 +11,18 @@ export function NavCategorias({
 }) {
   const listaCategorias = categorias?.length ? categorias : categoriasPadrao;
   const [menuAberto, setMenuAberto] = useState(false);
+
+  const pegarIcone = (categoria) => {
+    switch (categoria.toLowerCase()) {
+      case ("proteínas" || "proteinas"): return <Beef size={28} />;
+      case ("laticínios" || "laticinios"): return <Milk size={28} />;
+      case "hortifruti": return <Leaf size={28} style={{ color: "green" }} />;
+      case ("grãos e secos" || "grãos"): return <Wheat size={28} style={{ color: "#a8987a" }} />;
+      case ("bebidas" || "bebida"): return <BottleWine size={28} />
+      default: return <Package size={28} />;
+    }
+  };
+
 
   const categoriasFixas = useMemo(
     () => listaCategorias.slice(0, maxCategoriasFixas),
@@ -26,9 +39,6 @@ export function NavCategorias({
       <div className="categorias-toolbar">
         <button
           type="button"
-          style={{
-            display: categorias.length < maxCategoriasFixas ? "none" : "block",
-          }}
           className={`categoria-menu-btn ${menuAberto ? "active" : ""}`}
           onClick={() => setMenuAberto((prev) => !prev)}
           aria-label="Mostrar todas as categorias"
@@ -43,7 +53,7 @@ export function NavCategorias({
             className="categoria-item"
             onClick={() => selecionarCategoria(atual)}
           >
-            {atual}
+            {pegarIcone(atual)} {atual}
           </div>
         ))}
       </div>
