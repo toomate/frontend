@@ -19,7 +19,7 @@ export function EstoqueItem(props) {
 
     return (
         <>{props.elementos.map((atual) => <React.Fragment key={atual.idInsumo}>
-            <div className="linha-estoque item-container" id={atual.quantidadeMedida < atual.quantidadeMinima ? "vencido" : ""}>
+            <div className="linha-estoque item-container">
                 <div className="insumo-grupo">
                     <div className="item-nome">
                         {atual.quantidadeMedida < atual.quantidadeMinima
