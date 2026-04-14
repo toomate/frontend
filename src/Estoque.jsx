@@ -251,10 +251,6 @@ export function Estoque() {
                 <HeaderPadrao />
             </div>
             <div className="categoria-container">
-
-                <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
-                </div>
                 <div className="button-secund">
                     <div className="botoes-container">
                         <div className="botoes-container">
@@ -269,6 +265,9 @@ export function Estoque() {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="nav-categorias-container">
+                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
                 </div>
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Mínima", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />

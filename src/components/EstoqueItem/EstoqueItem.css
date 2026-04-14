@@ -6,7 +6,7 @@
     position: relative;
     width: 100%;
     font-size: 18px;
-    height: 6vh;
+    height: 8vh;
 }
 
 .insumo-grupo {
@@ -25,12 +25,10 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    border: 1px solid #e2c87a;
     height: 80%;
-    background-color: #f5edd8;
-    width: 100%;
+    width: 90%;
     gap: 10px;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .icone-insumo {

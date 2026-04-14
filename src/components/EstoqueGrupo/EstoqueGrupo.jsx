@@ -10,12 +10,12 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
     const pegarIcone = (categoria) => {
         switch (categoria.toLowerCase()) {
-            case ("proteínas" || "proteinas"): return <Beef size={32} />;
-            case ("laticínios" || "laticinios"): return <Milk size={32} />;
-            case "hortifruti": return <Leaf size={32} style={{ color: "green" }} />;
-            case ("grãos e secos" || "grãos"): return <Wheat size={32} style={{ color: "#a8987a" }} />;
-            case ("bebidas" || "bebida"): return <BottleWine size={32} />
-            default: return <Package size={30} />;
+            case ("proteínas" || "proteinas"): return <Beef size={28} />;
+            case ("laticínios" || "laticinios"): return <Milk size={28} />;
+            case "hortifruti": return <Leaf size={28} style={{ color: "green" }} />;
+            case ("grãos e secos" || "grãos"): return <Wheat size={28} style={{ color: "#a8987a" }} />;
+            case ("bebidas" || "bebida"): return <BottleWine size={28} />
+            default: return <Package size={28} />;
         }
     };
 
@@ -34,7 +34,8 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
             }} /></div>
-                <div className="insumo-nome"><div className="insumo-icon">{pegarIcone(grupo.categoria)}</div></div>
+                <div className="insumo-icon">{pegarIcone(grupo.categoria)}</div>
+                <div className="insumo-nome">{grupo.insumo}</div>
             </div>
             <div className="qtdMinima">{grupo.qtdMinima}</div>
             <div className="qtd-total">{Math.floor(grupo.qtdTotal)}
@@ -42,7 +43,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
                     ? (<TriangleAlert style={{ color: "darkred" }} />)
                     : (<CheckCircle style={{ color: "green" }} />)}
             </div>
-            <div className="medida">{grupo.medida}</div>
+            <div className="medida">{grupo.medida.toUpperCase()}</div>
             <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
         </div>
         {expandido && (

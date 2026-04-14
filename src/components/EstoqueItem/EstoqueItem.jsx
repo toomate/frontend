@@ -25,7 +25,7 @@ export function EstoqueItem(props) {
                         {atual.quantidadeMedida < atual.quantidadeMinima
                             ? (<TriangleAlert style={{ color: "darkred" }} />)
                             : (<CheckCircle style={{ color: "green" }} />)}
-                        {atual.nomeMarca}
+                       {props.nomeInsumo} {atual.nomeMarca}
                     </div>
                 </div>
 

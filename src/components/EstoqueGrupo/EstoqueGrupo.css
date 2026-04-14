@@ -43,7 +43,7 @@
     font-weight: 700;
     font-size: small;
     height: 80%;
-    width: 70%;
+    width: 60%;
 }
 
 .insumo-icon {
@@ -52,9 +52,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 45%;
-    border: 1px solid #e2c87a;
-    background-color: #f5edd8;
 }
 
 .icone {
@@ -62,7 +59,7 @@
 }
 
 .qtd-total {
-    gap: 4px
+    gap: 4px;
 }
 
 @media (max-width: 480px) {
