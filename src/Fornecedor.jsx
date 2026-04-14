@@ -3,7 +3,7 @@ import { SearchX, TriangleAlert } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 import { FornecedorToolbar } from "./components/fornecedores/FornecedorToolbar";
 import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
-import { PaginacaoFornecedor } from "./components/fornecedores/PaginacaoFornecedor";
+import SeletorPaginas from "./components/Paginas/SeletorPaginas";
 import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
 import { NovaCategoriaModal } from "./components/fornecedores/NovaCategoriaModal";
 import { BaseModal } from "./components/common/BaseModal";
@@ -381,10 +381,12 @@ export default function Fornecedor() {
           </section>
         )}
 
-        <PaginacaoFornecedor
-          paginaAtual={paginaAtual}
-          totalPaginas={totalPaginas}
-          aoMudarPagina={setPaginaAtual}
+        <SeletorPaginas
+          avancar={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas - 1))}
+          voltar={() => setPaginaAtual(p => Math.max(p - 1, 0))}
+          selecionar={setPaginaAtual}
+          numPages={totalPaginas}
+          paginaSelecionada={paginaAtual}
         />
       </main>
 
