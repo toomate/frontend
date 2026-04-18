@@ -1,4 +1,5 @@
 ﻿import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
 
 import Login from "./login";
 import Boletos from "./components/Boletos/Boletos";
@@ -21,8 +22,38 @@ import Fiado from "./components/Fiado/Fiado";
 import Leitor from "./components/Leitor/Leitor";
 import Admin from "./Admin";
 import RotaPrivada from "./RotaPrivada";
+import { AuthApi } from "./provider/Api";
+
+let usuarioPadraoInicializado = false;
 
 function App() {
+   useEffect(() => {
+    if (usuarioPadraoInicializado) {
+      return;
+    }
+
+    usuarioPadraoInicializado = true;
+
+    async function garantirUsuarioPadrao() {
+      try {
+        await AuthApi.cadastrar({
+          nome: "Toomate",
+          apelido: "toomate",
+          senha: "toomate123",
+          administrador: true,
+        });
+      } catch (error) {
+        const status = error?.response?.status;
+
+        if (status !== 409) {
+          console.error("Falha ao garantir usuario padrao na inicializacao:", error);
+        }
+      }
+    }
+
+    garantirUsuarioPadrao();
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
