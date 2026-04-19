@@ -415,13 +415,18 @@ input {
 .caixa {
   display: flex;
   flex-direction: column;
-  align-items: start;
   width: 100%;
   max-width: 350px;
   background: white;
   padding: 20px;
   border: none;
   gap: 5px;
+}
+
+.caixa span {
+  display: flex;
+  align-items: start;
+  margin-bottom: 5px;
 }
 
 /* Tela menor que 480px */
