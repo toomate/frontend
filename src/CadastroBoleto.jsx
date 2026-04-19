@@ -99,23 +99,47 @@ export default function CadastroBoleto() {
 
             <span>Categoria</span>
             <div className="input-wrapper">
-            <AutocompleteInput
-              options={categorias}
-              value={categoriaSelecionada}
-              onValueChange={setCategoriaSelecionada}
-              onSelect={(opcao) => {
-                if (opcao) {
-                  setCategoriaSelecionada(opcao.label);
-                }
-              }}
-              placeholder="Selecione ou digite"
-              className="selectCategoriaBoleto"
-            />
+              <select
+                className="selectCategoriaBoleto"
+                value={categoriaSelecionada || ""}
+                onChange={(e) => {
+                  const selectedValue = e.target.value;
 
+                  setCategoriaSelecionada(selectedValue);
+                }}
+              >
+                <option value="">Selecione uma categoria</option>
+                {categorias.map((categoria, index) => (
+                  <option key={index} value={categoria.label}>
+                    {categoria.label}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <span>Valor</span>
-            <input type="number" step="1" placeholder="R$ XXX,XX" value={valor} onChange={(e) => setValor(e.target.value)} />
+            <input
+              type="text"
+              placeholder="R$ 0,00"
+              value={valor}
+              onChange={(e) => {
+                let v = e.target.value;
+
+                // Remove tudo que não for número
+                v = v.replace(/\D/g, "");
+
+                // Converte para centavos
+                const numero = Number(v) / 100;
+
+                // Formata para moeda BRL
+                const formatado = numero.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                });
+
+                setValor(formatado);
+              }}
+            />
             
             <span>Data de Vencimento</span>
             <input type="date" value={dataVencimento} onChange={(e) => setDataVencimento(e.target.value)} />
@@ -123,7 +147,7 @@ export default function CadastroBoleto() {
 
         <div className="actions">
           <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
-            Cancelar
+            Voltar
           </button>
 
           <button className="btn" type="submit" disabled={isCadastrando}>
