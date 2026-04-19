@@ -115,7 +115,7 @@ export default function Index() {
   ]
   return (
     <div className="dashboard">
-      <HeaderPadrao />
+      <HeaderPadrao mostrarBotao={false}/>
 
       <nav className="menu">
         <button onClick={() => navigate("/estoque")} className="btn btn-menu estoque-menu">
