@@ -109,7 +109,6 @@ export default function Boletos() {
       <HeaderPadrao />
 
       <div className="conteudo">
-        <span>Pagamentos</span>
         <br />
         <div className="card-pagamentos">
           <div className="filtros">
