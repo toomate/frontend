@@ -218,6 +218,7 @@
 /* ===== Tabela / Lista ===== */
 .fiado-tabela-container {
   padding: 0 2.5% 1.5%;
+  background-color: white;
 }
 
 .fiado-tabela-header {
