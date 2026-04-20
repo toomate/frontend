@@ -214,7 +214,6 @@ useEffect(() => {
     <div className="calendario-container">
       <HeaderPadrao></HeaderPadrao>
       <div className="calendario-container-inside">
-        <h1>Calendário de Pagamentos</h1>
         <MyCalendar events={myEventsList} />
       </div>
       {selectedBoletos.length > 0 && (
