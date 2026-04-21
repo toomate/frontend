@@ -8,8 +8,8 @@ import {
   List,
   FileText,
 } from "lucide-react";
-import { FiadoCard } from "../FiadoCard/FiadoCard";
-import { FiadoModal } from "../FiadoModal/FiadoModal";
+import { FiadoCard } from "../../components/FiadoCard/FiadoCard";
+import { FiadoModal } from "../../components/FiadoModal/FiadoModal";
 import "./Fiado.css";
 import HeaderPadrao from '../../HeaderPadrao';
 import { clientes, dividas } from "../../provider/Api";

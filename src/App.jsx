@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 import Login from "./login";
-import Boletos from "./components/Boletos/Boletos";
+import Boletos from "./pages/Boletos/Boletos";
 import Cadastro from "./cadastro";
 import { Estoque } from "./Estoque";
 import Fornecedor from "./Fornecedor";
@@ -15,10 +15,10 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Calendario from "./components/Calendario/calendario";
 import BoletoDetail from "./components/Calendario/boletoDetail";
 import "./App.css";
-import Vencimento from "./Vencimento";
+import Vencimento from "./pages/vencimento/Vencimento";
 import RotinaCard from "./components/RotinaCard/RotinaCard";
 import Rotinas from "./Rotinas";
-import Fiado from "./components/Fiado/Fiado";
+import Fiado from "./pages/Fiado/Fiado";
 import Leitor from "./components/Leitor/Leitor";
 import Admin from "./Admin";
 import RotaPrivada from "./RotaPrivada";

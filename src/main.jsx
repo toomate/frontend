@@ -16,7 +16,7 @@ import { CardConfirmacao } from './components/CardConfirmacao/CardConfirmacao.js
 import CadastroInsumo from './CadastroInsumo.jsx'
 import CadastroLote from './CadastroLote.jsx'
 import { CardRotina } from "./components/CardRotina/CardRotina.jsx"
-import Vencimento from './Vencimento.jsx'
+import Vencimento from './pages/vencimento/Vencimento.jsx'
 import LinhaTabela from './components/LinhaTabela/LinhaTabela.jsx'
 
 
