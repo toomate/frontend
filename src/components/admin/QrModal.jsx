@@ -35,10 +35,26 @@ export default function QrModal({ open, onClose }) {
 
   return (
     <div style={{position:'fixed',inset:0,background:'rgba(0,0,0,0.5)',display:'flex',alignItems:'center',justifyContent:'center'}} onClick={onClose}>
-      <div style={{background:'#fff',padding:16,borderRadius:8,maxWidth:360}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:'#fff',padding:16,borderRadius:8,maxWidth:360,position:'relative'}} onClick={e=>e.stopPropagation()}>
         <div style={{display:'flex',justifyContent:'space-between',alignItems:'center'}}>
           <strong>QR Code</strong>
-          <button onClick={onClose} style={{border:0,background:'transparent',fontSize:18}}>×</button>
+          <button
+            onClick={onClose}
+            aria-label="Fechar"
+            title="Fechar"
+            style={{
+              border: 0,
+              background: 'transparent',
+              fontSize: 22,
+              color: '#000',
+              cursor: 'pointer',
+              padding: 6,
+              lineHeight: 1,
+              width: 32,
+            }}
+          >
+            ×
+          </button>
         </div>
         <div style={{marginTop:12, minHeight:180, display:'flex',alignItems:'center',justifyContent:'center'}}>
           {loading && <span>Carregando...</span>}
