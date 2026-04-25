@@ -2,6 +2,7 @@ import React from "react";
 import { ArrowLeft } from "lucide-react";
 import "./App.css";
 import "./HeaderPadrao.css";
+import NotificationBell from "./components/Cabecalho/NotificationBell.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import HamburgerButton from "./components/HamburgerButton/HamburgerButton";
 
@@ -101,6 +102,7 @@ export default function HeaderPadrao({ mostrarBotao = true }) {
             <ArrowLeft size={18} /> Voltar
           </button>
         )}
+        <NotificationBell />
       </div>
     </header>
   );

@@ -1,0 +1,52 @@
+/* NotificationBell.css */
+
+.notif-container {
+  position: relative;
+}
+
+.notif-button {
+  background: none;
+  border: none;
+  font-size: 22px;
+  cursor: pointer;
+  position: relative;
+}
+
+.notif-badge {
+  position: absolute;
+  top: -5px;
+  right: -8px;
+  background: red;
+  color: white;
+  font-size: 12px;
+  border-radius: 50%;
+  padding: 2px 6px;
+}
+
+.notif-dropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  width: 280px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px;
+  z-index: 100;
+}
+
+.notif-item {
+  border-bottom: 1px solid #eee;
+  padding: 8px 0;
+}
+
+.notif-item:last-child {
+  border-bottom: none;
+}
+
+.empty {
+  color: #777;
+  font-size: 14px;
+}

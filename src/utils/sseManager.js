@@ -1,13 +1,17 @@
 const CHANNEL_NAME = "sse_channel";
 const LEADER_KEY = "sse_leader";
 const HEARTBEAT_KEY = "sse_heartbeat";
+const SSE_URL = import.meta.env.VITE_SSE_URL;
 
 class sseManager {
   constructor() {
-    this.channel = new BroadcastChannel(CHANNEL_NAME);
+    this.channel = new BroadcastChannel(SSE_URL);
     this.eventSource = null;
     this.isLeader = false;
     this.listeners = [];
+
+    // 👇 estado persistente de notificações
+    this.notifications = [];
 
     this.init();
   }
@@ -15,25 +19,28 @@ class sseManager {
   init() {
     this.tryBecomeLeader();
 
-    // Escuta mensagens vindas de outras abas
+    // Recebe mensagens de outras abas
     this.channel.onmessage = (event) => {
-      this.notifyListeners(event.data);
+      this.handleIncomingData(event.data);
     };
 
-    // Verifica se o líder morreu
-    setInterval(() => {
+    // Verifica líder periodicamente
+    this.leaderCheckInterval = setInterval(() => {
       this.checkLeader();
     }, 3000);
 
+    // Cleanup ao fechar aba
     window.addEventListener("beforeunload", () => {
-  if (this.isLeader) {
-    localStorage.removeItem(LEADER_KEY);
-  }
-});
+      this.onUnload();
+    });
   }
 
+  // =========================
+  // 🟢 LIDERANÇA
+  // =========================
+
   tryBecomeLeader() {
-    let leader = localStorage.getItem(LEADER_KEY);
+    const leader = localStorage.getItem(LEADER_KEY);
 
     if (!leader) {
       this.becomeLeader();
@@ -49,7 +56,7 @@ class sseManager {
   }
 
   startHeartbeat() {
-    setInterval(() => {
+    this.heartbeatInterval = setInterval(() => {
       localStorage.setItem(HEARTBEAT_KEY, Date.now().toString());
     }, 2000);
   }
@@ -64,11 +71,14 @@ class sseManager {
 
     const diff = Date.now() - Number(heartbeat);
 
-    // Se o líder não atualiza há 5s → assumir
     if (diff > 5000) {
       this.becomeLeader();
     }
   }
+
+  // =========================
+  // 🔵 SSE
+  // =========================
 
   startSSE() {
     if (this.eventSource) return;
@@ -76,15 +86,17 @@ class sseManager {
     this.eventSource = new EventSource("/sse");
 
     this.eventSource.onmessage = (event) => {
-      // envia para outras abas
-      this.channel.postMessage(event.data);
+      const data = event.data;
 
-      // envia para a própria aba
-      this.notifyListeners(event.data);
+      // Distribui para outras abas
+      this.channel.postMessage(data);
+
+      // Processa localmente
+      this.handleIncomingData(data);
     };
 
     this.eventSource.onerror = () => {
-      console.log("Erro SSE, tentando reconectar...");
+      console.log("Erro SSE, reconectando...");
       this.eventSource.close();
       this.eventSource = null;
 
@@ -92,15 +104,67 @@ class sseManager {
     };
   }
 
-  subscribe(callback) {
-    this.listeners.push(callback);
+  // =========================
+  // 🟡 PROCESSAMENTO DE DADOS
+  // =========================
+
+  handleIncomingData(rawData) {
+    try {
+      const parsed = JSON.parse(rawData);
+
+      // 👇 aqui você pode filtrar por tipo depois
+      this.notifications = [parsed, ...this.notifications].slice(0, 50);
+
+      this.notifyListeners();
+
+    } catch (err) {
+      console.error("Erro ao processar SSE:", err);
+    }
   }
 
-  notifyListeners(data) {
-    this.listeners.forEach((cb) => cb(data));
+  // =========================
+  // 🟣 SUBSCRIBE
+  // =========================
+
+  subscribe(callback) {
+    this.listeners.push(callback);
+
+    // Envia estado atual imediatamente
+    callback(this.notifications);
+
+    return () => {
+      this.listeners = this.listeners.filter(cb => cb !== callback);
+    };
+  }
+
+  notifyListeners() {
+    this.listeners.forEach((cb) => cb(this.notifications));
+  }
+
+  // =========================
+  // 🔴 CLEANUP
+  // =========================
+
+  onUnload() {
+    if (this.isLeader) {
+      localStorage.removeItem(LEADER_KEY);
+      localStorage.removeItem(HEARTBEAT_KEY);
+    }
+
+    if (this.eventSource) {
+      this.eventSource.close();
+    }
+
+    if (this.heartbeatInterval) {
+      clearInterval(this.heartbeatInterval);
+    }
+
+    if (this.leaderCheckInterval) {
+      clearInterval(this.leaderCheckInterval);
+    }
   }
 }
 
 // Singleton
-const sseManager = new sseManager();
-export default sseManager;
+const instance = new sseManager();
+export default instance;
