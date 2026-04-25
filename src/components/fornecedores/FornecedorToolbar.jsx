@@ -16,18 +16,18 @@ export function FornecedorToolbar({
           type="button"
           className="fornecedores-btn-add"
           aria-label="Adicionar fornecedor"
-          onClick={aoAdicionar}
-        >
+          onClick={aoAdicionar}>
+          Adicionar Fornecedor
           <Plus size={18} />
         </button>
 
         <button
           type="button"
-          className="fornecedores-btn-add fornecedores-btn-add-categoria"
+          className="fornecedores-btn-add-categoria"
           aria-label="Adicionar categoria"
           title="Nova categoria"
-          onClick={aoAdicionarCategoria}
-        >
+          onClick={aoAdicionarCategoria}>
+          Adicionar Categoria
           <Tag size={18} />
         </button>
       </div>

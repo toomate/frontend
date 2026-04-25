@@ -2,11 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { ChevronDown } from "lucide-react";
 
 export function FiltroCategoriaFornecedor({
-  categorias,
-  categoriasSelecionadas,
-  aoToggleCategoria,
-  aoLimparCategorias,
-}) {
+  categorias, categoriasSelecionadas, aoToggleCategoria, aoLimparCategorias,}) {
   const [aberto, setAberto] = useState(false);
   const refContainer = useRef(null);
 

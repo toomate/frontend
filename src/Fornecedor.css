@@ -44,68 +44,72 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: 15px;
   margin-bottom: 10px;
 }
 
 .fornecedores-toolbar-esquerda {
   display: flex;
-  gap: 8px;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 450px;
+  gap: 15px;
   flex-shrink: 0;
 }
 
 .fornecedores-toolbar-direita {
   display: flex;
+  flex-direction: row;
   align-items: center;
-  gap: 10px;
+  justify-content: flex-start;
+  gap: 15px;
   flex: 1;
 }
 
-.fornecedores-btn-add {
-  border: 1px solid #6b4423;
+.fornecedores-btn-add, .fornecedores-btn-add-categoria {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  background: #6b4423;
-  color: #f8ecc6;
+  background: white;
+  color: black;
   cursor: pointer;
-  height: 42px;
-}
-
-.fornecedores-btn-add-categoria {
-  background: #f8ecc6;
-  color: #6b4423;
+  height: 35px;
+  
 }
 
 .fornecedores-select {
-  border: 1px solid #6b4423;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  padding: 0 12px;
-  color: #6b4423;
-  background: #f8ecc6;
+  padding: 2px;
+  color: black;
+  background: white;
   font-size: 14px;
-  height: 42px;
+  height: 35px;
   width: 130px;
   flex-shrink: 0;
   font-weight: 600;
 }
 
 .search-container {
-  margin: 0%;
-}
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  width: 350px;
+  height: 35px !important;
+  border: 1px solid #ccc !important;
+  background: white !important;
+  border-radius: 8px;
 
-.fornecedores-busca {
-  flex: 1;
-}
-
-.fornecedores-busca .search-container {
-  width: 100%;
-  height: 42px;
-  border: 1px solid #6b4423;
-  border-radius: 6px;
-  background: #fffdf4;
 }
 
 .fornecedores-busca .search {
-  width: calc(100% - 36px);
+  width: 350px;
+  height: 50px;
 }
 
 .fornecedores-busca .search-input {
@@ -114,7 +118,7 @@
 }
 
 .fornecedores-busca .search-icon {
-  width: 36px;
+  width: 35px;
   justify-content: center;
 }
 
@@ -126,10 +130,10 @@
 
 .filtro-categoria-toggle {
   height: 36px;
-  border: 1px solid #6b4423;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  background: #f8ecc6;
-  color: #6b4423;
+  background: white;
+  color: black;
   padding: 0 12px;
   font-weight: 600;
   font-size: 14px;
@@ -144,8 +148,8 @@
 
 .filtro-categoria-toggle:hover,
 .filtro-categoria-toggle.aberto {
-  border-color: #4a2e16;
-  background: #f0d98a;
+  border-color: #ccc;
+  background: white;
 }
 
 .filtro-categoria-chevron {
@@ -520,7 +524,7 @@
   .fornecedores-btn-add,
   .fornecedores-select,
   .fornecedores-busca .search-container {
-    width: 100%;
+    width: 90%;
   }
 
   .fornecedores-grid {
