@@ -96,7 +96,7 @@ export default function HeaderPadrao({ mostrarBotao = true }) {
 
       <div className="titulo-tela">{tituloTela}</div>
 
-      <div style={{ display: "flex", gap: "10px" }}>
+      <div className="lado-direito" style={{ display: "flex", gap: "10px" }}>
         {mostrarBotao && (
           <button onClick={handleBack} className="btn">
             <ArrowLeft size={18} /> Voltar
