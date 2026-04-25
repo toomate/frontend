@@ -195,12 +195,15 @@ export default function Boletos() {
                 })
               }
             >
-              <CalendarDays size={20} />
-              <h3>Painel</h3>
+            <CalendarDays size={20} />
+            <h3>Painel</h3>
             </button>
-            <button className="add-btn" onClick={() => navigate("/cadastro-boleto")}>
-              <Plus size={20} color="#fff" />
-            </button>
+            <div className="add-button">
+              Adicionar Boleto
+              <button className="add-btn" onClick={() => navigate("/cadastro-boleto")}>
+                <Plus size={20} color="#fff" />
+              </button>
+            </div>
 
           </div>
 

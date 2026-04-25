@@ -146,8 +146,9 @@
 }
 
 .dashboard .chart-page-arrow {
-  width: 34px;
+  width: 45px;
   height: 34px;
+  padding: 13px;
   border: none;
   border-radius: 8px;
   background: #c92c2c;
@@ -155,7 +156,7 @@
   font-size: 18px;
   font-weight: 700;
   cursor: pointer;
-  line-height: 1;
+  line-height: 0;
 }
 
 .dashboard .chart-page-arrow:disabled {

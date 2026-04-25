@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import AutocompleteInput from "./components/common/AutocompleteInput";
 import FormModal from "./components/common/FormModal";
 import { FornecedorApi, Lote, MarcaApi, insumos } from "./provider/Api";
 import { useLocation } from "react-router-dom";
@@ -375,14 +374,21 @@ export default function CadastroLote() {
           onChange={(e) => setNovaMarca(e.target.value)}
         />
 
-        <AutocompleteInput
-          options={opcoesInsumo}
-          value={novoInsumoMarcaTexto}
-          onValueChange={setNovoInsumoMarcaTexto}
-          onSelect={(opcao) => setNovoIdInsumoMarca(opcao?.id ?? "0")}
-          placeholder="Selecione o insumo"
+        <select
           className="modal-input"
-        />
+          value={novoIdInsumoMarca}
+          onChange={e => {
+            const selectedId = e.target.value;
+            setNovoIdInsumoMarca(selectedId);
+            const found = (opcoesInsumo ?? []).find(opcao => String(opcao.id) === String(selectedId));
+            setNovoInsumoMarcaTexto(found ? found.label : "");
+          }}
+        >
+          <option value="0" disabled>Selecione o insumo</option>
+          {(opcoesInsumo ?? []).map(opcao => (
+            <option key={opcao.id} value={opcao.id}>{opcao.label}</option>
+          ))}
+        </select>
 
         <select
           className="modal-input"
