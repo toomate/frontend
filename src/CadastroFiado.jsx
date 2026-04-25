@@ -3,7 +3,6 @@ import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { clientes, dividas } from "./provider/Api";
-import AutocompleteInput from "./components/common/AutocompleteInput";
 
 export default function CadastroFiado() {
   const navigate = useNavigate();

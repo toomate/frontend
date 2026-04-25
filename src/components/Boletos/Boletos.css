@@ -80,7 +80,7 @@
   height: var(--filtro-altura);
   background: white;
   border: 1px solid #ccc !important;
-  border-radius: 5px;
+  border-radius: 8px;
   border: none;
   cursor: pointer;
   color: black;
@@ -114,6 +114,24 @@
   border-radius: 6px;
   width: 120px;
   margin: 10px;
+}
+
+.add-button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  color: black;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+} 
+
+.add-btn {
+  width: 40px;
+  background-color: transparent !important;
+  color: black;
 }
 
 .btn-pago {

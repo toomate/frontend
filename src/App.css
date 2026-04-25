@@ -139,13 +139,16 @@ input {
   font-weight: bold;
 }
 
+.auth-input-wrap {
+  width: 100%;
+}
+
 .input-wrapper {
   display: flex;
   align-items: center;
   position: relative;
   border: none;
   width: 100%;
-  margin-bottom: 10px;
 }
 
 .input-wrapper1 {
@@ -164,6 +167,7 @@ input {
   border: 1.5px solid rgb(175, 175, 175);
   background-color: #fff;
   color: #1f2937;
+  margin-bottom: 15px;
 }
 
 .selectNome::placeholder,
@@ -180,7 +184,6 @@ input {
   height: 40px;
   border-radius: 5px;
   padding: 10px 40px 10px 10px;
-  margin-bottom: 15px;
   border: 1.5px solid rgb(175, 175, 175);
 }
 
@@ -193,7 +196,7 @@ input {
   background: transparent !important;
   color: black;
   cursor: pointer;
-  padding: 0 0 0 0;
+  margin-bottom: 15px;
 }
 
 /* Responsividade */

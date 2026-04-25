@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import AutocompleteInput from "./components/common/AutocompleteInput";
 import { boletos } from "./provider/Api";
 
 export default function CadastroBoleto() {

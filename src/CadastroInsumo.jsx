@@ -166,14 +166,18 @@ export default function CadastroInsumo() {
 
           {/* Unidade */}
           <span>Unidade de Medida</span>
-          <AutocompleteInput
-            options={opcoesUnidade}
-            value={unidadeMedida}
-            onValueChange={setUnidadeMedida}
-            onSelect={() => {}}
-            placeholder="Selecione ou digite"
+          <select
             className="selectUnidade"
-          />
+            value={unidadeMedida}
+            onChange={e => {
+              setUnidadeMedida(e.target.value);
+            }}
+          >
+            <option value="" disabled>Selecione</option>
+            {opcoesUnidade.map(opcao => (
+              <option key={opcao.id} value={opcao.label}>{opcao.label}</option>
+            ))}
+          </select>
 
           <span>Quantidade Mínima</span>
           <input
