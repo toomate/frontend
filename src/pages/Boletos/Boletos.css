@@ -18,16 +18,6 @@
   margin: 20px;
 }
 
-.view-toggle-btn svg {
-  width: 1.4em;
-  height: 1.4em;
-  display: block;
-  color: inherit;
-  fill: currentColor;
-  stroke: currentColor;
-  pointer-events: none;
-}
-
 .card-pagamentos {
   height: auto;
   overflow: visible;
@@ -98,10 +88,11 @@
   background: white;
   border: 1px solid #ccc !important;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #ccc;
   cursor: pointer;
   color: black;
   font-size: 12px;
+  transition: all 0.2s;
 }
 
 .item-pagamento {
@@ -144,8 +135,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 5px;
-  padding: 2px, 0, 2px, 0;
   width: auto;
   height: var(--fiado-control-height);
   border-radius: 8px;
@@ -153,7 +142,8 @@
   color: black;
   transition: all 0.2s;
   background-color: white;
-  border: 1px solid #ccc !important;
+  border: 1px solid #ccc;
+  padding: 10px, 0, 10px, 0;
 }
 
 .view-toggle-btn.active {
@@ -164,7 +154,7 @@
   z-index: 1;
 }
 
-.view-toggle-btn:hover {
+.btn-calendario:hover, .view-toggle-btn:hover {
   background: #e6d08e;
   color: #6b4423;
   fill: #6b4423;
