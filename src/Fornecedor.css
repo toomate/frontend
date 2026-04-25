@@ -399,6 +399,68 @@
   user-select: none;
 }
 
+/* Modal overlay for fornecedor feedback */
+.fornecedor-modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 11000;
+  padding: 20px;
+}
+
+.fornecedor-modal {
+  background: #fff;
+  border-radius: 10px;
+  padding: 18px 20px;
+  min-width: 280px;
+  max-width: 92vw;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+  text-align: center;
+}
+
+.fornecedor-modal-message {
+  font-weight: 700;
+  margin: 0 0 12px;
+  color: #222;
+}
+
+.fornecedor-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.fornecedor-modal-btn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #6b4423;
+  background: #f8ecc6;
+  color: #6b4423;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.fornecedor-modal-close {
+  background: #fff;
+  border: 1px solid #ccc;
+  color: #333;
+}
+
+.fornecedor-modal-overlay.fornecedor-modal-success .fornecedor-modal {
+  border: 1px solid #2a7a2a;
+  background: #e9f8e9;
+  color: #165d16;
+}
+
+.fornecedor-modal-overlay.fornecedor-modal-error .fornecedor-modal {
+  border: 1px solid #a81919;
+  background: #ffecec;
+  color: #8f1515;
+}
+
 .fornecedores-modal-overlay {
   position: fixed;
   inset: 0;
