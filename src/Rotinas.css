@@ -17,10 +17,12 @@
 
 .rotinas-container .nav-categorias-container {
     display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    width: 98%;
-
+    justify-content: flex-end;
+    align-items: center;
+    gap: 16px;
+    width: 95%;
+    margin: 0 auto;
+    
 }
 
 .nav-categorias-container .nav-categorias {
@@ -28,9 +30,9 @@
 }
 
 .ipt-pesquisar {
+    flex: 1;
     display: flex;
-    justify-content: space-between;
-    width: 85%;
+    max-width: 800px;
 }
 
 .botao-voltar {
@@ -67,9 +69,10 @@
     gap: 10px;
 }
 
- .search-container {
+.search-container {
     width: 100%;
     height: 42px;
+    max-width: 800px;
     border: 1px solid #6b4423;
     border-radius: 6px;
     background: #fffdf4;

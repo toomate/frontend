@@ -29,9 +29,9 @@ export function EstoqueItem(props) {
                     </div>
                 </div>
 
-                <div className="qtd-minima">{atual.quantidadeMinima}</div>
+                <div className="qtd-minima">{Math.floor(atual.quantidadeMinima)}</div>
                 <div className="qtd-total">
-                    <span>{atual.quantidadeMedida}</span>
+                    <span>{Math.floor(atual.quantidadeMedida)}</span>
                 </div>
                 <div className="medida">{atual.unidadeMedida}</div>
                 <div className="dt-vencimento">{formatarData(atual.dataValidade)}</div>
@@ -39,7 +39,7 @@ export function EstoqueItem(props) {
                 <div className="controle-container">
                     <div className="controle">
                         <CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />
-                        {atual.quantidadeMedida}
+                        {Math.floor(atual.quantidadeMedida)}
                         <CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} />
                     </div>
                 </div>
