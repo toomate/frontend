@@ -91,17 +91,17 @@ display: flex;
 .view-toggle-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 5px;
+  padding: 2px, 0, 2px, 0;
   width: auto;
   height: var(--fiado-control-height);
-  border: 0.0625em solid transparent;
-  border-radius: 0.4em;
+  border-radius: 8px;
   cursor: pointer;
   color: black;
   transition: all 0.2s;
-  fill: #f8ecc6;
   background-color: white;
-  border: 2px solid #ccc !important;
+  border: 1px solid #ccc !important;
 }
 
 .view-toggle-btn.active {
