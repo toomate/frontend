@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { AdminApi } from "../../provider/Api";
 
 function formatarDataHora(timestamp) {
@@ -71,7 +71,7 @@ export default function AdminLogsSistema() {
         if (ativo) setLogs(normalizarLogs(resposta));
       } catch {
         if (ativo) {
-          setErro("Não foi possível carregar os logs de auditoria.");
+          setErro("Não foi possível carregar os logs do sistema.");
           setLogs([]);
         }
       } finally {

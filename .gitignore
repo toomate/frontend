@@ -27,3 +27,4 @@ dist-ssr
 .dockerignore
 .env
 .gitignore
+.claude/
