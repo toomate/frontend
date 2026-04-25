@@ -58,7 +58,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        <Route element={<RotaPrivada />}>
+        {/* <Route element={<RotaPrivada />}> */}
           <Route path="/boletos" element={<Boletos />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/estoque" element={<Estoque />} />
@@ -77,7 +77,7 @@ function App() {
           <Route path="/Fiados" element={<Fiado />} />
           <Route path="/leitor" element={<Leitor />} />
           <Route path="/admin" element={<Admin />} />
-        </Route>
+        {/* </Route> */}
       </Routes>
     </BrowserRouter>
   );
