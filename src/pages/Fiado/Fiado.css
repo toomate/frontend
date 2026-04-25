@@ -40,16 +40,14 @@
 .filtro-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-  height: var(--fiado-control-height);
-  padding: 0 0.875em;
+  justify-content: space-between;
+  height: 32px;
   background: white;
-  border: 0.0625em solid #ccc;
+  border: 1px solid #ccc;
   cursor: pointer;
-  font-family: 'Arial', sans-serif;
-  font-weight: 600;
-  color: black;
+  color: black;;
   transition: background 0.2s;
+  height: var(--fiado-control-height);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -58,22 +56,25 @@
   background: #f0dfa8;
 }
 
-.filtro-btn.active {
+.filtro-btn.active, .add-btn {
   background: #e6d08e;
 }
 
 .add-btn {
-  display: inline-flex;
+display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
+  width: 180px;
   height: var(--fiado-control-height);
-  padding: 0 0.875em;
-  background: #6b4423;
-  border-radius: 12px;
-  border: 0.0625em solid #6b4423;
+  color: black;
+  font-size: 13px;
+  background: white !important;
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  padding: 8px 16px;
   cursor: pointer;
-  transition: background 0.2s;
-  flex-shrink: 0;
+  gap: 10px;
 }
 
 .add-btn:hover {
@@ -91,23 +92,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: var(--fiado-control-height);
+  width: auto;
   height: var(--fiado-control-height);
   border: 0.0625em solid transparent;
   border-radius: 0.4em;
   cursor: pointer;
-  color: #6b4423;
+  color: black;
   transition: all 0.2s;
   fill: #f8ecc6;
   background-color: white;
-  border: 2px solid #6b4423;
+  border: 2px solid #ccc !important;
 }
-
 
 .view-toggle-btn.active {
   background: white !important;
-  border-color: #6b4423 !important;
-  color: #6b4423 !important;
+  border-color: #ccc !important;
+  color: black !important;
   fill: #6b4423 !important;
   z-index: 1;
 }
@@ -185,7 +185,7 @@
 }
 
 .fiado-search-field::placeholder {
-  color: #999;
+  color: black;
 }
 
 .fiado-search-input:focus-within {

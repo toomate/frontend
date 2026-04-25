@@ -75,7 +75,7 @@ try:
 
     if login_sucesso:
         print("\n✅ Login realizado com sucesso!\n\n")
-        time.sleep(2)  # Pausa para visualização após login
+        time.sleep(5)  # Pausa para visualização após login
 
         # ===================== TESTE: ACESSO AO ESTOQUE E CLIQUE NO + =====================
         try:
@@ -84,7 +84,7 @@ try:
             # Clicar no botão Estoque da dashboard (deve ser um botão visível na tela principal)
             botao_estoque = espera.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Estoque')]")))
             botao_estoque.click()
-            time.sleep(1)
+            time.sleep(5)
 
             print("✅ Teste botão estoque realizado com sucesso!\n\n")
             print("Iniciando teste do botão +...\n")
@@ -92,7 +92,7 @@ try:
             # Clicar no botão + (plus) na tela principal de estoque
             botao_plus = espera.until(EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, 'plus-icon') or contains(@class, 'plus-icon-container')]/*[name()='svg']")))
             botao_plus.click()
-            time.sleep(1)
+            time.sleep(5)
 
             print("✅ Teste finalizado após clicar no botão + do estoque!\n\n")
 
@@ -102,7 +102,7 @@ try:
 
         # ========== NOVO TESTE: Cadastro de lote com dados específicos ==========
         try:
-            time.sleep(1)
+            time.sleep(5)
             print("Iniciando teste de cadastro de lote...")
             # Espera por mensagem de sucesso
 
