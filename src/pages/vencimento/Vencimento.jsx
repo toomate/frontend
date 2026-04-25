@@ -3,7 +3,6 @@ import { Cabecalho } from "../../components/Cabecalho/Cabecalho";
 import Kpi from "../../components/Kpi/Kpi";
 import LinhaTabela from "../../components/LinhaTabela/LinhaTabela";
 import HeaderPadrao from "../../HeaderPadrao";
-import { Lote } from "../../provider/Api";
 import "./Vencimento.css"
 import { Vencimentos } from "../../provider/Api";
 
@@ -15,14 +14,6 @@ export default function Vencimento() {
         Vencimentos.buscarEstoque().then((res) => setVencimento(res));
         Vencimentos.buscarKpis().then((res) => setKpis(res));
     }, [])
-
-    useEffect(() => {
-        for (let i = 0; i < vencimento.length; i++) {
-            if(vencimento[i].diasRestantes <= 0) {
-                vencimento[i].diasRestantes = "Vencido"
-            }
-        }
-    }, [vencimento])
 
     useEffect(() => {
         document.title = "Vencimentos";
