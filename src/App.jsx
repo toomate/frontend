@@ -1,8 +1,7 @@
 ﻿import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useEffect } from "react";
 
 import Login from "./login";
-import Boletos from "./pages/Boletos/Boletos";
+import Boletos from "./components/Boletos/Boletos";
 import Cadastro from "./cadastro";
 import { Estoque } from "./Estoque";
 import Fornecedor from "./Fornecedor";
@@ -15,50 +14,20 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Calendario from "./components/Calendario/calendario";
 import BoletoDetail from "./components/Calendario/boletoDetail";
 import "./App.css";
-import Vencimento from "./pages/vencimento/Vencimento";
+import Vencimento from "./Vencimento";
 import RotinaCard from "./components/RotinaCard/RotinaCard";
 import Rotinas from "./Rotinas";
-import Fiado from "./pages/Fiado/Fiado";
+import Fiado from "./components/Fiado/Fiado";
 import Leitor from "./components/Leitor/Leitor";
 import Admin from "./Admin";
 import RotaPrivada from "./RotaPrivada";
-import { AuthApi } from "./provider/Api";
-
-let usuarioPadraoInicializado = false;
 
 function App() {
-   useEffect(() => {
-    if (usuarioPadraoInicializado) {
-      return;
-    }
-
-    usuarioPadraoInicializado = true;
-
-    async function garantirUsuarioPadrao() {
-      try {
-        await AuthApi.cadastrar({
-          nome: "Toomate",
-          apelido: "toomate",
-          senha: "toomate123",
-          administrador: true,
-        });
-      } catch (error) {
-        const status = error?.response?.status;
-
-        if (status !== 409) {
-          console.error("Falha ao garantir usuario padrao na inicializacao:", error);
-        }
-      }
-    }
-
-    garantirUsuarioPadrao();
-  }, []);
-
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Login />} />
-        {/* <Route element={<RotaPrivada />}> */}
+        <Route element={<RotaPrivada />}>
           <Route path="/boletos" element={<Boletos />} />
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/estoque" element={<Estoque />} />
@@ -77,7 +46,7 @@ function App() {
           <Route path="/Fiados" element={<Fiado />} />
           <Route path="/leitor" element={<Leitor />} />
           <Route path="/admin" element={<Admin />} />
-        {/* </Route> */}
+        </Route>
       </Routes>
     </BrowserRouter>
   );
