@@ -1,6 +1,7 @@
 .tabela-insumo-container {
     height: 10vh;
     display: flex;
+    font-size: 1rem;
 }
 
 
@@ -10,7 +11,19 @@
     align-items: center;
     border-bottom: 0.2px solid black;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    font-size: inherit;
+    flex: 1;
+    min-width: 0;
+    padding: 0 10px;
+    text-align: center;
 
+}
+
+.linha-valor {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
 }
 
 
@@ -29,5 +42,46 @@
 
     100% {
         background-color:rgb(255, 182, 182);
+    }
+}
+
+@media (max-width: 768px) {
+    .tabela-insumo-container {
+        height: auto;
+        flex-direction: column;
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 24px rgba(20, 31, 52, 0.08);
+        background: rgba(255, 255, 255, 0.98);
+    }
+
+    .tabela-insumo-container .linha-estoque {
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+        text-align: right;
+    }
+
+    .tabela-insumo-container .linha-estoque::before {
+        content: attr(data-label);
+        flex: 0 0 44%;
+        text-align: left;
+        font-size: 0.82rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: #64748b;
+    }
+
+    .tabela-insumo-container .linha-estoque:last-child {
+        border-bottom: none;
+    }
+
+    .linha-valor {
+        justify-content: flex-end;
+        text-align: right;
     }
 }

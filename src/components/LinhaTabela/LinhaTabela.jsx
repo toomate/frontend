@@ -116,23 +116,23 @@ export default function LinhaTabela(props) {
 
                 return (
                 <div key={atual.id} className="tabela-insumo-container" id={estaVencido ? "vencido" : ""}>
-                        <div className="linha-tabela linha-estoque">
-                            {atual.insumo}
+                        <div className="linha-tabela linha-estoque" data-label="Insumo">
+                            <span className="linha-valor">{atual.insumo}</span>
                         </div>
-                        <div className="linha-tabela linha-estoque">
-                            {atual.marca}
+                        <div className="linha-tabela linha-estoque" data-label="Marca">
+                            <span className="linha-valor">{atual.marca}</span>
                         </div>
-                        <div className="linha-tabela linha-estoque">
-                            {atual.estoqueAtual}
+                        <div className="linha-tabela linha-estoque" data-label="Estoque Atual">
+                            <span className="linha-valor">{atual.estoqueAtual}</span>
                         </div>
-                        <div className="linha-tabela linha-estoque">
-                            {formatarData(atual.dtVencimento)}
+                        <div className="linha-tabela linha-estoque" data-label="Data de Vencimento">
+                            <span className="linha-valor">{formatarData(atual.dtVencimento)}</span>
                         </div>
-                        <div className="linha-tabela linha-estoque">
-                            {renderizarDiasRestantes(atual.diasRestantes)}
+                        <div className="linha-tabela linha-estoque" data-label="Dias Restantes">
+                            <span className="linha-valor">{renderizarDiasRestantes(atual.diasRestantes)}</span>
                         </div>
-                        <div className="linha-tabela linha-estoque">
-                            {renderizarStatus(atual)}
+                        <div className="linha-tabela linha-estoque" data-label="Status">
+                            <span className="linha-valor">{renderizarStatus(atual)}</span>
                         </div>
                 </div>
                 )
