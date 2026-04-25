@@ -1,5 +1,6 @@
 import { Plus, Search, Tag } from "lucide-react";
 import { FiltroCategoriaFornecedor } from "./FiltroCategoriaFornecedor";
+import { FiltroFornecedor } from "./FiltroFornecedor";
 
 export function FornecedorToolbar({
   busca,
@@ -12,6 +13,10 @@ export function FornecedorToolbar({
   categoriasSelecionadas,
   aoToggleCategoria,
   aoLimparCategorias,
+  fornecedores,
+  fornecedoresSelecionados,
+  aoToggleFornecedor,
+  aoLimparFornecedores,
 }) {
   return (
     <div className="fornecedores-toolbar">
@@ -50,6 +55,13 @@ export function FornecedorToolbar({
         categoriasSelecionadas={categoriasSelecionadas}
         aoToggleCategoria={aoToggleCategoria}
         aoLimparCategorias={aoLimparCategorias}
+      />
+
+      <FiltroFornecedor
+        fornecedores={fornecedores}
+        fornecedoresSelecionados={fornecedoresSelecionados}
+        aoToggleFornecedor={aoToggleFornecedor}
+        aoLimparFornecedores={aoLimparFornecedores}
       />
 
       <div className="fornecedores-busca">

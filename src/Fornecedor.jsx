@@ -10,7 +10,7 @@ import { BaseModal } from "./components/common/BaseModal";
 import { CategoriaApi, FornecedorApi } from "./provider/Api";
 import "./Fornecedor.css";
 
-const ITENS_POR_PAGINA = 9;
+const ITENS_POR_PAGINA = 12;
 
 const estadoInicialForm = {
   razaoSocial: "",
@@ -65,6 +65,7 @@ export default function Fornecedor() {
   const [busca, setBusca] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
+  const [fornecedoresSelecionados, setFornecedoresSelecionados] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(0);
   const [ordenacao, setOrdenacao] = useState("alfabetica");
   const [carregando, setCarregando] = useState(true);
@@ -88,7 +89,7 @@ export default function Fornecedor() {
 
   useEffect(() => {
     setPaginaAtual(0);
-  }, [busca, categoriasSelecionadas]);
+  }, [busca, categoriasSelecionadas, fornecedoresSelecionados]);
 
   function exibirToast(mensagem, tipo = "sucesso") {
     setToast({ visivel: true, tipo, mensagem });
@@ -168,6 +169,16 @@ export default function Fornecedor() {
 
   function aoLimparCategorias() {
     setCategoriasSelecionadas([]);
+  }
+
+  function aoToggleFornecedor(id) {
+    setFornecedoresSelecionados((prev) =>
+      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
+    );
+  }
+
+  function aoLimparFornecedores() {
+    setFornecedoresSelecionados([]);
   }
 
   function limparForm() {
@@ -311,6 +322,10 @@ export default function Fornecedor() {
       String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
     const termo = normalizar(busca.trim());
+    if (fornecedoresSelecionados.length > 0) {
+      lista = lista.filter((f) => fornecedoresSelecionados.includes(f.id));
+    }
+
     if (termo) {
       const termoDigitos = termo.replace(/\D/g, "");
       lista = lista.filter((f) => {
@@ -331,7 +346,7 @@ export default function Fornecedor() {
     const fornecedoresPagina = lista.slice(pagina * ITENS_POR_PAGINA, (pagina + 1) * ITENS_POR_PAGINA);
 
     return { fornecedoresPagina, totalPaginas };
-  }, [fornecedores, busca, ordenacao, paginaAtual]);
+  }, [fornecedores, busca, ordenacao, paginaAtual, fornecedoresSelecionados]);
 
   return (
     <div className="fornecedores-page">
@@ -351,6 +366,10 @@ export default function Fornecedor() {
           categoriasSelecionadas={categoriasSelecionadas}
           aoToggleCategoria={aoToggleCategoria}
           aoLimparCategorias={aoLimparCategorias}
+          fornecedores={fornecedores}
+          fornecedoresSelecionados={fornecedoresSelecionados}
+          aoToggleFornecedor={aoToggleFornecedor}
+          aoLimparFornecedores={aoLimparFornecedores}
         />
 
         {erro && <p className="fornecedores-erro">{erro}</p>}
@@ -381,6 +400,9 @@ export default function Fornecedor() {
           </section>
         )}
 
+      </main>
+
+      <div className="fornecedores-paginacao">
         <SeletorPaginas
           avancar={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas - 1))}
           voltar={() => setPaginaAtual(p => Math.max(p - 1, 0))}
@@ -388,7 +410,7 @@ export default function Fornecedor() {
           numPages={totalPaginas}
           paginaSelecionada={paginaAtual}
         />
-      </main>
+      </div>
 
       <NovoFornecedorModal
         aberto={modalAberto}

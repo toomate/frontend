@@ -348,12 +348,19 @@
   line-height: 1.5;
 }
 
+.fornecedores-paginacao {
+  background: #fffdf4;
+  border-top: 1px solid #e8d9a8;
+  padding: 10px 30px;
+  flex-shrink: 0;
+}
+
 .paginacao-container {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  margin-top: 24px;
+  margin-top: 0;
 }
 
 .paginacao-btn {

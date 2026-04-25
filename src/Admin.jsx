@@ -4,6 +4,8 @@ import { useLocation } from "react-router-dom";
 import CardResumoAdmin from "./components/admin/AdminStatCard";
 import CardGraficoAdmin from "./components/admin/AdminChartCard";
 import ComparativoPrecoUnitarioAdmin from "./components/admin/AdminComparativoPrecoUnitario";
+import AdminGraficoTendencia from "./components/admin/AdminGraficoTendencia";
+import AdminAlertas from "./components/admin/AdminAlertas";
 import GerenciamentoUsuariosAdmin from "./components/admin/AdminUsersManagement";
 import AdminLogsSistema from "./components/admin/AdminLogsSistema";
 import AdminRelatorios from "./components/admin/AdminRelatorios";
@@ -430,7 +432,7 @@ export default function Admin() {
           AuthApi.listarUsuarios(),
           Lote.listarLotes(),
           FornecedorApi.listar(),
-          AdminApi.listarLogs(),
+          AdminApi.listarAuditLogs(),
         ]);
 
       if (!ativo) return;
@@ -592,19 +594,13 @@ export default function Admin() {
       }
 
       if (logsResposta.status === "fulfilled") {
-        const listaLogs = extrairLista(logsResposta.value, ["logs", "data"]);
+        const listaLogs = extrairLista(logsResposta.value, ["logs", "auditLogs", "data"]);
         const dataPadraoLog = new Date().toISOString();
         const logsNormalizados = listaLogs
           .map((log, indice) => ({
-            id: normalizarNumero(log?.idLog ?? log?.id, indice + 1),
-            dataHoraIso: converterDataHoraParaIso(
-              log?.dataHoraIso ?? log?.dataHora ?? log?.createdAt,
-              dataPadraoLog
-            ),
-            mensagem: normalizarTexto(
-              log?.mensagem ?? log?.acao ?? log?.descricao,
-              "Log sem mensagem"
-            ),
+            id: normalizarTexto(log?.id, String(indice + 1)),
+            dataHoraIso: converterDataHoraParaIso(log?.timestamp ?? log?.dataHoraIso, dataPadraoLog),
+            mensagem: normalizarTexto(log?.detalhe ?? log?.mensagem ?? log?.message, "Log sem mensagem"),
             acao: normalizarTexto(log?.acao),
           }))
           .filter((log) => !Number.isNaN(new Date(log.dataHoraIso).getTime()));
@@ -1391,7 +1387,7 @@ export default function Admin() {
         ) : exibindoRelatorios ? (
           <AdminRelatorios lancamentosInsumos={lancamentosInsumos} />
         ) : exibindoLogsSistema ? (
-          <AdminLogsSistema logs={logsSistema} />
+          <AdminLogsSistema />
         ) : (
           <>
             <section className="admin-stat-grid">
@@ -1502,6 +1498,11 @@ export default function Admin() {
             subtitulo="Ranking por insumo usando o último lote por marca e fornecedor"
             comparativoPorInsumo={comparativoPrecoUnitarioPorInsumo}
           />
+        </section>
+
+        <section className="admin-bottom-grid">
+          <AdminGraficoTendencia lancamentos={lancamentosInsumos} />
+          <AdminAlertas lancamentos={lancamentosInsumos} />
         </section>
           </>
         )}
