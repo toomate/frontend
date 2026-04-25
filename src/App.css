@@ -149,6 +149,7 @@ input {
   position: relative;
   border: none;
   width: 100%;
+  margin-bottom: 10px;
 }
 
 .input-wrapper1 {
@@ -167,7 +168,7 @@ input {
   border: 1.5px solid rgb(175, 175, 175);
   background-color: #fff;
   color: #1f2937;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .selectNome::placeholder,
@@ -184,6 +185,7 @@ input {
   height: 40px;
   border-radius: 5px;
   padding: 10px 40px 10px 10px;
+  margin-bottom: 15px;
   border: 1.5px solid rgb(175, 175, 175);
 }
 
@@ -191,12 +193,13 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 60px;
+  width: 50px;
+  height: auto;
   border: none;
   background: transparent !important;
   color: black;
   cursor: pointer;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
 }
 
 /* Responsividade */

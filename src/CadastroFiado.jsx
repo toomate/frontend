@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import FormModal from "./components/common/FormModal";
 import { clientes, dividas } from "./provider/Api";
 
 export default function CadastroFiado() {
@@ -277,7 +278,6 @@ export default function CadastroFiado() {
               ))}
             </select>
           </div>
-          <br />
           
           <span>Valor</span>
           <input

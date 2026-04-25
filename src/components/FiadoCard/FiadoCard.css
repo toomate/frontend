@@ -11,6 +11,13 @@
   box-shadow: #6b4423 0px 4px 10px;
 }
 
+.filtro-btn {
+  width: 100px;
+  background: white;
+  justify-content:space-evenly;
+  border-radius: 8px;
+}
+
 /* Linha do nome */
 .fiado-card-nome {
   display: flex;

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import AutocompleteInput from "./components/common/AutocompleteInput";
 import FormModal from "./components/common/FormModal";
 import { CategoriaApi, insumos } from "./provider/Api";
 
