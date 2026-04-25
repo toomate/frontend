@@ -5,7 +5,6 @@ import { boletos as BoletosApi } from '../../provider/Api';
 export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
   const [carregandoPorId, setCarregandoPorId] = useState({});
   const [erroPorId, setErroPorId] = useState({});
-  const [confirmacaoPorId, setConfirmacaoPorId] = useState({});
   const [comprovantePorId, setComprovantePorId] = useState({});
 
   console.log('Boletos recebidos em BoletoDetail:', boletos);
@@ -41,20 +40,6 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
     }
   }
 
-  function abrirConfirmacaoPagamento(idBoleto) {
-    setConfirmacaoPorId((estadoAtual) => ({
-      ...estadoAtual,
-      [idBoleto]: true,
-    }));
-  }
-
-  function fecharConfirmacaoPagamento(idBoleto) {
-    setConfirmacaoPorId((estadoAtual) => ({
-      ...estadoAtual,
-      [idBoleto]: false,
-    }));
-  }
-
   async function anexarComprovanteEAtualizarStatus(boleto, eventoArquivo) {
     const arquivo = eventoArquivo.target.files?.[0];
 
@@ -68,7 +53,67 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
     }));
 
     await marcarComoPago(boleto);
-    fecharConfirmacaoPagamento(boleto.id);
+  }
+
+  async function pagarComConfirmacaoSemComprovante(boleto) {
+    const possuiComprovante = Boolean(comprovantePorId[boleto.id]);
+
+    if (!possuiComprovante) {
+      const confirmouSemComprovante = window.confirm(
+        'Deseja confirmar o pagamento sem inserir comprovante?',
+      );
+
+      if (!confirmouSemComprovante) {
+        return;
+      }
+    }
+
+    await marcarComoPago(boleto);
+  }
+
+  async function desmarcarPagamento(boleto) {
+    if (!boleto.status || carregandoPorId[boleto.id]) {
+      return;
+    }
+
+    const confirmouDesmarcacao = window.confirm(
+      'Deseja desmarcar este boleto como pago?',
+    );
+
+    if (!confirmouDesmarcacao) {
+      return;
+    }
+
+    setCarregandoPorId((estadoAtual) => ({
+      ...estadoAtual,
+      [boleto.id]: true,
+    }));
+    setErroPorId((estadoAtual) => ({
+      ...estadoAtual,
+      [boleto.id]: '',
+    }));
+
+    try {
+      await BoletosApi.desmarcarComoPago(boleto.id);
+      onStatusAtualizado?.(boleto.id, false);
+
+      setComprovantePorId((estadoAtual) => {
+        const proximoEstado = { ...estadoAtual };
+        delete proximoEstado[boleto.id];
+        return proximoEstado;
+      });
+    } catch (error) {
+      console.error('Erro ao desmarcar boleto como pago:', error);
+      setErroPorId((estadoAtual) => ({
+        ...estadoAtual,
+        [boleto.id]: 'Não foi possível desmarcar o pagamento.',
+      }));
+    } finally {
+      setCarregandoPorId((estadoAtual) => ({
+        ...estadoAtual,
+        [boleto.id]: false,
+      }));
+    }
   }
 
   return (
@@ -116,34 +161,42 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
 
               <div className="event-row event-actions">
                 {boleto.status ? (
-                  <button
-                    type="button"
-                    className="event-action-button is-paid"
-                    disabled
-                  >
-                    Pago ✓
-                  </button>
-                ) : confirmacaoPorId[boleto.id] ? (
+                  <div className="event-confirmacao-box">
+                    <button
+                      type="button"
+                      className="event-action-button is-paid"
+                      disabled
+                    >
+                      Pago ✓
+                    </button>
+
+                    <button
+                      type="button"
+                      className="event-action-button is-pending"
+                      onClick={() => desmarcarPagamento(boleto)}
+                      disabled={carregandoPorId[boleto.id]}
+                    >
+                      {carregandoPorId[boleto.id] ? 'Atualizando...' : 'Desmarcar pago'}
+                    </button>
+                  </div>
+                ) : (
                   <div className="event-confirmacao-box">
                     <p className="event-confirmacao-texto">
-                      Tem certeza que deseja mudar o status sem acrescentar o comprovante?
+                      Clique em pagar ou insira um comprovante para confirmar automaticamente o pagamento.
                     </p>
 
                     <div className="event-confirmacao-acoes">
                       <button
                         type="button"
                         className="event-action-button is-pending"
-                        onClick={async () => {
-                          await marcarComoPago(boleto);
-                          fecharConfirmacaoPagamento(boleto.id);
-                        }}
+                        onClick={() => pagarComConfirmacaoSemComprovante(boleto)}
                         disabled={carregandoPorId[boleto.id]}
                       >
-                        {carregandoPorId[boleto.id] ? 'Atualizando...' : 'Sim'}
+                        {carregandoPorId[boleto.id] ? 'Atualizando...' : 'Pagar'}
                       </button>
 
                       <label className="event-file-button" htmlFor={`comprovante-${boleto.id}`}>
-                        Acrescentar comprovante
+                        Inserir comprovante
                       </label>
                       <input
                         id={`comprovante-${boleto.id}`}
@@ -151,22 +204,14 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
                         accept="image/*,.pdf"
                         className="event-file-input"
                         onChange={(eventoArquivo) => anexarComprovanteEAtualizarStatus(boleto, eventoArquivo)}
+                        disabled={carregandoPorId[boleto.id]}
                       />
                     </div>
 
                     {comprovantePorId[boleto.id] && (
-                      <span className="event-file-name">Arquivo selecionado: {comprovantePorId[boleto.id]}</span>
+                      <span className="event-file-name">Comprovante: {comprovantePorId[boleto.id]}</span>
                     )}
                   </div>
-                ) : (
-                  <button
-                    type="button"
-                    className="event-action-button is-pending"
-                    onClick={() => abrirConfirmacaoPagamento(boleto.id)}
-                    disabled={carregandoPorId[boleto.id]}
-                  >
-                    Pagar
-                  </button>
                 )}
                 {erroPorId[boleto.id] && (
                   <span className="event-action-error">{erroPorId[boleto.id]}</span>

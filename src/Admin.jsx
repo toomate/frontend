@@ -1,5 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import { Activity, FileText, Home, List, UserPlus, Users, Wallet } from "lucide-react";
+import { Activity, FileText, Home, List, UserPlus, Users, Wallet, MessageSquare } from "lucide-react";
+import AdminWhatsapp from "./components/admin/AdminWhatsapp";
 import { useLocation, useNavigate } from "react-router-dom";
 import LayoutAdmin from "./components/admin/AdminLayout";
 import BarraLateralAdmin from "./components/admin/AdminSidebar";
@@ -129,6 +130,7 @@ const dadosMockAdmin = {
 const itensBarraLateral = [
   { id: "inicio", rotulo: "Início", icone: Home },
   { id: "lancamentos", rotulo: "Lançamentos", icone: List },
+  { id: "whatsapp", rotulo: "Whatsapp", icone: MessageSquare },
   { id: "usuarios", rotulo: "Usuários", icone: Users },
   { id: "relatorios", rotulo: "Relatórios", icone: FileText },
   { id: "logs", rotulo: "Logs do sistema", icone: Activity },
@@ -140,6 +142,7 @@ const acoesBarraLateral = [
 
 const abasAdminDisponiveis = new Set([
   "inicio",
+  "whatsapp",
   "lancamentos",
   "usuarios",
   "relatorios",
@@ -659,6 +662,7 @@ export default function Admin() {
   );
 
   const exibindoGestaoUsuarios = itemAtivo === "usuarios";
+  const exibindoWhatsapp = itemAtivo === "whatsapp";
   const exibindoLancamentos = itemAtivo === "lancamentos";
   const exibindoRelatorios = itemAtivo === "relatorios";
   const exibindoLogsSistema = itemAtivo === "logs";
@@ -1441,6 +1445,8 @@ export default function Admin() {
             usuarios={usuariosSistema}
             aoSalvarUsuario={salvarAlteracoesUsuario}
           />
+        ) : exibindoWhatsapp ? (
+          <AdminWhatsapp />
         ) : exibindoLancamentos ? (
           <>
             {filtrosLancamentos}
