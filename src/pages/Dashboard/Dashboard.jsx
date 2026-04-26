@@ -2,8 +2,8 @@
 import "./Dashboard.css";
 import HeaderPadrao from "../../HeaderPadrao";
 import { data, useNavigate } from "react-router-dom";
-import Kpi from "../Kpi/Kpi";
-import Grafico from "./Grafico";
+import Kpi from "../../components/Kpi/Kpi";
+import Grafico from "../../components/Dashboard/Grafico";
 import fiadosIcon from "../../images/fiados.png";
 import { useState } from "react";
 import { clientes, Lote } from "../../provider/Api";
@@ -22,34 +22,65 @@ export default function Index() {
     setlotesData(lotesData)
   }
   function agruparDados(dados) {
-    var dadosAgrupados = []
-    var nomes = new Set()
+    if (!Array.isArray(dados)) return setDadosInsumo([])
+
+    // Agrupar por nome do insumo e somar quantidade
+    const mapa = new Map()
     for (const dado of dados) {
-      nomes.add(dado.marca.insumo.nome)
+      const nome = dado.marca?.insumo?.nome ?? ''
+      const qtd = Number(dado.quantidadeMedida ?? 0)
+      const qtdMinima = Number(dado.marca?.insumo?.qtdMinima ?? 0)
+      if (!mapa.has(nome)) mapa.set(nome, { nome, quantidade: 0, qtdMinima })
+      const item = mapa.get(nome)
+      item.quantidade += qtd
+      // keep qtdMinima from any record (should be same per insumo)
+      if (!item.qtdMinima && qtdMinima) item.qtdMinima = qtdMinima
     }
-    for (const nome of nomes) {
-      var quantidade = 0
-      for (const dado of dados) {
-        if (dado.marca.insumo.nome == nome) {
-          quantidade += dado.quantidadeMedida
-          var loteFormatado = {
-            x: dado.marca.insumo.nome.split(" ")[0],
-            y: quantidade,
-            goals: [
-              {
-                name: "Estoque Mínimo",
-                value: dado.marca.insumo.qtdMinima,
-                strokeHeight: 5,
-                strokeColor: "red"
-              }
-            ]
-          }
-        }
+    const dadosAgrupados = Array.from(mapa.values()).map((it) => {
+      const nomeCurto = it.nome.split(' ')[0]
+      const y = it.quantidade
+      const estoqueMinimo = Number(it.qtdMinima ?? 0)
+      const diferenca = y - estoqueMinimo
+      let razao
+      if (estoqueMinimo !== 0) {
+        razao = diferenca / estoqueMinimo
+      } else {
+        // when minimo is zero: if both zero -> 0, if sobra -> +Infinity, if falta -> -Infinity
+        razao = diferenca === 0 ? 0 : (diferenca > 0 ? Infinity : -Infinity)
       }
-      dadosAgrupados.push(loteFormatado)
-    }
+
+      return {
+        x: nomeCurto,
+        y,
+        goals: [
+          {
+            name: 'Estoque Mínimo',
+            value: estoqueMinimo,
+            strokeHeight: 5,
+            strokeColor: 'red',
+          },
+        ],
+        __diferenca: diferenca,
+        __razao: razao,
+        __nomeCompleto: it.nome,
+      }
+    })
+
+    // Ordena pelos menores valores de razão (diferença / estoqueMinimo) primeiro
+    dadosAgrupados.sort((a, b) => {
+      // tratamos -Infinity/Infinity corretamente com comparação numérica
+      if (a.__razao === b.__razao) return 0
+      if (a.__razao === -Infinity) return -1
+      if (b.__razao === -Infinity) return 1
+      if (a.__razao === Infinity) return 1
+      if (b.__razao === Infinity) return -1
+      return a.__razao - b.__razao
+    })
+
     setDadosInsumo(dadosAgrupados)
   }
+
+  
   async function fetchBoletos() {
     const boletosData = await boletos.listarBoletos()
     setBoletosData(boletosData)

@@ -5,7 +5,34 @@ export default function Grafico({ dados }) {
   const ITEMS_PER_PAGE = 10;
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.max(1, Math.ceil((dados?.length || 0) / ITEMS_PER_PAGE));
+  function calcularRazaoCriticidade(item) {
+    const estoque = Number(item?.y ?? 0);
+    const estoqueMinimo = Number(item?.goals?.[0]?.value ?? 0);
+    const diferenca = estoque - estoqueMinimo;
+
+    if (estoqueMinimo !== 0) return diferenca / estoqueMinimo;
+    if (diferenca === 0) return 0;
+    return diferenca > 0 ? Infinity : -Infinity;
+  }
+
+  const dadosOrdenados = useMemo(() => {
+    return [...(dados || [])].sort((a, b) => {
+      const razaoA = calcularRazaoCriticidade(a);
+      const razaoB = calcularRazaoCriticidade(b);
+
+      if (razaoA === razaoB) return 0;
+      if (razaoA === -Infinity) return -1;
+      if (razaoB === -Infinity) return 1;
+      if (razaoA === Infinity) return 1;
+      if (razaoB === Infinity) return -1;
+      if (Number.isNaN(razaoA)) return 1;
+      if (Number.isNaN(razaoB)) return -1;
+
+      return razaoA - razaoB;
+    });
+  }, [dados]);
+
+  const totalPages = Math.max(1, Math.ceil((dadosOrdenados.length || 0) / ITEMS_PER_PAGE));
 
   useEffect(() => {
     if (currentPage > totalPages) {
@@ -13,11 +40,16 @@ export default function Grafico({ dados }) {
     }
   }, [currentPage, totalPages]);
 
+  // Sempre voltar para a primeira página quando os dados mudarem
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [dados]);
+
   const dadosPaginados = useMemo(() => {
     const inicio = (currentPage - 1) * ITEMS_PER_PAGE;
     const fim = inicio + ITEMS_PER_PAGE;
-    return (dados || []).slice(inicio, fim);
-  }, [dados, currentPage]);
+    return dadosOrdenados.slice(inicio, fim);
+  }, [dadosOrdenados, currentPage]);
 
   const irParaPaginaAnterior = () => {
     setCurrentPage((prev) => Math.max(1, prev - 1));

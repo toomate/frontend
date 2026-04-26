@@ -10,7 +10,7 @@ import CadastroFiado from "./CadastroFiado";
 import CadastroFornecedor from "./CadastroFornecedor";
 import CadastroInsumo from "./CadastroInsumo";
 import CadastroLote from "./CadastroLote";
-import Dashboard from "./components/Dashboard/Dashboard";
+import Dashboard from "./pages/Dashboard/Dashboard";
 import Calendario from "./components/Calendario/calendario";
 import BoletoDetail from "./components/Calendario/boletoDetail";
 import "./App.css";
@@ -21,8 +21,38 @@ import Fiado from "./pages/Fiado/Fiado";
 import Leitor from "./components/Leitor/Leitor";
 import Admin from "./Admin";
 import RotaPrivada from "./RotaPrivada";
+import { AuthApi } from "./provider/Api";
+import { useEffect } from "react";
+
+let usuarioPadraoInicializado = false;
 
 function App() {
+  useEffect(() => {
+    if (usuarioPadraoInicializado) {
+      return;
+    }
+
+    usuarioPadraoInicializado = true;
+
+    async function garantirUsuarioPadrao() {
+      try {
+        await AuthApi.cadastrar({
+          nome: "Toomate",
+          apelido: "toomate",
+          senha: "toomate123",
+          administrador: true,
+        });
+      } catch (error) {
+        const status = error?.response?.status;
+
+        if (status !== 409) {
+          console.error("Falha ao garantir usuario padrao na inicializacao:", error);
+        }
+      }
+    }
+
+    garantirUsuarioPadrao();
+  }, []);
   return (
     <BrowserRouter>
       <Routes>
