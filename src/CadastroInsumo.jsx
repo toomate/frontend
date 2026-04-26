@@ -16,6 +16,27 @@ export default function CadastroInsumo() {
   const [erroFormulario, setErroFormulario] = useState("");
   const [isCadastrando, setIsCadastrando] = useState(false);
 
+  function parseQuantidade(valor) {
+    if (valor === null || valor === undefined || valor === "") {
+      return null;
+    }
+
+    const texto = String(valor).trim().replace(",", ".");
+    const match = texto.match(/\d+(\.\d+)?/);
+
+    if (!match) {
+      return null;
+    }
+
+    const numero = Number(match[0]);
+
+    if (!Number.isFinite(numero) || numero < 0 || !Number.isInteger(numero)) {
+      return null;
+    }
+
+    return String(numero);
+  }
+
   async function fetchCategorias() {
     try {
       const categoriasData = await CategoriaApi.listar();
@@ -38,6 +59,36 @@ export default function CadastroInsumo() {
   useEffect(() => {
     fetchCategorias();
     fetchMedidas();
+
+    const produtoSalvo = sessionStorage.getItem("produto");
+
+    if (!produtoSalvo) {
+      return;
+    }
+
+    try {
+      const produto = JSON.parse(produtoSalvo);
+
+      const nome = String(produto?.nome ?? "").trim();
+      const unidade = String(produto?.unidade ?? "").trim();
+      const quantidade = parseQuantidade(produto?.quantidade);
+
+      if (nome) {
+        setNomeInsumo(nome);
+      }
+
+      if (unidade) {
+        setUnidadeMedida(unidade);
+      }
+
+      if (quantidade !== null) {
+        setQtdMinima(quantidade);
+      }
+    } catch {
+      // Ignora dados invalidos no sessionStorage
+    } finally {
+      sessionStorage.removeItem("produto");
+    }
   }, []);
 
 
@@ -103,8 +154,12 @@ export default function CadastroInsumo() {
     }
   }
 
-  const medidasDisponiveis =
+  const medidasDisponiveisBase =
     Array.isArray(medidas) && medidas.length > 0 ? medidas : ["Kg", "Unidade", "Litro"];
+
+  const medidasDisponiveis = unidadeMedida
+    ? [...medidasDisponiveisBase, unidadeMedida]
+    : medidasDisponiveisBase;
 
   const medidasNormalizadas = Array.from(
     new Set(
