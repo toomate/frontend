@@ -1,6 +1,7 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import { Activity, FileText, Users, Wallet } from "lucide-react";
 import { useLocation } from "react-router-dom";
+import AdminWhatsapp from "./components/admin/AdminWhatsapp";
 import CardResumoAdmin from "./components/admin/AdminStatCard";
 import CardGraficoAdmin from "./components/admin/AdminChartCard";
 import ComparativoPrecoUnitarioAdmin from "./components/admin/AdminComparativoPrecoUnitario";
@@ -49,6 +50,7 @@ const dadosMockAdmin = {
 
 const abasAdminDisponiveis = new Set([
   "inicio",
+  "whatsapp",
   "lancamentos",
   "usuarios",
   "relatorios",
@@ -257,7 +259,7 @@ export default function Admin() {
   const [logsSistema, setLogsSistema] = useState([]);
   const [lancamentosInsumos, setLancamentosInsumos] = useState([]);
   const [carregandoIntegracao, setCarregandoIntegracao] = useState(false);
-  const [erroIntegracao, setErroIntegracao] = useState("");
+  const [, setErroIntegracao] = useState("");
   const [insumosSelecionados, setInsumosSelecionados] = useState([]);
   const [marcasSelecionadas, setMarcasSelecionadas] = useState([]);
   const [fornecedoresSelecionados, setFornecedoresSelecionados] = useState([]);
@@ -558,6 +560,7 @@ export default function Admin() {
   );
 
   const exibindoGestaoUsuarios = itemAtivo === "usuarios";
+  const exibindoWhatsapp = itemAtivo === "whatsapp";
   const exibindoLancamentos = itemAtivo === "lancamentos";
   const exibindoRelatorios = itemAtivo === "relatorios";
   const exibindoLogsSistema = itemAtivo === "logs";
@@ -1297,6 +1300,8 @@ export default function Admin() {
             usuarios={usuariosSistema}
             aoSalvarUsuario={salvarAlteracoesUsuario}
           />
+        ) : exibindoWhatsapp ? (
+          <AdminWhatsapp />
         ) : exibindoLancamentos ? (
           <>
             {filtrosLancamentos}

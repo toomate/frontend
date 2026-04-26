@@ -27,6 +27,7 @@ export function FornecedorToolbar({
           aria-label="Adicionar fornecedor"
           onClick={aoAdicionar}
         >
+          Adicionar Fornecedor
           <Plus size={18} />
         </button>
 
@@ -37,6 +38,7 @@ export function FornecedorToolbar({
           title="Nova categoria"
           onClick={aoAdicionarCategoria}
         >
+          Adicionar Categoria
           <Tag size={18} />
         </button>
       </div>

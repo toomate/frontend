@@ -1,0 +1,345 @@
+.vencimento-container {
+    background-image: url(./images/fundo-tela.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 100vh;
+    height: auto;
+    box-sizing: border-box;
+}
+
+.kpi-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 12px 24px;
+}
+
+.kpi-container-interior {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 20vh;
+    width: min(95%);
+    max-width: 1280px;
+}
+
+.kpi-container-interior .status {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95%;
+    padding: 0;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.kpi-container-interior .card {
+    min-width: 180px;
+    padding: 18px 22px;
+    border-radius: 18px;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 247, 250, 0.98));
+    box-shadow: 0 18px 40px rgba(21, 35, 61, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(10px);
+}
+
+.kpi-container-interior .card span:first-child {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #334155;
+}
+
+.kpi-container-interior .numero {
+    font-size: clamp(2rem, 3.2vw, 3rem);
+    line-height: 1;
+    color: #0f172a;
+    font-weight: 800;
+}
+
+.kpi-container-interior .kpi-card-urgencia-neutra {
+    border-top: 5px solid #64748b;
+}
+
+.kpi-container-interior .kpi-card-urgencia-vencido {
+    background: linear-gradient(180deg, rgba(255, 244, 244, 0.98), rgba(255, 229, 229, 0.95));
+    box-shadow: 0 18px 40px rgba(185, 28, 28, 0.14);
+    border: 1px solid rgba(239, 68, 68, 0.18);
+    border-top: 5px solid #dc2626;
+}
+
+.kpi-container-interior .kpi-card-urgencia-vencido .numero {
+    color: #b91c1c;
+}
+
+.kpi-container-interior .kpi-card-urgencia-vencido span:first-child {
+    color: #7f1d1d;
+}
+
+.kpi-container-interior .kpi-card-urgencia-hoje {
+    background: linear-gradient(180deg, rgba(255, 247, 237, 0.98), rgba(254, 243, 199, 0.94));
+    border-top: 5px solid #f97316;
+}
+
+.kpi-container-interior .kpi-card-urgencia-hoje .numero {
+    color: #c2410c;
+}
+
+.kpi-container-interior .kpi-card-urgencia-hoje span:first-child {
+    color: #9a3412;
+}
+
+.kpi-container-interior .kpi-card-urgencia-semana {
+    background: linear-gradient(180deg, rgba(255, 253, 231, 0.98), rgba(254, 249, 195, 0.96));
+    border-top: 5px solid #eab308;
+}
+
+.kpi-container-interior .kpi-card-urgencia-semana .numero {
+    color: #a16207;
+}
+
+.kpi-container-interior .kpi-card-urgencia-semana span:first-child {
+    color: #854d0e;
+}
+
+.tabela-container {
+    display: flex;
+    background: rgba(255, 255, 255, 0.94);
+    align-items: center;
+    min-height: 50vh;
+    height: auto;
+    width: min(95%);
+    flex-direction: column;
+    margin: 5px auto 24px;
+    border-radius: 18px;
+    box-shadow: 0 20px 55px rgba(20, 31, 52, 0.15);
+    overflow: hidden;
+}
+
+.tabela-container .elemento-container {
+    width: 100%;
+}
+
+.tabela-container .linha-estoque {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+}
+
+.tabela-insumo-container {
+    width: 100%;
+}
+
+.tabela-interior {
+    width: 100%;
+    border: none;
+    height: auto;
+    margin-top: 5px;
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+.tabela-container .linha-tabela {
+    font-size: 1.35rem;
+    font-weight: 600;
+}
+
+.tabela-container #vencido {
+    background: linear-gradient(90deg, rgba(255, 202, 202, 0.72), rgba(255, 255, 255, 0.96));
+}
+
+.badge-status {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 8px 12px;
+    border-radius: 999px;
+    font-weight: 700;
+    line-height: 1;
+    white-space: nowrap;
+}
+
+.badge-status-neutro {
+    background: rgba(226, 232, 240, 0.9);
+    color: #334155;
+}
+
+.badge-status-normal {
+    background: rgba(217, 249, 223, 0.95);
+    color: #166534;
+}
+
+.badge-status-alerta {
+    background: rgba(254, 243, 199, 0.95);
+    color: #92400e;
+}
+
+.badge-status-hoje {
+    background: rgba(255, 237, 213, 0.95);
+    color: #9a3412;
+}
+
+.badge-status-vencido {
+    background: rgba(254, 226, 226, 0.98);
+    color: #b91c1c;
+}
+
+.badge-texto {
+    display: inline-flex;
+    align-items: center;
+}
+
+.tabela-container .elemento-container.linha-estoque:hover {
+    background: #471c0d;
+}
+
+.tabela-container .linha-estoque:hover {
+    background: rgba(243, 247, 252, 0.9);
+}
+
+.tabela-paginacao {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    padding: 16px 20px 20px;
+    border-top: 1px solid rgba(148, 163, 184, 0.2);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96));
+}
+
+.tabela-paginacao-resumo {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #334155;
+}
+
+.tabela-paginacao-acoes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.tabela-paginacao-pagina {
+    min-width: 110px;
+    text-align: center;
+    font-weight: 700;
+    color: #0f172a;
+    font-size: 1rem;
+}
+
+.botao-paginacao {
+    border: none;
+    border-radius: 999px;
+    padding: 10px 16px;
+    font-weight: 700;
+    background: #0f172a;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease, background 0.15s ease;
+}
+
+.botao-paginacao:hover:not(:disabled) {
+    transform: translateY(-1px);
+    background: #1d4ed8;
+}
+
+.botao-paginacao:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+}
+
+/* ── 768 ── */
+@media (max-width: 768px) {
+    .kpi-container {
+        padding: 0 10px 18px;
+    }
+
+    .kpi-container-interior {
+        height: auto;
+        padding: 16px 0;
+        gap: 12px;
+        flex-wrap: wrap;
+        min-height: unset;
+    }
+
+    .tabela-container {
+        width: 95%;
+        height: auto;
+        overflow: hidden;
+        margin: 8px auto 20px;
+    }
+
+    .tabela-container .linha-estoque.elemento-container {
+        display: none;
+    }
+
+    .tabela-interior {
+        height: auto;
+        min-height: 0;
+        overflow: visible;
+        max-height: none;
+        padding: 0 12px 12px;
+        gap: 12px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .kpi-container-interior .card {
+        min-width: 140px;
+        flex: 1 1 160px;
+        padding: 16px 18px;
+    }
+
+    .tabela-paginacao {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 14px 16px 16px;
+    }
+
+    .tabela-paginacao-acoes {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 480px) {
+    .vencimento-container {
+        padding: 0;
+        overflow-x: hidden;
+    }
+
+
+    .kpi-container-interior .status {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .tabela-container {
+        width: 100%;
+        border-radius: 14px;
+    }
+
+    .tabela-interior {
+        width: 100%;
+    }
+
+    .kpi-container-interior .numero {
+        font-size: 2rem;
+    }
+
+    .botao-paginacao {
+        width: 100%;
+    }
+
+    .tabela-paginacao-acoes {
+        width: 100%;
+        gap: 10px;
+    }
+
+    .tabela-paginacao-pagina,
+    .tabela-paginacao-resumo {
+        font-size: 0.95rem;
+    }
+}

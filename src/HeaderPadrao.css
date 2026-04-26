@@ -83,6 +83,12 @@
   pointer-events: none;
 }
 
+.lado-direito {  
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
 @media (max-width: 1390px) {
   .logo-circulo {
     width: 55px;

@@ -2,9 +2,9 @@ import React from "react";
 import { ArrowLeft } from "lucide-react";
 import "./App.css";
 import "./HeaderPadrao.css";
+import NotificationBell from "./components/Cabecalho/NotificationBell.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
 import HamburgerButton from "./components/HamburgerButton/HamburgerButton";
-import { limparSessaoAutenticacao } from "./utils/sessao";
 
 const titulosPorRota = {
   "/dashboard": "Dashboard",
@@ -57,7 +57,7 @@ function formatarTituloDaUrl(caminho) {
     .join(" /");
 }
 
-export default function HeaderPadrao() {
+export default function HeaderPadrao({ mostrarBotao = true }) {
   const navigate = useNavigate();
   const location = useLocation();
   const nomeUsuarioLogado =
@@ -96,16 +96,13 @@ export default function HeaderPadrao() {
 
       <div className="titulo-tela">{tituloTela}</div>
 
-      <div style={{ display: "flex", gap: "10px" }}>
-        {estaNaDashboard ? (
-          <button onClick={handleLogout} className="btn">
-            Sair
-          </button>
-        ) : (
+      <div className="lado-direito" style={{ display: "flex", gap: "10px" }}>
+        {mostrarBotao && (
           <button onClick={handleBack} className="btn">
             <ArrowLeft size={18} /> Voltar
           </button>
         )}
+        <NotificationBell />
       </div>
     </header>
   );

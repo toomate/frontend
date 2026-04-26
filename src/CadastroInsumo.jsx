@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import AutocompleteInput from "./components/common/AutocompleteInput";
 import FormModal from "./components/common/FormModal";
 import { CategoriaApi, insumos } from "./provider/Api";
 
@@ -166,14 +165,18 @@ export default function CadastroInsumo() {
 
           {/* Unidade */}
           <span>Unidade de Medida</span>
-          <AutocompleteInput
-            options={opcoesUnidade}
-            value={unidadeMedida}
-            onValueChange={setUnidadeMedida}
-            onSelect={() => {}}
-            placeholder="Selecione ou digite"
+          <select
             className="selectUnidade"
-          />
+            value={unidadeMedida}
+            onChange={e => {
+              setUnidadeMedida(e.target.value);
+            }}
+          >
+            <option value="" disabled>Selecione</option>
+            {opcoesUnidade.map(opcao => (
+              <option key={opcao.id} value={opcao.label}>{opcao.label}</option>
+            ))}
+          </select>
 
           <span>Quantidade Mínima</span>
           <input
@@ -191,7 +194,7 @@ export default function CadastroInsumo() {
 
           <div className="actions">
             <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
-              Cancelar
+              Voltar
             </button>
 
             <button type="submit" className="btn" disabled={isCadastrando}>

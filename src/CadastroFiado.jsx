@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import FormModal from "./components/common/FormModal";
 import { clientes, dividas } from "./provider/Api";
-import AutocompleteInput from "./components/common/AutocompleteInput";
 
 export default function CadastroFiado() {
   const navigate = useNavigate();
@@ -262,24 +262,45 @@ export default function CadastroFiado() {
           {/* Pedido */}
           <span>Pedido</span>
           <div className="input-wrapper1">
-            <AutocompleteInput
-              options={opcoesPedidos}
-              value={pedidoSelecionado}
-              onValueChange={setPedidoSelecionado}
-              onSelect={() => {}}
-              placeholder="Selecione ou digite"
+            <select
               className="selectPedido"
-            />
+              value={pedidoSelecionado || ""}
+              onChange={(e) => {
+                const selectedValue = e.target.value;
+                setPedidoSelecionado(selectedValue);
+              }}
+            >
+              <option value="">Selecione um pedido</option>
+              {opcoesPedidos.map((pedido, index) => (
+                <option key={index} value={pedido.label}>
+                  {pedido.label}
+                </option>
+              ))}
+            </select>
           </div>
           
           <span>Valor</span>
           <input
-            type="number"
-            placeholder="R$ XXX,XX"
+            type="text"
+            placeholder="R$ 0,00"
             value={valor}
-            onChange={(e) => setValor(e.target.value)}
-            min="0"
-            step="1"
+            onChange={(e) => {
+              let v = e.target.value;
+
+              // Remove tudo que não for número
+              v = v.replace(/\D/g, "");
+
+              // Converte para centavos
+              const numero = Number(v) / 100;
+
+              // Formata para moeda BRL
+              const formatado = numero.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              });
+
+              setValor(formatado);
+            }}
           />
           
           <span>Data do pedido</span>
@@ -305,7 +326,7 @@ export default function CadastroFiado() {
 
         <div className="actions">
           <button className="btn btn-cancelar" onClick={() => navigate(-1)}>
-            Cancelar
+            Voltar
           </button>
 
           <button className="btn" type="submit" form={formId} disabled={isCadastrando}>

@@ -4,7 +4,7 @@ import "react-calendar/dist/Calendar.css";
 import "./Boletos.css";
 import { CalendarDays, Search } from "lucide-react";
 import HeaderPadrao from "../../HeaderPadrao";
-import BoletoDetail from "../Calendario/boletoDetail";
+import BoletoDetail from "../../components/Calendario/boletoDetail";
 import { boletos } from '../../provider/Api';
 import { Plus } from 'lucide-react';
 
@@ -12,6 +12,9 @@ export default function Boletos() {
   const navigate = useNavigate();
   const [boletoLista, setBoletos] = useState([]);
   const [filtroMes, setFiltroMes] = useState("proximo");
+  const [filtroStatus, setFiltroStatus] = useState("");
+  const [filtroTipo, setFiltroTipo] = useState("");
+  const [pesquisa, setPesquisa] = useState("");
   const [selectedBoletos, setSelectedBoletos] = useState([]);
 
   function abrirModalBoleto(boleto) {
@@ -53,7 +56,29 @@ export default function Boletos() {
     return hoje.toISOString();
   }
 
-  const boletosFiltrados = boletoLista.filter((boleto) => {
+  function filtrarBoletosPorStatus(boletos, status) {
+    if (!status) {
+      return boletos;
+    }
+    if (status === "Pagos") {
+      return boletos.filter((boleto) => boleto.status === true);
+    } else if (status === "Em Aberto") {
+      return boletos.filter((boleto) => boleto.status === false);
+    } else if (status === "Atrasados") {
+      const hoje = new Date();
+      return boletos.filter((boleto) => boleto.status === false && boleto.start < hoje);
+    }
+  }
+
+  function filtrarBoletosPorTipo(boletos, tipo) {
+    if (!tipo) {
+      return boletos;
+    }
+    return boletos.filter((boleto) => boleto.categoria === tipo);
+  }
+
+
+  const boletosFiltradosPorMes = boletoLista.filter((boleto) => {
     if (!(boleto.start instanceof Date) || Number.isNaN(boleto.start.getTime())) {
       return false;
     }
@@ -74,6 +99,19 @@ export default function Boletos() {
     return mesBoleto === mesSelecionado;
   });
 
+  function filtrarBoletosPorNome(boletos, pesquisa) {
+    if (!pesquisa) {
+      return boletos;
+    }
+    const termo = pesquisa.toLowerCase();
+    return boletos.filter((boleto) =>
+      boleto.title.toLowerCase().includes(termo) ||
+      boleto.value.toLowerCase().includes(termo)
+    );
+  }
+
+  const boletosFiltrados = filtrarBoletosPorNome(filtrarBoletosPorTipo(filtrarBoletosPorStatus(boletosFiltradosPorMes, filtroStatus), filtroTipo), pesquisa);
+
   useEffect(() => {
     const fetchBoletos = async () => {
       try {
@@ -88,6 +126,7 @@ export default function Boletos() {
               value: `R$ ${boleto.valor.toFixed(2)}`,
               start: startDate,
               end: startDate,
+              categoria: boleto.categoria,
             };
           })
           : [];
@@ -109,7 +148,6 @@ export default function Boletos() {
       <HeaderPadrao />
 
       <div className="conteudo">
-        <span>Pagamentos</span>
         <br />
         <div className="card-pagamentos">
           <div className="filtros">
@@ -129,22 +167,21 @@ export default function Boletos() {
               <option value="11">Dezembro</option>
             </select>
 
-            <select>
-              <option>Status</option>
-              <option>Pagos</option>
-              <option>Em Aberto</option>
-              <option>Atrasados</option>
+            <select value={filtroStatus} onChange={(e) => setFiltroStatus(e.target.value)}>
+              <option value="">Status</option>
+              <option value="Pagos">Pagos</option>
+              <option value="Em Aberto">Em Aberto</option>
+              <option value="Atrasados">Atrasados</option>
             </select>
 
-            <select>
-              <option>Tipo</option>
-              <option>Boletos Fornecedores</option>
-              <option>Contas Consumo</option>
+            <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}>
+              <option value="">Tipo</option>
+              {boletoLista.map((boleto) => <option key={boleto.id} value={boleto.categoria}>{boleto.categoria}</option>)}
             </select>
 
             <div className="busca">
               <Search size={16} />
-              <input placeholder="Busca por nome" />
+              <input placeholder="Busca por nome" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} />
             </div>
 
             <button
@@ -158,13 +195,14 @@ export default function Boletos() {
                 })
               }
             >
-              <CalendarDays size={20} />
-              <h3>Painel</h3>
+            <CalendarDays size={20} />
+            <h3>Painel</h3>
             </button>
-            <button className="add-btn" onClick={() => navigate("/cadastro-boleto")}>
-              <Plus size={20} color="#fff" />
+              <button className="view-toggle-btn" 
+              onClick={() => navigate("/cadastro-boleto")}>
+                Adicionar Boleto
+                <Plus size={20} />
             </button>
-
           </div>
 
           <div className="lista">

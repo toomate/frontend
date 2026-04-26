@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import AutocompleteInput from "./components/common/AutocompleteInput";
 import FormModal from "./components/common/FormModal";
 import { FornecedorApi, Lote, MarcaApi, insumos } from "./provider/Api";
 import { useLocation } from "react-router-dom";
@@ -249,20 +248,28 @@ export default function CadastroLote() {
           {/* Nome do insumo */}
           <span>Nome</span>
           <div className="input-wrapper">
-            <AutocompleteInput
-              options={opcoesInsumo}
-              value={insumoSelecionado}
-              onValueChange={(texto) => {
-                setInsumoSelecionado(texto);
-                setIdMarcaSelecionada("0");
-              }}
-              onSelect={(opcao) => {
-                setIdInsumoSelecionado(opcao?.idInsumo ?? null);
-                setIdMarcaSelecionada("0");
-              }}
-              placeholder="Nome do Insumo"
+            <select
               className="selectNome"
-            />
+              value={idInsumoSelecionado ?? ""}
+              onChange={(e) => {
+                const selectedId = Number(e.target.value);
+
+                const insumo = listaInsumos.find(
+                  (i) => Number(i.idInsumo) === selectedId
+                );
+
+                setIdInsumoSelecionado(selectedId || null);
+                setInsumoSelecionado(insumo?.nome ?? "");
+                setIdMarcaSelecionada("0");
+              }}
+            >
+              <option value="">Selecione um insumo</option>
+              {listaInsumos.map((insumo) => (
+                <option key={insumo.idInsumo} value={insumo.idInsumo}>
+                  {insumo.nome}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Marca */}
@@ -286,12 +293,26 @@ export default function CadastroLote() {
           
           <span>Preço unitário</span>
           <input
-            type="number"
-            step="1"
-            min="0"
-            placeholder="R$ XXX,XX"
+            type="text"
+            placeholder="R$ 0,00"
             value={precoUnitario}
-            onChange={(e) => setPrecoUnitario(e.target.value)}
+            onChange={(e) => {
+              let valor = e.target.value;
+
+              // Remove tudo que não for número
+              valor = valor.replace(/\D/g, "");
+
+              // Converte para centavos
+              const numero = Number(valor) / 100;
+
+              // Formata para moeda BR
+              const formatado = numero.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              });
+
+              setPrecoUnitario(formatado);
+            }}
           />
           
           <span>Data de validade</span>
@@ -314,7 +335,7 @@ export default function CadastroLote() {
               <input type="file" accept="image/*" onChange={(e) => setArquivoNotaFiscal(e.target.files?.[0] ?? null)} />
             </label>
           </div>
-
+          <br />
           {arquivoNotaFiscal && (
             <span style={{ fontSize: "14px" }}>Arquivo selecionado: {arquivoNotaFiscal.name}</span>
           )}
@@ -325,7 +346,7 @@ export default function CadastroLote() {
 
           <div className="actions">
             <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
-              Cancelar
+              Voltar
             </button>
 
             <button type="submit" className="btn" disabled={isCadastrando}>
@@ -353,14 +374,21 @@ export default function CadastroLote() {
           onChange={(e) => setNovaMarca(e.target.value)}
         />
 
-        <AutocompleteInput
-          options={opcoesInsumo}
-          value={novoInsumoMarcaTexto}
-          onValueChange={setNovoInsumoMarcaTexto}
-          onSelect={(opcao) => setNovoIdInsumoMarca(opcao?.id ?? "0")}
-          placeholder="Selecione o insumo"
+        <select
           className="modal-input"
-        />
+          value={novoIdInsumoMarca}
+          onChange={e => {
+            const selectedId = e.target.value;
+            setNovoIdInsumoMarca(selectedId);
+            const found = (opcoesInsumo ?? []).find(opcao => String(opcao.id) === String(selectedId));
+            setNovoInsumoMarcaTexto(found ? found.label : "");
+          }}
+        >
+          <option value="0" disabled>Selecione o insumo</option>
+          {(opcoesInsumo ?? []).map(opcao => (
+            <option key={opcao.id} value={opcao.id}>{opcao.label}</option>
+          ))}
+        </select>
 
         <select
           className="modal-input"

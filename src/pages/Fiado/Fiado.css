@@ -7,12 +7,17 @@
   stroke: currentColor;
   pointer-events: none;
 }
+
 /* ===== Fiado Page ===== */
 .fiado-page {
-  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  font-family: "Arial", sans-serif;
   min-height: 100vh;
-  background-color: #ffffff;
-  font-family: 'Arial', sans-serif;
+  width: 100%;
+  background-image: url(../../images/fundo-tela.png);
+  background-size: cover;
+  background-attachment: fixed;
 }
 
 /* ===== Barra de filtros ===== */
@@ -23,7 +28,6 @@
   padding: 1.5% 2.5%;
   gap: 0.625em;
   width: 100%;
-  background: #ffffff;
   box-sizing: border-box;
   flex-wrap: wrap;
   overflow: visible;
@@ -36,17 +40,14 @@
 .filtro-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-  height: var(--fiado-control-height);
-  padding: 0 0.875em;
-  background: #f8ecc6;
-  border: 0.0625em solid #6b4423;
+  justify-content: space-between;
+  height: 32px;
+  background: white;
+  border: 1px solid #ccc;
   cursor: pointer;
-  font-family: 'Arial', sans-serif;
-  font-weight: 600;
-  font-size: clamp(0.75rem, 1.1vw, 1rem);
-  color: #6b4423;
+  color: black;;
   transition: background 0.2s;
+  height: var(--fiado-control-height);
   white-space: nowrap;
   flex-shrink: 0;
 }
@@ -55,22 +56,25 @@
   background: #f0dfa8;
 }
 
-.filtro-btn.active {
+.filtro-btn.active, .add-btn {
   background: #e6d08e;
 }
 
 .add-btn {
-  display: inline-flex;
+display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: row;
+  width: 180px;
   height: var(--fiado-control-height);
-  padding: 0 0.875em;
-  background: #6b4423;
-  border-radius: 12px;
-  border: 0.0625em solid #6b4423;
+  color: black;
+  font-size: 13px;
+  background: white !important;
+  border: 1px solid #ccc !important;
+  border-radius: 8px !important;
+  padding: 8px 16px;
   cursor: pointer;
-  transition: background 0.2s;
-  flex-shrink: 0;
+  gap: 10px;
 }
 
 .add-btn:hover {
@@ -87,27 +91,25 @@
 .view-toggle-btn {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: var(--fiado-control-height);
+  justify-content: space-between;
+  gap: 5px;
+  padding: 2px, 0, 2px, 0;
+  width: auto;
   height: var(--fiado-control-height);
-  border: 0.0625em solid transparent;
-  border-radius: 0.4em;
+  border-radius: 8px;
   cursor: pointer;
-  color: #6b4423;
+  color: black;
   transition: all 0.2s;
-  fill: #f8ecc6;
-  background-color: #f8ecc6;
-  border: 2px solid #6b4423;
+  background-color: white;
+  border: 1px solid #ccc !important;
 }
 
-
 .view-toggle-btn.active {
-  background: #e6d08e !important;
-  border-color: #6b4423 !important;
-  color: #6b4423 !important;
+  background: white !important;
+  border-color: #ccc !important;
+  color: black !important;
   fill: #6b4423 !important;
   z-index: 1;
-  box-shadow: 0 0 0 2px #e6d08e;
 }
 
 .view-toggle-btn:hover {
@@ -142,9 +144,9 @@
   width: 100%;
   height: 100%;
   padding: 0 0.75em;
-  background: #fffdf4;
-  border-radius: 0.375em;
-  border: 0.0625em solid #6b4423;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #ccc;
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -183,7 +185,7 @@
 }
 
 .fiado-search-field::placeholder {
-  color: #999;
+  color: black;
 }
 
 .fiado-search-input:focus-within {
@@ -210,11 +212,13 @@
   gap: 0.5% 2%;
   padding: 1.5% 2.5%;
   auto-rows: 1fr;
+  gap: 5px;
 }
 
 /* ===== Tabela / Lista ===== */
 .fiado-tabela-container {
   padding: 0 2.5% 1.5%;
+  background-color: white;
 }
 
 .fiado-tabela-header {

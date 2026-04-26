@@ -129,6 +129,17 @@ export class boletos {
     return boletos.atualizar(idBoleto, payload);
   }
 
+  static async desmarcarComoPago(idBoleto) {
+    const boletoAtual = await boletos.buscarPorId(idBoleto);
+    const payload = {
+      ...boletoAtual,
+      pago: false,
+      dataPagamento: null,
+    };
+
+    return boletos.atualizar(idBoleto, payload);
+  }
+
 }
 
 export class AuthApi {

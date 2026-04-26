@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Filter,
-  Plus,
-  Search,
-  LayoutGrid,
-  List,
-  FileText,
-} from "lucide-react";
-import { FiadoCard } from "../FiadoCard/FiadoCard";
-import { FiadoModal } from "../FiadoModal/FiadoModal";
+import {Filter, Plus, Search, LayoutGrid, List, FileText} from "lucide-react";
+import { FiadoCard } from "../../components/FiadoCard/FiadoCard";
+import { FiadoModal } from "../../components/FiadoModal/FiadoModal";
 import "./Fiado.css";
 import HeaderPadrao from '../../HeaderPadrao';
 import { clientes, dividas } from "../../provider/Api";
@@ -190,10 +183,6 @@ export default function Fiado({ irPara }) {
           <Filter size={18} />
         </button>
 
-        <button className="add-btn" onClick={() => navigate("/cadastro-fiado")}>
-          <Plus size={20} color="#fff" />
-        </button>
-
         <div className="view-toggle">
           <button
             className={`view-toggle-btn ${visualizacao === "cards" ? "active" : ""}`}
@@ -223,6 +212,13 @@ export default function Fiado({ irPara }) {
                         <Search size={18} className="fiado-search-icon" />
           </div>
         </div>
+
+        <button className={`view-toggle-btn ${visualizacao === "lista" ? "active" : ""}`}  
+        onClick={() => navigate("/cadastro-fiado")}>
+          Adicionar Fiado
+          <Plus size={20} />
+        </button>
+
       </div>
 
       {/* Conteúdo principal */}
