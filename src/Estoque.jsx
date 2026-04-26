@@ -249,9 +249,12 @@ export function Estoque() {
 
     function ButtonPlus() {
         return (
+            
             <div className="plus-container">
                 <div className="plus-icon-container">
-                    <div className="plus-icon"><Plus color="#F8ECC6" onClick={() => { navigate("/cadastro-insumo") }} /></div>
+                    Adicionar Insumo 
+                    <div className="plus-icon"><Plus onClick={() => { navigate("/cadastro-insumo") }} />
+                    </div>
                 </div>
             </div>
         )
@@ -299,16 +302,16 @@ export function Estoque() {
             <div className="categoria-container">
                 <div className="button-secund">
                     <div className="botoes-container">
-                        <div className="botoes-container">
-                            <ButtonPlus />
-                            <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
-                            <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
-                            <div className="botoes-container-icon">
-                                <ScanBarcode style={{cursor: "pointer"}} color="black" size={30} onClick={() => { navigate("/leitor") }} />
-                            </div>
-                            <div className="container-search">
-                                <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
-                            </div>
+                        <ButtonPlus />
+                        <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
+                        <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
+                        <div className="botoes-container-icon">
+                            QR Code
+                            <ScanBarcode style={{cursor: "pointer"}} color="black" size={28} 
+                            onClick={() => { navigate("/leitor") }} />
+                        </div>
+                        <div className="container-search">
+                            <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                         </div>
                     </div>
                 </div>

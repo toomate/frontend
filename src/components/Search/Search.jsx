@@ -7,7 +7,8 @@ export function Search({Icone, pesquisar, value}) {
                 <input value={value} className="search-input" placeholder="Pesquisar..." type="text" onInput={(e) => pesquisar(e.target.value)} />
             </div>
             {Icone &&
-                <div className="search-icon"><Icone size={20} color={"black"} strokeWidth={1}/></div>
+                <div className="search-icon">
+                    <Icone size={20} color={"black"} strokeWidth={1}/></div>
             }
         </div> 
 

@@ -1,12 +1,11 @@
 .search-container {
     display: flex;
     align-items: center;
-    border: 1px solid #6B4423;
     height: 5vh;
     width: 30vw;
     background-color: white;
-    border-radius: 5px;
     margin: 10px;
+    border-color: none !important;
 }
 
 .search{
@@ -30,7 +29,6 @@
     color: black;
     height: 100%;
     padding: 0 10px;
-    border: none;
 }
 
 .search-input:focus {
