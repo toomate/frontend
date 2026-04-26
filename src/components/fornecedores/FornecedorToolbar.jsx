@@ -1,5 +1,6 @@
 import { Plus, Search, Tag } from "lucide-react";
-import { Search as CampoBusca } from "../Search/Search";
+import { FiltroCategoriaFornecedor } from "./FiltroCategoriaFornecedor";
+import { FiltroFornecedor } from "./FiltroFornecedor";
 
 export function FornecedorToolbar({
   busca,
@@ -8,6 +9,14 @@ export function FornecedorToolbar({
   aoMudarOrdenacao,
   aoAdicionar,
   aoAdicionarCategoria,
+  categorias,
+  categoriasSelecionadas,
+  aoToggleCategoria,
+  aoLimparCategorias,
+  fornecedores,
+  fornecedoresSelecionados,
+  aoToggleFornecedor,
+  aoLimparFornecedores,
 }) {
   return (
     <div className="fornecedores-toolbar">
@@ -16,35 +25,56 @@ export function FornecedorToolbar({
           type="button"
           className="fornecedores-btn-add"
           aria-label="Adicionar fornecedor"
-          onClick={aoAdicionar}>
+          onClick={aoAdicionar}
+        >
           Adicionar Fornecedor
           <Plus size={18} />
         </button>
 
         <button
           type="button"
-          className="fornecedores-btn-add-categoria"
+          className="fornecedores-btn-add fornecedores-btn-add-categoria"
           aria-label="Adicionar categoria"
           title="Nova categoria"
-          onClick={aoAdicionarCategoria}>
+          onClick={aoAdicionarCategoria}
+        >
           Adicionar Categoria
           <Tag size={18} />
         </button>
       </div>
 
-      <div className="fornecedores-toolbar-direita">
-        <div className="fornecedores-busca">
-          <CampoBusca Icone={Search} pesquisar={aoBuscar} value={busca} />
-        </div>
+      <select
+        className="fornecedores-select"
+        value={ordenacao}
+        onChange={(e) => aoMudarOrdenacao(e.target.value)}
+      >
+        <option value="alfabetica">A → Z</option>
+        <option value="alfabetica_desc">Z → A</option>
+      </select>
 
-        <select
-          className="fornecedores-select"
-          value={ordenacao}
-          onChange={(e) => aoMudarOrdenacao(e.target.value)}
-        >
-          <option value="alfabetica">A → Z</option>
-          <option value="alfabetica_desc">Z → A</option>
-        </select>
+      <FiltroCategoriaFornecedor
+        categorias={categorias}
+        categoriasSelecionadas={categoriasSelecionadas}
+        aoToggleCategoria={aoToggleCategoria}
+        aoLimparCategorias={aoLimparCategorias}
+      />
+
+      <FiltroFornecedor
+        fornecedores={fornecedores}
+        fornecedoresSelecionados={fornecedoresSelecionados}
+        aoToggleFornecedor={aoToggleFornecedor}
+        aoLimparFornecedores={aoLimparFornecedores}
+      />
+
+      <div className="fornecedores-busca">
+        <Search size={16} className="fornecedores-busca-icone" />
+        <input
+          className="fornecedores-busca-input"
+          type="text"
+          placeholder="Pesquisar..."
+          value={busca}
+          onChange={(e) => aoBuscar(e.target.value)}
+        />
       </div>
     </div>
   );

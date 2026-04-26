@@ -313,6 +313,12 @@ export class AdminApi {
     console.error("Erro ao listar logs do sistema:", ultimoErro);
     throw ultimoErro;
   }
+
+  static async listarAuditLogs(data) {
+    const url = data ? `/audit-logs?data=${data}` : "/audit-logs";
+    const response = await requestComFallback({ method: "get", url });
+    return response.data;
+  }
 }
 
 export class Lote {

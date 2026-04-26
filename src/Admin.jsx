@@ -1,13 +1,12 @@
 ﻿import { useEffect, useMemo, useState } from "react";
-import { Activity, FileText, Home, List, UserPlus, Users, Wallet, MessageSquare } from "lucide-react";
+import { Activity, FileText, Users, Wallet } from "lucide-react";
+import { useLocation } from "react-router-dom";
 import AdminWhatsapp from "./components/admin/AdminWhatsapp";
-import { useLocation, useNavigate } from "react-router-dom";
-import LayoutAdmin from "./components/admin/AdminLayout";
-import BarraLateralAdmin from "./components/admin/AdminSidebar";
-import TopoAdmin from "./components/admin/AdminTopbar";
 import CardResumoAdmin from "./components/admin/AdminStatCard";
 import CardGraficoAdmin from "./components/admin/AdminChartCard";
 import ComparativoPrecoUnitarioAdmin from "./components/admin/AdminComparativoPrecoUnitario";
+import AdminGraficoTendencia from "./components/admin/AdminGraficoTendencia";
+import AdminAlertas from "./components/admin/AdminAlertas";
 import GerenciamentoUsuariosAdmin from "./components/admin/AdminUsersManagement";
 import AdminLogsSistema from "./components/admin/AdminLogsSistema";
 import AdminRelatorios from "./components/admin/AdminRelatorios";
@@ -19,19 +18,6 @@ import "./components/admin/Admin.css";
 const hoje = new Date();
 const anoAtualNumero = hoje.getFullYear();
 const mesAtualNumero = hoje.getMonth() + 1;
-
-function montarDataHoraIsoNoMesAtual(dia, horario) {
-  const [hora = "00", minuto = "00"] = String(horario).split(":");
-  const data = new Date(
-    anoAtualNumero,
-    mesAtualNumero - 1,
-    dia,
-    Number(hora),
-    Number(minuto),
-    0
-  );
-  return data.toISOString();
-}
 
 function formatarDataBr(dataIso) {
   const [ano, mes, dia] = dataIso.split("-");
@@ -59,86 +45,8 @@ const dadosMockAdmin = {
     { id: 1, nome: "Custo total de compras", cor: "#2f80ed" },
     { id: 2, nome: "Itens perdidos por validade", cor: "#c92c2c" },
   ],
-  logs: [
-    {
-      id: 1,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(18, "10:30"),
-      nivel: "INFO",
-      usuario: "João Silva",
-      acao: "Login realizado",
-      origem: "Autenticação",
-    },
-    {
-      id: 2,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(18, "09:15"),
-      nivel: "INFO",
-      usuario: "Maria Santos",
-      acao: "Usuário adicionado",
-      origem: "Gestão de usuários",
-    },
-    {
-      id: 3,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(18, "08:45"),
-      nivel: "ALERTA",
-      usuario: "Admin",
-      acao: "Configuração alterada",
-      origem: "Painel administrativo",
-    },
-    {
-      id: 4,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(17, "18:22"),
-      nivel: "ERRO",
-      usuario: "Sistema",
-      acao: "Falha ao processar relatório financeiro",
-      origem: "Relatórios",
-    },
-    {
-      id: 5,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(17, "16:08"),
-      nivel: "INFO",
-      usuario: "Pedro Costa",
-      acao: "Atualização de lote de insumo",
-      origem: "Controle de gastos",
-    },
-    {
-      id: 6,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(16, "14:37"),
-      nivel: "ALERTA",
-      usuario: "Sistema",
-      acao: "Tentativa de acesso sem permissão",
-      origem: "Autenticação",
-    },
-    {
-      id: 7,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(16, "11:03"),
-      nivel: "INFO",
-      usuario: "Bruna Almeida",
-      acao: "Cadastro de novo fornecedor",
-      origem: "Fornecedores",
-    },
-    {
-      id: 8,
-      dataHoraIso: montarDataHoraIsoNoMesAtual(15, "09:54"),
-      nivel: "ERRO",
-      usuario: "Sistema",
-      acao: "Timeout na consulta de categorias",
-      origem: "Fornecedores",
-    },
-  ],
 };
 
-const itensBarraLateral = [
-  { id: "inicio", rotulo: "Início", icone: Home },
-  { id: "lancamentos", rotulo: "Lançamentos", icone: List },
-  { id: "whatsapp", rotulo: "Whatsapp", icone: MessageSquare },
-  { id: "usuarios", rotulo: "Usuários", icone: Users },
-  { id: "relatorios", rotulo: "Relatórios", icone: FileText },
-  { id: "logs", rotulo: "Logs do sistema", icone: Activity },
-];
-
-const acoesBarraLateral = [
-  { id: "cadastro-usuario", rotulo: "Cadastro de usuário", icone: UserPlus },
-];
 
 const abasAdminDisponiveis = new Set([
   "inicio",
@@ -345,15 +253,13 @@ function normalizarTextoBusca(valor) {
 }
 
 export default function Admin() {
-  const navegar = useNavigate();
   const localizacao = useLocation();
   const [itemAtivo, setItemAtivo] = useState("inicio");
-  const [menuLateralAberto, setMenuLateralAberto] = useState(false);
   const [usuariosSistema, setUsuariosSistema] = useState([]);
-  const [logsSistema, setLogsSistema] = useState(dadosMockAdmin.logs);
+  const [logsSistema, setLogsSistema] = useState([]);
   const [lancamentosInsumos, setLancamentosInsumos] = useState([]);
   const [carregandoIntegracao, setCarregandoIntegracao] = useState(false);
-  const [erroIntegracao, setErroIntegracao] = useState("");
+  const [, setErroIntegracao] = useState("");
   const [insumosSelecionados, setInsumosSelecionados] = useState([]);
   const [marcasSelecionadas, setMarcasSelecionadas] = useState([]);
   const [fornecedoresSelecionados, setFornecedoresSelecionados] = useState([]);
@@ -449,7 +355,7 @@ export default function Admin() {
           AuthApi.listarUsuarios(),
           Lote.listarLotes(),
           FornecedorApi.listar(),
-          AdminApi.listarLogs(),
+          AdminApi.listarAuditLogs(),
         ]);
 
       if (!ativo) return;
@@ -611,26 +517,18 @@ export default function Admin() {
       }
 
       if (logsResposta.status === "fulfilled") {
-        const listaLogs = extrairLista(logsResposta.value, ["logs", "data"]);
+        const listaLogs = extrairLista(logsResposta.value, ["logs", "auditLogs", "data"]);
         const dataPadraoLog = new Date().toISOString();
         const logsNormalizados = listaLogs
           .map((log, indice) => ({
-            id: normalizarNumero(log?.idLog ?? log?.id, indice + 1),
-            dataHoraIso: converterDataHoraParaIso(
-              log?.dataHoraIso ?? log?.dataHora ?? log?.createdAt,
-              dataPadraoLog
-            ),
-            mensagem: normalizarTexto(
-              log?.mensagem ?? log?.acao ?? log?.descricao,
-              "Log sem mensagem"
-            ),
+            id: normalizarTexto(log?.id, String(indice + 1)),
+            dataHoraIso: converterDataHoraParaIso(log?.timestamp ?? log?.dataHoraIso, dataPadraoLog),
+            mensagem: normalizarTexto(log?.detalhe ?? log?.mensagem ?? log?.message, "Log sem mensagem"),
             acao: normalizarTexto(log?.acao),
           }))
           .filter((log) => !Number.isNaN(new Date(log.dataHoraIso).getTime()));
 
         setLogsSistema(logsNormalizados);
-      } else {
-        erros.push("logs");
       }
 
       if (erros.length > 0) {
@@ -872,9 +770,9 @@ export default function Admin() {
       mapaInsumos.set(lancamento.insumo, valorAcumulado + lancamento.valorTotal);
     });
 
-    const insumosOrdenados = Array.from(mapaInsumos.entries()).sort(
-      (a, b) => b[1] - a[1]
-    );
+    const insumosOrdenados = Array.from(mapaInsumos.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 5);
     const categorias = insumosOrdenados.map(([insumo]) => insumo);
     const valores = insumosOrdenados.map(([, valor]) => valor);
 
@@ -1008,30 +906,6 @@ export default function Admin() {
       });
   }, [insumosSelecionados, lancamentosFiltrados]);
 
-  function selecionarItemBarraLateral(id) {
-    setItemAtivo(id);
-    setMenuLateralAberto(false);
-
-    if (!abasAdminDisponiveis.has(id)) {
-      return;
-    }
-
-    if (id === "inicio") {
-      navegar("/admin", { replace: true });
-      return;
-    }
-
-    navegar(`/admin?aba=${id}`, { replace: true });
-  }
-
-  function selecionarAcaoBarraLateral(id) {
-    setItemAtivo(id);
-    setMenuLateralAberto(false);
-
-    if (id === "cadastro-usuario") {
-      navegar("/cadastro");
-    }
-  }
 
   async function salvarAlteracoesUsuario(idUsuario, dadosAtualizados) {
     const usuariosAntes = usuariosSistema;
@@ -1420,26 +1294,7 @@ export default function Admin() {
   return (
     <div className="admin-page">
       <HeaderPadrao />
-      <LayoutAdmin
-        menuLateralAberto={menuLateralAberto}
-        aoFecharMenuLateral={() => setMenuLateralAberto(false)}
-        barraLateral={
-          <BarraLateralAdmin
-            itens={itensBarraLateral}
-            acoes={acoesBarraLateral}
-            itemAtivo={itemAtivo}
-            aoSelecionar={selecionarItemBarraLateral}
-            aoSelecionarAcao={selecionarAcaoBarraLateral}
-          />
-        }
-        topo={
-          <TopoAdmin
-            aoAlternarSidebar={() =>
-              setMenuLateralAberto((menuAbertoAnterior) => !menuAbertoAnterior)
-            }
-          />
-        }
-      >
+      <div className="admin-content">
         {exibindoGestaoUsuarios ? (
           <GerenciamentoUsuariosAdmin
             usuarios={usuariosSistema}
@@ -1456,7 +1311,7 @@ export default function Admin() {
         ) : exibindoRelatorios ? (
           <AdminRelatorios lancamentosInsumos={lancamentosInsumos} />
         ) : exibindoLogsSistema ? (
-          <AdminLogsSistema logs={logsSistema} />
+          <AdminLogsSistema />
         ) : (
           <>
             <section className="admin-stat-grid">
@@ -1543,11 +1398,9 @@ export default function Admin() {
         </section>
 
         {carregandoIntegracao ? (
-          <p className="admin-integracao-status">Sincronizando dados do backend...</p>
-        ) : null}
-
-        {erroIntegracao ? (
-          <p className="admin-integracao-status is-error">{erroIntegracao}</p>
+          <div className="admin-integracao-loader" role="status" aria-label="Carregando">
+            <span className="admin-integracao-spinner" />
+          </div>
         ) : null}
 
         {filtrosLancamentos}
@@ -1568,9 +1421,14 @@ export default function Admin() {
             comparativoPorInsumo={comparativoPrecoUnitarioPorInsumo}
           />
         </section>
+
+        <section className="admin-bottom-grid">
+          <AdminGraficoTendencia lancamentos={lancamentosInsumos} />
+          <AdminAlertas lancamentos={lancamentosInsumos} />
+        </section>
           </>
         )}
-      </LayoutAdmin>
+      </div>
     </div>
   );
 }

@@ -16,6 +16,7 @@ import {
   Receipt,
   Shield,
   UserPlus,
+  Users,
   Wallet,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -37,16 +38,7 @@ const secoesMenu = [
       { to: "/leitor", label: "Leitor de Código de Barras", icone: QrCode },
     ],
   },
-  {
-    id: "fornecedores",
-    titulo: "Fornecedores",
-    to: "/fornecedores",
-    icone: Building2,
-    subitens: [
-      { to: "/cadastro-boleto", label: "Cadastro de Boleto", icone: CircleDollarSign },
-      { to: "/fornecedores", label: "Lista de Fornecedores", icone: Building2 },
-    ],
-  },
+  { id: "fornecedores", titulo: "Fornecedores", to: "/fornecedores", icone: Building2 },
   { id: "vencimentos", titulo: "Vencimentos", to: "/vencimentos", icone: CalendarDays },
   {
     id: "boletos",
@@ -75,7 +67,8 @@ const secoesMenu = [
     icone: Shield,
     subitens: [
       { to: "/admin?aba=lancamentos", label: "Controle de Gastos", icone: Wallet },
-      { to: "/admin?aba=usuarios", label: "Cadastro de Usuários", icone: UserPlus },
+      { to: "/admin?aba=usuarios", label: "Gerenciamento de Usuários", icone: Users },
+      { to: "/cadastro", label: "Cadastro de Usuários", icone: UserPlus },
       { to: "/admin?aba=logs", label: "Logs de Mudança", icone: Activity },
       { to: "/admin?aba=relatorios", label: "Relatório do Sistema", icone: FileText },
       {to: "/admin?aba=whatsapp", label: "Configurações do WhatsApp", icone: Handshake},
