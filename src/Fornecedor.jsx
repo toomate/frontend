@@ -401,7 +401,7 @@ export default function Fornecedor() {
         )}
 
       </main>
-
+{/* 
       <div className="fornecedores-paginacao">
         <SeletorPaginas
           avancar={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas - 1))}
@@ -410,7 +410,7 @@ export default function Fornecedor() {
           numPages={totalPaginas}
           paginaSelecionada={paginaAtual}
         />
-      </div>
+      </div> */}
 
       <NovoFornecedorModal
         aberto={modalAberto}

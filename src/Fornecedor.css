@@ -14,9 +14,9 @@
   width: 100%;
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
   background-image: url(./images/fundo-tela.png);
   box-sizing: border-box;
+  
 }
 
 .fornecedores-toast {
@@ -66,11 +66,12 @@
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border: 1px solid #6b4423;
+  border: 1px solid #ccc;
   border-radius: 8px;
-  background: #6b4423;
-  color: #f8ecc6;
+  background: white;
+  color: black;
   cursor: pointer;
+  width: 220px;
   height: 38px;
   padding: 0 14px;
   font-size: 14px;
@@ -88,21 +89,16 @@
   transform: translateY(1px);
 }
 
-.fornecedores-btn-add-categoria {
-  background: #f8ecc6;
-  color: #6b4423;
-}
-
 .fornecedores-btn-add-categoria:hover {
   background: #f0d98a;
 }
 
 .fornecedores-select {
-  border: 1px solid #d9bf80;
+  border: 1px solid #ccc;
   border-radius: 8px;
   padding: 0 10px;
-  color: #3d2408;
-  background: #fffdf4;
+  color: black;
+  background: white;
   font-size: 14px;
   height: 38px;
   width: 130px;
@@ -127,24 +123,24 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 42px;
-  border: 1px solid #6b4423;
+  height: 38px;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  background: #fffdf4;
+  background: white;
   padding: 0 12px;
+  margin-bottom: 5px;
 }
 
-<<<<<<< HEAD
 .fornecedores-busca .search {
   width: 350px;
   height: 35px;
   border: none;
   background: transparent;
-=======
+}
+
 .fornecedores-busca-icone {
   color: #6b4423;
   flex-shrink: 0;
->>>>>>> 352f02749b32a0cb4c4467b082ab72c837a681bf
 }
 
 .fornecedores-busca-input {
