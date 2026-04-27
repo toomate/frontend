@@ -69,7 +69,7 @@ export default function Leitor() {
 
       {erro && <div className="erro-topo">{erro}</div>}
 
-      <button className="voltar" onClick={() => navigate(-1)}>
+      <button className="voltar" onClick={() => navigate(-2)}>
         Voltar
       </button>
 
