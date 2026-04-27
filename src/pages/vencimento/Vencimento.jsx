@@ -49,8 +49,8 @@ export default function Vencimento() {
 
     return (
         <>
+            <HeaderPadrao />
             <div className="vencimento-container">
-                <HeaderPadrao />
                 <div className="kpi-container">
                     <div className="kpi-container-interior">
                         <Kpi kpis={kpis} />

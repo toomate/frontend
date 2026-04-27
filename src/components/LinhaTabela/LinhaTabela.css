@@ -1,5 +1,5 @@
 .tabela-insumo-container {
-    height: 10vh;
+    height: 100px;
     display: flex;
     font-size: 1rem;
 }
@@ -16,7 +16,6 @@
     min-width: 0;
     padding: 0 10px;
     text-align: center;
-
 }
 
 .linha-valor {

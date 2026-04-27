@@ -136,14 +136,11 @@
   height: 35px;
   border: none;
   background: transparent;
-<<<<<<< HEAD
 }
 
 .fornecedores-busca-icone {
   color: #6b4423;
   flex-shrink: 0;
-=======
->>>>>>> 14b8f7babf83d9fba0acf840073846e22909bb47
 }
 
 .fornecedores-busca-input {
