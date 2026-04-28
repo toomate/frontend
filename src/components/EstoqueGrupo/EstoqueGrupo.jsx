@@ -6,7 +6,6 @@ import { useEffect } from "react";
 
 export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId }) {
     const [expandido, setExpandido] = useState(false);
-    console.log("asdasd", grupo)
 
     const pegarIcone = (categoria) => {
         switch (categoria.toLowerCase()) {

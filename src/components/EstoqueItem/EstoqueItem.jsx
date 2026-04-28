@@ -6,7 +6,6 @@ import { PiDotsThree } from "react-icons/pi";
 import DropdownEstoque from "../Dropdown/DropdownEstoque";
 
 export function EstoqueItem(props) {
-    console.log("ablubleblau", props.elementos)
 
     const formatarData = (data) => {
         if (!data) return '';

@@ -83,7 +83,7 @@ class sseManager {
   startSSE() {
     if (this.eventSource) return;
 
-    this.eventSource = new EventSource("/sse");
+    this.eventSource = new EventSource(SSE_URL);
 
     this.eventSource.onmessage = (event) => {
       const data = event.data;
