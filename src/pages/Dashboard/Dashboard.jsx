@@ -157,7 +157,7 @@ export default function Index() {
           <span className="menu-icone vencimentos-menu-icone"></span>
           <span>Vencimentos</span>
         </button>
-        <button className="btn btn-menu gastos-menu">
+        <button onClick={() => navigate("/admin?aba=lancamentos")} className="btn btn-menu gastos-menu">
           <span className="menu-icone gastos-menu-icone"></span>
           <span>Gastos</span>
         </button>
