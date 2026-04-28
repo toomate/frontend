@@ -123,7 +123,7 @@ export default function Boletos() {
               id: boleto.idBoleto,
               title: boleto.descricao,
               status: boleto.pago,
-              value: `R$ ${boleto.valor.toFixed(2)}`,
+              value: `R$ ${boleto.valor}`,
               start: startDate,
               end: startDate,
               categoria: boleto.categoria,

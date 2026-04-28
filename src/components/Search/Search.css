@@ -1,18 +1,18 @@
 .search-container {
     display: flex;
     align-items: center;
-    height: 5vh;
-    width: 30vw;
-    background-color: white;
-    margin: 10px;
-    border-color: none !important;
+    height: 5vh !important;
+    width: 40vw;
+    background-color: white !important;
+    margin: 8px;
+    border-color: #ccc !important;
 }
 
 .search{
     display: flex;
     align-items: center;
-    height: 100%;
-    width: 90%;
+    height: 90%;
+    width: 80%;
 }
 
 .search-icon{

@@ -16,7 +16,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 89vh;
+    height: 85%;
+    
 }
 
 .nav-categorias-container {
@@ -31,6 +32,15 @@
     font-size: 15px;
 }
 
+.insumos-container .grupo-insumos-container .insumo-nome,
+    .qtd-total,
+    .medida,
+    .dt-vencimento,
+    .controle,
+    .item-nome {
+        font-size: 16px;
+    }
+
 .container-search {
     width: 350px;
     height: auto;
@@ -44,6 +54,12 @@
 .search {
     color: black;
     background: white;
+}
+
+.grupo-container {
+    display: flex;
+    align-items: center;
+    height: 25%;
 }
 
 .button-secund {
