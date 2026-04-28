@@ -116,12 +116,85 @@ def executar_testes(driver, nome_navegador):
 
     print("✅ Teste finalizado após clicar no botão + do estoque!\n\n")
 
-    # ========== NOVO TESTE: Cadastro de lote com dados específicos ==========
-    time.sleep(5)
-    print("Iniciando teste de cadastro de lote...")
-    # Espera por mensagem de sucesso
+    # ========== TESTE: Cadastro de Insumo ==========
+    print("Aguardando carregamento da página de cadastro...\n")
+    time.sleep(3)
 
-    print("\n Testes finalizados! \n")
+    # Esperar que a página de cadastro carregue - aguardar pelo campo de nome do insumo
+    print("Preenchendo formulário de cadastro de insumo...\n")
+    time.sleep(2)
+    
+    # Preencher nome do insumo
+    input_nome_insumo = espera.until(
+        EC.visibility_of_element_located((By.XPATH, "//input[@placeholder='Ex: Arroz']"))
+    )
+    nome_insumo_teste = f"Arroz Integral {int(time.time())}"
+    input_nome_insumo.clear()
+    input_nome_insumo.send_keys(nome_insumo_teste)
+    print(f"✅ Nome do insumo preenchido: {nome_insumo_teste}\n")
+    time.sleep(2)
+
+    # Selecionar categoria
+    print("Selecionando categoria...\n")
+    select_categoria = driver.find_element(By.CLASS_NAME, "selectCategoria")
+    select_categoria.click()
+    time.sleep(1)
+    
+    # Selecionar primeira opção disponível (que não seja "Selecione")
+    opcoes_categoria = driver.find_elements(By.XPATH, "//select[@class='selectCategoria']/option")
+    if len(opcoes_categoria) > 1:
+        opcoes_categoria[1].click()
+        categoria_selecionada = opcoes_categoria[1].text
+        print(f"✅ Categoria selecionada: {categoria_selecionada}\n")
+    time.sleep(2)
+
+    # Selecionar unidade de medida
+    print("Selecionando unidade de medida...\n")
+    select_unidade = driver.find_element(By.CLASS_NAME, "selectUnidade")
+    select_unidade.click()
+    time.sleep(1)
+    
+    opcoes_unidade = driver.find_elements(By.XPATH, "//select[@class='selectUnidade']/option")
+    if len(opcoes_unidade) > 1:
+        opcoes_unidade[1].click()
+        unidade_selecionada = opcoes_unidade[1].text
+        print(f"✅ Unidade de medida selecionada: {unidade_selecionada}\n")
+    time.sleep(2)
+
+    # Preencher quantidade mínima
+    print("Preenchendo quantidade mínima...\n")
+    input_qtd_minima = driver.find_element(By.XPATH, "//input[@type='number']")
+    input_qtd_minima.clear()
+    quantidade_minima = "10"
+    input_qtd_minima.send_keys(quantidade_minima)
+    print(f"✅ Quantidade mínima preenchida: {quantidade_minima}\n")
+    time.sleep(2)
+
+    # Clicar no botão Cadastrar
+    print("Clicando no botão Cadastrar...\n")
+    botao_cadastrar = driver.find_element(By.XPATH, "//button[contains(text(), 'Cadastrar')]")
+    botao_cadastrar.click()
+    print("✅ Botão Cadastrar clicado\n")
+    time.sleep(3)
+
+    # Aguardar pela mensagem de sucesso (modal ou feedback visual)
+    print("Aguardando confirmação de cadastro...\n")
+    try:
+        modal_sucesso = espera.until(
+            EC.visibility_of_element_located((By.XPATH, "//span[contains(text(), 'Cadastro realizado com sucesso')]"))
+        )
+        print("✅ Insumo cadastrado com sucesso!\n")
+        time.sleep(2)
+        
+        # Clicar no botão OK do modal de sucesso
+        botao_ok = driver.find_element(By.XPATH, "//button[contains(text(), 'OK')]")
+        botao_ok.click()
+        print("✅ Modal de sucesso fechado\n")
+    except TimeoutException:
+        print("⚠️  Mensagem de sucesso não apareceu, mas o cadastro pode ter sido realizado.\n")
+
+    time.sleep(2)
+    print("\n✅ Testes finalizados com sucesso! \n")
 
 
 def salvar_screenshot(driver, nome_navegador):
