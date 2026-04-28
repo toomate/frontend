@@ -43,7 +43,8 @@ export default function Leitor() {
 
       // redireciona após 2 segundos
       setTimeout(() => {
-        navigate("/cadastro-insumo");
+        sessionStorage.setItem("fromLeitor", "true");
+        navigate("/cadastro-insumo", { state: { fromLeitor: true } });
       }, 2000);
 
     } catch (e) {

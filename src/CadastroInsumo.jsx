@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import FormModal from "./components/common/FormModal";
 import { CategoriaApi, insumos } from "./provider/Api";
 
@@ -15,6 +15,8 @@ export default function CadastroInsumo() {
   const [qtdMinima, setQtdMinima] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
   const [isCadastrando, setIsCadastrando] = useState(false);
+  const location = useLocation();
+  const [successType, setSuccessType] = useState("");
 
   function parseQuantidade(valor) {
     if (valor === null || valor === undefined || valor === "") {
@@ -89,6 +91,9 @@ export default function CadastroInsumo() {
     } finally {
       sessionStorage.removeItem("produto");
     }
+
+    // Note: do not remove `sessionStorage.fromLeitor` here — keep it available
+    // so click-time handlers can check it (the redirector should set it).
   }, []);
 
 
@@ -141,6 +146,7 @@ export default function CadastroInsumo() {
       setIdCategoria("0");
       setUnidadeMedida("");
       setQtdMinima("");
+      setSuccessType("insumo");
       setAbrirModalSucesso(true);
       fetchMedidas();
     } catch (error) {
@@ -248,7 +254,20 @@ export default function CadastroInsumo() {
           )}
 
           <div className="actions">
-            <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
+            <button
+              type="button"
+              className="btn btn-cancelar"
+              onClick={() => {
+                const fromLeitor = location?.state?.fromLeitor === true || sessionStorage.getItem("fromLeitor") === "true";
+                console.log("fromLeitor:", fromLeitor);
+                if (fromLeitor) {
+                  sessionStorage.removeItem("fromLeitor");
+                  navigate(-2);
+                } else {
+                  navigate(-1);
+                }
+              }}
+            >
               Voltar
             </button>
 
@@ -295,6 +314,7 @@ export default function CadastroInsumo() {
             setAbrirModalCategoria(false);
             setNovaCategoriaNome("");
             setNovaCategoriaRotatividade("false");
+            setSuccessType("categoria");
             setAbrirModalSucesso(true);
           } catch {
             setErroModalCategoria("Nao foi possivel cadastrar a categoria.");
@@ -334,7 +354,14 @@ export default function CadastroInsumo() {
 
             <button
               className="btn"
-              onClick={() => setAbrirModalSucesso(false)}
+              onClick={() => {
+                const fromLeitor = location?.state?.fromLeitor === true || sessionStorage.getItem("fromLeitor") === "true";
+                if (fromLeitor && successType === "insumo") {
+                  navigate(-2);
+                } else {
+                  setAbrirModalSucesso(false);
+                }
+              }}
             >
               OK
             </button>
