@@ -1,4 +1,4 @@
-import { Button } from "../Button/Button.jsx"
+import { Button } from "../../shared/components/Button/Button.jsx"
 import { Trash } from "lucide-react"
 import "./RotinaCard.css"
 

@@ -1,5 +1,5 @@
 import { Bookmark, SquarePen, Save, X, ArrowUp, ArrowDown, ArrowUp01, ArrowUp10Icon, ArrowUpIcon } from "lucide-react"
-import { Button } from "../Button/Button"
+import { Button } from "../../shared/components/Button/Button"
 import React from "react"
 import "./CardRelatorio.css"
 

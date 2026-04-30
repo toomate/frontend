@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Cabecalho } from "../../components/Cabecalho/Cabecalho";
+import { Cabecalho } from "../../app/layouts/Cabecalho/Cabecalho";
 import Kpi from "../../components/Kpi/Kpi";
 import LinhaTabela from "../../components/LinhaTabela/LinhaTabela";
 import HeaderPadrao from "../../HeaderPadrao";

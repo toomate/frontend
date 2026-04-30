@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import config from '../../config'
+import config from '../../app/config/config'
 import axios from 'axios'
 
 export default function QrModal({ open, onClose }) {

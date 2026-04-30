@@ -3,7 +3,7 @@ import { Pencil, Trash2 } from "lucide-react";
 import { FaWhatsapp } from "react-icons/fa";
 import { useState } from "react";
 import { createPortal } from "react-dom";
-import config from "../../config";
+import config from "../../app/config/config";
 
 function limparTelefone(telefone = "") {
   return telefone.replace(/\D/g, "");

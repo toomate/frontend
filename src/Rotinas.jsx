@@ -1,13 +1,13 @@
 import { ArrowLeft, SearchIcon } from "lucide-react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import RotinaCard from "./components/RotinaCard/RotinaCard"
-import { Search } from "./components/Search/Search";
+import { Search } from "./shared/components/Search/Search";
 import HeaderPadrao from "./HeaderPadrao";
 import "./Rotinas.css"
 import { useEffect, useState } from "react";
 import { Rotinas as RotinasClass } from "./provider/Api";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
-import { Button } from "./components/Button/Button";
+import { Button } from "./shared/components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import SeletorPaginas from "./components/Paginas/SeletorPaginas";
 

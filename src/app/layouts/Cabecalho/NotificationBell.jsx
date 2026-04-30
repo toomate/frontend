@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNotifications } from "../../utils/useNotification.js";
+import { useNotifications } from "../../../utils/useNotification.js";
 import "./NotificationBell.css";
 
 export default function NotificationBell() {

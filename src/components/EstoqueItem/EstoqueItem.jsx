@@ -1,7 +1,7 @@
 import { CheckCircle, CircleMinus, CirclePlus, Dot, Plus, TextCursorIcon, TriangleAlert } from "lucide-react";
 import "./EstoqueItem.css"
 import React, { useState, useEffect, useRef } from "react";
-import { Button } from "../Button/Button";
+import { Button } from "../../shared/components/Button/Button";
 import { PiDotsThree } from "react-icons/pi";
 import DropdownEstoque from "../Dropdown/DropdownEstoque";
 

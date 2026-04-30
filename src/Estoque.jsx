@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
-import { Cabecalho } from "./components/Cabecalho/Cabecalho";
-import { Search } from "./components/Search/Search";
+import { Cabecalho } from "./app/layouts/Cabecalho/Cabecalho";
+import { Search } from "./shared/components/Search/Search";
 import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
-import { Button } from "./components/Button/Button";
+import { Button } from "./shared/components/Button/Button";
 import "./Estoque.css"
 import { CategoriaApi, Lote } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
