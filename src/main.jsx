@@ -11,11 +11,11 @@ import { Search } from './components/Search/Search.jsx'
 import { Cabecalho } from './app/layouts/Cabecalho/Cabecalho.jsx'
 import { EstoqueGrupo } from './components/EstoqueGrupo/EstoqueGrupo.jsx'
 import { EstoqueItem } from './components/EstoqueItem/EstoqueItem.jsx'
-import { CardRelatorio } from './components/CardRelatorio/CardRelatorio.jsx'
-import { CardConfirmacao } from './components/CardConfirmacao/CardConfirmacao.jsx'
+import { CardRelatorio } from './shared/components/CardRelatorio/CardRelatorio.jsx'
+import { CardConfirmacao } from './shared/components/CardConfirmacao/CardConfirmacao.jsx'
 import CadastroInsumo from './CadastroInsumo.jsx'
 import CadastroLote from './CadastroLote.jsx'
-import { CardRotina } from "./components/CardRotina/CardRotina.jsx"
+import { CardRotina } from "./shared/components/CardRotina/CardRotina.jsx"
 import Vencimento from './pages/vencimento/Vencimento.jsx'
 import LinhaTabela from './components/LinhaTabela/LinhaTabela.jsx'
 

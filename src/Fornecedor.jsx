@@ -6,7 +6,7 @@ import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
 import SeletorPaginas from "./components/Paginas/SeletorPaginas";
 import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
 import { NovaCategoriaModal } from "./components/fornecedores/NovaCategoriaModal";
-import { BaseModal } from "./components/common/BaseModal";
+import { BaseModal } from "./shared/components/common/BaseModal";
 import { CategoriaApi, FornecedorApi } from "./provider/Api";
 import "./Fornecedor.css";
 

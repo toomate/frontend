@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import FormModal from "./components/common/FormModal";
+import FormModal from "./shared/components/common/FormModal";
 import { FornecedorApi, Lote, MarcaApi, insumos } from "./provider/Api";
 import { useLocation } from "react-router-dom";
 

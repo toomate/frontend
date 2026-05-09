@@ -7,10 +7,10 @@ import { Button } from "./shared/components/Button/Button";
 import "./Estoque.css"
 import { CategoriaApi, Lote } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
-import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
-import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
+import { CardRelatorio } from "./shared/components/CardRelatorio/CardRelatorio";
+import { CardConfirmacao } from "./shared/components/CardConfirmacao/CardConfirmacao";
 import HeaderPadrao from "./HeaderPadrao";
-import { CardRotina } from "./components/CardRotina/CardRotina";
+import { CardRotina } from "./shared/components/CardRotina/CardRotina";
 import { useNavigate } from "react-router-dom";
 import { Rotinas } from "./provider/Api";
 

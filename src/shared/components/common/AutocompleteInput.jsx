@@ -1,4 +1,3 @@
-
 import React from "react";
 
 export default function AutocompleteInput({
@@ -9,7 +8,6 @@ export default function AutocompleteInput({
   placeholder,
   className,
 }) {
-  // Busca a opção selecionada pelo label
   const selectedOption = (options ?? []).find(
     (opcao) => String(opcao.label) === String(value)
   );

@@ -77,7 +77,7 @@ const secoesMenu = [
 ];
 
 function normalizarCaminho(caminho) {
-  const caminhoNormalizado = String(caminho || "").replace(/\/+$/, "");
+  const caminhoNormalizado = String(caminho || "").replace(/\/+$", "");
   return caminhoNormalizado || "/";
 }
 

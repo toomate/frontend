@@ -6,7 +6,7 @@ import HeaderPadrao from "./HeaderPadrao";
 import "./Rotinas.css"
 import { useEffect, useState } from "react";
 import { Rotinas as RotinasClass } from "./provider/Api";
-import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
+import { CardConfirmacao } from "./shared/components/CardConfirmacao/CardConfirmacao";
 import { Button } from "./shared/components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import SeletorPaginas from "./components/Paginas/SeletorPaginas";
