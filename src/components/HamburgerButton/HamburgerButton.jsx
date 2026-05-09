@@ -20,7 +20,7 @@ import {
   Wallet,
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { limparSessaoAutenticacao } from "../../utils/sessao";
+import { ehAdmin, limparSessaoAutenticacao } from "../../utils/sessao";
 import "./HamburgerButton.css";
 
 const secoesMenu = [
@@ -45,6 +45,7 @@ const secoesMenu = [
     titulo: "Boletos",
     to: "/boletos",
     icone: Receipt,
+    apenasAdmin: true,
     subitens: [
       { to: "/cadastro-boleto", label: "Cadastro de Boletos", icone: CircleDollarSign },
       { to: "/boletos", label: "Lista de Boletos", icone: Receipt },
@@ -55,6 +56,7 @@ const secoesMenu = [
     titulo: "Fiados",
     to: "/fiados",
     icone: Handshake,
+    apenasAdmin: true,
     subitens: [
       { to: "/cadastro-fiado", label: "Cadastro de Fiados", icone: CircleDollarSign },
       { to: "/fiados", label: "Lista de Fiados", icone: Handshake },
@@ -65,6 +67,7 @@ const secoesMenu = [
     titulo: "Admin",
     to: "/admin",
     icone: Shield,
+    apenasAdmin: true,
     subitens: [
       { to: "/admin?aba=lancamentos", label: "Controle de Gastos", icone: Wallet },
       { to: "/admin?aba=usuarios", label: "Gerenciamento de Usuários", icone: Users },
@@ -207,7 +210,7 @@ export default function HamburgerButton({
 
         <div className="conteudo-painel">
           <div className="lista-links-painel">
-            {secoesMenu.map((secao) => {
+            {secoesMenu.filter((secao) => !secao.apenasAdmin || ehAdmin()).map((secao) => {
               const secaoAtiva =
                 itemEstaAtivo(secao.to, true) ||
                 (secao.subitens || []).some((subitem) => itemEstaAtivo(subitem.to));

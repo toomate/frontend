@@ -58,14 +58,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Login />} />
         <Route element={<RotaPrivada />}>
-          <Route path="/boletos" element={<Boletos />} />
-          <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/estoque" element={<Estoque />} />
           <Route path="/fornecedor" element={<Fornecedor />} />
           <Route path="/cadastro-insumo" element={<CadastroInsumo />} />
           <Route path="/cadastro-fornecedor" element={<CadastroFornecedor />} />
-          <Route path="/cadastro-boleto" element={<CadastroBoleto />} />
-          <Route path="/cadastro-fiado" element={<CadastroFiado />} />
           <Route path="/cadastro-lote" element={<CadastroLote />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calendario" element={<Calendario />} />
@@ -73,9 +69,15 @@ function App() {
           <Route path="/fornecedores" element={<Fornecedor />} />
           <Route path="/vencimentos" element={<Vencimento />} />
           <Route path="/rotinas" element={<Rotinas />} />
-          <Route path="/Fiados" element={<Fiado />} />
           <Route path="/leitor" element={<Leitor />} />
+        </Route>
+        <Route element={<RotaPrivada rolesPermitidas={["ROLE_ADMIN"]} />}>
           <Route path="/admin" element={<Admin />} />
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/boletos" element={<Boletos />} />
+          <Route path="/cadastro-boleto" element={<CadastroBoleto />} />
+          <Route path="/Fiados" element={<Fiado />} />
+          <Route path="/cadastro-fiado" element={<CadastroFiado />} />
         </Route>
       </Routes>
     </BrowserRouter>

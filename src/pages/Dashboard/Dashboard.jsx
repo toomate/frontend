@@ -9,9 +9,11 @@ import { useState } from "react";
 import { clientes, Lote } from "../../provider/Api";
 import { boletos } from "../../provider/Api";
 import { dividas } from "../../provider/Api";
+import { ehAdmin } from "../../utils/sessao";
 
 export default function Index() {
   const navigate = useNavigate();
+  const usuarioEhAdmin = ehAdmin();
   const [kpisDados, setKpisDados] = useState([])
   const [lotesData, setlotesData] = useState([])
   const [dadosInsumo, setDadosInsumo] = useState([])
@@ -157,25 +159,31 @@ export default function Index() {
           <span className="menu-icone vencimentos-menu-icone"></span>
           <span>Vencimentos</span>
         </button>
-        <button onClick={() => navigate("/admin?aba=lancamentos")} className="btn btn-menu gastos-menu">
-          <span className="menu-icone gastos-menu-icone"></span>
-          <span>Gastos</span>
-        </button>
+        {usuarioEhAdmin && (
+          <button onClick={() => navigate("/admin?aba=lancamentos")} className="btn btn-menu gastos-menu">
+            <span className="menu-icone gastos-menu-icone"></span>
+            <span>Gastos</span>
+          </button>
+        )}
         <button onClick={() => navigate("/fornecedor")} className="btn btn-menu fornecedor-menu">
           <span className="menu-icone fornecedor-menu-icone"></span>
           <span>Fornecedores</span>
         </button>
-        <button onClick={() => navigate("/Boletos")} className="btn btn-menu boleto-menu">
-          <span className="menu-icone boleto-menu-icone"></span>
-          <span>Boletos</span>
-        </button>
-        <button onClick={() => navigate("/Fiados")} className="btn btn-menu fiado-menu">
-          <span
-            className="menu-icone fiado-menu-icone"
-            style={{ backgroundImage: `url(${fiadosIcon})` }}
-          ></span>
-          <span>Fiados</span>
-        </button>
+        {usuarioEhAdmin && (
+          <button onClick={() => navigate("/Boletos")} className="btn btn-menu boleto-menu">
+            <span className="menu-icone boleto-menu-icone"></span>
+            <span>Boletos</span>
+          </button>
+        )}
+        {usuarioEhAdmin && (
+          <button onClick={() => navigate("/Fiados")} className="btn btn-menu fiado-menu">
+            <span
+              className="menu-icone fiado-menu-icone"
+              style={{ backgroundImage: `url(${fiadosIcon})` }}
+            ></span>
+            <span>Fiados</span>
+          </button>
+        )}
       </nav>
 
       <Kpi kpis={cards} />

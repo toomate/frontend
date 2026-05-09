@@ -1,6 +1,6 @@
 ﻿import { useEffect, useMemo, useState } from "react";
 import { Activity, FileText, Users, Wallet } from "lucide-react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import AdminWhatsapp from "./components/admin/AdminWhatsapp";
 import CardResumoAdmin from "./components/admin/AdminStatCard";
 import CardGraficoAdmin from "./components/admin/AdminChartCard";
@@ -254,7 +254,12 @@ function normalizarTextoBusca(valor) {
 
 export default function Admin() {
   const localizacao = useLocation();
+  const navegar = useNavigate();
   const [itemAtivo, setItemAtivo] = useState("inicio");
+
+  function irParaAba(aba) {
+    navegar(aba ? `/admin?aba=${aba}` : "/admin");
+  }
   const [usuariosSistema, setUsuariosSistema] = useState([]);
   const [logsSistema, setLogsSistema] = useState([]);
   const [lancamentosInsumos, setLancamentosInsumos] = useState([]);
@@ -1321,7 +1326,7 @@ export default function Admin() {
             icone={Users}
             iconeCor="#1ba968"
             rotuloAcao="Gerenciar usuários"
-            aoClicarAcao={() => setItemAtivo("usuarios")}
+            aoClicarAcao={() => irParaAba("usuarios")}
           >
             <p className="admin-card-subtitle">Últimos cadastros:</p>
             {usuariosRecentes.length > 0 ? (
@@ -1350,7 +1355,7 @@ export default function Admin() {
             icone={FileText}
             iconeCor="#2f80ed"
             rotuloAcao="Ver relatórios"
-            aoClicarAcao={() => setItemAtivo("relatorios")}
+            aoClicarAcao={() => irParaAba("relatorios")}
           >
             {dadosMockAdmin.tiposRelatorio.length > 0 ? (
               <ul className="admin-bullet-list">
@@ -1372,7 +1377,7 @@ export default function Admin() {
             icone={Activity}
             iconeCor="#7d4ce0"
             rotuloAcao="Ver todos os logs"
-            aoClicarAcao={() => setItemAtivo("logs")}
+            aoClicarAcao={() => irParaAba("logs")}
           >
             {logsRecentesPainel.length > 0 ? (
               <ul className="admin-simple-list admin-log-list">
