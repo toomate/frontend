@@ -247,13 +247,13 @@ export function Estoque() {
         };
     }, []);
 
-    function ButtonPlus() {
+    function ButtonPlus({nome, onClick}) {
         return (
             
             <div className="plus-container">
-                <div className="plus-icon-container">
-                    Adicionar Insumo 
-                    <div className="plus-icon"><Plus onClick={() => { navigate("/cadastro-insumo") }} />
+                <div className="plus-icon-container" onClick={onClick}>
+                    {nome} 
+                    <div className="plus-icon"><Plus />
                     </div>
                 </div>
             </div>
@@ -276,7 +276,7 @@ export function Estoque() {
             mobile.removeEventListener("change", update);
         };
     }, []);
-
+    
     return (
         <div className="estoque-container">
             {exibirRelatorio && (
@@ -302,7 +302,8 @@ export function Estoque() {
             <div className="categoria-container">
                 <div className="button-secund">
                     <div className="botoes-container">
-                        <ButtonPlus />
+                        <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }}/>
+                        <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }}/>
                         <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
                         <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                         <div className="botoes-container-icon">

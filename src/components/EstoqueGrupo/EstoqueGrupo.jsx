@@ -42,7 +42,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
                     ? (<TriangleAlert style={{ color: "darkred" }} />)
                     : (<CheckCircle style={{ color: "green" }} />)}
             </div>
-            <div className="medida">{grupo.medida.toUpperCase()}</div>
+            <div className="medida">{grupo.medida?.toUpperCase()}</div>
             <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
         </div>
         {expandido && (
