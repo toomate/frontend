@@ -1,0 +1,1 @@
+export { Estoque } from '../../../Estoque';
