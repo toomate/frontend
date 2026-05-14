@@ -44,6 +44,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
             case "laticínios":
             case "laticinios":
+            case "laticã­nios":
                 return <Milk size={28} />;
 
             case "hortifruti":
@@ -55,6 +56,9 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             case "graos":
             case "grãos e cereais":
             case "graos e cereais":
+            case "grã£os e cereais":
+            case "grã£os e secos":
+            case "grã£os":
             case "cereais":
                 return <Wheat size={28} />;
 
