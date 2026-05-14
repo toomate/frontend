@@ -13,59 +13,65 @@ export function NavCategorias({
   const [menuAberto, setMenuAberto] = useState(false);
 
   const pegarIcone = (categoria) => {
-    switch (categoria.toLowerCase()) {
-      case "proteínas":
-      case "proteinas":
-        return <Beef size={28} />;
-
-      case "mercearia":
-        return <ShoppingCart size={28} />;
-
-      case "pescados":
-      case "peixes":
-      case "frutos do mar":
-        return <Fish size={28} />;
-
-      case "temperos":
-      case "condimentos":
-      case "temperos e condimentos":
-        return <CookingPot size={28} />
-
-      case "oleos":
-      case "óleos":
-      case "oleos e gordura":
-      case "óleos e gordura":
-      case "gordura":
-        return <Droplet size={28} />
-
-
-      case "frios":
-      case "embutidos":
-      case "frios e embutidos":
-        return <Sandwich size={28} />;
-
-      case "laticínios":
-      case "laticinios":
-        return <Milk size={28} />;
-
-      case "hortifruti":
-        return <Leaf size={28} />;
-
-      case "grãos e secos":
-      case "graos e secos":
-      case "grãos":
-      case "graos":
-        return <Wheat size={28} />;
-
-      case "bebidas":
-      case "bebida":
-        return <BottleWine size={28} />;
-
-      default:
-        return <Package size={28} />;
-    }
-  };
-
+         switch (categoria.toLowerCase()) {
+             case "proteínas":
+             case "proteinas":
+             case "carnes":
+             case "carnes e aves":
+             case "aves":
+                 return <Beef size={28} />;
+ 
+             case "mercearia":
+                 return <ShoppingCart size={28} />;
+ 
+             case "pescados":
+             case "peixes":
+             case "frutos do mar":
+                 return <Fish size={28} />;
+ 
+             case "temperos":
+             case "condimentos":
+             case "temperos e condimentos":
+                 return <CookingPot size={28} />
+ 
+             case "oleos":
+             case "óleos":
+             case "oleos e gordura":
+             case "óleos e gordura":
+             case "gordura":
+                 return <Droplet size={28} />
+ 
+ 
+             case "frios":
+             case "embutidos":
+             case "frios e embutidos":
+                 return <Sandwich size={28} />;
+ 
+             case "laticínios":
+             case "laticinios":
+                 return <Milk size={28} />;
+ 
+             case "hortifruti":
+                 return <Leaf size={28} />;
+ 
+             case "grãos e secos":
+             case "graos e secos":
+             case "grãos":
+             case "graos":
+             case "grãos e cereais":
+             case "graos e cereais":
+             case "cereais":
+                 return <Wheat size={28} />;
+ 
+             case "bebidas":
+             case "bebida":
+                 return <BottleWine size={28} />;
+ 
+             default:
+                 return <Package size={28} />;
+         }
+     };
+ 
   const categoriasFixas = useMemo(
     () => listaCategorias.slice(0, maxCategoriasFixas),
     [listaCategorias, maxCategoriasFixas]

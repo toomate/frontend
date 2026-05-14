@@ -1,5 +1,5 @@
 import { React, useState } from "react";
-import { Beef, BottleWine, ChevronDown, Leaf, Milk, Package, Wheat, TriangleAlert, CheckCircle } from "lucide-react";
+import { Beef, BottleWine, Menu, Leaf, Milk, Package, Wheat, ShoppingCart, Fish, UtensilsCrossed, Sandwich, CookingPot, Droplet, ChevronDown, TriangleAlert, CheckCircle } from "lucide-react";
 import "./EstoqueGrupo.css"
 import { EstoqueItem } from "../EstoqueItem/EstoqueItem";
 import { useEffect } from "react";
@@ -9,12 +9,61 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
     const pegarIcone = (categoria) => {
         switch (categoria.toLowerCase()) {
-            case ("proteínas" || "proteinas"): return <Beef size={28} />;
-            case ("laticínios" || "laticinios"): return <Milk size={28} />;
-            case "hortifruti": return <Leaf size={28} style={{ color: "green" }} />;
-            case ("grãos e secos" || "grãos"): return <Wheat size={28} style={{ color: "#a8987a" }} />;
-            case ("bebidas" || "bebida"): return <BottleWine size={28} />
-            default: return <Package size={28} />;
+            case "proteínas":
+            case "proteinas":
+            case "carnes":
+            case "carnes e aves":
+            case "aves":
+                return <Beef size={28} />;
+
+            case "mercearia":
+                return <ShoppingCart size={28} />;
+
+            case "pescados":
+            case "peixes":
+            case "frutos do mar":
+                return <Fish size={28} />;
+
+            case "temperos":
+            case "condimentos":
+            case "temperos e condimentos":
+                return <CookingPot size={28} />
+
+            case "oleos":
+            case "óleos":
+            case "oleos e gordura":
+            case "óleos e gordura":
+            case "gordura":
+                return <Droplet size={28} />
+
+
+            case "frios":
+            case "embutidos":
+            case "frios e embutidos":
+                return <Sandwich size={28} />;
+
+            case "laticínios":
+            case "laticinios":
+                return <Milk size={28} />;
+
+            case "hortifruti":
+                return <Leaf size={28} />;
+
+            case "grãos e secos":
+            case "graos e secos":
+            case "grãos":
+            case "graos":
+            case "grãos e cereais":
+            case "graos e cereais":
+            case "cereais":
+                return <Wheat size={28} />;
+
+            case "bebidas":
+            case "bebida":
+                return <BottleWine size={28} />;
+
+            default:
+                return <Package size={28} />;
         }
     };
 
