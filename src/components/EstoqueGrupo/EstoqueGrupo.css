@@ -34,6 +34,7 @@
     height: 100%;
     align-items: center;
     justify-content: start;
+    cursor: pointer;
 }
 
 .insumo-nome {

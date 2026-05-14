@@ -29,7 +29,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
     return (<div className="grupo-geral">
         <div className="linha-estoque grupo-container" id={grupo.qtdTotal < grupo.qtdMinima ? "vencido" : ""}>
-            <div className="insumo"><div className="icone" onClick={() => setExpandido(!expandido)}><ChevronDown className="insumo-icone-value" style={{
+            <div className="insumo" onClick={() => setExpandido(!expandido)} ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
             }} /></div>
