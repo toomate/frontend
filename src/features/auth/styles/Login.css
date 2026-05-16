@@ -15,7 +15,7 @@
   align-items: center;
   justify-content: center;
   padding: 24px;
-  background-image: url(./images/fundo-tela.png);
+  background-image: url(../../../shared/assets/images/fundo-tela.png);
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
@@ -209,7 +209,7 @@
 @media (max-width: 600px) {
   .auth-page {
     padding: 16px;
-    background-image: url(./images/cadastro-mobile-fundo.png);
+    background-image: url(../../../shared/assets/images/cadastro-mobile-fundo.png);
   }
 
   .auth-card {

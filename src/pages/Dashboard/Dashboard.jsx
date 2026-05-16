@@ -1,9 +1,9 @@
 ﻿import React, { useEffect } from "react";
 import "./Dashboard.css";
-import HeaderPadrao from "../../HeaderPadrao";
+import HeaderPadrao from "../../app/layouts/Header/HeaderPadrao";
 import { data, useNavigate } from "react-router-dom";
-import Kpi from "../../components/Kpi/Kpi";
-import Grafico from "../../components/Dashboard/Grafico";
+import Kpi from "../../features/dashboard/components/Kpi";
+import Grafico from "../../features/dashboard/components/Grafico";
 import fiadosIcon from "../../images/fiados.png";
 import { useState } from "react";
 import { clientes, Lote } from "../../provider/Api";
@@ -212,4 +212,3 @@ export default function Index() {
     </div>
   );
 }
-
