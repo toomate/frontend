@@ -117,7 +117,7 @@ export function Estoque() {
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
                 insumoId: atual.insumoId,
-                quantidadeTotal: Math.abs(atual.diferenca)
+                quantidadeInsumo: Math.abs(atual.diferenca)
             }))
             await Rotinas.associarInsumos(id, insumosRotina)
             setCardRotina(false)

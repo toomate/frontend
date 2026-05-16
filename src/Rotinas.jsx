@@ -10,6 +10,7 @@ import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 import { Button } from "./components/Button/Button";
 import { useNavigate } from "react-router-dom";
 import SeletorPaginas from "./components/Paginas/SeletorPaginas";
+import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 
 export default function Rotinas() {
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
@@ -94,7 +95,7 @@ export default function Rotinas() {
         <div className="rotinas-container-geral">
             {cardConfirmacao && (
                 <div className="escurecer">
-                    <CardConfirmacao titulo={"Deseja realizar baixa?"} confirmar={() => darBaixa()} fecharCard={() => setCardConfirmacao(false)} />
+                    <CardRelatorio titulo={"Deseja realizar baixa?"} confirmar={() => darBaixa()} fecharCard={() => setCardConfirmacao(false)} />
                 </div>
             )}
             {cardRemocao && (
