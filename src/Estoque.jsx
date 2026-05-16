@@ -320,7 +320,7 @@ export function Estoque() {
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
                 </div>
                 <div className="insumos-container">
-                    <Cabecalho elementos={["Insumo", "Qtd. Mínima", "Qtd. Medida", "Volume", "Data de Vencimento", "Controle"]} />
+                    <Cabecalho elementos={["Insumo", "Qtd. Medida", "Qtd. Mínima", "Qtd. Atual", "Data de Vencimento", "Controle"]} />
                     <div className="grupo-insumos-container">
                         {grupoOrdenado.length > 0 ? grupoOrdenado.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}

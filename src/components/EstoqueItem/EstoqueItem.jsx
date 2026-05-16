@@ -29,14 +29,14 @@ export function EstoqueItem(props) {
                         {atual.quantidadeMedida < atual.quantidadeMinima
                             ? (<TriangleAlert style={{ color: "darkred" }} />)
                             : (<CheckCircle style={{ color: "green" }} />)}
-                       {props.nomeInsumo} {atual.nomeMarca}
+                        {props.nomeInsumo} {atual.nomeMarca}
                     </div>
                 </div>
 
-                <div className="qtd-minima">{truncar(atual.quantidadeMinima)}</div>
                 <div className="qtd-medida">
                     <span>{`${atual.quantidadeMedida}${atual.unidadeMedida}`}</span>
                 </div>
+                <div className="qtd-minima">{truncar(atual.quantidadeMinima)}</div>
                 <div className="qtd-total">{atual.quantidadeTotal}</div>
                 <div className="dt-vencimento">{formatarData(atual.dataValidade)}</div>
 
@@ -52,7 +52,7 @@ export function EstoqueItem(props) {
                     <Button onClick={() => props.abrirDropdown(atual.idLote)} texto={<PiDotsThree size={30} />} />
 
                     {props.dropdownAbertoId === atual.idLote && (
-                        <DropdownEstoque atual={{insumoId: atual.idInsumo, insumoNome: props.nomeInsumo, marca: atual.idMarca}}/>
+                        <DropdownEstoque atual={{ insumoId: atual.idInsumo, insumoNome: props.nomeInsumo, marca: atual.idMarca }} />
                     )}
                 </div>
             </div>

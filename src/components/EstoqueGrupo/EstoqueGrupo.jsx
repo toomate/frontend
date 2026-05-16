@@ -94,12 +94,12 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
                 <div className="insumo-icon">{pegarIcone(grupo.categoria)}</div>
                 <div className="insumo-nome">{grupo.insumo}</div>
             </div>
-            <div className="qtd-medida">{`${grupo.qtdMinima}${grupo.medida}`}</div>
             <div className="qtd-medida">{`${(truncar(grupo.qtdTotal))}${grupo.medida}`}
                 {grupo.quantidadeMedida < grupo.qtdMinima
                     ? (<TriangleAlert style={{ color: "darkred" }} />)
                     : (<CheckCircle style={{ color: "green" }} />)}
             </div>
+            <div className="qtd-medida">{`${grupo.qtdMinima}`}</div>
             <div className="volume">{grupo.qtdAtual}</div>
             <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
         </div>
