@@ -1,7 +1,5 @@
 import React from "react";
 import { Menu } from "lucide-react";
-import "./index.css";
-import { Navbar } from "./components/Navbar/Navbar";
 
 export default function Index1({ irPara }) {
   return (

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "./App.css";
 import { CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { FornecedorApi } from "../../../provider/Api";

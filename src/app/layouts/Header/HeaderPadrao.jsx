@@ -1,6 +1,5 @@
 import React from "react";
 import { ArrowLeft } from "lucide-react";
-import "./App.css";
 import "./HeaderPadrao.css";
 import NotificationBell from "../Cabecalho/NotificationBell.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
