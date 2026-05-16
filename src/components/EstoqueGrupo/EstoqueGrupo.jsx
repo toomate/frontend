@@ -80,22 +80,27 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
         return `${dia}/${mes}/${ano}`;
     };
 
+    function truncar(numero) {
+        const fator = 10 ** 1;
+        return Math.trunc(numero * fator) / fator;
+    }
+
     return (<div className="grupo-geral">
-        <div className="linha-estoque grupo-container" id={grupo.qtdTotal < grupo.qtdMinima ? "vencido" : ""}>
-            <div className="insumo" onClick={() => setExpandido(!expandido)} ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
+        <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)} id={grupo.qtdTotal < grupo.qtdMinima ? "vencido" : ""}>
+            <div className="insumo" ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
             }} /></div>
                 <div className="insumo-icon">{pegarIcone(grupo.categoria)}</div>
                 <div className="insumo-nome">{grupo.insumo}</div>
             </div>
-            <div className="qtdMinima">{grupo.qtdMinima}</div>
-            <div className="qtd-total">{Math.floor(grupo.qtdTotal)}
-                {grupo.qtdTotal < grupo.qtdMinima
+            <div className="qtd-medida">{`${grupo.qtdMinima}${grupo.medida}`}</div>
+            <div className="qtd-medida">{`${(truncar(grupo.qtdTotal))}${grupo.medida}`}
+                {grupo.quantidadeMedida < grupo.qtdMinima
                     ? (<TriangleAlert style={{ color: "darkred" }} />)
                     : (<CheckCircle style={{ color: "green" }} />)}
             </div>
-            <div className="medida">{grupo.medida?.toUpperCase()}</div>
+            <div className="volume">{grupo.qtdAtual}</div>
             <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
         </div>
         {expandido && (

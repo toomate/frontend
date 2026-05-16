@@ -117,7 +117,7 @@ export function Estoque() {
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
                 insumoId: atual.insumoId,
-                quantidadeMedida: Math.abs(atual.diferenca)
+                quantidadeTotal: Math.abs(atual.diferenca)
             }))
             await Rotinas.associarInsumos(id, insumosRotina)
             setCardRotina(false)
@@ -160,18 +160,18 @@ export function Estoque() {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
                     novaQtd = operacao === 'somar'
-                        ? atual.quantidadeMedida + 1
-                        : atual.quantidadeMedida - 1
+                        ? atual.quantidadeTotal + 1
+                        : atual.quantidadeTotal - 1
 
                     if (novaQtd < 0) novaQtd = 0;
 
-                    diferenca = novaQtd - atual.quantidadeMedida
+                    diferenca = novaQtd - atual.quantidadeTotal
                     nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
 
                     return {
                         ...atual,
-                        quantidadeMedida: novaQtd
+                        quantidadeTotal: novaQtd
                     }
 
                 }
@@ -188,7 +188,7 @@ export function Estoque() {
                 return prev.map(m =>
                     m.id === idLote
                         ? {
-                            ...m, quantidadeMedida: novaQtd,
+                            ...m, quantidadeTotal: novaQtd,
                             diferenca: m.diferenca + diferenca
                         }
                         : m
@@ -201,7 +201,7 @@ export function Estoque() {
                     id: idLote,
                     insumoId: idInsumo,
                     produto: nomeProduto,
-                    quantidadeMedida: novaQtd,
+                    quantidadeTotal: novaQtd,
                     diferenca: diferenca
                 }
             ]
@@ -320,7 +320,7 @@ export function Estoque() {
                     <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
                 </div>
                 <div className="insumos-container">
-                    <Cabecalho elementos={["Insumo", "Qtd. Mínima", "Qtd. Total", "Un. de Medida", "Data de Vencimento", "Controle"]} />
+                    <Cabecalho elementos={["Insumo", "Qtd. Mínima", "Qtd. Medida", "Volume", "Data de Vencimento", "Controle"]} />
                     <div className="grupo-insumos-container">
                         {grupoOrdenado.length > 0 ? grupoOrdenado.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}

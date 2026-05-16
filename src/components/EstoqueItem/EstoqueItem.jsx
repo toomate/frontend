@@ -16,8 +16,13 @@ export function EstoqueItem(props) {
         return `${dia}/${mes}/${ano}`;
     };
 
+    function truncar(numero) {
+        const fator = 10 ** 1;
+        return Math.trunc(numero * fator) / fator;
+    }
+
     return (
-        <>{props.elementos.map((atual) => <React.Fragment key={atual.idInsumo}>
+        <>{props.elementos.map((atual) => <React.Fragment key={atual.idLote}>
             <div className="linha-estoque item-container">
                 <div className="insumo-grupo">
                     <div className="item-nome">
@@ -28,17 +33,17 @@ export function EstoqueItem(props) {
                     </div>
                 </div>
 
-                <div className="qtd-minima">{Math.floor(atual.quantidadeMinima)}</div>
-                <div className="qtd-total">
-                    <span>{Math.floor(atual.quantidadeMedida)}</span>
+                <div className="qtd-minima">{truncar(atual.quantidadeMinima)}</div>
+                <div className="qtd-medida">
+                    <span>{`${atual.quantidadeMedida}${atual.unidadeMedida}`}</span>
                 </div>
-                <div className="medida">{atual.unidadeMedida}</div>
+                <div className="qtd-total">{atual.quantidadeTotal}</div>
                 <div className="dt-vencimento">{formatarData(atual.dataValidade)}</div>
 
                 <div className="controle-container">
                     <div className="controle">
                         <CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />
-                        {Math.floor(atual.quantidadeMedida)}
+                        {atual.quantidadeTotal}
                         <CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} />
                     </div>
                 </div>
