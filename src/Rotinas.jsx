@@ -1,4 +1,4 @@
-import { ArrowLeft, SearchIcon } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUp, Save, SearchIcon, X } from "lucide-react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import RotinaCard from "./components/RotinaCard/RotinaCard"
 import { Search } from "./components/Search/Search";
@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import { Rotinas as RotinasClass } from "./provider/Api";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
 import { Button } from "./components/Button/Button";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import SeletorPaginas from "./components/Paginas/SeletorPaginas";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
@@ -16,6 +17,7 @@ export default function Rotinas() {
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [pesquisa, setPesquisa] = useState("")
+    const [insumosGrupo, setInsumosGrupo] = useState([])
     const [pagina, setPagina] = useState(0)
     const [totalPaginas, setTotalPaginas] = useState(0)
     const [tamanho, setTamanho] = useState(16)
@@ -23,6 +25,8 @@ export default function Rotinas() {
     const [cardConfirmacao, setCardConfirmacao] = useState(false)
     const [rotinas, setRotinas] = useState([])
     const [idSelecionado, setIdSelecionado] = useState("")
+    const [rotinaSelecionada, setRotinaSelecionada] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const abrirCardRemocao = (id) => {
         setCardRemocao(true)
@@ -54,18 +58,23 @@ export default function Rotinas() {
     };
 
     const abrirCard = (id) => {
+        const rotina = rotinas.find(r => r.id === id);
         setCardConfirmacao(true)
-        setIdSelecionado(id)
+        setRotinaSelecionada(rotina);
+        setIdSelecionado(id)    
     }
 
     const darBaixa = async () => {
         try {
+            setLoading(true)
             const res = await RotinasClass.darBaixa(idSelecionado)
             console.log("resposta", res)
         } catch (err) {
             if (err.status === 400) {
                 alert(err.response.data.message)
             }
+        } finally {
+            setLoading(false)
         }
         setCardConfirmacao(false)
     }
@@ -73,8 +82,8 @@ export default function Rotinas() {
     const excluirRotina = async () => {
         await RotinasClass.excluirRotina(idSelecionado)
         setCardRemocao(false)
-        const response = await RotinasClass.listar(busca, pagina, tamanho);
-
+        const response = await RotinasClass.listar(pesquisa, pagina, tamanho);
+        
         setRotinas(response.conteudo);
         setTotalPaginas(response.totalPaginas);
     }
@@ -82,20 +91,45 @@ export default function Rotinas() {
     useEffect(() => {
         RotinasClass.listar(pesquisa, pagina, tamanho).then((response) => {
             setRotinas(response.conteudo);
-            setTotalPaginas(response.totalPaginas)
+            setTotalPaginas(response.totalPaginas);
         });
-    }, [pesquisa, pagina, rotinas])
+    }, [pesquisa, pagina, tamanho])
 
     useEffect(() => {
         document.title = "Rotinas";
     }, []);
 
 
+    function RelatorioRotina({ props = [], fechar, confirmar, loading }) {
+        return (
+            <div className="container-card">
+                <div className="titulo-relatorio">
+                    <div className="titulo-primario">Deseja Realizar a baixa desses insumos?</div>
+                    <X className="icone-clicavel" onClick={fechar} />
+                </div>
+                <div className="produtos">
+                    {props.insumos && props.insumos.length > 0 ? (props.insumos.map(atual => <React.Fragment key={atual.id}>
+                        <div className="produto-linha">
+                            <div className="produto">{atual.nome}</div><div className="info-linha">{Math.abs(atual.quantidade)}</div>
+                            <div className="icone-linha">
+                            </div></div>
+                    </React.Fragment>)) :
+                        <div className="mensagem-vazio">Não há produtos!</div>}
+                </div>
+                <div className="botoes">
+                    <Button texto={loading ? "Salvando..." : "Sim"} onClick={darBaixa} disabled={loading}></Button>
+                    <Button texto={"Não"} onClick={fechar}></Button>
+                </div>
+
+            </div>
+        )
+    }
+    
     return (
         <div className="rotinas-container-geral">
             {cardConfirmacao && (
                 <div className="escurecer">
-                    <CardRelatorio titulo={"Deseja realizar baixa?"} confirmar={() => darBaixa()} fecharCard={() => setCardConfirmacao(false)} />
+                    <RelatorioRotina props={rotinaSelecionada} confirmar={() => darBaixa()} fechar={() => setCardConfirmacao(false)} loading={loading} />
                 </div>
             )}
             {cardRemocao && (
@@ -108,7 +142,7 @@ export default function Rotinas() {
                 <div className="nav-categorias-container">
                     <div className="botao-voltar">
                         <Button Icone={ArrowLeft} texto={"Voltar"} onClick={() => { navigate("/estoque") }} />
-                    </div>   
+                    </div>
                     <div className="ipt-pesquisar">
                         <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                     </div>
@@ -128,4 +162,6 @@ export default function Rotinas() {
             </div>
         </div>
     )
+
+    
 }
