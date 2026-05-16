@@ -2,7 +2,7 @@ import camera from "../../images/camera.png";
 import "./Leitor.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import BarcodeScanner from "./LeitorScanner";
+import BarcodeScanner from "../components/LeitorScanner";
 
 export default function Leitor() {
 

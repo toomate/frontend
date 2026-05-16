@@ -1,49 +1,84 @@
-import { Route, Routes } from 'react-router-dom';
-import Login from '../../features/auth/pages/Login';
-import Cadastro from '../../features/auth/pages/Cadastro';
-import Boletos from '../../features/boletos/pages/Boletos';
-import CadastroBoleto from '../../features/boletos/pages/CadastroBoleto';
-import Dashboard from '../../features/dashboard/pages/Dashboard';
-import Calendario from '../../features/calendario/pages/Calendario';
-import BoletoDetail from '../../features/calendario/components/BoletoDetail';
-import { Estoque } from '../../features/estoque/pages/Estoque';
-import CadastroInsumo from '../../features/estoque/pages/CadastroInsumo';
-import CadastroLote from '../../features/estoque/pages/CadastroLote';
-import Fornecedor from '../../features/fornecedores/pages/Fornecedor';
-import CadastroFornecedor from '../../features/fornecedores/pages/CadastroFornecedor';
-import Fiado from '../../features/fiado/pages/Fiado';
-import CadastroFiado from '../../features/fiado/pages/CadastroFiado';
-import Vencimento from '../../features/vencimentos/pages/Vencimento';
-import Rotinas from '../../features/rotinas/pages/Rotinas';
-import Leitor from '../../components/Leitor/Leitor';
-import Admin from '../../features/admin/pages/Admin';
-import RotaPrivada from '../guards/RotaPrivada';
+import React from "react";
+import { Menu } from "lucide-react";
+import "./index.css";
+import { Navbar } from "./components/Navbar/Navbar";
 
-export default function AppRoutes() {
+export default function Index1({ irPara }) {
   return (
-    <Routes>
-      <Route path='/' element={<Login />} />
-      <Route element={<RotaPrivada />}>
-        <Route path='/boletos' element={<Boletos />} />
-        <Route path='/cadastro' element={<Cadastro />} />
-        <Route path='/estoque' element={<Estoque />} />
-        <Route path='/fornecedor' element={<Fornecedor />} />
-        <Route path='/cadastro-insumo' element={<CadastroInsumo />} />
-        <Route path='/cadastro-fornecedor' element={<CadastroFornecedor />} />
-        <Route path='/cadastro-boleto' element={<CadastroBoleto />} />
-        <Route path='/cadastro-fiado' element={<CadastroFiado />} />
-        <Route path='/cadastro-lote' element={<CadastroLote />} />
-        <Route path='/dashboard' element={<Dashboard />} />
-        <Route path='/calendario' element={<Calendario />} />
-        <Route path='/calendarioDetalhes' element={<BoletoDetail />} />
-        <Route path='/fornecedores' element={<Fornecedor />} />
-        <Route path='/vencimentos' element={<Vencimento />} />
-        <Route path='/rotinas' element={<Rotinas />} />
-        <Route path='/fiados' element={<Fiado />} />
-        <Route path='/Fiados' element={<Fiado />} />
-        <Route path='/leitor' element={<Leitor />} />
-        <Route path='/admin' element={<Admin />} />
-      </Route>
-    </Routes>
+    <div className="dashboard">
+      <header className="header">
+        <div className="lado-esquerdo">
+        <button className="hamburger-btn">
+            <Menu size={28} color="#b88b09"/>
+          </button>
+          
+          <div className="logo-circulo"></div>
+
+          <div className="restaurante">
+          <div className="restaurante-name">Toomate Bistrô</div>
+            <div className="restaurante-subnome">Kaio</div>
+            </div>
+            </div>
+          
+            <button onClick={() => irPara("login")} className="btn">Sair</button>
+      </header>
+
+      {/* <Navbar /> */}
+      <nav className="menu">
+        <button>Estoque</button>
+        <button>Fornecedores</button>
+        <button>Gastos</button>
+        <button>Boletos</button>
+        <button onClick={() => irPara("fiados")}>Fiados</button>
+      </nav>
+
+      <div className="status">
+        <div className="card">
+          <span>Produtos Abaixo do Estoque Min.</span>
+          <span className="numero">8</span>
+        </div>
+        <div className="card">
+          <span>Produtos Perto da Data de Vencimento</span>
+          <span className="numero">12</span>
+        </div>
+        <div className="card">
+          <span>Boletos próximos ao Vencimento</span>
+          <span className="numero">4</span>
+        </div>
+        <div className="card">
+          <span>Total de clientes devedores</span>
+          <span className="numero">25</span>
+        </div>
+      </div>
+
+      <div className="container2">
+        <div className="grafico">
+        </div>
+
+        <div className="notificacao">
+          <h2 className="alerta-titulo">ALERTAS!</h2>
+
+          <button className="alerta-btn validade">
+            <span className="validade-icone"></span>
+            <span>Notificação de Validade!</span>
+          </button>
+
+          <button className="alerta-btn estoque">
+            <span className="estoque-icone"></span>
+            <span>Notificação de Estoque!</span>
+          </button>
+
+          <button className="alerta-btn fornecedor">
+            <span className="fornecedor-icone"></span>
+            <span>Notificação de Fornecedor!</span>
+          </button>
+
+          <button className="alerta-btn boleto">
+            <span className="boleto-icone"></span>
+            <span>Notificação de Boleto!</span>
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }

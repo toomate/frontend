@@ -2,9 +2,9 @@ import React from "react";
 import { ArrowLeft } from "lucide-react";
 import "./App.css";
 import "./HeaderPadrao.css";
-import NotificationBell from "./app/layouts/Cabecalho/NotificationBell.jsx";
+import NotificationBell from "../Cabecalho/NotificationBell.jsx";
 import { useNavigate, useLocation } from "react-router-dom";
-import HamburgerButton from "./shared/components/HamburgerButton/HamburgerButton";
+import HamburgerButton from "../../../shared/components/HamburgerButton/HamburgerButton.jsx";
 
 const titulosPorRota = {
   "/dashboard": "Dashboard",
