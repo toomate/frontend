@@ -95,7 +95,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
                 <div className="insumo-nome">{grupo.insumo}</div>
             </div>
             <div className="qtd-medida">{`${(truncar(grupo.qtdTotal))}${grupo.medida}`}
-                {grupo.quantidadeMedida < grupo.qtdMinima
+                {grupo.qtdAtual < grupo.qtdMinima
                     ? (<TriangleAlert style={{ color: "darkred" }} />)
                     : (<CheckCircle style={{ color: "green" }} />)}
             </div>
