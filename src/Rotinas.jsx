@@ -21,6 +21,7 @@ export default function Rotinas() {
     const [pagina, setPagina] = useState(0)
     const [totalPaginas, setTotalPaginas] = useState(0)
     const [tamanho, setTamanho] = useState(16)
+    const [ordenacao, setOrdenacao] = useState("alfabetica")
     const [cardRemocao, setCardRemocao] = useState(false)
     const [cardConfirmacao, setCardConfirmacao] = useState(false)
     const [rotinas, setRotinas] = useState([])
@@ -61,7 +62,7 @@ export default function Rotinas() {
         const rotina = rotinas.find(r => r.id === id);
         setCardConfirmacao(true)
         setRotinaSelecionada(rotina);
-        setIdSelecionado(id)    
+        setIdSelecionado(id)
     }
 
     const darBaixa = async () => {
@@ -83,7 +84,7 @@ export default function Rotinas() {
         await RotinasClass.excluirRotina(idSelecionado)
         setCardRemocao(false)
         const response = await RotinasClass.listar(pesquisa, pagina, tamanho);
-        
+
         setRotinas(response.conteudo);
         setTotalPaginas(response.totalPaginas);
     }
@@ -124,7 +125,7 @@ export default function Rotinas() {
             </div>
         )
     }
-    
+
     return (
         <div className="rotinas-container-geral">
             {cardConfirmacao && (
@@ -143,6 +144,10 @@ export default function Rotinas() {
                     <div className="botao-voltar">
                         <Button Icone={ArrowLeft} texto={"Voltar"} onClick={() => { navigate("/estoque") }} />
                     </div>
+                    <select value={ordenacao} onChange={(e) => setOrdenacao(e.target.value)} className="fornecedores-select">
+                        <option value="alfabetica">A → Z</option>
+                        <option value="alfabetica_desc">Z → A</option>
+                    </select>
                     <div className="ipt-pesquisar">
                         <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                     </div>
@@ -150,11 +155,21 @@ export default function Rotinas() {
             </div>
             <div className="rotina-container">
                 <div className="rotinas-linhas">
-                    {rotinas && (
-                        rotinas.map(atual => (
+                    {rotinas && [...rotinas]
+                        .sort((a, b) => {
+                            const t1 = a?.titulo ?? "";
+                            const t2 = b?.titulo ?? "";
+
+                            if (ordenacao === "alfabetica_desc") {
+                                return t2.localeCompare(t1); // Z → A
+                            }
+
+                            return t1.localeCompare(t2); // A → Z (padrão)
+                        })
+                        .map(atual => (
                             <RotinaCard key={atual.id} darBaixa={() => abrirCard(atual.id)} nomeRotina={atual.titulo} excluir={() => abrirCardRemocao(atual.id)} />
                         ))
-                    )}
+                    }
                 </div>
             </div>
             <div className="rotina-seletor">
@@ -163,5 +178,5 @@ export default function Rotinas() {
         </div>
     )
 
-    
+
 }

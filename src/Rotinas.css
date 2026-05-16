@@ -17,7 +17,7 @@
 
 .rotinas-container .nav-categorias-container {
     display: flex;
-    justify-content: flex-end;
+    justify-content: flex-start;
     align-items: center;
     gap: 16px;
     width: 95%;
@@ -41,10 +41,17 @@
 }
 
 .botao-voltar .button-container {
-    height: 40px;
-    border-radius: 5px;
-    background: #f8ecc6;
-    color: #6b4423;
+    height: 36px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: white;
+        color: black;
+        padding: 0 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
 }
 
 .botao-voltar .button-value {
