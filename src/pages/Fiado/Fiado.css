@@ -38,10 +38,10 @@
 }
 
 .filtro-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 32px;
+  width: 120px;
   background: white;
   border: 1px solid #ccc;
   cursor: pointer;
