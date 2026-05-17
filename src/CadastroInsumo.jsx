@@ -15,8 +15,12 @@ export default function CadastroInsumo() {
   const [qtdMinima, setQtdMinima] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
   const [isCadastrando, setIsCadastrando] = useState(false);
+<<<<<<< HEAD
   const location = useLocation();
   const [successType, setSuccessType] = useState("");
+=======
+  const [abrirModalEscolhaLote, setAbrirModalEscolhaLote] = useState(false);
+>>>>>>> Ortiz
 
   function parseQuantidade(valor) {
     if (valor === null || valor === undefined || valor === "") {
@@ -98,17 +102,23 @@ export default function CadastroInsumo() {
 
 
   const [abrirModalCategoria, setAbrirModalCategoria] = useState(false);
-  const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);
+  const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);  
+  const [abrirModalLote, setAbrirModalLote] = useState(false);
   const [novaCategoriaNome, setNovaCategoriaNome] = useState("");
   const [novaCategoriaRotatividade, setNovaCategoriaRotatividade] = useState("false");
   const [erroModalCategoria, setErroModalCategoria] = useState("");
   const [isCadastrandoCategoria, setIsCadastrandoCategoria] = useState(false);
+  const [novaMedidaNome, setNovaMedidaNome] = useState("");
+  const [novaMedidaRotatividade, setNovaMedidaRotatividade] = useState("false");
+  const [erroModalMedida, setErroModalMedida] = useState("");
+  const [isCadastrandoMedida, setIsCadastrandoMedida] = useState(false);
+  const [abrirModalMedida, setAbrirModalMedida] = useState(false);
 
   async function cadastrarInsumo(event) {
     event.preventDefault();
     setErroFormulario("");
 
-    const nome = nomeInsumo.trim();
+    const nome = nomeInsumo.trim(); 
     const categoriaNumero = Number(idCategoria);
     const quantidadeMinimaNumero = Number(qtdMinima);
     const unidade = unidadeMedida.trim();
@@ -146,8 +156,7 @@ export default function CadastroInsumo() {
       setIdCategoria("0");
       setUnidadeMedida("");
       setQtdMinima("");
-      setSuccessType("insumo");
-      setAbrirModalSucesso(true);
+      setAbrirModalEscolhaLote(true);
       fetchMedidas();
     } catch (error) {
       if (error?.response?.status === 409) {
@@ -224,20 +233,34 @@ export default function CadastroInsumo() {
             </button>
           </div>
 
-          {/* Unidade */}
+          {/* Medida */}
           <span>Unidade de Medida</span>
-          <select
-            className="selectUnidade"
-            value={unidadeMedida}
-            onChange={e => {
-              setUnidadeMedida(e.target.value);
-            }}
-          >
-            <option value="" disabled>Selecione</option>
-            {opcoesUnidade.map(opcao => (
-              <option key={opcao.id} value={opcao.label}>{opcao.label}</option>
-            ))}
-          </select>
+          <div className="input-wrapper">
+            <select
+              className="selectUnidade"
+              value={unidadeMedida}
+              onChange={e => {
+                setUnidadeMedida(e.target.value);
+              }}
+            >
+              <option value="" disabled>Selecione</option>
+              {opcoesUnidade.map(opcao => (
+                <option key={opcao.id} value={opcao.label}>{opcao.label}</option>
+              ))}
+            </select>
+
+            <button
+              type="button"
+              className="eye-btn1"
+              onClick={() => {
+                setErroModalMedida("");
+                setNovaMedidaRotatividade("false");
+                setAbrirModalMedida(true);
+              }}
+            >
+              <Plus size={18} />
+            </button>
+          </div>
 
           <span>Quantidade Mínima</span>
           <input
@@ -340,6 +363,91 @@ export default function CadastroInsumo() {
           <option value="true">Rotatividade alta</option>
         </select>
       </FormModal>
+
+      {/* MODAL NOVA MEDIDA */}
+      <FormModal
+        open={abrirModalMedida}
+        title="Nova Medida de Insumo"
+        onClose={() => {
+          setErroModalMedida("");
+          setAbrirModalMedida(false);
+        }}
+        isSaving={isCadastrandoMedida}
+        errorMessage={erroModalMedida}
+        onSave={async () => {
+          setErroModalMedida("");
+          const nome = novaMedidaNome.trim();
+
+          if (!nome) {
+            setErroModalMedida("Informe o nome da medida.");
+            return;
+          }
+
+          try {
+            setIsCadastrandoMedida(true);
+              await insumos.criarUnidade({
+              nome,
+            });
+            await fetchMedidas();
+            setAbrirModalMedida(false);
+            setNovaMedidaNome("");
+            setAbrirModalSucesso(true);
+          } catch {
+            setErroModalMedida("Nao foi possivel cadastrar a medida.");
+          } finally {
+            setIsCadastrandoMedida(false);
+          }
+        }}
+      >
+        <input
+          className="modal-input"
+          type="text"
+          placeholder="Nome da medida"
+          value={novaMedidaNome}
+          onChange={(e) => setNovaMedidaNome(e.target.value)}
+        />
+      </FormModal>
+
+      {/* MODAL ESCOLHA LOTE */}
+      {abrirModalEscolhaLote && (
+        <div className="modal-overlay">
+          <div className="modal modal-sucesso">
+
+            <span className="titulo">
+              Insumo cadastrado com sucesso!
+              <br /><br />
+              Deseja também cadastrar um lote deste insumo?
+            </span>
+
+            <div
+              className="actions"
+              style={{
+                marginTop: "20px",
+                display: "flex",
+                gap: "12px",
+                justifyContent: "center",
+                flexWrap: "wrap",
+              }}
+            >
+              <button
+                className="btn btn-cancelar"
+                onClick={() => setAbrirModalEscolhaLote(false)}
+              >
+                Não quero cadastrar
+              </button>
+
+              <button
+                className="btn"
+                onClick={() => {navigate("/cadastro-lote");}}
+              >
+                Cadastrar
+              </button>
+
+            </div>
+
+          </div>
+        </div>
+      )}
 
       {/* MODAL SUCESSO */}
       {abrirModalSucesso && (

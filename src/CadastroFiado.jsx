@@ -262,21 +262,13 @@ export default function CadastroFiado() {
           {/* Pedido */}
           <span>Pedido</span>
           <div className="input-wrapper1">
-            <select
+            <input
+              type="text"
               className="selectPedido"
+              placeholder="Digite o pedido"
               value={pedidoSelecionado || ""}
-              onChange={(e) => {
-                const selectedValue = e.target.value;
-                setPedidoSelecionado(selectedValue);
-              }}
-            >
-              <option value="">Selecione um pedido</option>
-              {opcoesPedidos.map((pedido, index) => (
-                <option key={index} value={pedido.label}>
-                  {pedido.label}
-                </option>
-              ))}
-            </select>
+              onChange={(e) => setPedidoSelecionado(e.target.value)}
+            />
           </div>
           
           <span>Valor</span>

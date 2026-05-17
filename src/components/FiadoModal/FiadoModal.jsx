@@ -1,9 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { X } from "lucide-react";
 import "./FiadoModal.css";
 
-export function FiadoModal({ fiado, onClose, onPagarDivida, onPagarTodas }) {
+export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento, onPagarTodas }) {
   if (!fiado) return null;
+
+  const [modalComprovante, setModalComprovante] = useState(false);
+  const [dividaSelecionada, setDividaSelecionada] = useState(null);
+  const [comprovante, setComprovante] = useState(null);
+  const [documento, setDocumento] = useState("");
 
   const totalAberto = fiado.dividas
     .filter((d) => !d.pago)
@@ -20,6 +25,32 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onPagarTodas }) {
     const d = new Date(dataStr);
     if (isNaN(d.getTime())) return dataStr;
     return d.toLocaleDateString("pt-BR");
+  };
+
+  const abrirModalPagamento = (divida) => {
+    setDividaSelecionada(divida);
+    setComprovante(null);
+    setDocumento("");
+    setModalComprovante(true);
+  };
+
+  const confirmarPagamento = async () => {
+    if (!comprovante) {
+      alert("Insira o comprovante.");
+      return;
+    }
+
+    if (!documento.trim()) {
+      alert("Insira o documento.");
+      return;
+    }
+
+    await onPagarDivida(fiado.idCliente, dividaSelecionada.idDivida, {
+      comprovante,
+      documento,
+    });
+
+    setModalComprovante(false);
   };
 
   return (
@@ -71,15 +102,18 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onPagarTodas }) {
                 <span>R$ {Number(divida.valor).toFixed(2)}</span>
                 <span>{formatarData(divida.dataCompra)}</span>
                 <span>
-                  <button
-                    className={`btn-pagar-divida ${divida.pago ? "pago" : "aberto"}`}
-                    onClick={() => !divida.pago && onPagarDivida(fiado.idCliente, divida.idDivida)}
-                    disabled={divida.pago}
-                  >
-                    {divida.pago
-                      ? `Pago ${divida.dataPagamento ? formatarData(divida.dataPagamento) : ""}`
-                      : "Marcar pago"}
-                  </button>
+
+                <button
+                  className={`btn-pagar-divida ${divida.pago ? "pago" : "aberto"}`}
+                  onClick={() =>
+                    divida.pago
+                      ? onDesfazerPagamento(fiado.idCliente, divida.idDivida)
+                      : abrirModalPagamento(divida)                  }
+                >
+                  {divida.pago
+                    ? `Desfazer pagamento (${divida.dataPagamento ? formatarData(divida.dataPagamento) : ""})`
+                    : "Marcar pago"}
+                </button>
                 </span>
               </div>
             ))
@@ -108,6 +142,53 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onPagarTodas }) {
             {todasPagas ? "Tudo pago" : "Pagar todas"}
           </button>
         </div>
+
+        {modalComprovante && (
+        <div
+          className="fiado-modal-overlay"
+          onClick={() => setModalComprovante(false)}
+        >
+          <div
+            className="fiado-modal comprovante-modal"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2>Confirmar pagamento</h2>
+
+            <div className="comprovante-form">
+              <label>Documento</label>
+              <input
+                type="text"
+                placeholder="Digite o documento"
+                value={documento}
+                onChange={(e) => setDocumento(e.target.value)}
+              />
+
+              <label>Comprovante (foto)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setComprovante(e.target.files[0])}
+              />
+            </div>
+
+            <div className="comprovante-actions">
+              <button
+                className="btn-cancelar"
+                onClick={() => setModalComprovante(false)}
+              >
+                Cancelar
+              </button>
+
+              <button
+                className="btn-confirmar"
+                onClick={confirmarPagamento}
+              >
+                Confirmar pagamento
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );

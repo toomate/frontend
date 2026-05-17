@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import {Filter, Plus, Search, LayoutGrid, List, FileText} from "lucide-react";
+import {Filter, Plus, Search, LayoutGrid, List, FileText, ArrowDown, ArrowUp} from "lucide-react";
 import { FiadoCard } from "../../components/FiadoCard/FiadoCard";
 import { FiadoModal } from "../../components/FiadoModal/FiadoModal";
 import "./Fiado.css";
@@ -12,7 +12,7 @@ export default function Fiado({ irPara }) {
   const [fiados, setFiados] = useState([]);
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
-  const [ordenacao, setOrdenacao] = useState(null);
+  const [ordenacao, setOrdenacao] = useState({ tipo: null, direcao: "asc" });
   const [visualizacao, setVisualizacao] = useState("cards");
   const [fiadoSelecionado, setFiadoSelecionado] = useState(null);
 
@@ -67,9 +67,15 @@ export default function Fiado({ irPara }) {
       );
     })
     .sort((a, b) => {
-      if (ordenacao === "nome") return a.nome.localeCompare(b.nome);
-      if (ordenacao === "valor") return calcularAberto(b) - calcularAberto(a);
-      if (ordenacao === "data") {
+      if (ordenacao.tipo === "nome") {
+        const comparison = a.nome.localeCompare(b.nome);
+        return ordenacao.direcao === "asc" ? comparison : -comparison;
+      }
+      if (ordenacao.tipo === "valor") {
+        const diff = calcularAberto(b) - calcularAberto(a);
+        return ordenacao.direcao === "asc" ? diff : -diff;
+      }
+      if (ordenacao.tipo === "data") {
         const dA = ultimaData(a) || "";
         const dB = ultimaData(b) || "";
         return dB.localeCompare(dA);
@@ -78,7 +84,19 @@ export default function Fiado({ irPara }) {
     });
 
   const toggleOrdenacao = (tipo) => {
-    setOrdenacao((prev) => (prev === tipo ? null : tipo));
+    setOrdenacao((prev) => {
+      if (prev.tipo === tipo) {
+        return {
+          tipo,
+          direcao: prev.direcao === "asc" ? "desc" : "asc",
+        };
+      }
+
+      return {
+        tipo,
+        direcao: "asc",
+      };
+    });
   };
 
   const abrirDetalhe = (fiado) => {
@@ -121,6 +139,50 @@ export default function Fiado({ irPara }) {
     }
   };
 
+  const desfazerPagamento = async (idCliente, idDivida) => {
+    try {
+      await dividas.atualizarEstado(idDivida);
+
+      setFiados((prev) =>
+        prev.map((cliente) => {
+          if (cliente.idCliente !== idCliente) return cliente;
+
+          return {
+            ...cliente,
+            dividas: cliente.dividas.map((divida) =>
+              divida.idDivida === idDivida
+                ? {
+                    ...divida,
+                    pago: false,
+                    dataPagamento: null,
+                  }
+                : divida
+            ),
+          };
+        })
+      );
+
+      setFiadoSelecionado((prev) => {
+        if (!prev || prev.idCliente !== idCliente) return prev;
+
+        return {
+          ...prev,
+          dividas: prev.dividas.map((divida) =>
+            divida.idDivida === idDivida
+              ? {
+                  ...divida,
+                  pago: false,
+                  dataPagamento: null,
+                }
+              : divida
+          ),
+        };
+      });
+    } catch (error) {
+      console.error("Erro ao desfazer pagamento:", error);
+    }
+  };
+
   // Marca todas as dívidas em aberto do cliente como pagas
   const pagarTodas = async (idCliente) => {
     const cliente = fiados.find((c) => c.idCliente === idCliente);
@@ -153,6 +215,16 @@ export default function Fiado({ irPara }) {
     return d.toLocaleDateString("pt-BR");
   };
 
+  const renderSetaOrdenacao = (tipo) => {
+    if (ordenacao.tipo !== tipo) return null;
+
+    return ordenacao.direcao === "asc" ? (
+      <ArrowDown size={16} />
+    ) : (
+      <ArrowUp size={16} />
+    );
+  };
+
   return (
     <div className="fiado-page">
       <HeaderPadrao titulo="Fiados" irPara={irPara} />
@@ -160,27 +232,36 @@ export default function Fiado({ irPara }) {
       {/* Barra de filtros */}
       <div className="fiado-filtros">
         <button
-          className={`filtro-btn ${ordenacao === "nome" ? "active" : ""}`}
+          className={`filtro-btn ${ordenacao.tipo === "nome" ? "active" : ""}`}
           onClick={() => toggleOrdenacao("nome")}
         >
           Nome
-          <Filter size={18} />
+          <div>
+            <Filter size={18} />
+            {renderSetaOrdenacao("nome")}
+          </div>
         </button>
 
         <button
-          className={`filtro-btn ${ordenacao === "valor" ? "active" : ""}`}
+          className={`filtro-btn ${ordenacao.tipo === "valor" ? "active" : ""}`}
           onClick={() => toggleOrdenacao("valor")}
         >
           Valor
-          <Filter size={18} />
+          <div>
+            <Filter size={18} />
+            {renderSetaOrdenacao("valor")}
+          </div>
         </button>
 
         <button
-          className={`filtro-btn ${ordenacao === "data" ? "active" : ""}`}
+          className={`filtro-btn ${ordenacao.tipo === "data" ? "active" : ""}`}
           onClick={() => toggleOrdenacao("data")}
         >
           Data
-          <Filter size={18} />
+          <div>
+            <Filter size={18} />
+            {renderSetaOrdenacao("data")}
+          </div>
         </button>
 
         <div className="view-toggle">
@@ -282,6 +363,7 @@ export default function Fiado({ irPara }) {
           fiado={fiadoSelecionado}
           onClose={fecharDetalhe}
           onPagarDivida={pagarDivida}
+          onDesfazerPagamento={desfazerPagamento}
           onPagarTodas={pagarTodas}
         />
       )}
