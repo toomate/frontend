@@ -139,6 +139,50 @@ export default function Fiado({ irPara }) {
     }
   };
 
+  const desfazerPagamento = async (idCliente, idDivida) => {
+    try {
+      await dividas.atualizarEstado(idDivida);
+
+      setFiados((prev) =>
+        prev.map((cliente) => {
+          if (cliente.idCliente !== idCliente) return cliente;
+
+          return {
+            ...cliente,
+            dividas: cliente.dividas.map((divida) =>
+              divida.idDivida === idDivida
+                ? {
+                    ...divida,
+                    pago: false,
+                    dataPagamento: null,
+                  }
+                : divida
+            ),
+          };
+        })
+      );
+
+      setFiadoSelecionado((prev) => {
+        if (!prev || prev.idCliente !== idCliente) return prev;
+
+        return {
+          ...prev,
+          dividas: prev.dividas.map((divida) =>
+            divida.idDivida === idDivida
+              ? {
+                  ...divida,
+                  pago: false,
+                  dataPagamento: null,
+                }
+              : divida
+          ),
+        };
+      });
+    } catch (error) {
+      console.error("Erro ao desfazer pagamento:", error);
+    }
+  };
+
   // Marca todas as dívidas em aberto do cliente como pagas
   const pagarTodas = async (idCliente) => {
     const cliente = fiados.find((c) => c.idCliente === idCliente);
@@ -319,6 +363,7 @@ export default function Fiado({ irPara }) {
           fiado={fiadoSelecionado}
           onClose={fecharDetalhe}
           onPagarDivida={pagarDivida}
+          onDesfazerPagamento={desfazerPagamento}
           onPagarTodas={pagarTodas}
         />
       )}

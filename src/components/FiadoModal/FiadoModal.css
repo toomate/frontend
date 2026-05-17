@@ -11,6 +11,22 @@
   box-shadow: 0 0.5em 2em rgba(0, 0, 0, 0.18);
 }
 
+.fiado-modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.35);
+
+  z-index: 9999;
+}
+
 /* ===== Header do modal ===== */
 .fiado-modal-header {
   background: #f8ecc6;
@@ -230,6 +246,87 @@
   padding: 5%;
   color: #828282;
   font-size: clamp(0.8rem, 1.1vw, 1rem);
+}
+
+.comprovante-modal {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  width: 90%;
+  max-width: 420px;
+
+  background: #fff;
+
+  border: 0.0625em solid #6b4423;
+  border-radius: 1.2em;
+
+  padding: 1.5em;
+
+  box-shadow: 0 0.5em 2em rgba(0, 0, 0, 0.18);
+
+  z-index: 10000;
+}
+
+.comprovante-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.comprovante-form input {
+  width: 100%;
+
+  padding: 12px;
+
+  border-radius: 10px;
+  border: 1px solid #d4d4d4;
+
+  font-size: 1rem;
+
+  box-sizing: border-box;
+}
+
+.comprovante-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.comprovante-actions button {
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+}
+
+.btn-cancelar {
+  background: #e8ddb5;
+  color: #6b4423;
+}
+
+.btn-confirmar {
+  background: #22c55e;
+  color: white;
+}
+
+.btn-cancelar {
+  background: #ccc;
+}
+
+.btn-confirmar {
+  background: #22c55e;
+  color: white;
 }
 
 /* ===== Responsivo ===== */
