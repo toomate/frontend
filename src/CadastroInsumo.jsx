@@ -15,12 +15,9 @@ export default function CadastroInsumo() {
   const [qtdMinima, setQtdMinima] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
   const [isCadastrando, setIsCadastrando] = useState(false);
-<<<<<<< HEAD
   const location = useLocation();
   const [successType, setSuccessType] = useState("");
-=======
   const [abrirModalEscolhaLote, setAbrirModalEscolhaLote] = useState(false);
->>>>>>> Ortiz
 
   function parseQuantidade(valor) {
     if (valor === null || valor === undefined || valor === "") {
