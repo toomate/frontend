@@ -6,6 +6,7 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
   const [carregandoPorId, setCarregandoPorId] = useState({});
   const [erroPorId, setErroPorId] = useState({});
   const [comprovantePorId, setComprovantePorId] = useState({});
+  const [pagamentoAbertoPorId, setPagamentoAbertoPorId] = useState({});
 
   console.log('Boletos recebidos em BoletoDetail:', boletos);
 
@@ -26,6 +27,11 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
     try {
       await BoletosApi.marcarComoPago(boleto.id);
       onStatusAtualizado?.(boleto.id, true);
+      setPagamentoAbertoPorId((estadoAtual) => {
+        const proximoEstado = { ...estadoAtual };
+        delete proximoEstado[boleto.id];
+        return proximoEstado;
+      });
     } catch (error) {
       console.error('Erro ao marcar boleto como pago:', error);
       setErroPorId((estadoAtual) => ({
@@ -55,19 +61,14 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
     await marcarComoPago(boleto);
   }
 
-  async function pagarComConfirmacaoSemComprovante(boleto) {
-    const possuiComprovante = Boolean(comprovantePorId[boleto.id]);
+  function abrirPagamento(boleto) {
+    setPagamentoAbertoPorId((estadoAtual) => ({
+      ...estadoAtual,
+      [boleto.id]: !estadoAtual[boleto.id],
+    }));
+  }
 
-    if (!possuiComprovante) {
-      const confirmouSemComprovante = window.confirm(
-        'Deseja confirmar o pagamento sem inserir comprovante?',
-      );
-
-      if (!confirmouSemComprovante) {
-        return;
-      }
-    }
-
+  async function marcarComoPagoSemComprovante(boleto) {
     await marcarComoPago(boleto);
   }
 
@@ -98,6 +99,12 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
       onStatusAtualizado?.(boleto.id, false);
 
       setComprovantePorId((estadoAtual) => {
+        const proximoEstado = { ...estadoAtual };
+        delete proximoEstado[boleto.id];
+        return proximoEstado;
+      });
+
+      setPagamentoAbertoPorId((estadoAtual) => {
         const proximoEstado = { ...estadoAtual };
         delete proximoEstado[boleto.id];
         return proximoEstado;
@@ -182,34 +189,47 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
                 ) : (
                   <div className="event-confirmacao-box">
                     <p className="event-confirmacao-texto">
-                      Clique em pagar ou insira um comprovante para confirmar automaticamente o pagamento.
+                      Clique em pagar para abrir as opções de comprovante ou confirmação sem anexar arquivo.
                     </p>
 
                     <div className="event-confirmacao-acoes">
                       <button
                         type="button"
                         className="event-action-button is-pending"
-                        onClick={() => pagarComConfirmacaoSemComprovante(boleto)}
+                        onClick={() => abrirPagamento(boleto)}
                         disabled={carregandoPorId[boleto.id]}
                       >
-                        {carregandoPorId[boleto.id] ? 'Atualizando...' : 'Pagar'}
+                        {carregandoPorId[boleto.id] ? 'Atualizando...' : pagamentoAbertoPorId[boleto.id] ? 'Fechar' : 'Pagar'}
                       </button>
-
-                      <label className="event-file-button" htmlFor={`comprovante-${boleto.id}`}>
-                        Inserir comprovante
-                      </label>
-                      <input
-                        id={`comprovante-${boleto.id}`}
-                        type="file"
-                        accept="image/*,.pdf"
-                        className="event-file-input"
-                        onChange={(eventoArquivo) => anexarComprovanteEAtualizarStatus(boleto, eventoArquivo)}
-                        disabled={carregandoPorId[boleto.id]}
-                      />
                     </div>
 
-                    {comprovantePorId[boleto.id] && (
-                      <span className="event-file-name">Comprovante: {comprovantePorId[boleto.id]}</span>
+                    {pagamentoAbertoPorId[boleto.id] && (
+                      <div className="event-confirmacao-painel">
+                        <label className="event-file-button" htmlFor={`comprovante-${boleto.id}`}>
+                          Inserir comprovante
+                        </label>
+                        <input
+                          id={`comprovante-${boleto.id}`}
+                          type="file"
+                          accept="image/*,.pdf"
+                          className="event-file-input"
+                          onChange={(eventoArquivo) => anexarComprovanteEAtualizarStatus(boleto, eventoArquivo)}
+                          disabled={carregandoPorId[boleto.id]}
+                        />
+
+                        <button
+                          type="button"
+                          className="event-action-button is-pending"
+                          onClick={() => marcarComoPagoSemComprovante(boleto)}
+                          disabled={carregandoPorId[boleto.id]}
+                        >
+                          Marcar como pago sem comprovante
+                        </button>
+
+                        {comprovantePorId[boleto.id] && (
+                          <span className="event-file-name">Comprovante: {comprovantePorId[boleto.id]}</span>
+                        )}
+                      </div>
                     )}
                   </div>
                 )}
