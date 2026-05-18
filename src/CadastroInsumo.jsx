@@ -428,10 +428,28 @@ export default function CadastroInsumo() {
             >
               <button
                 className="btn btn-cancelar"
-                onClick={() => setAbrirModalEscolhaLote(false)}
+                onClick={() => {
+                  const confirmar = window.confirm(
+                    "Tem certeza que não deseja cadastrar um lote?"
+                  );
+
+                  if (confirmar) {
+                    setAbrirModalEscolhaLote(false);
+                  }
+                }}
               >
                 Não quero cadastrar
               </button>
+
+
+
+
+
+
+
+
+
+
 
               <button
                 className="btn"
