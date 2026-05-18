@@ -123,7 +123,7 @@ useEffect(() => {
     );
   }
 
-  const primeiraPalavra = event.title?.split(' ')[0];
+  const primeiraPalavra = event.title?.split(' ')[0] + " " +  event.title?.split(' ')[1];
 
   if (eventosDoDia.length > 1) {
     if (!ehPrimeiroDoDia) return null;

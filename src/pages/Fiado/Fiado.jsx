@@ -13,6 +13,7 @@ export default function Fiado({ irPara }) {
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
   const [ordenacao, setOrdenacao] = useState({ tipo: null, direcao: "asc" });
+  const [filtroPagamento, setFiltroPagamento] = useState("naoPago");
   const [visualizacao, setVisualizacao] = useState("cards");
   const [fiadoSelecionado, setFiadoSelecionado] = useState(null);
 
@@ -46,6 +47,12 @@ export default function Fiado({ irPara }) {
       .filter((d) => !d.pago)
       .reduce((acc, d) => acc + Number(d.valor), 0);
 
+  const fiadoTemDividasEmAberto = (cliente) =>
+    cliente.dividas.some((divida) => !divida.pago);
+
+  const fiadoEstaPago = (cliente) =>
+    cliente.dividas.length > 0 && cliente.dividas.every((divida) => divida.pago);
+
   // Última data de compra
   const ultimaData = (cliente) => {
     if (cliente.dividas.length === 0) return "";
@@ -65,6 +72,17 @@ export default function Fiado({ irPara }) {
         f.telefone.toLowerCase().includes(termo) ||
         f.bairro.toLowerCase().includes(termo)
       );
+    })
+    .filter((f) => {
+      if (filtroPagamento === "pago") {
+        return fiadoEstaPago(f);
+      }
+
+      if (filtroPagamento === "naoPago") {
+        return fiadoTemDividasEmAberto(f);
+      }
+
+      return true;
     })
     .sort((a, b) => {
       if (ordenacao.tipo === "nome") {
@@ -263,6 +281,30 @@ export default function Fiado({ irPara }) {
             {renderSetaOrdenacao("data")}
           </div>
         </button>
+
+        <div className="view-toggle">
+          <button
+            className={`view-toggle-btn ${filtroPagamento === "todos" ? "active" : ""}`}
+            onClick={() => setFiltroPagamento("todos")}
+            title="Mostrar todos"
+          >
+            Todos
+          </button>
+          <button
+            className={`view-toggle-btn ${filtroPagamento === "pago" ? "active" : ""}`}
+            onClick={() => setFiltroPagamento("pago")}
+            title="Mostrar clientes com tudo pago"
+          >
+            Pago
+          </button>
+          <button
+            className={`view-toggle-btn ${filtroPagamento === "naoPago" ? "active" : ""}`}
+            onClick={() => setFiltroPagamento("naoPago")}
+            title="Mostrar clientes com dívida em aberto"
+          >
+            Não pago
+          </button>
+        </div>
 
         <div className="view-toggle">
           <button
