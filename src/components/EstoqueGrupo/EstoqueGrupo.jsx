@@ -11,6 +11,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
         switch (categoria.toLowerCase()) {
             case "proteínas":
             case "proteinas":
+            case "protenas":
             case "carnes":
             case "carnes e aves":
             case "aves":
@@ -32,7 +33,11 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             case "oleos":
             case "óleos":
             case "oleos e gordura":
+            case "oleos e gorduras":
             case "óleos e gordura":
+            case "óleos e gorduras":
+            case "leos e gordura":
+            case "leos e gorduras":
             case "gordura":
                 return <Droplet size={28} />
 
@@ -44,6 +49,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
             case "laticínios":
             case "laticinios":
+            case "laticnios":
             case "laticã­nios":
                 return <Milk size={28} />;
 
@@ -52,6 +58,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
             case "grãos e secos":
             case "graos e secos":
+            case "gros e secos":
             case "grãos":
             case "graos":
             case "grãos e cereais":
