@@ -25,8 +25,8 @@ jobs:
       - name: Build and push (lucaspaessptech/toomate:frontend)
         uses: docker/build-push-action@v6
         with:
-          context: ./frontend
-          file: ./frontend/Dockerfile
+          context: .
+          file: ./Dockerfile
           push: true
           tags: lucaspaessptech/toomate:frontend
           cache-from: type=gha
