@@ -34,6 +34,28 @@ export default function CadastroLote() {
   const location = useLocation();
 
   const dados = location.state?.insumo;
+
+  function extrairLista(resposta, chavesFallback = []) {
+    if (Array.isArray(resposta)) {
+      return resposta;
+    }
+
+    for (const chave of chavesFallback) {
+      if (Array.isArray(resposta?.[chave])) {
+        return resposta[chave];
+      }
+    }
+
+    return [];
+  }
+
+  function mapearFornecedor(item) {
+    return {
+      id: String(item?.idFornecedor ?? item?.id ?? ""),
+      razaoSocial: String(item?.razaoSocial ?? item?.nome ?? "Fornecedor sem nome"),
+    };
+  }
+
   useEffect(() => {
     if (dados) {
       console.log(dados)
@@ -47,7 +69,7 @@ export default function CadastroLote() {
   async function fetchInsumos() {
     try {
       const response = await insumos.listar();
-      setListaInsumos(Array.isArray(response) ? response : []);
+      setListaInsumos(extrairLista(response, ["insumos", "content", "data"]));
     } catch {
       setListaInsumos([]);
     }
@@ -56,7 +78,7 @@ export default function CadastroLote() {
   async function fetchMarcas() {
     try {
       const response = await MarcaApi.listar();
-      setListaMarcas(Array.isArray(response) ? response : []);
+      setListaMarcas(extrairLista(response, ["marcas", "content", "data"]));
     } catch {
       setListaMarcas([]);
     }
@@ -64,8 +86,11 @@ export default function CadastroLote() {
 
   async function fetchFornecedores() {
     try {
-      const response = await FornecedorApi.listar();
-      setListaFornecedores(Array.isArray(response) ? response : []);
+      const response = await FornecedorApi.listar({ tamanho: 999 });
+      const fornecedoresNormalizados = extrairLista(response, ["fornecedores", "content", "data", "conteudo"]).map(
+        mapearFornecedor
+      );
+      setListaFornecedores(fornecedoresNormalizados);
     } catch {
       setListaFornecedores([]);
     }
@@ -428,7 +453,7 @@ export default function CadastroLote() {
         >
           <option value="0">Selecione o fornecedor</option>
           {(listaFornecedores ?? []).map((fornecedor) => (
-            <option key={fornecedor.idFornecedor} value={fornecedor.idFornecedor}>{fornecedor.razaoSocial}</option>
+            <option key={fornecedor.id} value={fornecedor.id}>{fornecedor.razaoSocial}</option>
           ))}
         </select>
       </FormModal>
