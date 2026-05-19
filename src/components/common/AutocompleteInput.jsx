@@ -10,8 +10,9 @@ export default function AutocompleteInput({
 }) {
   const [mostrarSugestoes, setMostrarSugestoes] = useState(false);
 
+  const termosDigitado = String(value ?? "").trim().toLowerCase();
   const opcoesFiltradas = (options ?? [])
-    .filter((opcao) => opcao.label.toLowerCase().includes(String(value ?? "").trim().toLowerCase()))
+    .filter((opcao) => opcao.label.toLowerCase().includes(termosDigitado))
     .slice(0, 6);
 
   function selecionarPorTextoExato(texto) {
@@ -28,8 +29,8 @@ export default function AutocompleteInput({
     <div className="input-wrapper" style={{ position: "relative", width: "100%" }}>
       <input
         className={className}
-        placeholder={placeholder}
-        value={value}
+        placeholder={placeholder || "Selecione"}
+        value={value ?? ""}
         onFocus={() => setMostrarSugestoes(true)}
         onBlur={() => {
           selecionarPorTextoExato(value);
@@ -39,6 +40,14 @@ export default function AutocompleteInput({
           onValueChange(e.target.value);
           onSelect(null);
           setMostrarSugestoes(true);
+        }}
+        style={{
+          width: "100%",
+          color: "#000",
+          background: "#fff",
+          caretColor: "#000",
+          WebkitTextFillColor: "#000",
+          opacity: 1,
         }}
       />
 
@@ -75,6 +84,7 @@ export default function AutocompleteInput({
                 border: "none",
                 background: "transparent",
                 cursor: "pointer",
+                color: "#000",
               }}
             >
               {opcao.label}

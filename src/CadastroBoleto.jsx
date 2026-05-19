@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import AutocompleteInput from "./components/common/AutocompleteInput";
 import { boletos } from "./provider/Api";
 
 export default function CadastroBoleto() {
@@ -98,22 +99,18 @@ export default function CadastroBoleto() {
 
             <span>Categoria</span>
             <div className="input-wrapper">
-              <select
-                className="selectCategoriaBoleto"
-                value={categoriaSelecionada || ""}
-                onChange={(e) => {
-                  const selectedValue = e.target.value;
-
-                  setCategoriaSelecionada(selectedValue);
+              <AutocompleteInput
+                options={categorias}
+                value={categoriaSelecionada}
+                onValueChange={(v) => setCategoriaSelecionada(v)}
+                onSelect={(opcao) => {
+                  if (opcao) {
+                    setCategoriaSelecionada(opcao.label);
+                  }
                 }}
-              >
-                <option value="">Selecione uma categoria</option>
-                {categorias.map((categoria, index) => (
-                  <option key={index} value={categoria.label}>
-                    {categoria.label}
-                  </option>
-                ))}
-              </select>
+                placeholder="Selecione uma categoria"
+                className="selectCategoriaBoleto"
+              />
             </div>
 
             <span>Valor</span>

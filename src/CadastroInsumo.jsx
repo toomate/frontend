@@ -247,16 +247,6 @@ export default function CadastroInsumo() {
               className="selectUnidade"
             />
 
-            <button
-              type="button"
-              className="eye-btn1"
-              onClick={() => {
-                setErroModalMedida("");
-                setNovaMedidaRotatividade("false");
-                setAbrirModalMedida(true);
-              }}
-            >
-            </button>
           </div>
 
           <span>Quantidade Mínima</span>

@@ -3,6 +3,7 @@ import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import FormModal from "./components/common/FormModal";
+import AutocompleteInput from "./components/common/AutocompleteInput";
 import { FornecedorApi, Lote, MarcaApi, insumos } from "./provider/Api";
 import { useLocation } from "react-router-dom";
 
@@ -96,8 +97,19 @@ export default function CadastroLote() {
   }));
 
   const marcasFiltradas = (listaMarcas ?? []).filter((marca) => {
-    if (!idInsumoSelecionado) return true;
-    return Number(marca?.insumo?.idInsumo) === Number(idInsumoSelecionado);
+    // Determina qual insumo será finalmente usado
+    let insumoParaFiltro = idInsumoSelecionado;
+    if (!insumoParaFiltro && insumoSelecionado) {
+      const insumoEncontrado = (listaInsumos ?? []).find(
+        (insumo) => String(insumo?.nome ?? "").trim().toLowerCase() === String(insumoSelecionado).trim().toLowerCase()
+      );
+      if (insumoEncontrado) {
+        insumoParaFiltro = insumoEncontrado.idInsumo;
+      }
+    }
+    
+    if (!insumoParaFiltro) return false; // Sem insumo válido, não mostra marcas
+    return Number(marca?.insumo?.idInsumo) === Number(insumoParaFiltro);
   });
 
   async function cadastrarLote(event) {
@@ -105,17 +117,39 @@ export default function CadastroLote() {
     setErroFormulario("");
 
     const idMarca = Number(idMarcaSelecionada);
-    const preco = Number(precoUnitario);
+    
+    // Converte preço formatado (ex: "R$ 100,00") para número
+    const precoFormatado = String(precoUnitario ?? "").replace(/\D/g, "");
+    const preco = precoFormatado ? Number(precoFormatado) / 100 : 0;
+    
     const qtd = Number(quantidade);
     const idUsuario = Number(localStorage.getItem("usuarioId"));
 
-    if (!idInsumoSelecionado) {
+    // Se idInsumoSelecionado é nulo, tenta encontrar o insumo pelo nome digitado
+    let idInsumoFinal = idInsumoSelecionado;
+    if (!idInsumoFinal && insumoSelecionado) {
+      const insumoEncontrado = (listaInsumos ?? []).find(
+        (insumo) => String(insumo?.nome ?? "").trim().toLowerCase() === String(insumoSelecionado).trim().toLowerCase()
+      );
+      if (insumoEncontrado) {
+        idInsumoFinal = insumoEncontrado.idInsumo;
+      }
+    }
+
+    if (!idInsumoFinal) {
       setErroFormulario("Selecione um insumo valido no autocomplete.");
       return;
     }
 
     if (!Number.isFinite(idMarca) || idMarca <= 0) {
       setErroFormulario("Selecione uma marca valida.");
+      return;
+    }
+
+    // Valida que a marca selecionada pertence ao insumo selecionado
+    const marcaSelecionada = (listaMarcas ?? []).find(m => Number(m?.idMarca) === idMarca);
+    if (marcaSelecionada && Number(marcaSelecionada?.insumo?.idInsumo) !== idInsumoFinal) {
+      setErroFormulario("A marca selecionada não pertence ao insumo escolhido.");
       return;
     }
 
@@ -248,28 +282,25 @@ export default function CadastroLote() {
           {/* Nome do insumo */}
           <span>Nome</span>
           <div className="input-wrapper">
-            <select
-              className="selectNome"
-              value={idInsumoSelecionado ?? ""}
-              onChange={(e) => {
-                const selectedId = Number(e.target.value);
-
-                const insumo = listaInsumos.find(
-                  (i) => Number(i.idInsumo) === selectedId
-                );
-
-                setIdInsumoSelecionado(selectedId || null);
-                setInsumoSelecionado(insumo?.nome ?? "");
+            <AutocompleteInput
+              options={opcoesInsumo}
+              value={insumoSelecionado}
+              onValueChange={(v) => {
+                setInsumoSelecionado(v);
+                setIdInsumoSelecionado(null);
                 setIdMarcaSelecionada("0");
               }}
-            >
-              <option value="">Selecione um insumo</option>
-              {listaInsumos.map((insumo) => (
-                <option key={insumo.idInsumo} value={insumo.idInsumo}>
-                  {insumo.nome}
-                </option>
-              ))}
-            </select>
+              onSelect={(opcao) => {
+                if (!opcao) return;
+                // opcao may include idInsumo
+                const id = opcao.idInsumo ?? opcao.id;
+                setIdInsumoSelecionado(id ? Number(id) : null);
+                setInsumoSelecionado(opcao.label ?? "");
+                setIdMarcaSelecionada("0");
+              }}
+              placeholder="Selecione um insumo"
+              className="selectNome"
+            />
           </div>
 
           {/* Marca */}
