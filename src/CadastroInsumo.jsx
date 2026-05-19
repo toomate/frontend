@@ -3,6 +3,7 @@ import "./App.css";
 import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import FormModal from "./components/common/FormModal";
+import AutocompleteInput from "./components/common/AutocompleteInput";
 import { CategoriaApi, insumos } from "./provider/Api";
 
 export default function CadastroInsumo() {
@@ -233,18 +234,18 @@ export default function CadastroInsumo() {
           {/* Medida */}
           <span>Unidade de Medida</span>
           <div className="input-wrapper">
-            <select
-              className="selectUnidade"
+            <AutocompleteInput
+              options={opcoesUnidade}
               value={unidadeMedida}
-              onChange={e => {
-                setUnidadeMedida(e.target.value);
+              onValueChange={setUnidadeMedida}
+              onSelect={(opcao) => {
+                if (opcao) {
+                  setUnidadeMedida(opcao.label);
+                }
               }}
-            >
-              <option value="" disabled>Selecione</option>
-              {opcoesUnidade.map(opcao => (
-                <option key={opcao.id} value={opcao.label}>{opcao.label}</option>
-              ))}
-            </select>
+              placeholder="Selecione uma unidade"
+              className="selectUnidade"
+            />
 
             <button
               type="button"
@@ -255,7 +256,6 @@ export default function CadastroInsumo() {
                 setAbrirModalMedida(true);
               }}
             >
-              <Plus size={18} />
             </button>
           </div>
 
