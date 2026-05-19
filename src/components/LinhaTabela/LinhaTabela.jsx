@@ -20,8 +20,36 @@ function obterDiasRestantes(diasRestantes) {
     return Number.isFinite(numero) ? numero : null
 }
 
-function renderizarDiasRestantes(diasRestantes) {
+function obterClasseUrgencia(diasRestantes, statusBruto = "") {
     const numero = obterDiasRestantes(diasRestantes)
+    const statusNormalizado = String(statusBruto ?? "").toLowerCase()
+
+    if (numero !== null && numero < 0) {
+        return "badge-status-vencido"
+    }
+
+    if (numero === 0 || statusNormalizado.includes("hoje")) {
+        return "badge-status-hoje"
+    }
+
+    if (statusNormalizado.includes("vencid")) {
+        return "badge-status-vencido"
+    }
+
+    if (numero !== null && numero <= 7) {
+        return "badge-status-alerta"
+    }
+
+    if (statusNormalizado.includes("ok") || statusNormalizado.includes("valid") || statusNormalizado.includes("normal")) {
+        return "badge-status-normal"
+    }
+
+    return "badge-status-neutro"
+}
+
+function renderizarDiasRestantes(diasRestantes, statusBruto = "") {
+    const numero = obterDiasRestantes(diasRestantes)
+    const classeUrgencia = obterClasseUrgencia(diasRestantes, statusBruto)
 
     if (numero === null) {
         return <span className="badge-status badge-status-neutro">{diasRestantes ?? "-"}</span>
@@ -29,16 +57,16 @@ function renderizarDiasRestantes(diasRestantes) {
 
     if (numero < 0) {
         return (
-            <span className="badge-status badge-status-vencido">
+            <span className={`badge-status ${classeUrgencia}`}>
                 <Skull size={16} strokeWidth={2.2} />
-                <span className="badge-texto">Vencido</span>
+                <span className="badge-texto">Vencido há {Math.abs(numero)} dia{Math.abs(numero) === 1 ? "" : "s"}</span>
             </span>
         )
     }
 
     if (numero === 0) {
         return (
-            <span className="badge-status badge-status-hoje">
+            <span className={`badge-status ${classeUrgencia}`}>
                 <AlertTriangle size={16} strokeWidth={2.2} />
                 <span className="badge-texto">Hoje</span>
             </span>
@@ -46,7 +74,7 @@ function renderizarDiasRestantes(diasRestantes) {
     }
 
     return (
-        <span className="badge-status badge-status-normal">
+        <span className={`badge-status ${classeUrgencia}`}>
             {numero} dia{numero === 1 ? "" : "s"}
         </span>
     )
@@ -129,7 +157,7 @@ export default function LinhaTabela(props) {
                             <span className="linha-valor">{formatarData(atual.dtVencimento)}</span>
                         </div>
                         <div className="linha-tabela linha-estoque" data-label="Dias Restantes">
-                            <span className="linha-valor">{renderizarDiasRestantes(atual.diasRestantes)}</span>
+                            <span className="linha-valor">{renderizarDiasRestantes(atual.diasRestantes, atual.status)}</span>
                         </div>
                         <div className="linha-tabela linha-estoque" data-label="Status">
                             <span className="linha-valor">{renderizarStatus(atual)}</span>

@@ -1,5 +1,5 @@
 .tabela-insumo-container {
-    height: 100px;
+    min-height: 118px;
     display: flex;
     font-size: 1rem;
 }

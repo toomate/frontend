@@ -4,7 +4,7 @@
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
-    max-height: 100vh;
+    height: 91vh;
     box-sizing: border-box;
     overflow-y: auto;
 }
@@ -110,7 +110,7 @@
     background: rgba(255, 255, 255, 0.94);
     align-items: center;
     min-height: 50vh;
-    height: auto;
+    height: 80%;
     width: min(95%);
     flex-direction: column;
     margin: 5px;
@@ -144,6 +144,7 @@
 .tabela-container .linha-tabela {
     font-size: 15px;
     font-weight: 600;
+    line-height: 0.8
 }
 
 .tabela-container #vencido {

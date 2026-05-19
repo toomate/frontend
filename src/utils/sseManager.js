@@ -13,6 +13,9 @@ class sseManager {
     // 👇 estado persistente de notificações
     this.notifications = [];
 
+    this.reconnectAttempts = 0; // Track reconnection attempts
+    this.maxReconnectAttempts = 5; // Limit reconnection attempts
+
     this.init();
   }
 
@@ -83,53 +86,70 @@ class sseManager {
   startSSE() {
     if (this.eventSource) return;
 
-    this.eventSource = new EventSource(SSE_URL);
+    const clientId = localStorage.getItem("usuarioId");
+
+    if (!clientId) {
+      console.warn("SSE nao iniciado: usuarioId ausente.");
+      return;
+    }
+
+    console.log("Iniciando SSE para clienteId:", clientId);
+    const sseUrlWithClient = `${SSE_URL.replace(/\/$/, "")}/${encodeURIComponent(clientId)}`;
+    console.log("URL SSE:", sseUrlWithClient);
+
+    this.eventSource = new EventSource(sseUrlWithClient);
+
+    this.eventSource.onopen = () => {
+      console.log("SSE conectado com sucesso.");
+      this.reconnectAttempts = 0; // Reset attempts on successful connection
+    };
 
     this.eventSource.onmessage = (event) => {
+      console.log("Raw SSE data received:", event.data);
       const data = event.data;
 
-      // Distribui para outras abas
       this.channel.postMessage(data);
 
-      // Processa localmente
       this.handleIncomingData(data);
     };
 
     this.eventSource.onerror = () => {
-      console.log("Erro SSE, reconectando...");
-      this.eventSource.close();
-      this.eventSource = null;
+      if (this.eventSource?.readyState === EventSource.CLOSED) {
+        console.log("Erro SSE, reconectando...");
+        this.eventSource = null;
 
-      setTimeout(() => this.startSSE(), 3000);
+        if (this.reconnectAttempts < this.maxReconnectAttempts) {
+          this.reconnectAttempts++;
+          setTimeout(() => this.startSSE(), 3000);
+        } else {
+          console.error("SSE reconexão falhou após várias tentativas.");
+        }
+        return;
+      }
+
+      console.log("SSE temporariamente indisponivel, aguardando reconexao automatica...");
     };
   }
 
-  // =========================
-  // 🟡 PROCESSAMENTO DE DADOS
-  // =========================
+handleIncomingData(rawData) {
+  try {
+    const parsed = JSON.parse(rawData);
+    const incoming = Array.isArray(parsed) ? parsed : [parsed];
 
-  handleIncomingData(rawData) {
-    try {
-      const parsed = JSON.parse(rawData);
+    const objects = incoming.map(item =>
+      typeof item === "string" ? JSON.parse(item) : item
+    );
 
-      // 👇 aqui você pode filtrar por tipo depois
-      this.notifications = [parsed, ...this.notifications].slice(0, 50);
-
-      this.notifyListeners();
-
-    } catch (err) {
-      console.error("Erro ao processar SSE:", err);
-    }
+    this.notifications = [...objects, ...this.notifications].slice(0, 50);
+    this.notifyListeners();
+  } catch (err) {
+    console.error("Erro ao processar SSE:", err);
   }
-
-  // =========================
-  // 🟣 SUBSCRIBE
-  // =========================
+}
 
   subscribe(callback) {
     this.listeners.push(callback);
 
-    // Envia estado atual imediatamente
     callback(this.notifications);
 
     return () => {
