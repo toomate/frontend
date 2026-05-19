@@ -56,6 +56,34 @@ export default function CadastroLote() {
     };
   }
 
+  function resolverInsumoFinal() {
+    if (idInsumoSelecionado) {
+      return {
+        id: Number(idInsumoSelecionado),
+        nome: String(insumoSelecionado ?? ""),
+      };
+    }
+
+    if (!insumoSelecionado) {
+      return null;
+    }
+
+    const insumoEncontrado = (listaInsumos ?? []).find(
+      (insumo) =>
+        String(insumo?.nome ?? "").trim().toLowerCase() ===
+        String(insumoSelecionado).trim().toLowerCase()
+    );
+
+    if (!insumoEncontrado) {
+      return null;
+    }
+
+    return {
+      id: Number(insumoEncontrado.idInsumo),
+      nome: String(insumoEncontrado.nome ?? ""),
+    };
+  }
+
   useEffect(() => {
     if (dados) {
       console.log(dados)
@@ -106,14 +134,9 @@ export default function CadastroLote() {
     if (abrirModal === "marca") {
       setErroModalMarca("");
       setNovaMarca("");
-      setNovoIdInsumoMarca(idInsumoSelecionado ? String(idInsumoSelecionado) : "0");
-      const insumoAtual = (listaInsumos ?? []).find(
-        (insumo) => Number(insumo?.idInsumo) === Number(idInsumoSelecionado)
-      );
-      setNovoInsumoMarcaTexto(insumoAtual?.nome ?? "");
       setNovoIdFornecedorMarca("0");
     }
-  }, [abrirModal, idInsumoSelecionado, listaInsumos]);
+  }, [abrirModal]);
 
   const opcoesInsumo = (listaInsumos ?? []).map((insumo) => ({
     id: String(insumo?.idInsumo ?? ""),
@@ -122,19 +145,10 @@ export default function CadastroLote() {
   }));
 
   const marcasFiltradas = (listaMarcas ?? []).filter((marca) => {
-    // Determina qual insumo será finalmente usado
-    let insumoParaFiltro = idInsumoSelecionado;
-    if (!insumoParaFiltro && insumoSelecionado) {
-      const insumoEncontrado = (listaInsumos ?? []).find(
-        (insumo) => String(insumo?.nome ?? "").trim().toLowerCase() === String(insumoSelecionado).trim().toLowerCase()
-      );
-      if (insumoEncontrado) {
-        insumoParaFiltro = insumoEncontrado.idInsumo;
-      }
-    }
-    
-    if (!insumoParaFiltro) return false; // Sem insumo válido, não mostra marcas
-    return Number(marca?.insumo?.idInsumo) === Number(insumoParaFiltro);
+    const insumoFinal = resolverInsumoFinal();
+
+    if (!insumoFinal) return false;
+    return Number(marca?.insumo?.idInsumo) === Number(insumoFinal.id);
   });
 
   async function cadastrarLote(event) {
@@ -150,16 +164,8 @@ export default function CadastroLote() {
     const qtd = Number(quantidade);
     const idUsuario = Number(localStorage.getItem("usuarioId"));
 
-    // Se idInsumoSelecionado é nulo, tenta encontrar o insumo pelo nome digitado
-    let idInsumoFinal = idInsumoSelecionado;
-    if (!idInsumoFinal && insumoSelecionado) {
-      const insumoEncontrado = (listaInsumos ?? []).find(
-        (insumo) => String(insumo?.nome ?? "").trim().toLowerCase() === String(insumoSelecionado).trim().toLowerCase()
-      );
-      if (insumoEncontrado) {
-        idInsumoFinal = insumoEncontrado.idInsumo;
-      }
-    }
+    const insumoFinal = resolverInsumoFinal();
+    const idInsumoFinal = insumoFinal?.id;
 
     if (!idInsumoFinal) {
       setErroFormulario("Selecione um insumo valido no autocomplete.");
@@ -238,7 +244,8 @@ export default function CadastroLote() {
   async function cadastrarMarcaPeloModal() {
     setErroModalMarca("");
     const nome = novaMarca.trim();
-    const fkInsumo = Number(novoIdInsumoMarca);
+    const insumoFinal = resolverInsumoFinal();
+    const fkInsumo = Number(insumoFinal?.id);
     const fkFornecedor = Number(novoIdFornecedorMarca);
 
     if (!nome) {
@@ -247,7 +254,7 @@ export default function CadastroLote() {
     }
 
     if (!Number.isFinite(fkInsumo) || fkInsumo <= 0) {
-      setErroModalMarca("Selecione um insumo valido para a marca.");
+      setErroModalMarca("Selecione um insumo valido no cadastro do lote.");
       return;
     }
 
@@ -267,8 +274,6 @@ export default function CadastroLote() {
       await fetchMarcas();
       setAbrirModal(null);
       setNovaMarca("");
-      setNovoIdInsumoMarca("0");
-      setNovoInsumoMarcaTexto("");
       setNovoIdFornecedorMarca("0");
 
       if (marcaCriada?.idMarca) {
@@ -430,21 +435,13 @@ export default function CadastroLote() {
           onChange={(e) => setNovaMarca(e.target.value)}
         />
 
-        <select
+        <input
           className="modal-input"
-          value={novoIdInsumoMarca}
-          onChange={e => {
-            const selectedId = e.target.value;
-            setNovoIdInsumoMarca(selectedId);
-            const found = (opcoesInsumo ?? []).find(opcao => String(opcao.id) === String(selectedId));
-            setNovoInsumoMarcaTexto(found ? found.label : "");
-          }}
-        >
-          <option value="0" disabled>Selecione o insumo</option>
-          {(opcoesInsumo ?? []).map(opcao => (
-            <option key={opcao.id} value={opcao.id}>{opcao.label}</option>
-          ))}
-        </select>
+          type="text"
+          value={resolverInsumoFinal()?.nome ?? ""}
+          placeholder="Insumo selecionado no lote"
+          disabled
+        />
 
         <select
           className="modal-input"
