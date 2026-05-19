@@ -1,4 +1,4 @@
-name: Build and publish Docker image (frontend)
+name: CI/CD para EC2 pública
 
 on:
   push:
@@ -6,13 +6,11 @@ on:
       - main
 
 jobs:
-  docker:
+  build_FE:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
 
     steps:
-      - name: Checkout
+      - name: Checkout do Repositório
         uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
@@ -27,9 +25,22 @@ jobs:
       - name: Build and push (lucaspaessptech/toomate:frontend)
         uses: docker/build-push-action@v6
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./frontend
+          file: ./frontend/Dockerfile
           push: true
           tags: lucaspaessptech/toomate:frontend
           cache-from: type=gha
           cache-to: type=gha,mode=max
+
+      - name: Recriar frontend na instância pública
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ubuntu
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker pull lucaspaessptech/toomate:frontend
+            docker stop frontend || true
+            docker rm frontend || true
+            docker network create toomate_network || true
+            docker run --network toomate_network --env-file /etc/toomate/containers.env --name frontend -p 80:80 -d lucaspaessptech/toomate:frontend
