@@ -11,6 +11,7 @@ import { Plus } from 'lucide-react';
 export default function Boletos() {
   const navigate = useNavigate();
   const [boletoLista, setBoletos] = useState([]);
+  const categorias = Array.from(new Set(boletoLista.map((b) => b.categoria).filter(Boolean)));
   const [filtroMes, setFiltroMes] = useState("proximo");
   const [filtroStatus, setFiltroStatus] = useState("");
   const [filtroTipo, setFiltroTipo] = useState("");
@@ -176,7 +177,9 @@ export default function Boletos() {
 
             <select value={filtroTipo} onChange={(e) => setFiltroTipo(e.target.value)}>
               <option value="">Tipo</option>
-              {boletoLista.map((boleto) => <option key={boleto.id} value={boleto.categoria}>{boleto.categoria}</option>)}
+              {categorias.map((cat) => (
+                <option key={cat} value={cat}>{cat}</option>
+              ))}
             </select>
 
             <div className="busca">

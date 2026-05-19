@@ -11,6 +11,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
         switch (categoria.toLowerCase()) {
             case "proteínas":
             case "proteinas":
+            case "protenas":
             case "carnes":
             case "carnes e aves":
             case "aves":
@@ -32,7 +33,11 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             case "oleos":
             case "óleos":
             case "oleos e gordura":
+            case "oleos e gorduras":
             case "óleos e gordura":
+            case "óleos e gorduras":
+            case "leos e gordura":
+            case "leos e gorduras":
             case "gordura":
                 return <Droplet size={28} />
 
@@ -44,6 +49,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
             case "laticínios":
             case "laticinios":
+            case "laticnios":
             case "laticã­nios":
                 return <Milk size={28} />;
 
@@ -52,6 +58,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
 
             case "grãos e secos":
             case "graos e secos":
+            case "gros e secos":
             case "grãos":
             case "graos":
             case "grãos e cereais":
@@ -86,7 +93,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
     }
 
     return (<div className="grupo-geral">
-        <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)} id={grupo.qtdTotal < grupo.qtdMinima ? "vencido" : ""}>
+        <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)} id={grupo.qtdAtual < grupo.qtdMinima ? "vencido" : ""}>
             <div className="insumo" ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
@@ -94,13 +101,12 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
                 <div className="insumo-icon">{pegarIcone(grupo.categoria)}</div>
                 <div className="insumo-nome">{grupo.insumo}</div>
             </div>
-            <div className="qtd-medida">{`${(truncar(grupo.qtdTotal))}${grupo.medida}`}
-                {grupo.qtdAtual < grupo.qtdMinima
-                    ? (<TriangleAlert style={{ color: "darkred" }} />)
-                    : (<CheckCircle style={{ color: "green" }} />)}
+            <div className="qtd-medida">
             </div>
-            <div className="qtd-medida">{`${grupo.qtdMinima}`}</div>
-            <div className="volume">{grupo.qtdAtual}</div>
+            <div className="qtd-minima">{`${grupo.qtdMinima}`}</div>
+            <div className="volume">{grupo.qtdAtual}{grupo.qtdAtual < grupo.qtdMinima
+                ? (<TriangleAlert style={{ color: "darkred" }} />)
+                : (<CheckCircle style={{ color: "green" }} />)}</div>
             <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
         </div>
         {expandido && (
