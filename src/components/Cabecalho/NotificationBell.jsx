@@ -6,13 +6,44 @@ export default function NotificationBell() {
   const notifications = useNotifications();
   const [open, setOpen] = useState(false);
 
-  // ✅ notifications já é array de objetos — só agrupar
-  const groupedNotifications = notifications.reduce((acc, msg) => {
-    const { id, timestamp, body } = msg;
-    if (!acc[id]) acc[id] = [];
-    acc[id].push({ timestamp, ...body });
-    return acc;
-  }, {});
+  const processNotifications = (rawData) => {
+    try {
+      const groupedMessages = rawData.reduce((acc, message) => {
+        const { id, timestamp, body } = message;
+
+        if (!id || !body) {
+          console.warn("Notification missing required fields:", message);
+          return acc;
+        }
+
+        // Determine group based on the first character of the ID
+        const groupKey = id[0].toLowerCase();
+        let groupName = "Outros";
+
+        if (groupKey === "e") {
+          groupName = "Estoque";
+        } else if (groupKey === "v") {
+          groupName = "Vencimento";
+        } else if (groupKey === "b") {
+          groupName = "Boleto";
+        }
+
+        if (!acc[groupName]) {
+          acc[groupName] = [];
+        }
+
+        acc[groupName].push({ timestamp, ...body });
+        return acc;
+      }, {});
+
+      return groupedMessages;
+    } catch (error) {
+      console.error("Failed to process notifications:", error);
+      return {};
+    }
+  };
+
+  const groupedNotifications = processNotifications(notifications);
 
   return (
     <div className="notif-container">
@@ -31,10 +62,10 @@ export default function NotificationBell() {
             <p className="empty">Nenhuma notificação</p>
           )}
 
-          {Object.keys(groupedNotifications).map((id) => (
-            <div key={id} className="notif-group">
-              <h5>Grupo: {id}</h5>
-              {groupedNotifications[id].map((msg, index) => (
+          {Object.keys(groupedNotifications).map((groupName) => (
+            <div key={groupName} className="notif-group">
+              <h5>{groupName}</h5>
+              {groupedNotifications[groupName].map((msg, index) => (
                 <div key={index} className="notif-item">
                   <strong>{msg.nome}</strong>
                   <p>Quantidade Atual: {msg.quantidadeAtual}</p>
