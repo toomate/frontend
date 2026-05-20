@@ -3,7 +3,7 @@ import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { data, useNavigate } from "react-router-dom";
 import AutocompleteInput from "./components/common/AutocompleteInput";
-import { boletos } from "./provider/Api";
+import { boletos, FornecedorApi } from "./provider/Api";
 
 export default function CadastroBoleto() {
   const navigate = useNavigate();
@@ -13,6 +13,9 @@ export default function CadastroBoleto() {
   const [novaCategoriaBoleto, setNovaCategoriaBoleto] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [categoriaSelecionada, setCategoriaSelecionada] = useState("");
+  const [fornecedores, setFornecedores] = useState([]);
+  const [fornecedorSelecionado, setFornecedorSelecionado] = useState(null);
+  const [fornecedorValue, setFornecedorValue] = useState("");
   const [titulo, setTitulo] = useState("");
   const [valor, setValor] = useState("");
   const [dataVencimento, setDataVencimento] = useState("");
@@ -35,20 +38,40 @@ export default function CadastroBoleto() {
         return;
       }
 
-      await boletos.criar({
+      // tenta resolver fornecedor pela string digitada caso nao exista selecao
+      let escolhido = fornecedorSelecionado;
+      if (!escolhido && fornecedorValue) {
+        const encontrado = (fornecedores || []).find(
+          (f) => String(f.label ?? "").trim().toLowerCase() === String(fornecedorValue ?? "").trim().toLowerCase()
+        );
+        if (encontrado) escolhido = encontrado;
+      }
+
+      const payload = {
         descricao: titulo,
         categoria: categoriaSelecionada,
         pago: false,
         dataVencimento: dataVencimento,
         dataPagamento: null,
         valor: valorNumerico,
-      });
+      };
+
+      if (escolhido) {
+        const idNum = Number(escolhido.id);
+        payload.idFornecedor = Number.isFinite(idNum) ? idNum : escolhido.id;
+      }
+
+      console.debug("Criando boleto payload:", { payload, escolhido });
+
+      await boletos.criar(payload);
 
       setAbrirModalSucesso(true);
       setTitulo("");
       setValor("");
       setDataVencimento("");
       setCategoriaSelecionada("");
+      setFornecedorSelecionado(null);
+      setFornecedorValue("");
     } catch (error) {
       console.error("Erro ao cadastrar boleto:", error);
       setErroFormulario("Nao foi possivel cadastrar o boleto. Tente novamente.");
@@ -94,7 +117,40 @@ export default function CadastroBoleto() {
       }
     }
 
+    async function carregarFornecedores() {
+      try {
+        const resposta = await FornecedorApi.listar({ pagina: 0, tamanho: 1000 });
+
+        function extrairLista(res) {
+          if (Array.isArray(res)) return res;
+          const chaves = ["fornecedores", "data", "content", "conteudo"];
+          for (const chave of chaves) {
+            if (Array.isArray(res?.[chave])) return res[chave];
+          }
+          return [];
+        }
+
+        const data = extrairLista(resposta);
+
+        const lista = (data ?? [])
+          .map((f, i) => {
+            const label = String(f?.razaoSocial ?? f?.nome ?? f?.fantasia ?? "").trim();
+            if (!label) return null;
+            const id = String(
+              f?.id ?? f?.idFornecedor ?? f?.fkFornecedor ?? `${label}-${i}`
+            );
+            return { id, label };
+          })
+          .filter(Boolean);
+
+        setFornecedores(lista);
+      } catch {
+        setFornecedores([]);
+      }
+    }
+
     carregarCategorias();
+    carregarFornecedores();
   }, []);
 
   return (
@@ -119,8 +175,28 @@ export default function CadastroBoleto() {
                     setCategoriaSelecionada(opcao.label);
                   }
                 }}
-                placeholder="Selecione uma categoria"
+                placeholder="Insira uma categoria"
                 className="selectCategoriaBoleto"
+              />
+            </div>
+
+            <span>Fornecedor</span>
+            <div className="input-wrapper">
+              <AutocompleteInput
+                options={fornecedores}
+                value={fornecedorValue}
+                onValueChange={(v) => {
+                  setFornecedorValue(v);
+                  setFornecedorSelecionado(null);
+                }}
+                onSelect={(opcao) => {
+                  if (opcao) {
+                    setFornecedorSelecionado(opcao);
+                    setFornecedorValue(opcao.label);
+                  }
+                }}
+                placeholder="Insira um fornecedor"
+                className="selectFornecedorBoleto"
               />
             </div>
 
