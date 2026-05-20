@@ -431,16 +431,6 @@ export default function CadastroInsumo() {
                 Não quero cadastrar
               </button>
 
-
-
-
-
-
-
-
-
-
-
               <button
                 className="btn"
                 onClick={() => {navigate("/cadastro-lote");}}
