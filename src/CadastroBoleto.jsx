@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import AutocompleteInput from "./components/common/AutocompleteInput";
 import { boletos } from "./provider/Api";
 
@@ -26,11 +26,22 @@ export default function CadastroBoleto() {
     try {
       setIsCadastrando(true);
 
+      // Converte a string formatada (ex: "R$ 1.234,56") para número
+      const valorNumerico = Number((valor || "").replace(/\D/g, "")) / 100;
+
+      if (isNaN(valorNumerico)) {
+        setErroFormulario("Valor inválido");
+        setIsCadastrando(false);
+        return;
+      }
+
       await boletos.criar({
-        titulo,
-        valor: parseFloat(valor),
-        dataVencimento,
+        descricao: titulo,
         categoria: categoriaSelecionada,
+        pago: false,
+        dataVencimento: dataVencimento,
+        dataPagamento: null,
+        valor: valorNumerico,
       });
 
       setAbrirModalSucesso(true);
