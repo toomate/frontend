@@ -416,7 +416,6 @@ export default function CadastroInsumo() {
                 flexWrap: "wrap",
               }}
             >
-<<<<<<< Updated upstream
               <button
                 className="btn btn-cancelar"
                 onClick={() => {
@@ -431,29 +430,6 @@ export default function CadastroInsumo() {
               >
                 Não quero cadastrar
               </button>
-=======
-              
-            <button
-              className="btn btn-cancelar"
-              onClick={() => {
-                setAbrirModalEscolhaLote(false);
-                setSuccessType("insumo");
-                setAbrirModalSucesso(true);
-              }}
-            >
-              Não quero cadastrar
-            </button>
->>>>>>> Stashed changes
-
-
-
-
-
-
-
-
-
-
 
               <button
                 className="btn"
