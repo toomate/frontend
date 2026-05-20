@@ -283,27 +283,16 @@ export default function Fiado({ irPara }) {
         </button>
 
         <div className="view-toggle">
-          <button
-            className={`view-toggle-btn ${filtroPagamento === "todos" ? "active" : ""}`}
-            onClick={() => setFiltroPagamento("todos")}
-            title="Mostrar todos"
+          <select
+            className="filtro-select"
+            value={filtroPagamento}
+            onChange={(e) => setFiltroPagamento(e.target.value)}
+            aria-label="Filtrar por pagamento"
           >
-            Todos
-          </button>
-          <button
-            className={`view-toggle-btn ${filtroPagamento === "pago" ? "active" : ""}`}
-            onClick={() => setFiltroPagamento("pago")}
-            title="Mostrar clientes com tudo pago"
-          >
-            Pago
-          </button>
-          <button
-            className={`view-toggle-btn ${filtroPagamento === "naoPago" ? "active" : ""}`}
-            onClick={() => setFiltroPagamento("naoPago")}
-            title="Mostrar clientes com dívida em aberto"
-          >
-            Não pago
-          </button>
+            <option value="todos">Todos</option>
+            <option value="pago">Pago</option>
+            <option value="naoPago">Não pago</option>
+          </select>
         </div>
 
         <div className="view-toggle">

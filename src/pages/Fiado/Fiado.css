@@ -88,6 +88,37 @@ display: flex;
   flex-shrink: 0;
 }
 
+/* Select usado para filtro de pagamento */
+.filtro-select {
+  height: var(--fiado-control-height);
+  min-width: 10.5em;
+  padding: 0 0.85em;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background: #fff;
+  color: #000;
+  font-family: 'Arial', sans-serif;
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.filtro-select:focus {
+  outline: none;
+  box-shadow: 0 0 0 0.15em rgba(107, 68, 35, 0.18);
+  border-color: #6b4423;
+}
+
+/* Responsividade: em telas pequenas o select ocupa toda a largura disponível */
+@media (max-width: 680px) {
+  .filtro-select {
+    min-width: 100%;
+    width: 100%;
+  }
+}
+
 .view-toggle-btn {
   display: flex;
   align-items: center;
