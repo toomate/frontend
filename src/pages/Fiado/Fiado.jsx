@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import {Filter, Plus, Search, LayoutGrid, List, FileText, ArrowDown, ArrowUp} from "lucide-react";
 import { FiadoCard } from "../../components/FiadoCard/FiadoCard";
 import { FiadoModal } from "../../components/FiadoModal/FiadoModal";
+import { FiltroSelecaoMultipla } from "../../components/shared/FiltroSelecaoMultipla";
 import "./Fiado.css";
 import HeaderPadrao from '../../HeaderPadrao';
 import { clientes, dividas } from "../../provider/Api";
@@ -13,7 +14,7 @@ export default function Fiado({ irPara }) {
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
   const [ordenacao, setOrdenacao] = useState({ tipo: null, direcao: "asc" });
-  const [filtroPagamento, setFiltroPagamento] = useState("naoPago");
+  const [filtroPagamento, setFiltroPagamento] = useState(["naoPago"]);
   const [visualizacao, setVisualizacao] = useState("cards");
   const [fiadoSelecionado, setFiadoSelecionado] = useState(null);
 
@@ -74,15 +75,23 @@ export default function Fiado({ irPara }) {
       );
     })
     .filter((f) => {
-      if (filtroPagamento === "pago") {
+      if (filtroPagamento.length > 0 && !filtroPagamento.includes("pago") && !filtroPagamento.includes("naoPago")) {
+        return true;
+      }
+
+      if (filtroPagamento.includes("pago") && !filtroPagamento.includes("naoPago")) {
         return fiadoEstaPago(f);
       }
 
-      if (filtroPagamento === "naoPago") {
+      if (filtroPagamento.includes("naoPago") && !filtroPagamento.includes("pago")) {
         return fiadoTemDividasEmAberto(f);
       }
 
-      return true;
+      if (filtroPagamento.length === 0) {
+        return true;
+      }
+
+      return fiadoEstaPago(f) || fiadoTemDividasEmAberto(f);
     })
     .sort((a, b) => {
       if (ordenacao.tipo === "nome") {
@@ -243,6 +252,19 @@ export default function Fiado({ irPara }) {
     );
   };
 
+  const opcoesFiltroPagamento = [
+    { id: "pago", nome: "Pago" },
+    { id: "naoPago", nome: "Não pago" },
+  ];
+
+  const aoAlternarFiltroPagamento = (valor) => {
+    setFiltroPagamento([valor]);
+  };
+
+  const aoLimparFiltroPagamento = () => {
+    setFiltroPagamento([]);
+  };
+
   return (
     <div className="fiado-page">
       <HeaderPadrao titulo="Fiados" irPara={irPara} />
@@ -282,18 +304,20 @@ export default function Fiado({ irPara }) {
           </div>
         </button>
 
-        <div className="view-toggle">
-          <select
-            className="filtro-select"
-            value={filtroPagamento}
-            onChange={(e) => setFiltroPagamento(e.target.value)}
-            aria-label="Filtrar por pagamento"
-          >
-            <option value="todos">Todos</option>
-            <option value="pago">Pago</option>
-            <option value="naoPago">Não pago</option>
-          </select>
-        </div>
+        <FiltroSelecaoMultipla
+          itens={opcoesFiltroPagamento}
+          itensSelecionados={filtroPagamento}
+          aoAlternarItem={aoAlternarFiltroPagamento}
+          aoLimparSelecao={aoLimparFiltroPagamento}
+          obterValorItem={(opcao) => opcao.id}
+          obterRotuloItem={(opcao) => opcao.nome}
+          rotuloTudo="Todos"
+          rotuloTudoSelecionado="Todos"
+          rotuloItemUnicoFallback="Todos"
+          rotuloItensMuitos={(quantidade) => `${quantidade} selecionados`}
+          classeBase="fiado-filtro"
+          modoSelecao="single"
+        />
 
         <div className="view-toggle">
           <button
