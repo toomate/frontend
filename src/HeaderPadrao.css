@@ -108,10 +108,13 @@
     flex-wrap: wrap;
     padding: 10px;
     gap: 10px;
+    justify-content: flex-start;
   }
 
   .lado-esquerdo {
-    width: 70%;
+    width: auto;
+    flex: 1 1 auto;
+    min-width: 0;
     justify-content: flex-start;
     gap: 15px;
   }
@@ -127,6 +130,22 @@
 
   .restaurante-subnome {
     font-size: 12px;
+  }
+
+  .titulo-tela {
+    position: static;
+    order: 3;
+    width: 100%;
+    max-width: none;
+    transform: none;
+    padding: 0 4px;
+    text-align: left;
+    font-size: 18px;
+    line-height: 1.15;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: clip;
+    pointer-events: auto;
   }
 
   .header-right {
