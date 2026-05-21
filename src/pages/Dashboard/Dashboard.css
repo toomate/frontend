@@ -287,7 +287,7 @@
 
   .dashboard .grafico {
     margin-right: 0;
-    min-height: 300px;
+    min-height: 340px;
   }
 
   .dashboard .notificacao {
@@ -321,9 +321,14 @@
 
   .dashboard .grafico {
     width: 100%;
-    min-height: 380px;
+    min-height: 520px;
+    height: 520px;
     flex: none;
     padding: 10px;
+  }
+
+  .dashboard .chart-area {
+    min-height: 440px;
   }
 
   .dashboard .chart-page-arrow {
