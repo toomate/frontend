@@ -4,6 +4,7 @@ import React from "react"
 import "./CardRelatorio.css"
 
 export function CardRelatorio({ props = [], fechar, salvarAlteracoes, abrirCardRemocao, abrirCardRotina, loading }) {
+    console.log(props)
     return (
         <div className="container-card">
             <div className="titulo-relatorio">

@@ -156,9 +156,11 @@ export function Estoque() {
         let nomeProduto = null;
         let idInsumo = null;
         let diferenca = null;
+        console.log(grupo)
         const novoGrupo = grupo.map(item => {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
+                    console.log("atual", atual)
                     novaQtd = operacao === 'somar'
                         ? atual.quantidadeTotal + 1
                         : atual.quantidadeTotal - 1
@@ -166,7 +168,7 @@ export function Estoque() {
                     if (novaQtd < 0) novaQtd = 0;
 
                     diferenca = novaQtd - atual.quantidadeTotal
-                    nomeProduto = atual.nomeMarca
+                    nomeProduto = item.insumo
                     idInsumo = atual.idInsumo
 
                     return {

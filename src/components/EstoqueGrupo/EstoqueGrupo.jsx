@@ -78,14 +78,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
         }
     };
 
-    const formatarData = (data) => {
-        if (!data) return '';
-        const d = new Date(data);
-        const dia = String(d.getDate()).padStart(2, '0');
-        const mes = String(d.getMonth() + 1).padStart(2, '0');
-        const ano = d.getFullYear();
-        return `${dia}/${mes}/${ano}`;
-    };
+    
 
     function truncar(numero) {
         const fator = 10 ** 1;
@@ -107,7 +100,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             <div className="volume">{grupo.qtdAtual}{grupo.qtdAtual < grupo.qtdMinima
                 ? (<TriangleAlert style={{ color: "darkred" }} />)
                 : (<CheckCircle style={{ color: "green" }} />)}</div>
-            <div className="dt-vencimento">{formatarData(grupo.dtVencimento)}</div><div className="controle"></div>
+            <div className="dt-vencimento"></div><div className="controle"></div>
         </div>
         {expandido && (
             <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} />
