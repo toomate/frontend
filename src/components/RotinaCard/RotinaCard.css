@@ -1,80 +1,73 @@
 .rotina-card-container {
     background: #ffffff;
     border: 1px solid #d9bf80;
-    border-radius: 12px;
-    padding: 14px;
-    width: 100%;
-    height: 15vh;
+    border-radius: 14px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    box-shadow: 0 8px 20px rgba(107, 68, 35, 0.16);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    gap: 16px;
+    box-shadow: 0 4px 12px rgba(107, 68, 35, 0.06);
+    transition: all 0.3s ease;
+    position: relative;
 }
 
 .rotina-card-container:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 26px rgba(107, 68, 35, 0.22);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(107, 68, 35, 0.12);
+    border-color: #d9bf80;
 }
 
-.titulo-rotina-card {
+.titulo-rotina-info h3 {
+    font-size: 17px;
+    margin: 0;
+    color: #4a3321;
+    font-weight: 700;
+}
+
+.status-badge {
+    font-size: 12px;
+    color: #8c735a;
+    background: #fdf8eb;
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.rotina-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: auto;
+}
+
+.btn-icon-secundario {
+    background: #fdf2f2;
+    border: 1px solid #fee2e2;
+    color: #ef4444;
+    padding: 8px;
+    border-radius: 8px;
+    cursor: pointer;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+    justify-content: center;
+    transition: all 0.2s;
 }
 
-.titulo-rotina-card h3 {
-    font-size: 18px;
-    margin: 0;
-    color: #5a3519;
+.btn-icon-secundario:hover {
+    background: #ef4444;
+    color: white;
 }
 
-.botoes-rotina-card {
-    display: flex;
-    justify-content: space-around;
-}
-
-.botoes-rotina-card .button-container {
-    height: 34px;
+.acao-principal .button-container {
+    height: 38px;
+    border-radius: 10px;
+    background: #f8ecc6;
     border: 1px solid #6b4423;
-    border-radius: 16px;
+    color: #5a3519;
+    font-size: 12px;
 }
 
-.botoes-rotina-card .button-container .button-value {
-    font-size: 16px;
-}
-
-/* ── 990px ── */
-@media (max-width: 990px) {
-    .rotina-card-container {
-        width: 48%;
-        /* 2 colunas */
-        height: auto;
-        min-height: 13vh;
-    }
-}
-
-/* ── 480px ── */
-@media (max-width: 480px) {
-    .rotina-card-container {
-        width: 100%;
-    }
-
-    .titulo-rotina-card h3 {
-        font-size: 16px;
-    }
-
-    .botoes-rotina-card .button-container {
-        width: 30%;
-    }
-
-    .botoes-rotina-card .button-container .button-value {
-        font-size: 12px;
-    }
-
-    .botoes-rotina-card .button-container .icon-container {
-        width: 0px;
-        visibility: hidden;
-    }
+.acao-principal .button-container:hover {
+    background: #f0d98a;
 }

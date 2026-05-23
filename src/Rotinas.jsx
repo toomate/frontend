@@ -20,7 +20,7 @@ export default function Rotinas() {
     const [insumosGrupo, setInsumosGrupo] = useState([])
     const [pagina, setPagina] = useState(0)
     const [totalPaginas, setTotalPaginas] = useState(0)
-    const [tamanho, setTamanho] = useState(16)
+    const [tamanho, setTamanho] = useState(12)
     const [ordenacao, setOrdenacao] = useState("alfabetica")
     const [cardRemocao, setCardRemocao] = useState(false)
     const [cardConfirmacao, setCardConfirmacao] = useState(false)
@@ -42,7 +42,7 @@ export default function Rotinas() {
     }
 
     const avancarPag = () => {
-        if (pagina <= totalPaginas) {
+        if (pagina < totalPaginas - 1) {
             let pag = pagina + 1;
             setPagina(pag)
         }
