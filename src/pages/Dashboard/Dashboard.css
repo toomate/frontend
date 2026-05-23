@@ -88,7 +88,8 @@
 
 .dashboard .menu button:hover,
 .dashboard .btn:hover {
-  border: 1.5px solid blue;
+  border: 1.5px solid #8c730d;
+  background: #f0dfa8;
   opacity: 0.9;
 }
 
