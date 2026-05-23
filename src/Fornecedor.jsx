@@ -13,7 +13,7 @@ import "./Fornecedor.css";
 const ITENS_POR_PAGINA = 12;
 
 const estadoInicialForm = {
-  razaoSocial: "",
+  razaoSocial: "",adicionar
   telefone: "",
 };
 

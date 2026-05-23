@@ -180,25 +180,30 @@ export default function CadastroBoleto() {
               />
             </div>
 
-            <span>Fornecedor</span>
-            <div className="input-wrapper">
-              <AutocompleteInput
-                options={fornecedores}
-                value={fornecedorValue}
-                onValueChange={(v) => {
-                  setFornecedorValue(v);
-                  setFornecedorSelecionado(null);
-                }}
-                onSelect={(opcao) => {
-                  if (opcao) {
-                    setFornecedorSelecionado(opcao);
-                    setFornecedorValue(opcao.label);
-                  }
-                }}
-                placeholder="Insira um fornecedor"
-                className="selectFornecedorBoleto"
-              />
-            </div>
+            {categoriaSelecionada?.trim().toLowerCase() === "boletos fornecedores" && (
+              <>
+                <span>Fornecedor</span>
+
+                <div className="input-wrapper">
+                  <AutocompleteInput
+                    options={fornecedores}
+                    value={fornecedorValue}
+                    onValueChange={(v) => {
+                      setFornecedorValue(v);
+                      setFornecedorSelecionado(null);
+                    }}
+                    onSelect={(opcao) => {
+                      if (opcao) {
+                        setFornecedorSelecionado(opcao);
+                        setFornecedorValue(opcao.label);
+                      }
+                    }}
+                    placeholder="Insira um fornecedor"
+                    className="selectFornecedorBoleto"
+                  />
+                </div>
+              </>
+            )}
 
             <span>Valor</span>
             <input
@@ -289,11 +294,13 @@ export default function CadastroBoleto() {
 
             <button
               className="btn"
-              onClick={() => setAbrirModalSucesso(false)}
+              onClick={() => {
+                setAbrirModalSucesso(false);
+                navigate("/boletos");
+              }}
             >
               OK
             </button>
-
           </div>
         </div>
       )}
