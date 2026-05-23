@@ -117,7 +117,10 @@ export default function CadastroFornecedor() {
 
             <button
               className="btn"
-              onClick={() => setAbrirModalSucesso(false)}
+              onClick={() => {
+                setAbrirModalSucesso(false);
+                navigate("/estoque");
+              }}
             >
               OK
             </button>

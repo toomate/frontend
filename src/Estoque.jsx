@@ -306,6 +306,7 @@ export function Estoque() {
                     <div className="botoes-container">
                         <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }}/>
                         <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }}/>
+                        <ButtonPlus nome="Adicionar Fornecedor" onClick={() => { navigate("/cadastro-fornecedor") }}/>
                         <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
                         <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                         <button className="botoes-container-icon" onClick={() => { navigate("/leitor") }}>
