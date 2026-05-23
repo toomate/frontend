@@ -73,50 +73,141 @@
     height: 80vh;
 }
 
-/* ===== RESPONSIVO MOBILE ===== */
+
+/* ===== TOOLBAR CALENDARIO ===== */
+
+.rbc-toolbar {
+    display: grid !important;
+
+    grid-template-columns: 1fr auto 1fr;
+    grid-template-rows: auto auto;
+
+    align-items: center;
+
+    row-gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+/* remove agrupamento padrão */
+.rbc-btn-group {
+    display: contents;
+}
+
+/* ===== TÍTULO ===== */
+
+.rbc-toolbar-label {
+    grid-column: 1 / 4;
+    grid-row: 2;
+
+    text-align: center;
+
+    font-size: 28px;
+    font-weight: 700;
+
+    color: #000;
+
+    text-transform: capitalize;
+}
+
+/* ===== BOTÕES ===== */
+
+.rbc-toolbar button {
+    height: 36px;
+
+    width: 170px;
+
+    padding: 0 12px;
+
+    border-radius: 5px !important;
+
+    background-color: #2c3e50 !important;
+    color: white !important;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+/* Mês Atual (today) */
+.rbc-toolbar button:first-child {
+    grid-column: 2;
+    grid-row: 1;
+
+    justify-self: center;
+
+    max-width: 140px;
+    width: 100%;
+}
+
+/* Mês Anterior (previous) */
+.rbc-toolbar button:nth-child(2) {
+    grid-column: 1;
+    grid-row: 1;
+
+    justify-self: start;
+
+    max-width: 170px;
+    width: 100%;
+}
+
+/* Próximo Mês */
+.rbc-toolbar button:nth-child(3) {
+    grid-column: 3;
+    grid-row: 1;
+
+    justify-self: end;
+
+    max-width: 170px;
+    width: 100%;
+}
+
+.rbc-toolbar button:hover {
+    opacity: 0.9;
+}
+
+/* ===== MOBILE ===== */
 
 @media (max-width: 768px) {
 
-    .calendario-container {
-        padding: 10px;
+    .rbc-toolbar {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto auto;
+
+        gap: 8px;
     }
 
-    .calendar-wrapper {
-        height: 75vh;
+    .rbc-toolbar-label {
+        grid-column: 1;
+        grid-row: 1;
+
+        font-size: 20px;
     }
 
-    /* diminui fonte do calendário */
-    .rbc-month-view {
-        font-size: 11px;
+    .rbc-toolbar button:first-child,
+    .rbc-toolbar button:nth-child(2),
+    .rbc-toolbar button:nth-child(3) {
+        grid-column: 1;
+
+        justify-self: stretch;
+
+        max-width: 100%;
     }
 
-    .rbc-date-cell {
-        padding: 2px;
-        font-size: 10px;
+    .rbc-toolbar button:first-child {
+        grid-row: 2;
     }
 
-    .rbc-event {
-        font-size: 9px;
-        padding: 2px;
-        border-radius: 6px;
+    .rbc-toolbar button:nth-child(2) {
+        grid-row: 3;
     }
 
-    /* botão ver dia menor */
-    .ver-dia-btn {
-        font-size: 8px;
-        padding: 1px 4px;
+    .rbc-toolbar button:nth-child(3) {
+        grid-row: 4;
     }
-
-    /* eventos mais compactos */
-    .event-content {
-        gap: 2px;
-    }
-
-    /* remove altura exagerada das células */
-    .rbc-row-content {
-        min-height: 40px;
-    }
-
 }
 
 /* ===== MOBILE EVENT ===== */

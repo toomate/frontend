@@ -1,5 +1,28 @@
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import 'moment/locale/pt-br';
+
+moment.locale('pt-br');
+moment.updateLocale('pt-br', {
+  months: [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ],
+});
+
+
+
+const localizer = momentLocalizer(moment);
 import { useState, useEffect } from 'react';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendario.css';
@@ -13,6 +36,7 @@ export default function Calendario() {
   const location = useLocation();
   const [myEventsList, setMyEventsList] = useState(location.state?.myEventsList || []);
   const initialDate = location.state?.initialDate ? new Date(location.state.initialDate) : undefined;
+  const [currentDate, setCurrentDate] = useState(initialDate || new Date());
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
@@ -83,9 +107,7 @@ useEffect(() => {
     setSelectedBoletos(boletosDoDia);
   }
 
-  moment.locale('pt-br');
   const localizer = momentLocalizer(moment);
-
   const EVENT_BG = '#C3C3C3';
 
   // Componente customizado para o evento
@@ -170,20 +192,20 @@ useEffect(() => {
     <div className="calendar-wrapper">
       <Calendar
         localizer={localizer}
+        culture="pt-BR"
         events={events}
         startAccessor="start"
         endAccessor="end"
         views={['month']}
-        defaultDate={initialDate}
+        date={currentDate}
+        onNavigate={(date) => setCurrentDate(date)}
         style={{ height: '100%' }}
-        toolbar={false}
-        components={{
-          event: (props) => (
-            <EventComponent
-              {...props}
-              allEvents={myEventsList}
-            />
-          ),
+        toolbar={true}
+        messages={{
+          previous: 'Mês Anterior',
+          today: 'Mês Atual',
+          next: 'Próximo Mês',
+          month: 'Mês',
         }}
         eventPropGetter={() => {
           return {
