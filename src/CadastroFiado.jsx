@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import "./CadastroFiado.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { clientes, dividas } from "./provider/Api";
@@ -246,127 +246,131 @@ function adicionarPedido() {
 
   return (
     <div className="container">
-      <div className="box">
+      <div className="box2">
 
         <span className="titulo">Cadastro de Fiado</span>
 
-        <div className="caixa">
-          <form id={formId} onSubmit={cadastrarFiado}>
+        <div className="conteudo-fiado">
 
-            <span>Cliente</span>
+          <div className="caixa">
+            <form id={formId} onSubmit={cadastrarFiado}>
 
-            <div className="input-wrapper">
-              <select
-                className="selectNome"
-                value={String(clienteSelecionado?.idCliente ?? "")}
+              <span>Cliente</span>
+
+              <div className="input-wrapper">
+                <select
+                  className="selectNome"
+                  value={String(clienteSelecionado?.idCliente ?? "")}
+                  onChange={(e) => {
+                    const cliente =
+                      listaClientes.find(
+                        (item) =>
+                          String(item?.idCliente) === String(e.target.value)
+                      ) ?? null;
+
+                    setClienteSelecionado(cliente);
+                    setNomeCliente(cliente?.nome ?? "");
+                  }}
+                >
+                  <option value="">Selecione</option>
+
+                  {opcoesClientes.map((opcao) => (
+                    <option key={opcao.id} value={opcao.id}>
+                      {opcao.label}
+                    </option>
+                  ))}
+                </select>
+
+                <button
+                  type="button"
+                  className="eye-btn"
+                  onClick={() => {
+                    setErroModalCliente("");
+                    setAbrirModalCliente(true);
+                  }}
+                >
+                  <Plus size={18} />
+                </button>
+              </div>
+
+              <span>Pedido</span>
+
+              <input
+                type="text"
+                placeholder="Digite o pedido"
+                value={pedidoSelecionado}
+                onChange={(e) => setPedidoSelecionado(e.target.value)}
+              />
+
+              <span>Valor</span>
+
+              <input
+                type="text"
+                placeholder="R$ 0,00"
+                value={valor}
                 onChange={(e) => {
-                  const cliente =
-                    listaClientes.find(
-                      (item) =>
-                        String(item?.idCliente) === String(e.target.value)
-                    ) ?? null;
+                  let v = e.target.value;
 
-                  setClienteSelecionado(cliente);
-                  setNomeCliente(cliente?.nome ?? "");
+                  v = v.replace(/\D/g, "");
+
+                  const numero = Number(v) / 100;
+
+                  const formatado = numero.toLocaleString("pt-BR", {
+                    style: "currency",
+                    currency: "BRL",
+                  });
+
+                  setValor(formatado);
                 }}
-              >
-                <option value="">Selecione</option>
+              />
 
-                {opcoesClientes.map((opcao) => (
-                  <option key={opcao.id} value={opcao.id}>
-                    {opcao.label}
-                  </option>
-                ))}
-              </select>
+              <span>Data</span>
 
-              <button
-                type="button"
-                className="eye-btn"
-                onClick={() => {
-                  setErroModalCliente("");
-                  setAbrirModalCliente(true);
-                }}
-              >
-                <Plus size={18} />
-              </button>
-            </div>
+              <input
+                type="date"
+                value={dataPedido}
+                onChange={(e) => setDataPedido(e.target.value)}
+              />
 
-            <span>Pedido</span>
+              {erroFormulario && (
+                <span className="erro-texto">
+                  {erroFormulario}
+                </span>
+              )}
 
-            <input
-              type="text"
-              placeholder="Digite o pedido"
-              value={pedidoSelecionado}
-              onChange={(e) => setPedidoSelecionado(e.target.value)}
-            />
+              <div className="botao-upload">
+                Enviar Nota Fiscal
 
-            <span>Valor</span>
+                <label className="botao-upload-fiado">
+                  <input type="file" accept="image/*" />
+                </label>
+              </div>
+            </form>
 
-            <input
-              type="text"
-              placeholder="R$ 0,00"
-              value={valor}
-              onChange={(e) => {
-                let v = e.target.value;
+            <button
+              type="button"
+              className="adiciionar-pedido-btn"
+              onClick={adicionarPedido}
+            >
+              Adicionar Pedido
+            </button>
+          </div>
 
-                v = v.replace(/\D/g, "");
+          <div className="pedidos-box">
+            <h3>Pedidos adicionados</h3>
 
-                const numero = Number(v) / 100;
-
-                const formatado = numero.toLocaleString("pt-BR", {
-                  style: "currency",
-                  currency: "BRL",
-                });
-
-                setValor(formatado);
-              }}
-            />
-
-            <span>Data</span>
-
-            <input
-              type="date"
-              value={dataPedido}
-              onChange={(e) => setDataPedido(e.target.value)}
-            />
-
-            {erroFormulario && (
-              <span className="erro-texto">
-                {erroFormulario}
-              </span>
+            {pedidos.length === 0 ? (
+              <span>Nenhum pedido adicionado.</span>
+            ) : (
+              <textarea
+                className="pedidos-textarea"
+                value={observacoesPedidos}
+                readOnly
+                rows={18}
+              />
             )}
+          </div>
 
-            <div className="botao-upload">
-              Enviar Nota Fiscal
-
-              <label className="botao-upload-fiado">
-                <input type="file" accept="image/*" />
-              </label>
-            </div>
-          </form>
-        </div>
-
-        <button
-          type="button"
-          className="adiciionar-pedido-btn"
-          onClick={adicionarPedido}
-        >
-          Adicionar Pedido
-        </button>
-
-        <div className="pedidos-box">
-          <h3>Pedidos adicionados</h3>
-
-          {pedidos.length === 0 ? (
-            <span>Nenhum pedido adicionado.</span>
-          ) : (
-            <textarea
-              className="pedidos-textarea"
-              value={observacoesPedidos}
-              readOnly
-              rows={10}
-            />
-          )}
         </div>
 
         <div className="actions">
