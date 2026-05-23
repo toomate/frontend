@@ -166,11 +166,12 @@
     justify-content: space-evenly;
     width: 120px;
     gap: 10px;
+    height: auto;
     color: black;
     background: white;
     font-size: 14px;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 5px;
     padding: 3px;
 }
 

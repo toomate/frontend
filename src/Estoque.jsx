@@ -308,11 +308,10 @@ export function Estoque() {
                         <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }}/>
                         <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
                         <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
-                        <div className="botoes-container-icon">
-                            QR Code
-                            <ScanBarcode style={{cursor: "pointer"}} color="black" size={28} 
-                            onClick={() => { navigate("/leitor") }} />
-                        </div>
+                        <button className="botoes-container-icon" onClick={() => { navigate("/leitor") }}>
+                            <span>QR Code</span>
+                            <ScanBarcode style={{cursor: "pointer"}} color="black" size={28}/>
+                        </button>
                         <div className="container-search">
                             <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
                         </div>
