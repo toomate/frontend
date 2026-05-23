@@ -154,6 +154,7 @@ export default function CadastroInsumo() {
       setIdCategoria("0");
       setUnidadeMedida("");
       setQtdMinima("");
+      setSuccessType("insumo");
       setAbrirModalEscolhaLote(true);
       fetchMedidas();
     } catch (error) {
@@ -416,16 +417,12 @@ export default function CadastroInsumo() {
                 flexWrap: "wrap",
               }}
             >
+
               <button
                 className="btn btn-cancelar"
                 onClick={() => {
-                  const confirmar = window.confirm(
-                    "Tem certeza que não deseja cadastrar um lote?"
-                  );
-
-                  if (confirmar) {
-                    setAbrirModalEscolhaLote(false);
-                  }
+                  setAbrirModalEscolhaLote(false);
+                  setAbrirModalSucesso(true);
                 }}
               >
                 Não quero cadastrar
@@ -433,8 +430,11 @@ export default function CadastroInsumo() {
 
               <button
                 className="btn"
-                onClick={() => {navigate("/cadastro-lote");}}
-              >
+                  onClick={() => {
+                    setAbrirModalEscolhaLote(false);
+                    navigate("/cadastro-lote");
+                  }}
+                >
                 Cadastrar
               </button>
 
@@ -458,11 +458,10 @@ export default function CadastroInsumo() {
             <button
               className="btn"
               onClick={() => {
-                const fromLeitor = location?.state?.fromLeitor === true || sessionStorage.getItem("fromLeitor") === "true";
-                if (fromLeitor && successType === "insumo") {
-                  navigate(-2);
-                } else {
-                  setAbrirModalSucesso(false);
+                setAbrirModalSucesso(false);
+
+                if (successType === "insumo") {
+                  navigate(-1);
                 }
               }}
             >
