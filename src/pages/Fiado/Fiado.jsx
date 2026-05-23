@@ -55,13 +55,13 @@ export default function Fiado({ irPara }) {
     cliente.dividas.length > 0 && cliente.dividas.every((divida) => divida.pago);
 
   // Última data de compra
-  const ultimaData = (cliente) => {
-    if (cliente.dividas.length === 0) return "";
-    return cliente.dividas
-      .map((d) => d.dataCompra)
-      .sort()
-      .pop();
-  };
+  // const ultimaData = (cliente) => {
+  //   if (cliente.dividas.length === 0) return "";
+  //   return cliente.dividas
+  //     .map((d) => d.dataCompra)
+  //     .sort()
+  //     .pop();
+  // };
 
   // Filtra e ordena
   const fiadosFiltrados = fiados
@@ -102,11 +102,11 @@ export default function Fiado({ irPara }) {
         const diff = calcularAberto(b) - calcularAberto(a);
         return ordenacao.direcao === "asc" ? diff : -diff;
       }
-      if (ordenacao.tipo === "data") {
-        const dA = ultimaData(a) || "";
-        const dB = ultimaData(b) || "";
-        return dB.localeCompare(dA);
-      }
+      // if (ordenacao.tipo === "data") {
+      //   const dA = ultimaData(a) || "";
+      //   const dB = ultimaData(b) || "";
+      //   return dB.localeCompare(dA);
+      // }
       return 0;
     });
 
@@ -292,7 +292,7 @@ export default function Fiado({ irPara }) {
             {renderSetaOrdenacao("valor")}
           </div>
         </button>
-
+{/* 
         <button
           className={`filtro-btn ${ordenacao.tipo === "data" ? "active" : ""}`}
           onClick={() => toggleOrdenacao("data")}
@@ -302,7 +302,7 @@ export default function Fiado({ irPara }) {
             <Filter size={18} />
             {renderSetaOrdenacao("data")}
           </div>
-        </button>
+        </button> */}
 
         <FiltroSelecaoMultipla
           itens={opcoesFiltroPagamento}
