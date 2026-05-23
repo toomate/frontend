@@ -96,8 +96,12 @@ export default function CadastroFiado() {
           : []
       );
 
-      setClienteSelecionado(clienteCriado);
-      setNomeCliente(clienteCriado?.nome ?? nome);
+      const clienteCompleto = clientesAtualizados.find(
+        (c) => c.nome === nome
+      );
+
+      setClienteSelecionado(clienteCompleto);
+      setNomeCliente(clienteCompleto?.nome ?? nome);
 
       setNovoCliente({
         nome: "",
