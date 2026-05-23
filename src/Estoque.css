@@ -103,6 +103,18 @@
     font-size: 14px;
 }
 
+.botoes-container .button-container:hover,
+.plus-container:hover,
+.botoes-container-icon:hover {
+    background: #f0dfa8;
+}
+
+.botoes-container .button-container.active,
+.plus-container.active,
+.botoes-container-icon.active {
+    background: #e6d08e;
+}
+
 .insumos-container {
     width: 100%;
     height: 67vh;
