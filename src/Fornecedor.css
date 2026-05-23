@@ -81,16 +81,17 @@
 }
 
 .fornecedores-btn-add:hover, .fornecedores-btn-add-categoria:hover {
-  background: #4e3119;
+  background: #f0dfa8;
   box-shadow: 0 4px 10px rgba(107, 68, 35, 0.28);
 }
 
 .fornecedores-btn-add:active, .fornecedores-btn-add-categoria:active {
   transform: translateY(1px);
+  box-shadow: 0 1px 4px rgba(107, 68, 35, 0.22);
 }
 
 .fornecedores-btn-add-categoria:hover {
-  background: #f0d98a;
+  background: #e6d08e;
 }
 
 .fornecedores-select {
