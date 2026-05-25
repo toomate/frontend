@@ -6,6 +6,8 @@ import { PiDotsThree } from "react-icons/pi";
 import DropdownEstoque from "../Dropdown/DropdownEstoque";
 
 export function EstoqueItem(props) {
+    const UM_DIA_EM_MS = 24 * 60 * 60 * 1000;
+    const UMA_SEMANA_EM_MS = 7 * UM_DIA_EM_MS;
 
     const formatarData = (data) => {
         if (!data) return '';
@@ -14,6 +16,22 @@ export function EstoqueItem(props) {
         const mes = String(d.getMonth() + 1).padStart(2, '0');
         const ano = d.getFullYear();
         return `${dia}/${mes}/${ano}`;
+    };
+
+    const obterClasseValidade = (dataValidade) => {
+        if (!dataValidade) return "";
+
+        const vencimento = new Date(`${dataValidade}`.includes("T") ? dataValidade : `${dataValidade}T00:00:00`);
+        if (Number.isNaN(vencimento.getTime())) return "";
+
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        const diferencaDias = Math.ceil((vencimento.getTime() - hoje.getTime()) / UM_DIA_EM_MS);
+
+        if (diferencaDias < 0) return "dt-vencimento-vencido";
+        if (vencimento.getTime() - hoje.getTime() <= UMA_SEMANA_EM_MS) return "dt-vencimento-alerta";
+        return "";
     };
 
     function truncar(numero) {
@@ -38,7 +56,7 @@ export function EstoqueItem(props) {
                 </div>
                 <div className="qtd-minima">{truncar(atual.quantidadeMinima)}</div>
                 <div className="qtd-total">{atual.quantidadeTotal}</div>
-                <div className="dt-vencimento">{formatarData(atual.dataValidade)}</div>
+                <div className={`dt-vencimento ${obterClasseValidade(atual.dataValidade)}`}>{formatarData(atual.dataValidade)}</div>
 
                 <div className="controle-container">
                     <div className="controle">
