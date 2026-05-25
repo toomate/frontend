@@ -93,7 +93,7 @@ export default function CadastroFornecedor() {
 
           <div className="actions">
             <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
-              Cancelar
+              Voltar
             </button>
 
             <button type="submit" className="btn" disabled={isCadastrando}>
