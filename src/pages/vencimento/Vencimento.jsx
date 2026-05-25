@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { X } from "lucide-react";
 import { Cabecalho } from "../../components/Cabecalho/Cabecalho";
 import Kpi from "../../components/Kpi/Kpi";
 import LinhaTabela from "../../components/LinhaTabela/LinhaTabela";
@@ -6,19 +8,36 @@ import HeaderPadrao from "../../HeaderPadrao";
 import "./Vencimento.css"
 import { Vencimentos } from "../../provider/Api";
 
+function normalizar(valor) {
+    return String(valor ?? "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[̀-ͯ]/g, "")
+        .trim();
+}
+
 export default function Vencimento() {
     const [vencimento, setVencimento] = useState([])
     const [kpis, setKpis] = useState([])
     const [paginaAtual, setPaginaAtual] = useState(1)
+    const [searchParams, setSearchParams] = useSearchParams()
     const itensPorPagina = 10
+
+    const filtroInsumo = searchParams.get("insumo") ?? ""
 
     useEffect(() => {
         Vencimentos.buscarEstoque().then((res) => setVencimento(res));
         Vencimentos.buscarKpis().then((res) => setKpis(res));
     }, [])
 
+    const vencimentoFiltrado = useMemo(() => {
+        if (!filtroInsumo) return vencimento
+        const alvo = normalizar(filtroInsumo)
+        return vencimento.filter((item) => normalizar(item.insumo) === alvo)
+    }, [vencimento, filtroInsumo])
+
     useEffect(() => {
-        const totalPaginas = Math.max(1, Math.ceil(vencimento.length / itensPorPagina))
+        const totalPaginas = Math.max(1, Math.ceil(vencimentoFiltrado.length / itensPorPagina))
 
         setPaginaAtual((paginaAnterior) => {
             if (paginaAnterior > totalPaginas) {
@@ -31,20 +50,27 @@ export default function Vencimento() {
 
             return paginaAnterior
         })
-    }, [vencimento])
+    }, [vencimentoFiltrado])
 
     useEffect(() => {
         document.title = "Vencimentos";
       }, []);
 
-    const totalPaginas = Math.max(1, Math.ceil(vencimento.length / itensPorPagina))
+    const totalPaginas = Math.max(1, Math.ceil(vencimentoFiltrado.length / itensPorPagina))
     const indiceInicial = (paginaAtual - 1) * itensPorPagina
     const indiceFinal = indiceInicial + itensPorPagina
-    const vencimentosPaginados = vencimento.slice(indiceInicial, indiceFinal)
-    const temRegistros = vencimento.length > 0
+    const vencimentosPaginados = vencimentoFiltrado.slice(indiceInicial, indiceFinal)
+    const temRegistros = vencimentoFiltrado.length > 0
 
     function irParaPagina(proximaPagina) {
         setPaginaAtual(Math.min(Math.max(proximaPagina, 1), totalPaginas))
+    }
+
+    function limparFiltro() {
+        const novosParams = new URLSearchParams(searchParams)
+        novosParams.delete("insumo")
+        setSearchParams(novosParams)
+        setPaginaAtual(1)
     }
 
     return (
@@ -55,6 +81,21 @@ export default function Vencimento() {
                     <div className="kpi-container-interior">
                         <Kpi kpis={kpis} />
                     </div>
+                    {filtroInsumo && (
+                        <div className="vencimento-filtro-banner">
+                            <span>
+                                Filtrando por insumo: <strong>{filtroInsumo}</strong>
+                            </span>
+                            <button
+                                type="button"
+                                className="vencimento-filtro-limpar"
+                                onClick={limparFiltro}
+                            >
+                                <X size={14} />
+                                Limpar filtro
+                            </button>
+                        </div>
+                    )}
                     <div className="tabela-container">
                         <Cabecalho elementos={["Insumo", "Marca", "Estoque Atual", "Data De Vencimento", "Dias Restantes", "Status"]} />
                         <div className="tabela-interior">
@@ -63,8 +104,10 @@ export default function Vencimento() {
                         <div className="tabela-paginacao">
                             <div className="tabela-paginacao-resumo">
                                 {temRegistros
-                                    ? `Mostrando ${indiceInicial + 1}-${Math.min(indiceFinal, vencimento.length)} de ${vencimento.length}`
-                                    : "Nenhum registro encontrado"}
+                                    ? `Mostrando ${indiceInicial + 1}-${Math.min(indiceFinal, vencimentoFiltrado.length)} de ${vencimentoFiltrado.length}`
+                                    : filtroInsumo
+                                        ? `Nenhum registro para "${filtroInsumo}"`
+                                        : "Nenhum registro encontrado"}
                             </div>
                             <div className="tabela-paginacao-acoes">
                                 <button

@@ -189,6 +189,20 @@ export class AuthApi {
     }
   }
 
+  static async listarUsuariosPaginado({ pagina = 0, tamanho = 7 } = {}) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/usuarios/paginado",
+        params: { pagina, tamanho },
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar usuarios paginado:", error);
+      throw error;
+    }
+  }
+
   static async atualizarUsuario(idUsuario, payload) {
     const idNormalizado = Number(idUsuario);
 
@@ -319,6 +333,24 @@ export class AdminApi {
     const response = await requestComFallback({ method: "get", url });
     return response.data;
   }
+
+  static async listarAuditLogsPaginado({ data, pagina = 0, tamanho = 20 } = {}) {
+    try {
+      const params = { pagina, tamanho };
+      if (data) {
+        params.data = data;
+      }
+      const response = await requestComFallback({
+        method: "get",
+        url: "/audit-logs/paginado",
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao listar audit logs paginado:", error);
+      throw error;
+    }
+  }
 }
 
 export class Lote {
@@ -364,6 +396,42 @@ export class Lote {
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar os lotes:", error);
+      throw error;
+    }
+  }
+
+  static async listarLotesPaginado({ pagina = 0, tamanho = 10, dataInicial, dataFinal } = {}) {
+    try {
+      const params = { pagina, tamanho };
+      if (dataInicial) params.dataInicial = dataInicial;
+      if (dataFinal) params.dataFinal = dataFinal;
+
+      const response = await requestComFallback({
+        method: "get",
+        url: "/lotes/paginado",
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar lotes paginado:", error);
+      throw error;
+    }
+  }
+
+  static async resumoPeriodoLotes({ dataInicial, dataFinal } = {}) {
+    try {
+      const params = {};
+      if (dataInicial) params.dataInicial = dataInicial;
+      if (dataFinal) params.dataFinal = dataFinal;
+
+      const response = await requestComFallback({
+        method: "get",
+        url: "/lotes/resumo-periodo",
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao buscar resumo do período:", error);
       throw error;
     }
   }

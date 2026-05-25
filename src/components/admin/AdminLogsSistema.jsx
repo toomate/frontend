@@ -1,5 +1,7 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { AdminApi } from "../../provider/Api";
+
+const TAMANHO_PAGINA = 20;
 
 function formatarDataHora(timestamp) {
   const d = new Date(timestamp);
@@ -34,31 +36,30 @@ function resolverAcaoCor(acao) {
   return ACAO_COR[key] ?? { cor: "#6b4423", bg: "#fdf5dc" };
 }
 
-function normalizarLogs(resposta) {
-  const lista = Array.isArray(resposta)
-    ? resposta
-    : resposta?.logs ?? resposta?.auditLogs ?? resposta?.data ?? [];
-
-  return lista
-    .map((log, i) => {
-      const dataValida = log?.timestamp ? new Date(log.timestamp) : null;
-      return {
-        id: log?.id ?? i,
-        timestamp: dataValida && !isNaN(dataValida) ? dataValida.toISOString() : new Date().toISOString(),
-        usuario: log?.usuario ?? null,
-        acao: log?.acao ?? null,
-        entidade: log?.entidade ?? null,
-        detalhe: log?.detalhe ?? null,
-      };
-    })
-    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+function normalizarLogs(conteudo) {
+  return (Array.isArray(conteudo) ? conteudo : []).map((log, i) => {
+    const dataValida = log?.timestamp ? new Date(log.timestamp) : null;
+    return {
+      id: log?.id ?? i,
+      timestamp: dataValida && !isNaN(dataValida) ? dataValida.toISOString() : new Date().toISOString(),
+      usuario: log?.usuario ?? null,
+      acao: log?.acao ?? null,
+      entidade: log?.entidade ?? null,
+      detalhe: log?.detalhe ?? null,
+    };
+  });
 }
 
 export default function AdminLogsSistema() {
   const [dataSelecionada, setDataSelecionada] = useState(obterDataLocalIso());
-  const [logs, setLogs] = useState([]);
+  const [pagina, setPagina] = useState(0);
+  const [resposta, setResposta] = useState(null);
   const [carregando, setCarregando] = useState(false);
   const [erro, setErro] = useState("");
+
+  useEffect(() => {
+    setPagina(0);
+  }, [dataSelecionada]);
 
   useEffect(() => {
     let ativo = true;
@@ -67,13 +68,17 @@ export default function AdminLogsSistema() {
       setCarregando(true);
       setErro("");
       try {
-        const resposta = await AdminApi.listarAuditLogs(dataSelecionada);
-        if (ativo) setLogs(normalizarLogs(resposta));
+        const dados = await AdminApi.listarAuditLogsPaginado({
+          data: dataSelecionada,
+          pagina,
+          tamanho: TAMANHO_PAGINA,
+        });
+        if (!ativo) return;
+        setResposta(dados ?? { content: [], totalElements: 0, totalPages: 1 });
       } catch {
-        if (ativo) {
-          setErro("Não foi possível carregar os logs do sistema.");
-          setLogs([]);
-        }
+        if (!ativo) return;
+        setErro("Não foi possível carregar os logs do sistema.");
+        setResposta({ content: [], totalElements: 0, totalPages: 1 });
       } finally {
         if (ativo) setCarregando(false);
       }
@@ -81,7 +86,11 @@ export default function AdminLogsSistema() {
 
     buscar();
     return () => { ativo = false; };
-  }, [dataSelecionada]);
+  }, [dataSelecionada, pagina]);
+
+  const logs = normalizarLogs(resposta?.content);
+  const totalPaginas = Math.max(1, resposta?.totalPages ?? 1);
+  const totalElementos = resposta?.totalElements ?? logs.length;
 
   return (
     <section className="admin-card admin-logs-lista-card">
@@ -99,7 +108,9 @@ export default function AdminLogsSistema() {
           onChange={(e) => setDataSelecionada(e.target.value)}
         />
         {!carregando && !erro && (
-          <span className="admin-logs-contagem">{logs.length} registro{logs.length !== 1 ? "s" : ""}</span>
+          <span className="admin-logs-contagem">
+            {totalElementos} registro{totalElementos !== 1 ? "s" : ""}
+          </span>
         )}
       </div>
 
@@ -147,6 +158,28 @@ export default function AdminLogsSistema() {
         ) : (
           <p className="admin-empty-list">Nenhum log encontrado para a data selecionada.</p>
         )}
+      </div>
+
+      <div className="admin-lancamentos-paginacao">
+        <button
+          type="button"
+          className="admin-lancamentos-pag-btn"
+          onClick={() => setPagina((p) => Math.max(0, p - 1))}
+          disabled={carregando || pagina <= 0}
+        >
+          Anterior
+        </button>
+        <span className="admin-lancamentos-pag-info">
+          Página {pagina + 1} de {totalPaginas}
+        </span>
+        <button
+          type="button"
+          className="admin-lancamentos-pag-btn"
+          onClick={() => setPagina((p) => Math.min(totalPaginas - 1, p + 1))}
+          disabled={carregando || pagina + 1 >= totalPaginas}
+        >
+          Próxima
+        </button>
       </div>
     </section>
   );

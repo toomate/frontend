@@ -1302,17 +1302,12 @@ export default function Admin() {
       <div className="admin-content">
         {exibindoGestaoUsuarios ? (
           <GerenciamentoUsuariosAdmin
-            usuarios={usuariosSistema}
             aoSalvarUsuario={salvarAlteracoesUsuario}
           />
         ) : exibindoWhatsapp ? (
           <AdminWhatsapp />
         ) : exibindoLancamentos ? (
-          <>
-            {filtrosLancamentos}
-
-            <AdminLancamentos lancamentos={lancamentosFiltrados} />
-          </>
+          <AdminLancamentos />
         ) : exibindoRelatorios ? (
           <AdminRelatorios lancamentosInsumos={lancamentosInsumos} />
         ) : exibindoLogsSistema ? (
