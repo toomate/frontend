@@ -1,6 +1,6 @@
-﻿import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import SeletorPaginas from "../Paginas/SeletorPaginas";
+import { AuthApi } from "../../provider/Api";
 
 const USUARIOS_POR_PAGINA = 7;
 
@@ -14,6 +14,30 @@ function usernameEhValido(valor) {
   return /^[a-z0-9]+$/.test(String(valor ?? ""));
 }
 
+function normalizarBooleano(valor) {
+  return valor === true || valor === "true" || valor === 1 || valor === "1";
+}
+
+function normalizarTextoSeguro(valor, fallback = "") {
+  const texto = String(valor ?? "").trim();
+  return texto || fallback;
+}
+
+function normalizarUsuario(usuario, indice) {
+  const id = Number(usuario?.id ?? usuario?.idUsuario) || indice + 1;
+  return {
+    id,
+    nome: normalizarTextoSeguro(usuario?.nome ?? usuario?.nomeCompleto, `Usuário ${id}`),
+    username: normalizarTextoSeguro(
+      usuario?.apelido ?? usuario?.username ?? usuario?.login,
+      `usuario.${id}`
+    ),
+    ehAdmin: normalizarBooleano(
+      usuario?.administrador ?? usuario?.ehAdmin ?? usuario?.admin
+    ),
+  };
+}
+
 function montarDadosEdicao(usuario) {
   return {
     nome: usuario.nome ?? "",
@@ -24,8 +48,15 @@ function montarDadosEdicao(usuario) {
   };
 }
 
-export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }) {
+export default function GerenciamentoUsuariosAdmin({ aoSalvarUsuario }) {
   const navigate = useNavigate();
+  const [usuarios, setUsuarios] = useState([]);
+  const [paginaAtual, setPaginaAtual] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(1);
+  const [totalUsuarios, setTotalUsuarios] = useState(0);
+  const [carregando, setCarregando] = useState(false);
+  const [erroCarregar, setErroCarregar] = useState("");
+
   const [usuarioEmEdicao, setUsuarioEmEdicao] = useState(null);
   const [dadosEdicao, setDadosEdicao] = useState({
     nome: "",
@@ -38,19 +69,37 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
   const [erroSalvar, setErroSalvar] = useState("");
   const [avisoUsername, setAvisoUsername] = useState("");
   const [salvando, setSalvando] = useState(false);
-  const [paginaAtual, setPaginaAtual] = useState(0);
 
-  const totalAdmins = useMemo(
+  const carregar = useCallback(async () => {
+    setCarregando(true);
+    setErroCarregar("");
+    try {
+      const resposta = await AuthApi.listarUsuariosPaginado({
+        pagina: paginaAtual,
+        tamanho: USUARIOS_POR_PAGINA,
+      });
+      const conteudo = Array.isArray(resposta?.content) ? resposta.content : [];
+      setUsuarios(conteudo.map(normalizarUsuario));
+      setTotalPaginas(Math.max(1, resposta?.totalPages ?? 1));
+      setTotalUsuarios(resposta?.totalElements ?? conteudo.length);
+    } catch (e) {
+      setErroCarregar("Não foi possível carregar os usuários.");
+      setUsuarios([]);
+      setTotalPaginas(1);
+      setTotalUsuarios(0);
+    } finally {
+      setCarregando(false);
+    }
+  }, [paginaAtual]);
+
+  useEffect(() => {
+    carregar();
+  }, [carregar]);
+
+  const totalAdminsPagina = useMemo(
     () => usuarios.filter((usuario) => usuario.ehAdmin).length,
     [usuarios]
   );
-
-  const totalPaginas = Math.max(1, Math.ceil(usuarios.length / USUARIOS_POR_PAGINA));
-
-  const usuariosPaginados = useMemo(() => {
-    const inicio = paginaAtual * USUARIOS_POR_PAGINA;
-    return usuarios.slice(inicio, inicio + USUARIOS_POR_PAGINA);
-  }, [usuarios, paginaAtual]);
 
   function abrirModalEdicao(usuario) {
     setUsuarioEmEdicao(usuario);
@@ -157,6 +206,7 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
       setSalvando(true);
       await aoSalvarUsuario(usuarioEmEdicao.id, payloadAtualizacao);
       fecharModalEdicao();
+      await carregar();
     } catch {
       setErroSalvar("Não foi possível salvar as alterações. Tente novamente.");
       setSalvando(false);
@@ -172,8 +222,8 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
             <p>Visualize todos os usuários e edite dados de acesso pelo modal.</p>
           </div>
           <div className="admin-users-resumo">
-            <span>{usuarios.length} usuários</span>
-            <span>{totalAdmins} admins</span>
+            <span>{totalUsuarios} usuários</span>
+            <span>{totalAdminsPagina} admins nesta página</span>
             <button
               type="button"
               className="admin-users-btn-salvar"
@@ -184,52 +234,80 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
           </div>
         </header>
 
-        <div className="admin-users-tabela-wrapper">
-          <table className="admin-users-tabela">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Apelido</th>
-                <th>Status</th>
-                <th>Alteração</th>
-              </tr>
-            </thead>
-            <tbody>
-              {usuariosPaginados.map((usuario) => (
-                <tr key={usuario.id}>
-                  <td>{usuario.nome}</td>
-                  <td>{usuario.username}</td>
-                  <td>
-                    <span
-                      className={`admin-users-status-badge ${
-                        usuario.ehAdmin ? "is-admin" : "is-comum"
-                      }`}
-                    >
-                      {usuario.ehAdmin ? "Admin" : "Comum"}
-                    </span>
-                  </td>
-                  <td>
-                    <button
-                      type="button"
-                      className="admin-users-acao-btn"
-                      onClick={() => abrirModalEdicao(usuario)}
-                    >
-                      Editar
-                    </button>
-                  </td>
+        {erroCarregar ? (
+          <p className="admin-empty-list" style={{ color: "#c92c2c" }}>{erroCarregar}</p>
+        ) : (
+          <div className="admin-users-tabela-wrapper">
+            <table className="admin-users-tabela">
+              <thead>
+                <tr>
+                  <th>Nome</th>
+                  <th>Apelido</th>
+                  <th>Status</th>
+                  <th>Alteração</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {carregando && usuarios.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="admin-empty-list">Carregando...</td>
+                  </tr>
+                ) : usuarios.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="admin-empty-list">Nenhum usuário encontrado.</td>
+                  </tr>
+                ) : (
+                  usuarios.map((usuario) => (
+                    <tr key={usuario.id}>
+                      <td>{usuario.nome}</td>
+                      <td>{usuario.username}</td>
+                      <td>
+                        <span
+                          className={`admin-users-status-badge ${
+                            usuario.ehAdmin ? "is-admin" : "is-comum"
+                          }`}
+                        >
+                          {usuario.ehAdmin ? "Admin" : "Comum"}
+                        </span>
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="admin-users-acao-btn"
+                          onClick={() => abrirModalEdicao(usuario)}
+                        >
+                          Editar
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-        <SeletorPaginas
-          avancar={() => setPaginaAtual((p) => Math.min(p + 1, totalPaginas - 1))}
-          voltar={() => setPaginaAtual((p) => Math.max(p - 1, 0))}
-          selecionar={setPaginaAtual}
-          numPages={totalPaginas}
-          paginaSelecionada={paginaAtual}
-        />
+        <div className="admin-lancamentos-paginacao">
+          <button
+            type="button"
+            className="admin-lancamentos-pag-btn"
+            onClick={() => setPaginaAtual((p) => Math.max(0, p - 1))}
+            disabled={carregando || paginaAtual <= 0}
+          >
+            Anterior
+          </button>
+          <span className="admin-lancamentos-pag-info">
+            Página {paginaAtual + 1} de {totalPaginas}
+          </span>
+          <button
+            type="button"
+            className="admin-lancamentos-pag-btn"
+            onClick={() => setPaginaAtual((p) => Math.min(totalPaginas - 1, p + 1))}
+            disabled={carregando || paginaAtual + 1 >= totalPaginas}
+          >
+            Próxima
+          </button>
+        </div>
       </section>
 
       {usuarioEmEdicao ? (
@@ -354,6 +432,3 @@ export default function GerenciamentoUsuariosAdmin({ usuarios, aoSalvarUsuario }
     </>
   );
 }
-
-
-

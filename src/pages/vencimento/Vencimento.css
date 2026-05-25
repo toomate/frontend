@@ -27,6 +27,47 @@
     padding-bottom: 2px;
 }
 
+.vencimento-filtro-banner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: min(95%);
+    max-width: 100%;
+    margin-bottom: 12px;
+    padding: 10px 16px;
+    border-radius: 12px;
+    background: rgba(255, 248, 238, 0.96);
+    border: 1px solid #f5dfa0;
+    box-shadow: 0 8px 20px rgba(21, 35, 61, 0.08);
+    font-size: 14px;
+    color: #6b4423;
+}
+
+.vencimento-filtro-banner strong {
+    color: #1f1f1f;
+}
+
+.vencimento-filtro-limpar {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    background: transparent;
+    border: 1px solid #e07b00;
+    color: #e07b00;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.vencimento-filtro-limpar:hover {
+    background: #e07b00;
+    color: #fff;
+}
+
 .kpi-container-interior .status {
     display: flex;
     justify-content: center;

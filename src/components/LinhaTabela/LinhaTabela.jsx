@@ -6,10 +6,18 @@ function formatarData(dataOriginal) {
         return "-"
     }
 
-    const data = new Date(dataOriginal)
+    const valor = String(dataOriginal)
+
+    const correspondenciaIso = valor.match(/^(\d{4})-(\d{2})-(\d{2})/)
+    if (correspondenciaIso) {
+        const [, ano, mes, dia] = correspondenciaIso
+        return `${dia}/${mes}/${ano}`
+    }
+
+    const data = new Date(valor)
 
     if (Number.isNaN(data.getTime())) {
-        return String(dataOriginal)
+        return valor
     }
 
     return new Intl.DateTimeFormat("pt-BR").format(data)
