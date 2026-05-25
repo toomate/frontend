@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import { Cabecalho } from "./components/Cabecalho/Cabecalho";
 import { Search } from "./components/Search/Search";
@@ -16,6 +16,7 @@ import { Rotinas } from "./provider/Api";
 
 
 export function Estoque() {
+    const [grupoMax, setGrupoMax] = useState([])
     const [grupo, setGrupo] = useState([])
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
@@ -29,6 +30,13 @@ export function Estoque() {
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
     const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
     const [loading, setLoading] = useState({rotina: false, relatorio: false});
+
+    const carregarEstoque = useCallback(async (categoria = categoriaAtiva, busca = pesquisa) => {
+        const dados = await Lote.dynamicGetEstoque(categoria, busca);
+        setGrupo(dados);
+        setGrupoMax(dados);
+        return dados;
+    }, [categoriaAtiva, pesquisa]);
 
     const calcularDeficit = (item) => {
         const qtdMinima = Number(item?.qtdMinima ?? 0);
@@ -134,7 +142,7 @@ export function Estoque() {
         try {
             setLoading({relatorio: true})
             await Lote.atualizarQuantidade(mudancas)
-            await Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res))
+            await carregarEstoque()
             setExibirRelatorio(false)
             setMudancas([])
         } catch (error) {
@@ -151,24 +159,47 @@ export function Estoque() {
         setCardRemocao(false)
     }
 
+    const obterItemLote = (listaGrupos, idLote) => {
+        return listaGrupos.find((item) => item.itens.some((atual) => atual.idLote === idLote))
+            ?.itens.find((atual) => atual.idLote === idLote);
+    }
+
+    const qtdMaxima = (idLote) => {
+        const item = obterItemLote(grupoMax, idLote);
+        return item ? Number(item.quantidadeTotal) : null;
+    }
+
     const alterarQuantidade = (idLote, operacao) => {
+        
         let novaQtd = null;
         let nomeProduto = null;
         let idInsumo = null;
         let diferenca = null;
-        console.log(grupo)
+        const quantidadeMaxima = qtdMaxima(idLote);
+
         const novoGrupo = grupo.map(item => {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
-                    console.log("atual", atual)
-                    novaQtd = operacao === 'somar'
-                        ? atual.quantidadeTotal + 1
-                        : atual.quantidadeTotal - 1
+                    const quantidadeAtual = Number(atual.quantidadeTotal ?? 0);
+                    const quantidadeSolicitada = operacao === "somar"
+                        ? quantidadeAtual + 1
+                        : operacao === "subtrair"
+                        ? quantidadeAtual - 1
+                        : Number(operacao);
+
+                    novaQtd = Number.isFinite(quantidadeSolicitada)
+                        ? quantidadeSolicitada
+                        : quantidadeAtual;
 
                     if (novaQtd < 0) novaQtd = 0;
 
-                    diferenca = novaQtd - atual.quantidadeTotal
-                    nomeProduto = item.insumo
+                    if (Number.isFinite(quantidadeMaxima)) {
+                        novaQtd = Math.min(novaQtd, quantidadeMaxima);
+                    }
+
+                    diferenca = novaQtd - quantidadeAtual;
+
+                    nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
 
                     return {
@@ -215,8 +246,8 @@ export function Estoque() {
     }, []);
 
     useEffect(() => {
-        Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
-    }, [categoriaAtiva, pesquisa])
+        carregarEstoque();
+    }, [carregarEstoque])
 
     useEffect(() => {
         CategoriaApi.listar()

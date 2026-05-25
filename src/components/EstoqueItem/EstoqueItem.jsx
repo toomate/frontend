@@ -43,7 +43,29 @@ export function EstoqueItem(props) {
                 <div className="controle-container">
                     <div className="controle">
                         <CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />
-                        {atual.quantidadeTotal}
+                        <span
+                            className="quantidade-total"
+                            style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                        >
+                            <input
+                                class
+                                type="Number" 
+                                pattern="[0-9]*"
+                                value={atual.quantidadeTotal}
+                                onInput={(e) => props.alterarValor(atual.idLote, e.target.value)}
+                                style={{
+                                    border: 'none',
+                                    background: 'transparent',
+                                    textAlign: 'center',
+                                    margin: 0,
+                                    width: '70px',
+                                    appearance: 'textfield',
+                                    outline: 'none',
+                                    fontSize: 'inherit',
+                                    color: 'inherit'
+                                }}
+                            />
+                        </span>
                         <CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} />
                     </div>
                 </div>
