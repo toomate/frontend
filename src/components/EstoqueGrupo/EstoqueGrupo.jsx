@@ -6,6 +6,36 @@ import { useEffect } from "react";
 
 export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId }) {
     const [expandido, setExpandido] = useState(false);
+    const UM_DIA_EM_MS = 24 * 60 * 60 * 1000;
+    const UMA_SEMANA_EM_MS = 7 * UM_DIA_EM_MS;
+
+    const classificarValidadeGrupo = (itens = []) => {
+        let encontrouAlerta = false;
+
+        for (const item of itens) {
+            const dataValidade = item?.dataValidade;
+            if (!dataValidade) continue;
+
+            const vencimento = new Date(String(dataValidade).includes("T") ? dataValidade : `${dataValidade}T00:00:00`);
+            if (Number.isNaN(vencimento.getTime())) continue;
+
+            const hoje = new Date();
+            hoje.setHours(0, 0, 0, 0);
+
+            const diferenca = vencimento.getTime() - hoje.getTime();
+            if (diferenca < 0) {
+                return "vencido";
+            }
+
+            if (diferenca <= UMA_SEMANA_EM_MS) {
+                encontrouAlerta = true;
+            }
+        }
+
+        return encontrouAlerta ? "alerta" : "";
+    };
+
+    const statusValidade = classificarValidadeGrupo(grupo?.itens);
 
     const pegarIcone = (categoria) => {
         switch (categoria.toLowerCase()) {
@@ -100,7 +130,11 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             <div className="volume">{grupo.qtdAtual}{grupo.qtdAtual < grupo.qtdMinima
                 ? (<TriangleAlert style={{ color: "darkred" }} />)
                 : (<CheckCircle style={{ color: "green" }} />)}</div>
-            <div className="dt-vencimento"></div><div className="controle"></div>
+            <div className="dt-vencimento">
+                {statusValidade && (
+                    <span className={`badge-validade badge-validade-${statusValidade}`}>V</span>
+                )}
+            </div><div className="controle"></div>
         </div>
         {expandido && (
             <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} />

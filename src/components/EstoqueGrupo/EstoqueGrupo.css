@@ -47,6 +47,29 @@
     width: 60%;
 }
 
+.badge-validade {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 22px;
+    margin: 0 auto;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+    line-height: 1;
+    color: #fff;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.badge-validade-alerta {
+    background: #f59e0b;
+}
+
+.badge-validade-vencido {
+    background: #dc2626;
+}
+
 .insumo-icon {
     border-radius: 15px;
     height: 100%;
