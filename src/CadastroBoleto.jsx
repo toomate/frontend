@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import "./CadastroBoleto.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { data, useNavigate } from "react-router-dom";
 import AutocompleteInput from "./components/common/AutocompleteInput";
@@ -178,6 +178,14 @@ export default function CadastroBoleto() {
                 placeholder="Insira uma categoria"
                 className="selectCategoriaBoleto"
               />
+
+              <button
+                type="button"
+                className="eye-btn"
+                onClick={() => setAbrirModal(true)}
+              >
+                <Plus size={18} />
+              </button>
             </div>
 
             {categoriaSelecionada?.trim().toLowerCase() === "boletos fornecedores" && (
