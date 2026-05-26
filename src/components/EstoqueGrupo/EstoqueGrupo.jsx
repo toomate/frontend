@@ -116,7 +116,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
     }
 
     return (<div className="grupo-geral">
-        <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)} id={grupo.qtdAtual < grupo.qtdMinima ? "vencido" : ""}>
+        <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)}>
             <div className="insumo" ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
@@ -127,9 +127,9 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             <div className="qtd-medida">
             </div>
             <div className="qtd-minima">{`${grupo.qtdMinima}`}</div>
-            <div className="volume">{grupo.qtdAtual}{grupo.qtdAtual < grupo.qtdMinima
+            <div className="volume"><span id={grupo.qtdAtual < grupo.qtdMinima ? "vencido" : ""}>{grupo.qtdAtual}{grupo.qtdAtual < grupo.qtdMinima
                 ? (<TriangleAlert style={{ color: "darkred" }} />)
-                : (<CheckCircle style={{ color: "green" }} />)}</div>
+                : (<CheckCircle style={{ color: "green" }} />)}</span></div>
             <div className="dt-vencimento">
                 {statusValidade && (
                     <span className={`badge-validade badge-validade-${statusValidade}`}>V</span>
