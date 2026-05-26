@@ -38,51 +38,51 @@ export function Estoque() {
         return dados;
     }, [categoriaAtiva, pesquisa]);
 
-    const calcularDeficit = (item) => {
-        const qtdMinima = Number(item?.qtdMinima ?? 0);
-        const qtdTotal = Number(item?.qtdTotal ?? 0);
+    // const calcularDeficit = (item) => {
+    //     const qtdMinima = Number(item?.qtdMinima ?? 0);
+    //     const qtdTotal = Number(item?.qtdTotal ?? 0);
 
-        if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-            return 0;
-        }
+    //     if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
+    //         return 0;
+    //     }
 
-        return qtdMinima - qtdTotal;
-    };
+    //     return qtdMinima - qtdTotal;
+    // };
 
-    const calcularRazaoEstoqueMinimo = (item) => {
-        const qtdMinima = Number(item?.qtdMinima ?? 0);
-        const qtdTotal = Number(item?.qtdTotal ?? 0);
+    // const calcularRazaoEstoqueMinimo = (item) => {
+    //     const qtdMinima = Number(item?.qtdMinima ?? 0);
+    //     const qtdTotal = Number(item?.qtdTotal ?? 0);
 
-        if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-            return Number.POSITIVE_INFINITY;
-        }
+    //     if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
+    //         return Number.POSITIVE_INFINITY;
+    //     }
 
-        if (qtdMinima <= 0) {
-            return Number.POSITIVE_INFINITY;
-        }
+    //     if (qtdMinima <= 0) {
+    //         return Number.POSITIVE_INFINITY;
+    //     }
 
-        return qtdTotal / qtdMinima;
-    };
+    //     return qtdTotal / qtdMinima;
+    // };
 
-    const grupoOrdenado = [...grupo].sort((a, b) => {
-        const razaoA = calcularRazaoEstoqueMinimo(a);
-        const razaoB = calcularRazaoEstoqueMinimo(b);
+    // // const grupoOrdenado = [...grupo].sort((a, b) => {
+    // //     const razaoA = calcularRazaoEstoqueMinimo(a);
+    // //     const razaoB = calcularRazaoEstoqueMinimo(b);
 
-        if (razaoA !== razaoB) {
-            return razaoA - razaoB;
-        }
+    // //     if (razaoA !== razaoB) {
+    // //         return razaoA - razaoB;
+    // //     }
 
-        const deficitA = calcularDeficit(a);
-        const deficitB = calcularDeficit(b);
+    // //     const deficitA = calcularDeficit(a);
+    // //     const deficitB = calcularDeficit(b);
 
-        if (deficitA !== deficitB) {
-            return deficitB - deficitA;
-        }
+    // //     if (deficitA !== deficitB) {
+    // //         return deficitB - deficitA;
+    // //     }
 
-        const nomeA = String(a?.insumo ?? "");
-        const nomeB = String(b?.insumo ?? "");
-        return nomeA.localeCompare(nomeB, "pt-BR");
-    });
+    // //     const nomeA = String(a?.insumo ?? "");
+    // //     const nomeB = String(b?.insumo ?? "");
+    // //     return nomeA.localeCompare(nomeB, "pt-BR");
+    // // });
 
 
     const abrirDropdown = (idLote) => {
@@ -355,7 +355,7 @@ export function Estoque() {
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Medida", "Qtd. Mínima", "Qtd. Atual", "Data de Vencimento", "Controle"]} />
                     <div className="grupo-insumos-container">
-                        {grupoOrdenado.length > 0 ? grupoOrdenado.map(atual => (
+                        {grupo.length > 0 ? grupo.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}
                                 dropdownAbertoId={dropdownAbertoId}
                             />
