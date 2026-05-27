@@ -153,7 +153,7 @@ export default function Boletos() {
         <div className="card-pagamentos">
           <div className="filtros">
             <select value={filtroMes} onChange={(e) => setFiltroMes(e.target.value)}>
-              <option value="proximo">Próximo mês</option>
+              <option value="proximo">Selecionar mês</option>
               <option value="0">Janeiro</option>
               <option value="1">Fevereiro</option>
               <option value="2">Março</option>
