@@ -10,7 +10,7 @@ import { BaseModal } from "./components/common/BaseModal";
 import { CategoriaApi, FornecedorApi } from "./provider/Api";
 import "./Fornecedor.css";
 
-const ITENS_POR_PAGINA = 12;
+const ITENS_POR_PAGINA = 9;
 
 const estadoInicialForm = {
   razaoSocial: "",
@@ -59,6 +59,7 @@ function mapearFornecedor(item) {
     categoria: item.categoria ?? item.nomeCategoria ?? item.categoriaNome ?? "Sem categoria",
   };
 }
+
 
 export default function Fornecedor() {
   const [fornecedores, setFornecedores] = useState([]);
@@ -354,63 +355,76 @@ export default function Fornecedor() {
 
       {toast.visivel && <div className={`fornecedores-toast ${toast.tipo}`}>{toast.mensagem}</div>}
 
+
       <main className="fornecedores-content">
-        <FornecedorToolbar
-          busca={busca}
-          aoBuscar={setBusca}
-          ordenacao={ordenacao}
-          aoMudarOrdenacao={setOrdenacao}
-          aoAdicionar={abrirModalCriacao}
-          aoAdicionarCategoria={abrirModalCategoria}
-          categorias={categorias}
-          categoriasSelecionadas={categoriasSelecionadas}
-          aoToggleCategoria={aoToggleCategoria}
-          aoLimparCategorias={aoLimparCategorias}
-          fornecedores={fornecedores}
-          fornecedoresSelecionados={fornecedoresSelecionados}
-          aoToggleFornecedor={aoToggleFornecedor}
-          aoLimparFornecedores={aoLimparFornecedores}
-        />
+        {/* 1º bloco: Toolbar */}
+        <div className="fornecedores-bloco-toolbar">
+          <FornecedorToolbar
+            busca={busca}
+            aoBuscar={setBusca}
+            ordenacao={ordenacao}
+            aoMudarOrdenacao={setOrdenacao}
+            aoAdicionar={abrirModalCriacao}
+            aoAdicionarCategoria={abrirModalCategoria}
+            categorias={categorias}
+            categoriasSelecionadas={categoriasSelecionadas}
+            aoToggleCategoria={aoToggleCategoria}
+            aoLimparCategorias={aoLimparCategorias}
+            fornecedores={fornecedores}
+            fornecedoresSelecionados={fornecedoresSelecionados}
+            aoToggleFornecedor={aoToggleFornecedor}
+            aoLimparFornecedores={aoLimparFornecedores}
+          />
+        </div>
 
-        {erro && <p className="fornecedores-erro">{erro}</p>}
+        {/* 2º bloco: Paginação */}
+        <div className="fornecedores-bloco-paginacao">
+          <div className="fornecedores-paginacao">
+            <SeletorPaginas
+              avancar={() =>
+                setPaginaAtual((p) => Math.min(p + 1, totalPaginas - 1))
+              }
+              voltar={() =>
+                setPaginaAtual((p) => Math.max(p - 1, 0))
+              }
+              selecionar={setPaginaAtual}
+              numPages={totalPaginas}
+              paginaSelecionada={paginaAtual}
+            />
+          </div>
+        </div>
 
-        {carregando ? (
-          <p className="fornecedores-mensagem">Carregando fornecedores...</p>
-        ) : fornecedoresPagina.length > 0 ? (
-          <section className="fornecedores-grid">
-            {fornecedoresPagina.map((fornecedor) => (
-              <FornecedorCard
-                key={fornecedor.id ?? fornecedor.razaoSocial}
-                fornecedor={fornecedor}
-                onEditar={abrirModalEdicao}
-                onExcluir={abrirConfirmacaoExclusao}
-              />
-            ))}
-          </section>
-        ) : (
-          <section className="fornecedores-empty-state">
-            <div className="fornecedores-empty-icon">
-              <SearchX size={30} />
-            </div>
-            <h3>Nenhum fornecedor encontrado</h3>
-            <p>
-              Tente ajustar os filtros ou a busca. Se preferir, cadastre um novo fornecedor no
-              botao <strong>+</strong>.
-            </p>
-          </section>
-        )}
+        {/* 3º bloco: Cards */}
+        <div className="fornecedores-bloco-cards">
+          {erro && <p className="fornecedores-erro">{erro}</p>}
 
+          {carregando ? (
+            <p className="fornecedores-mensagem">Carregando fornecedores...</p>
+          ) : fornecedoresPagina.length > 0 ? (
+            <section className="fornecedores-grid">
+              {fornecedoresPagina.map((fornecedor) => (
+                <FornecedorCard
+                  key={fornecedor.id ?? fornecedor.razaoSocial}
+                  fornecedor={fornecedor}
+                  onEditar={abrirModalEdicao}
+                  onExcluir={abrirConfirmacaoExclusao}
+                />
+              ))}
+            </section>
+          ) : (
+            <section className="fornecedores-empty-state">
+              <div className="fornecedores-empty-icon">
+                <SearchX size={30} />
+              </div>
+              <h3>Nenhum fornecedor encontrado</h3>
+              <p>
+                Tente ajustar os filtros ou a busca. Se preferir, cadastre um novo fornecedor no
+                botao <strong>+</strong>.
+              </p>
+            </section>
+          )}
+        </div>
       </main>
-{/* 
-      <div className="fornecedores-paginacao">
-        <SeletorPaginas
-          avancar={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas - 1))}
-          voltar={() => setPaginaAtual(p => Math.max(p - 1, 0))}
-          selecionar={setPaginaAtual}
-          numPages={totalPaginas}
-          paginaSelecionada={paginaAtual}
-        />
-      </div> */}
 
       <NovoFornecedorModal
         aberto={modalAberto}

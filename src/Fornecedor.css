@@ -1,22 +1,42 @@
-﻿html, body, #root {
-  height: 100%;
-  margin: 0;
+﻿/* Blocos separados para toolbar, cards e paginação */
+.fornecedores-bloco-toolbar {
+  margin-bottom: 8px;
+}
+
+.fornecedores-bloco-cards {
+  margin-bottom: 10px;
+}
+
+.fornecedores-bloco-paginacao {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+html, body, #root {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .fornecedores-page {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+
+  background-image: url(./images/fundo-tela.png);
+  background-position: center top;
 }
 
 .fornecedores-content {
-  padding: 30px;
   width: 100%;
-  flex: 1;
-  min-height: 0;
-  background-image: url(./images/fundo-tela.png);
+  max-width: 1400px;
+
+  margin: 0 auto;
+  padding: 10px 16px 0;
+
   box-sizing: border-box;
-  
+  background: transparent;
 }
 
 .fornecedores-toast {
@@ -208,6 +228,10 @@
   padding: 6px 0;
   min-width: 220px;
   box-shadow: 0 6px 20px rgba(107, 68, 35, 0.15);
+
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .filtro-categoria-opcao {
@@ -239,17 +263,20 @@
 }
 
 .fornecedores-grid {
+  width: 100%;
+
   display: grid;
   grid-template-columns: repeat(3, minmax(220px, 1fr));
-  gap: 16px;
+
+  gap: 12px;
 }
 
 .fornecedor-card {
   background: #ffffff;
   border: 1px solid #d9bf80;
   border-radius: 12px;
-  padding: 14px;
-  min-height: 120px;
+  padding: 12px;
+  min-height: 95px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -270,7 +297,7 @@
 }
 
 .fornecedor-card-topo h3 {
-  font-size: 18px;
+  font-size: 1p6x;
   margin: 0;
   color: #5a3519;
 }
@@ -280,8 +307,8 @@
   background: #ecfaec;
   border: 1px solid #bde5bd;
   border-radius: 999px;
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -289,7 +316,7 @@
 
 .fornecedor-telefone {
   font-size: 14px;
-  margin: 9px 0;
+  margin: 4px 0;
   color: #4e4e4e;
   font-weight: 500;
 }
@@ -375,30 +402,82 @@
 }
 
 .fornecedores-empty-state h3 {
-  margin: 0;
   font-size: 20px;
 }
 
 .fornecedores-empty-state p {
-  margin: 0;
   max-width: 560px;
   color: #525252;
   line-height: 1.5;
 }
 
 .fornecedores-paginacao {
-  background: #fffdf4;
-  border-top: 1px solid #e8d9a8;
-  padding: 10px 30px;
-  flex-shrink: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-top: 0;
+  margin-bottom: 15px;
+  min-height: 46px;
+  background: transparent;
+  gap: 32px;
+  z-index: 2;
 }
 
 .paginacao-container {
+  width: 100%;
+  max-width: 900px;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
-  margin-top: 0;
+  gap: 15px;
+}
+
+.paginacao-numeros {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.paginacao-btn {
+  min-width: 36px;
+  height: 36px;
+  border: 1px solid #d9bf80;
+  border-radius: 8px;
+  background: #f8ecc6;
+  color: #6b4423;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.paginacao-btn:hover:not(:disabled) {
+  background: #f0d98a;
+  border-color: #6b4423;
+}
+
+.paginacao-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.paginacao-btn-ativo {
+  background: #6b4423;
+  color: #f8ecc6;
+  border-color: #6b4423;
+}
+
+.paginacao-btn-ativo:hover:not(:disabled) {
+  background: #5a3519;
+}
+
+.paginacao-nav {
+  flex-shrink: 0;
 }
 
 @media (max-width: 768px) {
@@ -462,8 +541,8 @@
 }
 
 .paginacao-btn {
-  min-width: 36px;
-  height: 36px;
+  min-width: 50px;
+  height: 30px;
   border: 1px solid #d9bf80;
   border-radius: 8px;
   background: #f8ecc6;
@@ -498,7 +577,7 @@
 }
 
 .paginacao-nav {
-  padding: 0 8px;
+  padding: 0 18px;
 }
 
 .paginacao-ellipsis {
