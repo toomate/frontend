@@ -66,19 +66,24 @@ html, body, #root {
 .fornecedores-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
-  margin-bottom: 10px;
+  margin: 0 auto 10px auto;
 }
 
 .fornecedores-toolbar-esquerda {
   display: flex;
+  align-items: center;
+  justify-content: center;
+
   gap: 8px;
-  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .fornecedores-toolbar-direita {
-  display: contents;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fornecedores-btn-add, .fornecedores-btn-add-categoria {
@@ -92,11 +97,11 @@ html, body, #root {
   color: black;
   cursor: pointer;
   width: 220px;
-  height: 38px;
-  padding: 0 14px;
+  height: 34px;
+  margin-top: 0;
+  padding: 0 10px;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(107, 68, 35, 0.18);
   transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
 }
 
@@ -121,7 +126,7 @@ html, body, #root {
   color: black;
   background: white;
   font-size: 14px;
-  height: 38px;
+  height: 34px;
   width: 130px;
   flex-shrink: 0;
   font-weight: 600;
@@ -495,7 +500,7 @@ html, body, #root {
   .fornecedores-btn-add,
   .fornecedores-btn-add-categoria {
     width: 100%;
-    height: 44px;
+    height: 30px;
   }
 
   .fornecedores-select {
