@@ -1,14 +1,27 @@
 .fiado-card {
   background: #fff;
   border-radius: 0.8em;
-  padding: 1em 1.2em;
+  padding: 10px;
   display: flex;
   flex-direction: column;
-  gap: 0.6em;
-  height: 100%;
+  gap: 10px;
+  height: auto;
+  width: 460px;
   position: relative;
   box-sizing: border-box;
-  box-shadow: #6b4423 0px 4px 10px;
+  border: 1px solid #d4af37;
+  box-shadow: #6b4423 0px 2px 8px;
+}
+
+.fiado-cards-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+
+  gap: 10px;
+  
+  padding: 30px;
 }
 
 .filtro-btn {
