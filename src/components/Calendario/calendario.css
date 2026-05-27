@@ -58,9 +58,13 @@
 
 .calendario-container-inside {
     display: flex;
+    justify-content: center;
     flex-direction: column;
     padding: 10px;
-    background-color: white;
+    background-image: url(../../images/fundo-tela.png); 
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .calendario-container-inside h1 {
@@ -70,7 +74,16 @@
 /* ===== WRAPPER CALENDÁRIO ===== */
 
 .calendar-wrapper {
-    height: 80vh;
+    height: 85vh;
+
+    width: 80%;
+
+    margin: 0 auto;
+
+    padding: 5px;
+
+    /* mudar a cor do fundo se precisar */
+    background-color: transparent;
 }
 
 /* ===== TOOLBAR CALENDARIO ===== */
@@ -145,7 +158,7 @@
 .toolbar-top {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
 
     gap: 15px;
 
