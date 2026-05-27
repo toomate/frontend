@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { SearchX, TriangleAlert } from "lucide-react";
+import { SearchX, TriangleAlert, Trash2, Save } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 import { FornecedorToolbar } from "./components/fornecedores/FornecedorToolbar";
 import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
@@ -426,60 +426,153 @@ export default function Fornecedor() {
         </div>
       </main>
 
-      <NovoFornecedorModal
-        aberto={modalAberto}
-        aoFechar={fecharModal}
-        aoSalvar={salvarFornecedor}
-        form={form}
-        aoMudar={onChangeForm}
-        salvando={salvando}
-        titulo={modoModal === "editar" ? "Editar fornecedor" : "Novo fornecedor"}
-        textoBotao={modoModal === "editar" ? "Atualizar" : "Salvar"}
-      />
+      {/* MODAL NOVO/EDITAR FORNECEDOR */}
+      {modalAberto && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span className="titulo">
+              {modoModal === "editar"
+                ? "Editar fornecedor"
+                : "Novo fornecedor"}
+            </span>
 
-      <NovaCategoriaModal
-        aberto={modalCategoriaAberto}
-        aoFechar={fecharModalCategoria}
-        aoSalvar={salvarCategoria}
-        form={formCategoria}
-        aoMudar={onChangeFormCategoria}
-        salvando={salvandoCategoria}
-      />
+            <input
+              className="modal-input"
+              type="text"
+              name="razaoSocial"
+              placeholder="Razão social"
+              value={form.razaoSocial}
+              onChange={onChangeForm}
+            />
 
-      <BaseModal
-        aberto={confirmacaoExclusaoAberta}
-        onClose={fecharConfirmacaoExclusao}
-        title="Excluir fornecedor?"
-        width={360}
-        className="fornecedores-modal-confirmacao"
-        footer={
-          <>
-            <button
-              type="button"
-              className="fornecedores-btn-cancelar"
-              onClick={fecharConfirmacaoExclusao}
-              disabled={excluindo}
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              className="fornecedores-btn-salvar fornecedores-btn-excluir"
-              onClick={excluirFornecedor}
-              disabled={excluindo}
-            >
-              {excluindo ? "Excluindo..." : "Excluir"}
-            </button>
-          </>
-        }
-      >
-        <div className="fornecedores-confirmacao-icone">
-          <TriangleAlert size={28} />
+            <input
+              className="modal-input"
+              type="text"
+              name="telefone"
+              placeholder="Telefone"
+              value={form.telefone}
+              onChange={onChangeForm}
+            />
+
+            <div className="modal-actions">
+              <button
+                className="btn btn-cancelar"
+                onClick={fecharModal}
+              >
+                Cancelar <Trash2 size={14} />
+              </button>
+
+              <button
+                className="btn"
+                onClick={salvarFornecedor}
+                disabled={salvando}
+              >
+                {salvando
+                  ? "Salvando..."
+                  : modoModal === "editar"
+                  ? "Atualizar"
+                  : "Salvar"}{" "}
+                <Save size={14} />
+              </button>
+            </div>
+          </div>
         </div>
-        <p>
-          Essa acao remove <strong>{fornecedorSelecionado?.razaoSocial}</strong> da sua lista.
-        </p>
-      </BaseModal>
+      )}
+
+      {/* MODAL NOVA CATEGORIA */}
+      {modalCategoriaAberto && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span className="titulo">
+              Nova categoria
+            </span>
+
+            <input
+              className="modal-input"
+              type="text"
+              name="nome"
+              placeholder="Nome da categoria"
+              value={formCategoria.nome}
+              onChange={onChangeFormCategoria}
+            />
+
+            <div className="modal-actions">
+              <button
+                className="btn btn-cancelar"
+                onClick={fecharModalCategoria}
+              >
+                Cancelar <Trash2 size={14} />
+              </button>
+
+              <button
+                className="btn"
+                onClick={salvarCategoria}
+                disabled={salvandoCategoria}
+              >
+                {salvandoCategoria
+                  ? "Salvando..."
+                  : "Salvar"}{" "}
+                <Save size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL CONFIRMAÇÃO EXCLUSÃO */}
+      {confirmacaoExclusaoAberta && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "10px",
+              }}
+            >
+              <TriangleAlert size={50} />
+            </div>
+
+            <span className="titulo">
+              Excluir fornecedor?
+            </span>
+
+            <p
+              style={{
+                textAlign: "center",
+                marginBottom: "20px",
+              }}
+            >
+              Essa ação remove{" "}
+              <strong>
+                {fornecedorSelecionado?.razaoSocial}
+              </strong>{" "}
+              da sua lista.
+            </p>
+
+            <div className="modal-actions">
+              <button
+                className="btn btn-cancelar"
+                onClick={fecharConfirmacaoExclusao}
+                disabled={excluindo}
+              >
+                Cancelar <Trash2 size={14} />
+              </button>
+
+              <button
+                className="btn"
+                onClick={excluirFornecedor}
+                disabled={excluindo}
+              >
+                {excluindo
+                  ? "Excluindo..."
+                  : "Excluir"}{" "}
+                <TriangleAlert size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+        )}
     </div>
   );
 }

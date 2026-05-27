@@ -141,7 +141,7 @@ input {
   z-index: 999;
 }
 
-.modal {
+.modal, .base-modal {
   background: white;
   padding: 24px;
   border-radius: 12px;
