@@ -35,7 +35,9 @@ export function Estoque() {
         const dados = await Lote.dynamicGetEstoque(categoria, busca);
         setGrupo(dados);
         setGrupoMax(dados);
+                console.log(dados)
         return dados;
+
     }, [categoriaAtiva, pesquisa]);
 
     // const calcularDeficit = (item) => {
@@ -247,7 +249,7 @@ export function Estoque() {
 
     useEffect(() => {
         carregarEstoque();
-    }, [carregarEstoque])
+    }, [])
 
     useEffect(() => {
         CategoriaApi.listar()
