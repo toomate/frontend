@@ -33,13 +33,6 @@ export function Estoque() {
 
     const carregarEstoque = useCallback(async (categoria = categoriaAtiva, busca = pesquisa) => {
         const dados = await Lote.dynamicGetEstoque(categoria, busca);
-<<<<<<< Updated upstream
-        setGrupo(dados);
-        setGrupoMax(dados);
-                console.log(dados)
-        return dados;
-
-=======
         console.log(dados)
         if (dados.total > 0) {
             setGrupo(dados.conteudo);
@@ -50,7 +43,6 @@ export function Estoque() {
             setGrupoMax([]);
             return []
         }
->>>>>>> Stashed changes
     }, [categoriaAtiva, pesquisa]);
 
     // const calcularDeficit = (item) => {
