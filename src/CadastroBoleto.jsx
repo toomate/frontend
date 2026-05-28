@@ -250,14 +250,6 @@ export default function CadastroBoleto() {
                 placeholder="Insira uma categoria"
                 className="selectCategoriaBoleto"
               />
-
-              <button
-                type="button"
-                className="eye-btn"
-                onClick={() => setAbrirModal(true)}
-              >
-                <Plus size={18} />
-              </button>
             </div>
 
             {categoriaSelecionada?.trim().toLowerCase() === "boletos fornecedores" && (
