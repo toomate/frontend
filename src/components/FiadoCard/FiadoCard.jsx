@@ -11,7 +11,6 @@ export function FiadoCard({ fiado, onAbrir }) {
   return (
     <div className="fiado-card">
       <div className="fiado-card-nome">
-        <span className="label">Nome:</span>
         <span className="valor-bar">{fiado.nome}</span>
       </div>
 
