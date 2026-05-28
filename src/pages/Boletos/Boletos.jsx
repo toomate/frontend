@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useLayoutEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import "./Boletos.css";
@@ -11,12 +11,19 @@ import { Plus } from 'lucide-react';
 export default function Boletos() {
   const navigate = useNavigate();
   const [boletoLista, setBoletos] = useState([]);
+  const [paginaAtual, setPaginaAtual] = useState(0);
+  const [itensPorPagina, setItensPorPagina] = useState(10);
+  const mesAtual = String(new Date().getMonth());
   const categorias = Array.from(new Set(boletoLista.map((b) => b.categoria).filter(Boolean)));
-  const [filtroMes, setFiltroMes] = useState("proximo");
+  const [filtroMes, setFiltroMes] = useState(mesAtual);
   const [filtroStatus, setFiltroStatus] = useState("");
   const [filtroTipo, setFiltroTipo] = useState("");
   const [pesquisa, setPesquisa] = useState("");
   const [selectedBoletos, setSelectedBoletos] = useState([]);
+  const filtrosRef = useRef(null);
+  const paginacaoRef = useRef(null);
+  const listaRef = useRef(null);
+  const itemMedidaRef = useRef(null);
 
   function abrirModalBoleto(boleto) {
     setSelectedBoletos([boleto]);
@@ -42,11 +49,6 @@ export default function Boletos() {
     }
 
     const hoje = new Date();
-
-    if (filtroMes === "proximo") {
-      const dataProximoMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 1);
-      return dataProximoMes.toISOString();
-    }
 
     const mesSelecionado = Number(filtroMes);
     if (Number.isFinite(mesSelecionado)) {
@@ -79,27 +81,6 @@ export default function Boletos() {
   }
 
 
-  const boletosFiltradosPorMes = boletoLista.filter((boleto) => {
-    if (!(boleto.start instanceof Date) || Number.isNaN(boleto.start.getTime())) {
-      return false;
-    }
-
-    const mesBoleto = boleto.start.getMonth();
-    const anoBoleto = boleto.start.getFullYear();
-
-    if (filtroMes === "proximo") {
-      const hoje = new Date();
-      const proximoMes = (hoje.getMonth() + 1) % 12;
-      const anoProximoMes = hoje.getMonth() === 11 ? hoje.getFullYear() + 1 : hoje.getFullYear();
-      return mesBoleto === proximoMes && anoBoleto === anoProximoMes;
-    }
-
-    const mesSelecionado = Number(filtroMes);
-    if (!Number.isFinite(mesSelecionado)) return true;
-
-    return mesBoleto === mesSelecionado;
-  });
-
   function filtrarBoletosPorNome(boletos, pesquisa) {
     if (!pesquisa) {
       return boletos;
@@ -111,7 +92,35 @@ export default function Boletos() {
     );
   }
 
-  const boletosFiltrados = filtrarBoletosPorNome(filtrarBoletosPorTipo(filtrarBoletosPorStatus(boletosFiltradosPorMes, filtroStatus), filtroTipo), pesquisa);
+  const boletosFiltrados = useMemo(() => {
+    const boletosFiltradosPorMes = boletoLista.filter((boleto) => {
+      if (!(boleto.start instanceof Date) || Number.isNaN(boleto.start.getTime())) {
+        return false;
+      }
+
+      const mesBoleto = boleto.start.getMonth();
+      const anoBoleto = boleto.start.getFullYear();
+
+      const mesSelecionado = Number(filtroMes);
+      if (!Number.isFinite(mesSelecionado)) return true;
+
+      return mesBoleto === mesSelecionado;
+    });
+
+    return filtrarBoletosPorNome(
+      filtrarBoletosPorTipo(
+        filtrarBoletosPorStatus(boletosFiltradosPorMes, filtroStatus),
+        filtroTipo,
+      ),
+      pesquisa,
+    );
+  }, [boletoLista, filtroMes, filtroStatus, filtroTipo, pesquisa]);
+
+  const totalPaginas = Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina));
+  const boletosPaginados = useMemo(
+    () => boletosFiltrados.slice(paginaAtual * itensPorPagina, (paginaAtual + 1) * itensPorPagina),
+    [boletosFiltrados, paginaAtual, itensPorPagina],
+  );
 
   useEffect(() => {
     const fetchBoletos = async () => {
@@ -119,17 +128,17 @@ export default function Boletos() {
         const boletosData = await boletos.listarBoletos();
         const boletosJson = Array.isArray(boletosData)
           ? boletosData.map((boleto) => {
-            const startDate = new Date(boleto.dataVencimento + 'T00:00:00');
-            return {
-              id: boleto.idBoleto,
-              title: boleto.descricao,
-              status: boleto.pago,
-              value: `R$ ${boleto.valor}`,
-              start: startDate,
-              end: startDate,
-              categoria: boleto.categoria,
-            };
-          })
+          const startDate = new Date(boleto.dataVencimento + 'T00:00:00');
+          return {
+            id: boleto.idBoleto,
+            title: boleto.descricao,
+            status: boleto.pago,
+            value: `R$ ${boleto.valor}`,
+            start: startDate,
+            end: startDate,
+            categoria: boleto.categoria,
+          };
+        })
           : [];
         setBoletos(boletosJson);
       } catch (error) {
@@ -139,6 +148,56 @@ export default function Boletos() {
     };
     fetchBoletos();
   }, []);
+
+  useEffect(() => {
+    setPaginaAtual(0);
+  }, [filtroMes, filtroStatus, filtroTipo, pesquisa]);
+
+  useLayoutEffect(() => {
+    function recalcularItensPorPagina() {
+      const filtros = filtrosRef.current;
+      const paginacao = paginacaoRef.current;
+      const lista = listaRef.current;
+      const item = itemMedidaRef.current;
+
+      if (!filtros || !lista || !item) return;
+
+      const viewportBottom = window.innerHeight;
+      const listaTop = lista.getBoundingClientRect().top;
+      const filtrosBottom = filtros.getBoundingClientRect().bottom;
+      const paginacaoAltura = paginacao ? paginacao.getBoundingClientRect().height : 0;
+      const alturaItem = item.getBoundingClientRect().height;
+      const estiloLista = window.getComputedStyle(lista);
+      const gapLista = Number.parseFloat(estiloLista.rowGap || estiloLista.gap || "0") || 0;
+
+      const espacoUtil = Math.max(0, viewportBottom - listaTop - paginacaoAltura - (filtrosBottom - listaTop));
+      const alturaLinha = Math.max(1, alturaItem + gapLista);
+      const itensVisiveis = Math.max(1, Math.floor(espacoUtil / alturaLinha));
+
+      setItensPorPagina(itensVisiveis);
+    }
+
+    recalcularItensPorPagina();
+
+    const observer = new ResizeObserver(() => recalcularItensPorPagina());
+    if (filtrosRef.current) observer.observe(filtrosRef.current);
+    if (paginacaoRef.current) observer.observe(paginacaoRef.current);
+    if (listaRef.current) observer.observe(listaRef.current);
+    if (itemMedidaRef.current) observer.observe(itemMedidaRef.current);
+    window.addEventListener("resize", recalcularItensPorPagina);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", recalcularItensPorPagina);
+    };
+  }, [boletoLista.length]);
+
+  useEffect(() => {
+    const totalPaginasCalculado = Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina));
+    if (paginaAtual > totalPaginasCalculado - 1) {
+      setPaginaAtual(Math.max(0, totalPaginasCalculado - 1));
+    }
+  }, [paginaAtual, itensPorPagina, boletosFiltrados.length]);
 
   useEffect(() => {
     document.title = "Boletos";
@@ -151,9 +210,9 @@ export default function Boletos() {
       <div className="conteudo">
         <br />
         <div className="card-pagamentos">
-          <div className="filtros">
+          <div className="filtros" ref={filtrosRef}>
             <select value={filtroMes} onChange={(e) => setFiltroMes(e.target.value)}>
-              <option value="proximo">Selecionar mês</option>
+              <option value={mesAtual}>Mês atual</option>
               <option value="0">Janeiro</option>
               <option value="1">Fevereiro</option>
               <option value="2">Março</option>
@@ -208,9 +267,9 @@ export default function Boletos() {
             </button>
           </div>
 
-          <div className="lista">
-            {boletosFiltrados.map((boleto) => (
-              <div className="item-pagamento" key={boleto.id}>
+          <div className="lista" ref={listaRef}>
+            {boletosPaginados.map((boleto) => (
+              <div className="item-pagamento" key={boleto.id} ref={itemMedidaRef}>
                 <div className="info-esquerda">
                   <div className="vencimento">Vencimento: {boleto.start.toLocaleDateString()}</div>
 
@@ -236,6 +295,32 @@ export default function Boletos() {
               <div className="sem-resultados">Nenhum boleto encontrado para os filtros selecionados.</div>
             )}
           </div>
+
+          {Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina)) > 1 && (
+            <div ref={paginacaoRef} className="paginacao-boletos" style={{ display: "flex", justifyContent: "center", gap: "12px", marginTop: "16px", alignItems: "center" }}>
+              <button
+                type="button"
+                className="btn-pendente"
+                onClick={() => setPaginaAtual((atual) => Math.max(0, atual - 1))}
+                disabled={paginaAtual === 0}
+              >
+                Anterior
+              </button>
+
+              <span>
+                Página {paginaAtual + 1} de {Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina))}
+              </span>
+
+              <button
+                type="button"
+                className="btn-pendente"
+                onClick={() => setPaginaAtual((atual) => Math.min(Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina)) - 1, atual + 1))}
+                disabled={paginaAtual + 1 >= Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina))}
+              >
+                Próxima
+              </button>
+            </div>
+          )}
         </div>
       </div>
 

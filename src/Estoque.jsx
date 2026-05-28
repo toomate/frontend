@@ -29,15 +29,20 @@ export function Estoque() {
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
     const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
-    const [loading, setLoading] = useState({rotina: false, relatorio: false});
+    const [loading, setLoading] = useState({ rotina: false, relatorio: false });
 
     const carregarEstoque = useCallback(async (categoria = categoriaAtiva, busca = pesquisa) => {
         const dados = await Lote.dynamicGetEstoque(categoria, busca);
-        setGrupo(dados);
-        setGrupoMax(dados);
-                console.log(dados)
-        return dados;
-
+        console.log(dados)
+        if (dados.total > 0) {
+            setGrupo(dados.conteudo);
+            setGrupoMax(dados.conteudo);
+            return dados.conteudo;
+        } else {
+            setGrupo([])
+            setGrupoMax([]);
+            return []
+        }
     }, [categoriaAtiva, pesquisa]);
 
     // const calcularDeficit = (item) => {
@@ -122,7 +127,7 @@ export function Estoque() {
 
     const criarRotina = async (titulo) => {
         try {
-            setLoading({rotina: true})
+            setLoading({ rotina: true })
             const res = await Rotinas.criar(titulo)
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
@@ -142,7 +147,7 @@ export function Estoque() {
 
     const salvarAlteracoes = async () => {
         try {
-            setLoading({relatorio: true})
+            setLoading({ relatorio: true })
             await Lote.atualizarQuantidade(mudancas)
             await carregarEstoque()
             setExibirRelatorio(false)
@@ -172,7 +177,7 @@ export function Estoque() {
     }
 
     const alterarQuantidade = (idLote, operacao) => {
-        
+
         let novaQtd = null;
         let nomeProduto = null;
         let idInsumo = null;
@@ -186,8 +191,8 @@ export function Estoque() {
                     const quantidadeSolicitada = operacao === "somar"
                         ? quantidadeAtual + 1
                         : operacao === "subtrair"
-                        ? quantidadeAtual - 1
-                        : Number(operacao);
+                            ? quantidadeAtual - 1
+                            : Number(operacao);
 
                     novaQtd = Number.isFinite(quantidadeSolicitada)
                         ? quantidadeSolicitada
@@ -282,12 +287,12 @@ export function Estoque() {
         };
     }, []);
 
-    function ButtonPlus({nome, onClick}) {
+    function ButtonPlus({ nome, onClick }) {
         return (
-            
+
             <div className="plus-container">
                 <div className="plus-icon-container" onClick={onClick}>
-                    {nome} 
+                    {nome}
                     <div className="plus-icon"><Plus />
                     </div>
                 </div>
@@ -311,7 +316,7 @@ export function Estoque() {
             mobile.removeEventListener("change", update);
         };
     }, []);
-    
+
     return (
         <div className="estoque-container">
             {exibirRelatorio && (
@@ -337,14 +342,14 @@ export function Estoque() {
             <div className="categoria-container">
                 <div className="button-secund">
                     <div className="botoes-container">
-                        <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }}/>
-                        <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }}/>
-                        <ButtonPlus nome="Adicionar Fornecedor" onClick={() => { navigate("/cadastro-fornecedor") }}/>
+                        <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }} />
+                        <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }} />
+                        <ButtonPlus nome="Adicionar Fornecedor" onClick={() => { navigate("/cadastro-fornecedor") }} />
                         <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
                         <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                         <button className="botoes-container-icon" onClick={() => { navigate("/leitor") }}>
                             <span>QR Code</span>
-                            <ScanBarcode style={{cursor: "pointer"}} color="black" size={28}/>
+                            <ScanBarcode style={{ cursor: "pointer" }} color="black" size={28} />
                         </button>
                         <div className="container-search">
                             <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />

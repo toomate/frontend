@@ -64,6 +64,20 @@ export class boletos {
     }
   };
 
+  static async listarBoletosPaginado({ pagina = 0, tamanho = 10 } = {}) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/boletos/paginado",
+        params: { pagina, tamanho },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar boletos paginados:', error);
+      throw error;
+    }
+  }
+
   static async listarCategorias() {
     try {
       const response = await requestComFallback({
