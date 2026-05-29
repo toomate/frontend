@@ -10,7 +10,7 @@ export default function SeletorPaginas({ avancar, voltar, selecionar, numPages, 
             {gerarPaginas(numPages).map(pagAtual => (
                 <div className="pagina" id={`${pagAtual === paginaSelecionada ? "ativa" : ""}`} key={pagAtual} title={`Página ${pagAtual + 1}`} onClick={() => selecionar(pagAtual)}>
                     <CircleSmall size={32} className="icone-circulo" />
-                    <span className="numero-pagina">{pagAtual + 1}</span>
+                    <span className="numero-pagina"></span>
                 </div>
             ))}
             <div className="seletor-posterior" onClick={avancar}><ChevronRight size={32} className="icone-right" /></div>

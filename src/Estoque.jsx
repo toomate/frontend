@@ -13,6 +13,7 @@ import HeaderPadrao from "./HeaderPadrao";
 import { CardRotina } from "./components/CardRotina/CardRotina";
 import { useNavigate } from "react-router-dom";
 import { Rotinas } from "./provider/Api";
+import SeletorPaginas from "./components/Paginas/SeletorPaginas"
 
 
 export function Estoque() {
@@ -30,20 +31,22 @@ export function Estoque() {
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
     const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
     const [loading, setLoading] = useState({ rotina: false, relatorio: false });
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [pagina, setPagina] = useState(0);
 
-    const carregarEstoque = useCallback(async (categoria = categoriaAtiva, busca = pesquisa) => {
-        const dados = await Lote.dynamicGetEstoque(categoria, busca);
-        console.log(dados)
+    const carregarEstoque = useCallback(async (categoria = categoriaAtiva, busca = pesquisa, paginaAtual = pagina) => {
+        const dados = await Lote.dynamicGetEstoque(categoria, busca, paginaAtual);
         if (dados.total > 0) {
             setGrupo(dados.conteudo);
             setGrupoMax(dados.conteudo);
+            setTotalPaginas(dados.totalPaginas);
             return dados.conteudo;
         } else {
             setGrupo([])
             setGrupoMax([]);
             return []
         }
-    }, [categoriaAtiva, pesquisa]);
+    }, [categoriaAtiva, pesquisa, pagina]);
 
     // const calcularDeficit = (item) => {
     //     const qtdMinima = Number(item?.qtdMinima ?? 0);
@@ -105,6 +108,25 @@ export function Estoque() {
             setCategoriaAtiva("Geral")
         }
     };
+
+    const voltarPag = () => {
+        if (pagina > 0) {
+            let pag = pagina - 1;
+            setPagina(pag)
+        }
+    }
+
+    const avancarPag = () => {
+        if (pagina < totalPaginas - 1) {
+            let pag = pagina + 1;
+            setPagina(pag)
+        }
+    }
+
+    const selecionarPag = (numPag) => {
+        setPagina(numPag);
+    }
+
 
 
     const abrirCard = () => {
@@ -254,7 +276,7 @@ export function Estoque() {
 
     useEffect(() => {
         carregarEstoque();
-    }, [])
+    }, [pagina, categoriaAtiva, pesquisa])
 
     useEffect(() => {
         CategoriaApi.listar()
@@ -367,6 +389,9 @@ export function Estoque() {
                                 dropdownAbertoId={dropdownAbertoId}
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
+                    </div>
+                    <div className="estoque-seletor">
+                        <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={pagina} selecionar={selecionarPag}></SeletorPaginas>
                     </div>
                 </div>
             </div>

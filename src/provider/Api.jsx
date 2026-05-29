@@ -368,7 +368,7 @@ export class AdminApi {
 }
 
 export class Lote {
-  static async dynamicGetEstoque(categoria, busca) {
+  static async dynamicGetEstoque(categoria, busca, pagina) {
     try {
       let parametro = categoria === "Geral" ? "" : `/${categoria}`;
 
@@ -376,10 +376,15 @@ export class Lote {
         parametro = `/search?insumo=${busca}`;
       }
 
+      if(pagina > 0){
+        parametro += `?pagina=${pagina}`
+      }
+
       const response = await requestComFallback({
         method: "get",
         url: `/lotes/estoque${parametro}`,
       });
+      console.log(response)
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar o estoque:", error);
