@@ -60,7 +60,6 @@ function App() {
           <Route path="/estoque" element={<Estoque />} />
           <Route path="/fornecedor" element={<Fornecedor />} />
           <Route path="/cadastro-insumo" element={<CadastroInsumo />} />
-          <Route path="/cadastro-fornecedor" element={<CadastroFornecedor />} />
           <Route path="/cadastro-lote" element={<CadastroLote />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calendario" element={<Calendario />} />
