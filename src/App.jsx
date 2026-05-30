@@ -7,7 +7,6 @@ import { Estoque } from "./Estoque";
 import Fornecedor from "./Fornecedor";
 import CadastroBoleto from "./CadastroBoleto";
 import CadastroFiado from "./CadastroFiado";
-import CadastroFornecedor from "./CadastroFornecedor";
 import CadastroInsumo from "./CadastroInsumo";
 import CadastroLote from "./CadastroLote";
 import Dashboard from "./pages/Dashboard/Dashboard";
