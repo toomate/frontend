@@ -471,7 +471,7 @@ export class Lote {
 }
 
 export class FornecedorApi {
-  static async listar({ razaoSocial = "", pagina = 0, tamanho = 9 } = {}) {
+  static async listar({ razaoSocial = "", pagina = 0, tamanho = 12 } = {}) {
     try {
       const params = {
         razaoSocial: razaoSocial || undefined,

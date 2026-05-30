@@ -68,6 +68,7 @@ export default function Fornecedor() {
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
   const [fornecedoresSelecionados, setFornecedoresSelecionados] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(0);
   const [ordenacao, setOrdenacao] = useState("alfabetica");
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -87,10 +88,6 @@ export default function Fornecedor() {
   useEffect(() => {
     document.title = "Fornecedores";
   }, []);
-
-  useEffect(() => {
-    setPaginaAtual(0);
-  }, [busca, categoriasSelecionadas, fornecedoresSelecionados]);
 
   function exibirToast(mensagem, tipo = "sucesso") {
     setToast({ visivel: true, tipo, mensagem });
@@ -119,8 +116,9 @@ export default function Fornecedor() {
       let itens;
 
       if (categoriasSelecionadas.length === 0) {
-        const response = await FornecedorApi.listar({ tamanho: 999 });
+        const response = await FornecedorApi.listar({pagina: paginaAtual});
         itens = Array.isArray(response) ? response : response?.conteudo ?? response?.fornecedores ?? [];
+        setTotalPaginas(response.totalPaginas)
       } else {
         const respostas = await Promise.all(
           categoriasSelecionadas.map((id) => FornecedorApi.listarPorCategoria(id, { tamanho: 999 }))
@@ -144,7 +142,7 @@ export default function Fornecedor() {
     } finally {
       setCarregando(false);
     }
-  }, [categoriasSelecionadas]);
+  }, [categoriasSelecionadas, paginaAtual]);
 
   useEffect(() => {
     carregarCategorias();
@@ -152,7 +150,7 @@ export default function Fornecedor() {
 
   useEffect(() => {
     carregarFornecedores();
-  }, [carregarFornecedores]);
+  }, [carregarFornecedores, paginaAtual]);
 
   useEffect(() => {
     return () => {
@@ -316,38 +314,6 @@ export default function Fornecedor() {
     }
   }
 
-  const { fornecedoresPagina, totalPaginas } = useMemo(() => {
-    let lista = [...fornecedores];
-
-    const normalizar = (s) =>
-      String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-    const termo = normalizar(busca.trim());
-    if (fornecedoresSelecionados.length > 0) {
-      lista = lista.filter((f) => fornecedoresSelecionados.includes(f.id));
-    }
-
-    if (termo) {
-      const termoDigitos = termo.replace(/\D/g, "");
-      lista = lista.filter((f) => {
-        if (normalizar(f.razaoSocial).includes(termo)) return true;
-        if (termoDigitos.length > 0 && f.telefone.replace(/\D/g, "").includes(termoDigitos)) return true;
-        return false;
-      });
-    }
-
-    if (ordenacao === "alfabetica_desc") {
-      lista.sort((a, b) => b.razaoSocial.localeCompare(a.razaoSocial));
-    } else {
-      lista.sort((a, b) => a.razaoSocial.localeCompare(b.razaoSocial));
-    }
-
-    const totalPaginas = Math.max(1, Math.ceil(lista.length / ITENS_POR_PAGINA));
-    const pagina = Math.min(paginaAtual, totalPaginas - 1);
-    const fornecedoresPagina = lista.slice(pagina * ITENS_POR_PAGINA, (pagina + 1) * ITENS_POR_PAGINA);
-
-    return { fornecedoresPagina, totalPaginas };
-  }, [fornecedores, busca, ordenacao, paginaAtual, fornecedoresSelecionados]);
 
   return (
     <div className="fornecedores-page">
@@ -376,33 +342,15 @@ export default function Fornecedor() {
             aoLimparFornecedores={aoLimparFornecedores}
           />
         </div>
-
-        {/* 2º bloco: Paginação */}
-        <div className="fornecedores-bloco-paginacao">
-          <div className="fornecedores-paginacao">
-            <SeletorPaginas
-              avancar={() =>
-                setPaginaAtual((p) => Math.min(p + 1, totalPaginas - 1))
-              }
-              voltar={() =>
-                setPaginaAtual((p) => Math.max(p - 1, 0))
-              }
-              selecionar={setPaginaAtual}
-              numPages={totalPaginas}
-              paginaSelecionada={paginaAtual}
-            />
-          </div>
-        </div>
-
         {/* 3º bloco: Cards */}
         <div className="fornecedores-bloco-cards">
           {erro && <p className="fornecedores-erro">{erro}</p>}
 
           {carregando ? (
             <p className="fornecedores-mensagem">Carregando fornecedores...</p>
-          ) : fornecedoresPagina.length > 0 ? (
+          ) : fornecedores.length > 0 ? (
             <section className="fornecedores-grid">
-              {fornecedoresPagina.map((fornecedor) => (
+              {fornecedores.map((fornecedor) => (
                 <FornecedorCard
                   key={fornecedor.id ?? fornecedor.razaoSocial}
                   fornecedor={fornecedor}
@@ -573,6 +521,23 @@ export default function Fornecedor() {
           </div>
         </div>
         )}
+
+      {/* 2º bloco: Paginação */}
+      <div className="fornecedores-bloco-paginacao">
+        <div className="fornecedores-paginacao">
+          <SeletorPaginas
+            avancar={() =>
+              setPaginaAtual((p) => Math.min(p + 1, totalPaginas - 1))
+            }
+            voltar={() =>
+              setPaginaAtual((p) => Math.max(p - 1, 0))
+            }
+            selecionar={setPaginaAtual}
+            numPages={totalPaginas}
+            paginaSelecionada={paginaAtual}
+          />
+        </div>
+      </div>
     </div>
   );
 }

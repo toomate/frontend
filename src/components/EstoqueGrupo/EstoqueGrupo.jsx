@@ -115,6 +115,16 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
         return Math.trunc(numero * fator) / fator;
     }
 
+    function getIcon(qtdMin, qtdAtual) {
+        if(qtdMin > qtdAtual){
+            return <TriangleAlert style={{ color: "darkred" }} />
+        } else if (qtdAtual <= qtdMin) {
+            return <TriangleAlert style={{ color: "darkorange" }} />
+        } else {
+            return <CheckCircle style={{ color: "green" }} />
+        }
+    }
+
     return (<div className="grupo-geral">
         <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)}>
             <div className="insumo" ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
@@ -127,9 +137,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             <div className="qtd-medida">
             </div>
             <div className="qtd-minima">{`${grupo.qtdMinima}`}</div>
-            <div className="volume"><span id={grupo.qtdAtual < grupo.qtdMinima ? "vencido" : ""}>{grupo.qtdAtual}{grupo.qtdAtual < grupo.qtdMinima
-                ? (<TriangleAlert style={{ color: "darkred" }} />)
-                : (<CheckCircle style={{ color: "green" }} />)}</span></div>
+            <div className="volume"><span id={grupo.qtdAtual < grupo.qtdMinima ? "vencido" : ""}>{grupo.qtdAtual}{getIcon(grupo.qtdMinima, grupo.qtdAtual)}</span></div>
             <div className="dt-vencimento">
                 {statusValidade && (
                     <span className={`badge-validade badge-validade-${statusValidade}`}>V</span>
