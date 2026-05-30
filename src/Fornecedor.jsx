@@ -1,10 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { SearchX, TriangleAlert, Trash2, Save } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 import { FornecedorToolbar } from "./components/fornecedores/FornecedorToolbar";
 import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
 import SeletorPaginas from "./components/Paginas/SeletorPaginas";
-import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
 import { NovaCategoriaModal } from "./components/fornecedores/NovaCategoriaModal";
 import { BaseModal } from "./components/common/BaseModal";
 import { CategoriaApi, FornecedorApi } from "./provider/Api";
@@ -63,6 +63,7 @@ function mapearFornecedor(item) {
 
 
 export default function Fornecedor() {
+  const navigate = useNavigate();
   const [fornecedores, setFornecedores] = useState([]);
   const [busca, setBusca] = useState("");
   const [categorias, setCategorias] = useState([]);
@@ -161,6 +162,10 @@ export default function Fornecedor() {
     };
   }, []);
 
+  function irParaCadastroFornecedor() {
+    navigate("/cadastro-fornecedor");
+  }
+  
   function aoToggleCategoria(id) {
     setCategoriasSelecionadas((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
@@ -183,13 +188,6 @@ export default function Fornecedor() {
 
   function limparForm() {
     setForm(estadoInicialForm);
-  }
-
-  function abrirModalCriacao() {
-    setModoModal("criar");
-    setFornecedorSelecionado(null);
-    limparForm();
-    setModalAberto(true);
   }
 
   function abrirModalCategoria() {
@@ -333,7 +331,7 @@ export default function Fornecedor() {
             aoBuscar={setBusca}
             ordenacao={ordenacao}
             aoMudarOrdenacao={setOrdenacao}
-            aoAdicionar={abrirModalCriacao}
+            aoAdicionar={irParaCadastroFornecedor}
             aoAdicionarCategoria={abrirModalCategoria}
             categorias={categorias}
             categoriasSelecionadas={categoriasSelecionadas}

@@ -119,7 +119,7 @@ export default function CadastroFornecedor() {
               className="btn"
               onClick={() => {
                 setAbrirModalSucesso(false);
-                navigate("/estoque");
+                navigate(-1);
               }}
             >
               OK
