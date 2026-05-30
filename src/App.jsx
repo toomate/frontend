@@ -7,6 +7,7 @@ import { Estoque } from "./Estoque";
 import Fornecedor from "./Fornecedor";
 import CadastroBoleto from "./CadastroBoleto";
 import CadastroFiado from "./CadastroFiado";
+import CadastroFornecedor from "./CadastroFornecedor";
 import CadastroInsumo from "./CadastroInsumo";
 import CadastroLote from "./CadastroLote";
 import Dashboard from "./pages/Dashboard/Dashboard";
@@ -60,6 +61,7 @@ function App() {
           <Route path="/estoque" element={<Estoque />} />
           <Route path="/fornecedor" element={<Fornecedor />} />
           <Route path="/cadastro-insumo" element={<CadastroInsumo />} />
+          <Route path="/cadastro-fornecedor" element={<CadastroFornecedor />} />
           <Route path="/cadastro-lote" element={<CadastroLote />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/calendario" element={<Calendario />} />
