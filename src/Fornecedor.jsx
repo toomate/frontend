@@ -15,6 +15,7 @@ const ITENS_POR_PAGINA = 9;
 const estadoInicialForm = {
   razaoSocial: "",
   telefone: "",
+  linkWhatsapp: "",
 };
 
 const estadoInicialCategoriaForm = {
@@ -55,7 +56,7 @@ function mapearFornecedor(item) {
     id: item.idFornecedor ?? item.id,
     razaoSocial: item.razaoSocial ?? item.nome ?? "Fornecedor sem nome",
     telefone: item.telefone ?? "",
-    link: item.link ?? "",
+    linkWhatsapp: item.linkWhatsapp ?? item.link ?? "",
     categoria: item.categoria ?? item.nomeCategoria ?? item.categoriaNome ?? "Sem categoria",
   };
 }
@@ -202,6 +203,7 @@ export default function Fornecedor() {
     setForm({
       razaoSocial: fornecedor.razaoSocial ?? "",
       telefone: fornecedor.telefone ?? "",
+      linkWhatsapp: fornecedor.linkWhatsapp ?? "",
     });
     setModalAberto(true);
   }
@@ -250,6 +252,7 @@ export default function Fornecedor() {
       const payload = {
         razaoSocial: form.razaoSocial.trim(),
         telefone: form.telefone.trim(),
+        linkWhatsapp: form.linkWhatsapp.trim(),
       };
 
       if (modoModal === "editar" && fornecedorSelecionado?.id) {
@@ -399,6 +402,15 @@ export default function Fornecedor() {
               name="telefone"
               placeholder="Telefone"
               value={form.telefone}
+              onChange={onChangeForm}
+            />
+
+            <input
+              className="modal-input"
+              type="text"
+              name="linkWhatsapp"
+              placeholder="Link do WhatsApp"
+              value={form.linkWhatsapp}
               onChange={onChangeForm}
             />
 
