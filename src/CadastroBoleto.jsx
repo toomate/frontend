@@ -1,14 +1,12 @@
 import React, { useEffect, useState } from "react";
 import "./CadastroBoleto.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
-import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
 import { data, useNavigate } from "react-router-dom";
 import AutocompleteInput from "./components/common/AutocompleteInput";
 import { boletos, FornecedorApi } from "./provider/Api";
 
 export default function CadastroBoleto() {
   const navigate = useNavigate();
-
   const [abrirModal, setAbrirModal] = useState(false);
   const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);
   const [novaCategoriaBoleto, setNovaCategoriaBoleto] = useState("");
@@ -22,13 +20,6 @@ export default function CadastroBoleto() {
   const [dataVencimento, setDataVencimento] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
   const [isCadastrando, setIsCadastrando] = useState(false);
-  const [modalFornecedorAberto, setModalFornecedorAberto] = useState(false);
-  const [salvandoFornecedor, setSalvandoFornecedor] = useState(false);
-
-  const [formFornecedor, setFormFornecedor] = useState({
-    razaoSocial: "",
-    telefone: "",
-  });
 
   async function cadastrarBoleto(event) {
     event.preventDefault();
@@ -89,70 +80,9 @@ export default function CadastroBoleto() {
 
   }
 
-  function abrirModalFornecedor() {
-    setFormFornecedor({
-      razaoSocial: "",
-      telefone: "",
-    });
-
-    setModalFornecedorAberto(true);
+  function irParaCadastroFornecedor() {
+    navigate("/cadastro-fornecedor");
   }
-
-  function fecharModalFornecedor() {
-    setModalFornecedorAberto(false);
-
-    setFormFornecedor({
-      razaoSocial: "",
-      telefone: "",
-    });
-  }
-
-  function onChangeFornecedor(event) {
-    const { name, value } = event.target;
-
-    setFormFornecedor((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
-
-  async function salvarFornecedor() {
-    if (!formFornecedor.razaoSocial.trim()) {
-      return;
-    }
-
-    try {
-      setSalvandoFornecedor(true);
-
-      const payload = {
-        razaoSocial: formFornecedor.razaoSocial.trim(),
-        telefone: formFornecedor.telefone.trim(),
-      };
-
-      const response = await FornecedorApi.criar(payload);
-
-      const novoFornecedor = {
-        id: String(
-          response?.idFornecedor ??
-          response?.id ??
-          formFornecedor.razaoSocial
-        ),
-        label: formFornecedor.razaoSocial.trim(),
-      };
-
-      setFornecedores((prev) => [...prev, novoFornecedor]);
-
-      setFornecedorSelecionado(novoFornecedor);
-      setFornecedorValue(novoFornecedor.label);
-
-      fecharModalFornecedor();
-    } catch (error) {
-      console.error("Erro ao cadastrar fornecedor:", error);
-    } finally {
-      setSalvandoFornecedor(false);
-    }
-  }
-
 
   useEffect(() => {
     async function carregarCategorias() {
@@ -277,7 +207,7 @@ export default function CadastroBoleto() {
                     <button
                       type="button"
                       className="eye-btn"
-                      onClick={abrirModalFornecedor}
+                        onClick={irParaCadastroFornecedor}
                     >
                       <Plus size={18} />
                     </button>
@@ -384,52 +314,6 @@ export default function CadastroBoleto() {
           </div>
         </div>
       )}
-
-      {/* MODAL NOVO FORNECEDOR */}
-      {modalFornecedorAberto && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <span className="titulo">Novo fornecedor</span>
-
-            <input
-              className="modal-input"
-              type="text"
-              name="nome"
-              placeholder="Nome do fornecedor"
-              value={formFornecedor.nome}
-              onChange={onChangeFornecedor}
-            />
-
-            <input
-              className="modal-input"
-              type="text"
-              name="telefone"
-              placeholder="Telefone"
-              value={formFornecedor.telefone}
-              onChange={onChangeFornecedor}
-            />
-
-            <div className="modal-actions">
-              <button
-                className="btn btn-cancelar"
-                onClick={fecharModalFornecedor}
-              >
-                Cancelar <Trash2 size={14} />
-              </button>
-
-              <button
-                className="btn"
-                onClick={salvarFornecedor}
-                disabled={salvandoFornecedor}
-              >
-                {salvandoFornecedor ? "Salvando..." : "Salvar"}{" "}
-                <Save size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
     </div>
   );
 }
