@@ -1,16 +1,19 @@
-import { useMemo, useState } from "react";
-import { Beef, BottleWine, Menu, Leaf, Milk, Package, Wheat, ShoppingCart, Fish, UtensilsCrossed, Sandwich, CookingPot, Droplet } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Beef, BottleWine, ChevronDown, Leaf, Milk, Package, Wheat, ShoppingCart, Fish, Sandwich, CookingPot, Droplet } from "lucide-react";
 
 import "./NavCategorias.css";
 
+const categoriasPadrao = ["Geral"];
+
 export function NavCategorias({
-  categoriaAtual,
-  aoMudarCategoria,
+  categoriasAtivas = [],
+  aoAlternarCategoria,
+  aoLimparCategorias,
   categorias = categoriasPadrao,
-  maxCategoriasFixas,
 }) {
   const listaCategorias = categorias?.length ? categorias : categoriasPadrao;
   const [menuAberto, setMenuAberto] = useState(false);
+  const refMobile = useRef(null);
 
   const pegarIcone = (categoria) => {
     switch (categoria.toLowerCase()) {
@@ -83,54 +86,98 @@ export function NavCategorias({
     }
   };
 
-  const categoriasFixas = useMemo(
-    () => listaCategorias.slice(0, maxCategoriasFixas),
-    [listaCategorias, maxCategoriasFixas]
-  );
-
-  function selecionarCategoria(categoria) {
-    aoMudarCategoria(categoria);
-    setMenuAberto(false);
+  function categoriaEhAtiva(categoria) {
+    if (categoria === "Geral") {
+      return categoriasAtivas.length === 0;
+    }
+    return categoriasAtivas.includes(categoria);
   }
+
+  function aoClicarCategoria(categoria) {
+    if (categoria === "Geral") {
+      aoLimparCategorias?.();
+      return;
+    }
+    aoAlternarCategoria?.(categoria);
+  }
+
+  const textoBotaoMobile = useMemo(() => {
+    if (categoriasAtivas.length === 0) return "Todas as categorias";
+    if (categoriasAtivas.length === 1) return categoriasAtivas[0];
+    return `${categoriasAtivas.length} categorias`;
+  }, [categoriasAtivas]);
+
+  useEffect(() => {
+    if (!menuAberto) return;
+
+    function fecharFora(evento) {
+      if (refMobile.current && !refMobile.current.contains(evento.target)) {
+        setMenuAberto(false);
+      }
+    }
+
+    document.addEventListener("mousedown", fecharFora);
+    return () => document.removeEventListener("mousedown", fecharFora);
+  }, [menuAberto]);
 
   return (
     <div className="categorias-container">
-      <div className="categorias-toolbar">
-        <button
-          type="button"
-          className={`categoria-menu-btn ${menuAberto ? "active" : ""}`}
-          onClick={() => setMenuAberto((prev) => !prev)}
-          aria-label="Mostrar todas as categorias"
-        >
-          <Menu size={18} />
-        </button>
-
-        {categoriasFixas.map((atual) => (
+      <div className="categorias-toolbar categorias-toolbar-desktop">
+        {listaCategorias.map((atual) => (
           <div
             key={atual}
-            id={categoriaAtual === atual ? "active" : ""}
+            id={categoriaEhAtiva(atual) ? "active" : ""}
             className="categoria-item"
-            onClick={() => selecionarCategoria(atual)}
+            onClick={() => aoClicarCategoria(atual)}
           >
             {pegarIcone(atual)} {atual}
           </div>
         ))}
       </div>
 
-      {menuAberto && (
-        <div className="categorias-dropdown">
-          {listaCategorias.map((atual) => (
-            <button
-              type="button"
-              key={atual}
-              className={`categorias-dropdown-item ${categoriaAtual === atual ? "active" : ""}`}
-              onClick={() => selecionarCategoria(atual)}
-            >
-              {atual}
-            </button>
-          ))}
-        </div>
-      )}
+      <div className="categorias-toolbar-mobile" ref={refMobile}>
+        <button
+          type="button"
+          className={`categorias-mobile-botao ${menuAberto ? "aberto" : ""}`}
+          onClick={() => setMenuAberto((v) => !v)}
+          aria-haspopup="listbox"
+          aria-expanded={menuAberto}
+        >
+          <span className="categorias-mobile-texto">{textoBotaoMobile}</span>
+          {categoriasAtivas.length > 0 && (
+            <span className="categorias-mobile-contagem">{categoriasAtivas.length}</span>
+          )}
+          <ChevronDown size={16} className={`categorias-mobile-chevron ${menuAberto ? "rotacionado" : ""}`} />
+        </button>
+
+        {menuAberto && (
+          <div className="categorias-mobile-dropdown" role="listbox">
+            <label className="categorias-mobile-item">
+              <input
+                type="checkbox"
+                checked={categoriasAtivas.length === 0}
+                onChange={() => aoLimparCategorias?.()}
+              />
+              <span>Todas as categorias</span>
+            </label>
+
+            {listaCategorias.length > 1 && <div className="categorias-mobile-divisor" />}
+
+            {listaCategorias
+              .filter((c) => c !== "Geral")
+              .map((categoria) => (
+                <label key={categoria} className="categorias-mobile-item">
+                  <input
+                    type="checkbox"
+                    checked={categoriasAtivas.includes(categoria)}
+                    onChange={() => aoAlternarCategoria?.(categoria)}
+                  />
+                  <span>{categoria}</span>
+                </label>
+              ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

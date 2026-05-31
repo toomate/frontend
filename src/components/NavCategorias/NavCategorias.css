@@ -12,27 +12,6 @@
   min-height: 44px;
 }
 
-.categoria-menu-btn {
-  width: auto;
-  height: 40px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  background: white;
-  color: black;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.categoria-menu-btn.active {
-  background: #6b4423;
-  color: white;
-  border-color: #6b4423;
-  border-radius: 5px;
-}
-
 .categoria-item {
   display: flex;
   align-items: center;
@@ -56,43 +35,6 @@
   border-color: #6b4423;
 }
 
-.categorias-dropdown {
-  width: fit-content;
-  max-width: 240px;
-  background: white;
-  border: 1px solid #6b4423;
-  border-radius: 5px;
-  box-shadow: 0 0 0 rgba(0, 0, 0, 0) !important;
-  padding: 8px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  z-index: 20;
-}
-
-.categorias-dropdown {
-  position: absolute;
-  top: calc(20% + 6px);
-
-}
-
-.categorias-dropdown-item {
-  height: 36px;
-  border: 1px solid #6b4423;
-  border-radius: 8px;
-  background: #fff8e3;
-  color: #6b4423;
-  padding: 0 12px;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.categorias-dropdown-item.active {
-  background: #6b4423;
-  border-color: #6b4423;
-  color: #f8ecc6;
-}
-
 .search-container {
   width: auto;
   height: 42px;
@@ -101,7 +43,7 @@
   background: transparent;
   display: flex;
   align-items: center;
-} 
+}
 
 .search {
   width: 100%;
@@ -109,7 +51,7 @@
   border: none;
   outline: none;
   background: transparent;
-  padding: 0 12px;  
+  padding: 0 12px;
 }
 
 .search input{
@@ -120,27 +62,119 @@
   background: transparent;
 }
 
-@media (max-width: 700px) {
-  .categorias-toolbar {
-    overflow-x: auto;
-    padding-bottom: 2px;
-  }
-
-  .categoria-item {
-    min-width: 110px;
-    height: 40px;
-  }
-
-  .categoria-menu-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 14px;
-  }
+.categorias-toolbar-mobile {
+  display: none;
+  position: relative;
+  width: 100%;
 }
 
-@media (max-width: 480px) {
-  .categorias-dropdown {
-      position: absolute;
-      top: calc(15% + 6px);
-    }
+.categorias-mobile-botao {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid #6b4423;
+  border-radius: 8px;
+  background: white;
+  color: #2a2a2a;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+
+.categorias-mobile-botao.aberto {
+  box-shadow: 0 0 0 2px rgba(107, 68, 35, 0.12);
+}
+
+.categorias-mobile-texto {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.categorias-mobile-contagem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #6b4423;
+  color: #f8ecc6;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.categorias-mobile-chevron {
+  color: #6b4423;
+  transition: transform 0.15s ease;
+  flex-shrink: 0;
+}
+
+.categorias-mobile-chevron.rotacionado {
+  transform: rotate(180deg);
+}
+
+.categorias-mobile-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  right: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #6b4423;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  z-index: 30;
+}
+
+.categorias-mobile-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  color: #2a2a2a;
+  font-size: 14px;
+  transition: background 0.12s ease;
+}
+
+.categorias-mobile-item:hover {
+  background: #fff8e3;
+}
+
+.categorias-mobile-item input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  accent-color: #6b4423;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.categorias-mobile-divisor {
+  height: 1px;
+  background: #ececec;
+  margin: 4px 2px;
+}
+
+@media (max-width: 900px) {
+  .categorias-toolbar-desktop {
+    display: none;
+  }
+
+  .categorias-toolbar-mobile {
+    display: block;
+  }
 }

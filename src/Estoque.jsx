@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import { Cabecalho } from "./components/Cabecalho/Cabecalho";
 import { Search } from "./components/Search/Search";
@@ -18,7 +18,7 @@ import { Rotinas } from "./provider/Api";
 export function Estoque() {
     const [grupo, setGrupo] = useState([])
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
-    const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
+    const [categoriasAtivas, setCategoriasAtivas] = useState([])
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
     const [exibirRelatorio, setExibirRelatorio] = useState(false);
@@ -27,7 +27,6 @@ export function Estoque() {
     const [idSelecionado, setIdSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
-    const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
     const [loading, setLoading] = useState({rotina: false, relatorio: false});
 
     const calcularDeficit = (item) => {
@@ -87,9 +86,25 @@ export function Estoque() {
     const pesquisar = (valor) => {
         setPesquisa(valor)
         if (valor.length > 0) {
-            setCategoriaAtiva("Geral")
+            setCategoriasAtivas([])
         }
     };
+
+    const alternarCategoria = (categoria) => {
+        if (categoria === "Geral") {
+            setCategoriasAtivas([])
+            return
+        }
+        setCategoriasAtivas((atual) =>
+            atual.includes(categoria)
+                ? atual.filter((c) => c !== categoria)
+                : [...atual, categoria]
+        )
+    }
+
+    const limparCategorias = () => {
+        setCategoriasAtivas([])
+    }
 
 
     const abrirCard = () => {
@@ -134,7 +149,7 @@ export function Estoque() {
         try {
             setLoading({relatorio: true})
             await Lote.atualizarQuantidade(mudancas)
-            await Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res))
+            await carregarEstoque()
             setExibirRelatorio(false)
             setMudancas([])
         } catch (error) {
@@ -214,9 +229,43 @@ export function Estoque() {
         document.title = "Estoque";
     }, []);
 
+    const carregarEstoque = useCallback(async () => {
+        if (pesquisa.length > 0) {
+            const resultado = await Lote.dynamicGetEstoque("Geral", pesquisa)
+            const lista = Array.isArray(resultado) ? resultado : []
+            if (categoriasAtivas.length === 0) {
+                setGrupo(lista)
+                return
+            }
+            const ativasNormalizadas = categoriasAtivas.map((c) => String(c).toLowerCase())
+            setGrupo(lista.filter((item) => ativasNormalizadas.includes(String(item?.categoria ?? "").toLowerCase())))
+            return
+        }
+
+        if (categoriasAtivas.length === 0) {
+            const resultado = await Lote.dynamicGetEstoque("Geral", "")
+            setGrupo(Array.isArray(resultado) ? resultado : [])
+            return
+        }
+
+        const respostas = await Promise.all(
+            categoriasAtivas.map((cat) => Lote.dynamicGetEstoque(cat, ""))
+        )
+        const vistos = new Set()
+        const agrupados = respostas
+            .flatMap((r) => (Array.isArray(r) ? r : []))
+            .filter((item) => {
+                const chave = item?.fkInsumo ?? item?.idInsumo
+                if (chave == null || vistos.has(chave)) return false
+                vistos.add(chave)
+                return true
+            })
+        setGrupo(agrupados)
+    }, [categoriasAtivas, pesquisa])
+
     useEffect(() => {
-        Lote.dynamicGetEstoque(categoriaAtiva, pesquisa).then((res) => setGrupo(res));
-    }, [categoriaAtiva, pesquisa])
+        carregarEstoque()
+    }, [carregarEstoque])
 
     useEffect(() => {
         CategoriaApi.listar()
@@ -262,23 +311,6 @@ export function Estoque() {
         )
     }
 
-    useEffect(() => {
-        const mobile = window.matchMedia("(max-width: 480px)");
-
-        const update = () => {
-            if (mobile.matches) setMaxCategoriasFixas(0);
-            else setMaxCategoriasFixas(10);
-        };
-
-        update();
-
-        mobile.addEventListener("change", update);
-
-        return () => {
-            mobile.removeEventListener("change", update);
-        };
-    }, []);
-    
     return (
         <div className="estoque-container">
             {exibirRelatorio && (
@@ -319,7 +351,12 @@ export function Estoque() {
                     </div>
                 </div>
                 <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
+                    <NavCategorias
+                        categoriasAtivas={categoriasAtivas}
+                        aoAlternarCategoria={alternarCategoria}
+                        aoLimparCategorias={limparCategorias}
+                        categorias={categorias}
+                    />
                 </div>
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Medida", "Qtd. Mínima", "Qtd. Atual", "Data de Vencimento", "Controle"]} />

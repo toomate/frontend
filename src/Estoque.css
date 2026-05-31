@@ -206,10 +206,6 @@
         padding: 0 10px 12px;
     }
 
-    .categoria-item {
-        width: auto;
-    }
-
     .button-secund {
         flex-direction: column;
         width: 100%;
@@ -240,23 +236,6 @@
         height: auto;
         padding-bottom: 2px;
         justify-content: flex-start;
-    }
-
-    .nav-categorias-container .categorias-container {
-        position: static;
-        width: 100%;
-    }
-
-    .nav-categorias-container .categorias-container .categorias-toolbar {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        align-items: stretch;
-    }
-
-    .nav-categorias-container .categorias-container .categorias-toolbar .categoria-menu-btn,
-    .categoria-item {
-        width: 100%;
     }
 
     .categoria-container .botoes-container .button-container {
