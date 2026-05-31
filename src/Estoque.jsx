@@ -313,43 +313,9 @@ export function Estoque() {
         document.title = "Estoque";
     }, []);
 
-    const carregarEstoque = useCallback(async () => {
-        if (pesquisa.length > 0) {
-            const resultado = await Lote.dynamicGetEstoque("Geral", pesquisa)
-            const lista = Array.isArray(resultado) ? resultado : []
-            if (categoriasAtivas.length === 0) {
-                setGrupo(lista)
-                return
-            }
-            const ativasNormalizadas = categoriasAtivas.map((c) => String(c).toLowerCase())
-            setGrupo(lista.filter((item) => ativasNormalizadas.includes(String(item?.categoria ?? "").toLowerCase())))
-            return
-        }
-
-        if (categoriasAtivas.length === 0) {
-            const resultado = await Lote.dynamicGetEstoque("Geral", "")
-            setGrupo(Array.isArray(resultado) ? resultado : [])
-            return
-        }
-
-        const respostas = await Promise.all(
-            categoriasAtivas.map((cat) => Lote.dynamicGetEstoque(cat, ""))
-        )
-        const vistos = new Set()
-        const agrupados = respostas
-            .flatMap((r) => (Array.isArray(r) ? r : []))
-            .filter((item) => {
-                const chave = item?.fkInsumo ?? item?.idInsumo
-                if (chave == null || vistos.has(chave)) return false
-                vistos.add(chave)
-                return true
-            })
-        setGrupo(agrupados)
-    }, [categoriasAtivas, pesquisa])
-
     useEffect(() => {
         carregarEstoque();
-    }, [carregarEstoque])
+    }, [carregarEstoque]);
 
     useEffect(() => {
         CategoriaApi.listar()
