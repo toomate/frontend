@@ -67,3 +67,23 @@
     border: 0;
     width: 100%;
 }
+
+.dt-vencimento-alerta {
+    color: #9a6700;
+    font-weight: 700;
+}
+
+.dt-vencimento-vencido {
+    color: #8f1d1d;
+    font-weight: 800;
+}
+
+input-quantidade input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

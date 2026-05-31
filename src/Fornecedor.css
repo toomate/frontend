@@ -1,22 +1,37 @@
-﻿html, body, #root {
-  height: 100%;
-  margin: 0;
+﻿/* Blocos separados para toolbar, cards e paginação */
+.fornecedores-bloco-toolbar {
+  margin-bottom: 8px;
+}
+
+.fornecedores-bloco-cards {
+  margin-bottom: 10px;
+}
+
+
+html, body, #root {
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .fornecedores-page {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+
+  background-image: url(./images/fundo-tela.png);
+  background-position: center top;
 }
 
 .fornecedores-content {
-  padding: 30px;
   width: 100%;
-  flex: 1;
-  min-height: 0;
-  background-image: url(./images/fundo-tela.png);
+
+  margin: 0 auto;
+  padding: 10px 16px 0;
+
   box-sizing: border-box;
-  
+  background: transparent;
+  min-height: 80vh;
 }
 
 .fornecedores-toast {
@@ -46,19 +61,24 @@
 .fornecedores-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   gap: 16px;
-  margin-bottom: 10px;
+  margin: 0 auto 10px auto;
 }
 
 .fornecedores-toolbar-esquerda {
   display: flex;
+  align-items: center;
+  justify-content: center;
+
   gap: 8px;
-  flex-shrink: 0;
+  flex-wrap: wrap;
 }
 
 .fornecedores-toolbar-direita {
-  display: contents;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fornecedores-btn-add, .fornecedores-btn-add-categoria {
@@ -72,11 +92,11 @@
   color: black;
   cursor: pointer;
   width: 220px;
-  height: 38px;
-  padding: 0 14px;
+  height: 34px;
+  margin-top: 0;
+  padding: 0 10px;
   font-size: 14px;
   font-weight: 600;
-  box-shadow: 0 2px 6px rgba(107, 68, 35, 0.18);
   transition: background 0.15s ease, transform 0.05s ease, box-shadow 0.15s ease;
 }
 
@@ -101,7 +121,7 @@
   color: black;
   background: white;
   font-size: 14px;
-  height: 38px;
+  height: 34px;
   width: 130px;
   flex-shrink: 0;
   font-weight: 600;
@@ -208,6 +228,10 @@
   padding: 6px 0;
   min-width: 220px;
   box-shadow: 0 6px 20px rgba(107, 68, 35, 0.15);
+
+  max-height: 350px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .filtro-categoria-opcao {
@@ -239,17 +263,20 @@
 }
 
 .fornecedores-grid {
+  width: 100%;
+
   display: grid;
   grid-template-columns: repeat(3, minmax(220px, 1fr));
-  gap: 16px;
+
+  gap: 12px;
 }
 
 .fornecedor-card {
   background: #ffffff;
   border: 1px solid #d9bf80;
   border-radius: 12px;
-  padding: 14px;
-  min-height: 120px;
+  padding: 12px;
+  min-height: 95px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -270,7 +297,7 @@
 }
 
 .fornecedor-card-topo h3 {
-  font-size: 18px;
+  font-size: 1p6x;
   margin: 0;
   color: #5a3519;
 }
@@ -280,8 +307,8 @@
   background: #ecfaec;
   border: 1px solid #bde5bd;
   border-radius: 999px;
-  width: 42px;
-  height: 42px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -289,7 +316,7 @@
 
 .fornecedor-telefone {
   font-size: 14px;
-  margin: 9px 0;
+  margin: 4px 0;
   color: #4e4e4e;
   font-weight: 500;
 }
@@ -375,30 +402,13 @@
 }
 
 .fornecedores-empty-state h3 {
-  margin: 0;
   font-size: 20px;
 }
 
 .fornecedores-empty-state p {
-  margin: 0;
   max-width: 560px;
   color: #525252;
   line-height: 1.5;
-}
-
-.fornecedores-paginacao {
-  background: #fffdf4;
-  border-top: 1px solid #e8d9a8;
-  padding: 10px 30px;
-  flex-shrink: 0;
-}
-
-.paginacao-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  margin-top: 0;
 }
 
 @media (max-width: 768px) {
@@ -416,7 +426,7 @@
   .fornecedores-btn-add,
   .fornecedores-btn-add-categoria {
     width: 100%;
-    height: 44px;
+    height: 30px;
   }
 
   .fornecedores-select {
@@ -462,8 +472,8 @@
 }
 
 .paginacao-btn {
-  min-width: 36px;
-  height: 36px;
+  min-width: 50px;
+  height: 30px;
   border: 1px solid #d9bf80;
   border-radius: 8px;
   background: #f8ecc6;
@@ -498,7 +508,7 @@
 }
 
 .paginacao-nav {
-  padding: 0 8px;
+  padding: 0 18px;
 }
 
 .paginacao-ellipsis {

@@ -13,9 +13,11 @@ import HeaderPadrao from "./HeaderPadrao";
 import { CardRotina } from "./components/CardRotina/CardRotina";
 import { useNavigate } from "react-router-dom";
 import { Rotinas } from "./provider/Api";
+import SeletorPaginas from "./components/Paginas/SeletorPaginas"
 
 
 export function Estoque() {
+    const [grupoMax, setGrupoMax] = useState([])
     const [grupo, setGrupo] = useState([])
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
     const [categoriasAtivas, setCategoriasAtivas] = useState([])
@@ -27,53 +29,89 @@ export function Estoque() {
     const [idSelecionado, setIdSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
-    const [loading, setLoading] = useState({rotina: false, relatorio: false});
+    const [loading, setLoading] = useState({ rotina: false, relatorio: false });
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [pagina, setPagina] = useState(0);
 
-    const calcularDeficit = (item) => {
-        const qtdMinima = Number(item?.qtdMinima ?? 0);
-        const qtdTotal = Number(item?.qtdTotal ?? 0);
-
-        if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-            return 0;
+    const carregarEstoque = useCallback(async () => {
+        if (categoriasAtivas.length >= 2) {
+            const respostas = await Promise.all(
+                categoriasAtivas.map((cat) => Lote.dynamicGetEstoque(cat, pesquisa, 0))
+            );
+            const vistos = new Set();
+            const todos = respostas
+                .flatMap((r) => (Array.isArray(r?.conteudo) ? r.conteudo : Array.isArray(r) ? r : []))
+                .filter((item) => {
+                    const chave = item?.fkInsumo;
+                    if (chave == null || vistos.has(chave)) return false;
+                    vistos.add(chave);
+                    return true;
+                });
+            setGrupo(todos);
+            setGrupoMax(todos);
+            setTotalPaginas(0);
+            return todos;
         }
 
-        return qtdMinima - qtdTotal;
-    };
-
-    const calcularRazaoEstoqueMinimo = (item) => {
-        const qtdMinima = Number(item?.qtdMinima ?? 0);
-        const qtdTotal = Number(item?.qtdTotal ?? 0);
-
-        if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-            return Number.POSITIVE_INFINITY;
+        const categoria = categoriasAtivas[0] ?? "Geral";
+        const dados = await Lote.dynamicGetEstoque(categoria, pesquisa, pagina);
+        if (dados?.total > 0) {
+            setGrupo(dados.conteudo);
+            setGrupoMax(dados.conteudo);
+            setTotalPaginas(dados.totalPaginas);
+            return dados.conteudo;
         }
+        setGrupo([]);
+        setGrupoMax([]);
+        setTotalPaginas(0);
+        return [];
+    }, [categoriasAtivas, pesquisa, pagina]);
 
-        if (qtdMinima <= 0) {
-            return Number.POSITIVE_INFINITY;
-        }
+    // const calcularDeficit = (item) => {
+    //     const qtdMinima = Number(item?.qtdMinima ?? 0);
+    //     const qtdTotal = Number(item?.qtdTotal ?? 0);
 
-        return qtdTotal / qtdMinima;
-    };
+    //     if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
+    //         return 0;
+    //     }
 
-    const grupoOrdenado = [...grupo].sort((a, b) => {
-        const razaoA = calcularRazaoEstoqueMinimo(a);
-        const razaoB = calcularRazaoEstoqueMinimo(b);
+    //     return qtdMinima - qtdTotal;
+    // };
 
-        if (razaoA !== razaoB) {
-            return razaoA - razaoB;
-        }
+    // const calcularRazaoEstoqueMinimo = (item) => {
+    //     const qtdMinima = Number(item?.qtdMinima ?? 0);
+    //     const qtdTotal = Number(item?.qtdTotal ?? 0);
 
-        const deficitA = calcularDeficit(a);
-        const deficitB = calcularDeficit(b);
+    //     if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
+    //         return Number.POSITIVE_INFINITY;
+    //     }
 
-        if (deficitA !== deficitB) {
-            return deficitB - deficitA;
-        }
+    //     if (qtdMinima <= 0) {
+    //         return Number.POSITIVE_INFINITY;
+    //     }
 
-        const nomeA = String(a?.insumo ?? "");
-        const nomeB = String(b?.insumo ?? "");
-        return nomeA.localeCompare(nomeB, "pt-BR");
-    });
+    //     return qtdTotal / qtdMinima;
+    // };
+
+    // // const grupoOrdenado = [...grupo].sort((a, b) => {
+    // //     const razaoA = calcularRazaoEstoqueMinimo(a);
+    // //     const razaoB = calcularRazaoEstoqueMinimo(b);
+
+    // //     if (razaoA !== razaoB) {
+    // //         return razaoA - razaoB;
+    // //     }
+
+    // //     const deficitA = calcularDeficit(a);
+    // //     const deficitB = calcularDeficit(b);
+
+    // //     if (deficitA !== deficitB) {
+    // //         return deficitB - deficitA;
+    // //     }
+
+    // //     const nomeA = String(a?.insumo ?? "");
+    // //     const nomeB = String(b?.insumo ?? "");
+    // //     return nomeA.localeCompare(nomeB, "pt-BR");
+    // // });
 
 
     const abrirDropdown = (idLote) => {
@@ -93,18 +131,41 @@ export function Estoque() {
     const alternarCategoria = (categoria) => {
         if (categoria === "Geral") {
             setCategoriasAtivas([])
+            setPagina(0)
             return
         }
-        setCategoriasAtivas((atual) =>
-            atual.includes(categoria)
+        setCategoriasAtivas((atual) => {
+            const proxima = atual.includes(categoria)
                 ? atual.filter((c) => c !== categoria)
                 : [...atual, categoria]
-        )
+            return proxima
+        })
+        setPagina(0)
     }
 
     const limparCategorias = () => {
         setCategoriasAtivas([])
+        setPagina(0)
     }
+
+    const voltarPag = () => {
+        if (pagina > 0) {
+            let pag = pagina - 1;
+            setPagina(pag)
+        }
+    }
+
+    const avancarPag = () => {
+        if (pagina < totalPaginas - 1) {
+            let pag = pagina + 1;
+            setPagina(pag)
+        }
+    }
+
+    const selecionarPag = (numPag) => {
+        setPagina(numPag);
+    }
+
 
 
     const abrirCard = () => {
@@ -127,7 +188,7 @@ export function Estoque() {
 
     const criarRotina = async (titulo) => {
         try {
-            setLoading({rotina: true})
+            setLoading({ rotina: true })
             const res = await Rotinas.criar(titulo)
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
@@ -147,7 +208,7 @@ export function Estoque() {
 
     const salvarAlteracoes = async () => {
         try {
-            setLoading({relatorio: true})
+            setLoading({ relatorio: true })
             await Lote.atualizarQuantidade(mudancas)
             await carregarEstoque()
             setExibirRelatorio(false)
@@ -166,24 +227,47 @@ export function Estoque() {
         setCardRemocao(false)
     }
 
+    const obterItemLote = (listaGrupos, idLote) => {
+        return listaGrupos.find((item) => item.itens.some((atual) => atual.idLote === idLote))
+            ?.itens.find((atual) => atual.idLote === idLote);
+    }
+
+    const qtdMaxima = (idLote) => {
+        const item = obterItemLote(grupoMax, idLote);
+        return item ? Number(item.quantidadeTotal) : null;
+    }
+
     const alterarQuantidade = (idLote, operacao) => {
+
         let novaQtd = null;
         let nomeProduto = null;
         let idInsumo = null;
         let diferenca = null;
-        console.log(grupo)
+        const quantidadeMaxima = qtdMaxima(idLote);
+
         const novoGrupo = grupo.map(item => {
             const itensAtualizados = item.itens.map(atual => {
                 if (atual.idLote === idLote) {
-                    console.log("atual", atual)
-                    novaQtd = operacao === 'somar'
-                        ? atual.quantidadeTotal + 1
-                        : atual.quantidadeTotal - 1
+                    const quantidadeAtual = Number(atual.quantidadeTotal ?? 0);
+                    const quantidadeSolicitada = operacao === "somar"
+                        ? quantidadeAtual + 1
+                        : operacao === "subtrair"
+                            ? quantidadeAtual - 1
+                            : Number(operacao);
+
+                    novaQtd = Number.isFinite(quantidadeSolicitada)
+                        ? quantidadeSolicitada
+                        : quantidadeAtual;
 
                     if (novaQtd < 0) novaQtd = 0;
 
-                    diferenca = novaQtd - atual.quantidadeTotal
-                    nomeProduto = item.insumo
+                    if (Number.isFinite(quantidadeMaxima)) {
+                        novaQtd = Math.min(novaQtd, quantidadeMaxima);
+                    }
+
+                    diferenca = novaQtd - quantidadeAtual;
+
+                    nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
 
                     return {
@@ -264,7 +348,7 @@ export function Estoque() {
     }, [categoriasAtivas, pesquisa])
 
     useEffect(() => {
-        carregarEstoque()
+        carregarEstoque();
     }, [carregarEstoque])
 
     useEffect(() => {
@@ -298,18 +382,19 @@ export function Estoque() {
         };
     }, []);
 
-    function ButtonPlus({nome, onClick}) {
+    function ButtonPlus({ nome, onClick }) {
         return (
-            
+
             <div className="plus-container">
                 <div className="plus-icon-container" onClick={onClick}>
-                    {nome} 
+                    {nome}
                     <div className="plus-icon"><Plus />
                     </div>
                 </div>
             </div>
         )
     }
+
 
     return (
         <div className="estoque-container">
@@ -336,14 +421,14 @@ export function Estoque() {
             <div className="categoria-container">
                 <div className="button-secund">
                     <div className="botoes-container">
-                        <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }}/>
-                        <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }}/>
-                        <ButtonPlus nome="Adicionar Fornecedor" onClick={() => { navigate("/cadastro-fornecedor") }}/>
+                        <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }} />
+                        <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }} />
+                        <ButtonPlus nome="Adicionar Fornecedor" onClick={() => { navigate("/cadastro-fornecedor") }} />
                         <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
                         <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                         <button className="botoes-container-icon" onClick={() => { navigate("/leitor") }}>
                             <span>QR Code</span>
-                            <ScanBarcode style={{cursor: "pointer"}} color="black" size={28}/>
+                            <ScanBarcode style={{ cursor: "pointer" }} color="black" size={28} />
                         </button>
                         <div className="container-search">
                             <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
@@ -361,12 +446,17 @@ export function Estoque() {
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Medida", "Qtd. Mínima", "Qtd. Atual", "Data de Vencimento", "Controle"]} />
                     <div className="grupo-insumos-container">
-                        {grupoOrdenado.length > 0 ? grupoOrdenado.map(atual => (
+                        {grupo.length > 0 ? grupo.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}
                                 dropdownAbertoId={dropdownAbertoId}
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>
+                    {totalPaginas > 0 && categoriasAtivas.length < 2 && (
+                        <div className="estoque-seletor">
+                            <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={pagina} selecionar={selecionarPag}></SeletorPaginas>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

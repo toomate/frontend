@@ -64,6 +64,20 @@ export class boletos {
     }
   };
 
+  static async listarBoletosPaginado({ pagina = 0, tamanho = 10 } = {}) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/boletos/paginado",
+        params: { pagina, tamanho },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar boletos paginados:', error);
+      throw error;
+    }
+  }
+
   static async listarCategorias() {
     try {
       const response = await requestComFallback({
@@ -354,7 +368,7 @@ export class AdminApi {
 }
 
 export class Lote {
-  static async dynamicGetEstoque(categoria, busca) {
+  static async dynamicGetEstoque(categoria, busca, pagina) {
     try {
       let parametro = categoria === "Geral" ? "" : `/${categoria}`;
 
@@ -362,10 +376,15 @@ export class Lote {
         parametro = `/search?insumo=${busca}`;
       }
 
+      if(pagina > 0){
+        parametro += `?pagina=${pagina}`
+      }
+
       const response = await requestComFallback({
         method: "get",
         url: `/lotes/estoque${parametro}`,
       });
+      console.log(response)
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar o estoque:", error);
@@ -452,7 +471,7 @@ export class Lote {
 }
 
 export class FornecedorApi {
-  static async listar({ razaoSocial = "", pagina = 0, tamanho = 9 } = {}) {
+  static async listar({ razaoSocial = "", pagina = 0, tamanho = 12 } = {}) {
     try {
       const params = {
         razaoSocial: razaoSocial || undefined,

@@ -3,21 +3,28 @@
 }
 
 .estoque-container {
-    min-height: 100vh;
-    height: 100%;
+    height: 100vh;
+    /* Fixa a tela exatamente no tamanho do monitor */
     width: 100%;
+    display: flex;
+    flex-direction: column;
     background-image: url(./images/fundo-tela.png);
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+    overflow: hidden;
+    /* Evita que a página inteira ganhe scroll */
 }
 
 .categoria-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 85%;
-
+    flex: 1;
+    /* Ocupa todo o espaço vertical restante abaixo do Header */
+    min-height: 0;
+    /* Crucial: permite que os filhos encolham sem estourar a tela */
+    width: 100%;
 }
 
 .nav-categorias-container {
@@ -117,12 +124,14 @@
 
 .insumos-container {
     width: 100%;
-    height: 67vh;
-    display: flex;
     flex: 1;
-    min-height: 0;
+    /* Ocupa o espaço restante da tela */
+    display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 0;
+    /* Crucial: ativa a capacidade de encolhimento para o scroll interno */
+    padding-bottom: 15px;
 }
 
 .grupo-insumos-container {
@@ -131,9 +140,20 @@
     align-items: center;
     width: 95%;
     overflow-y: auto;
+    /* Ativa o scroll interno apenas aqui quando necessário */
     flex: 1;
+    /* Faz a tabela expandir dinamicamente para ocupar o espaço livre */
     min-height: 0;
-    max-height: max-content;
+    /* REMOVIDO: max-height: max-content (isso quebrava o cálculo do flexbox) */
+}
+
+.estoque-seletor {
+    display: flex;
+    justify-content: center;
+    align-self: center;
+    margin-top: auto;
+    /* Pega o seletor e prende na base da área útil se a tabela for pequena */
+    padding-top: 15px;
 }
 
 .plus-container {
@@ -187,11 +207,19 @@
     padding: 3px;
 }
 
+
+
 @media (max-width: 768px) {
     #root {
         width: 100dvw;
         min-height: 100dvh;
         height: auto;
+    }
+
+    .estoque-container {
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
     }
 
     .nav-header .header {
@@ -202,8 +230,9 @@
         width: 100%;
         height: auto;
         display: flex;
+        flex-direction: column;
         gap: 12px;
-        padding: 0 10px 12px;
+        padding: 12px;
     }
 
     .button-secund {
@@ -215,18 +244,44 @@
     }
 
     .botoes-container {
-        flex-direction: column;
-        height: auto;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
         width: 100%;
+        height: auto;
         align-items: stretch;
-        justify-content: stretch;
+    }
+
+    .botoes-container .button-container,
+    .botoes-container .plus-container,
+    .botoes-container-icon {
+        width: 100%;
+        height: 44px;
+        margin: 0;
+        justify-content: center;
+        font-size: 14px;
+    }
+
+    .botoes-container-icon {
         gap: 8px;
     }
 
     .container-search {
+        grid-column: 1 / -1;
         max-width: none;
         min-width: 0;
         width: 100%;
+        height: auto;
+        padding-left: 0;
+        background: transparent;
+        border-radius: 0;
+    }
+
+    .container-search .search-container {
+        height: 44px !important;
+        width: 100%;
+        border: 1px solid #ccc;
+        border-radius: 6px;
     }
 
     .nav-categorias-container {
@@ -234,49 +289,16 @@
         flex-direction: column;
         width: 100%;
         height: auto;
-        padding-bottom: 2px;
+        padding: 0;
         justify-content: flex-start;
-    }
-
-    .categoria-container .botoes-container .button-container {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .plus-container {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .botoes-container-icon,
-    .container-search {
-        width: 100%;
-    }
-
-    .categoria-container .insumos-container .elemento-container {
-        font-size: small;
-    }
-
-    .insumos-container .grupo-insumos-container .insumo-nome {
-        font-size: small;
-        width: 70%;
-    }
-
-    .insumos-container .grupo-insumos-container .grupo-container {
-        font-size: small;
-    }
-
-    .insumos-container .grupo-insumos-container .item-container {
-        font-size: small;
-    }
-
-    .linha-estoque.elemento-container {
-        margin-top: 10px;
+        flex-shrink: 0;
     }
 
     .insumos-container {
+        flex: 1 1 auto;
+        min-height: 0;
         width: 100%;
-        height: auto;
+        padding-bottom: 12px;
     }
 
     .grupo-insumos-container {
@@ -284,14 +306,23 @@
         overflow-x: visible;
         overflow-y: visible;
         padding-bottom: 8px;
-        align-items: flex-start;
+        align-items: stretch;
+    }
+
+    .insumos-container .grupo-insumos-container .insumo-nome,
+    .insumos-container .grupo-insumos-container .grupo-container,
+    .insumos-container .grupo-insumos-container .item-container {
+        font-size: 13px;
+    }
+
+    .linha-estoque.elemento-container {
+        margin-top: 8px;
     }
 
     .linha-estoque {
         min-width: 0;
         width: 100%;
     }
-
 }
 
 @media (max-width: 480px) {
@@ -300,71 +331,52 @@
     }
 
     .categoria-container {
-        padding: 0 8px 10px;
+        padding: 10px;
+        gap: 10px;
     }
 
-    .categoria-container .insumos-container .elemento-container {
-        font-size: 9px;
+    .botoes-container {
+        grid-template-columns: 1fr 1fr;
+        gap: 6px;
     }
 
-    .nav-categorias-container {
-        width: 100%;
-        height: auto;
-    }
-
-    .button-secund .botoes-container .button-container {
-        width: 100%;
-        justify-content: center;
-    }
-
-    .button-secund .botoes-container .button-container .button-value {
-        font-size: 12px;
-    }
-
-    .button-secund .botoes-container .button-container .icon-container .button-icon svg {
-        height: 20px;
-    }
-
-    .container-search {
-        flex-wrap: wrap;
-    }
-
-    .button-secund .botoes-container {
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-        width: 100%;
-    }
-
-    .botoes-container .container-search {
-        display: flex;
-        justify-content: center;
-        width: 100%;
-        align-items: center;
-    }
-
-    .botoes-container .container-search {
-        width: 100%;
-        height: 85%;
-    }
-
+    .botoes-container .button-container,
+    .botoes-container .plus-container,
     .botoes-container-icon {
-        width: 100%;
-        justify-content: center;
+        height: 42px;
+        font-size: 13px;
+        padding: 0 10px;
+    }
+
+    .botoes-container .button-container .button-value,
+    .botoes-container .plus-icon-container {
+        font-size: 13px;
+    }
+
+    .botoes-container .button-container .icon-container .button-icon svg,
+    .botoes-container .plus-icon svg,
+    .botoes-container-icon svg {
+        height: 18px;
+        width: 18px;
+    }
+
+    .container-search .search-container {
+        height: 42px !important;
     }
 
     .insumos-container .grupo-insumos-container .insumo-nome,
+    .insumos-container .grupo-insumos-container .grupo-container,
+    .insumos-container .grupo-insumos-container .item-container,
     .qtd-total,
     .medida,
     .dt-vencimento,
     .controle,
     .item-nome {
-        font-size: 10px;
+        font-size: 12px;
     }
 
     .linha-estoque .insumo .insumo-nome .insumo-icon svg {
-        height: 20px;
+        height: 18px;
     }
 
     .linha-estoque .insumo .insumo-nome .insumo-icon {
@@ -379,20 +391,12 @@
 
     .linha-estoque .insumo-grupo .item-nome {
         justify-content: center;
-        flex-direction: row-reverse;
-        border: 1px solid rebeccapurple;
-        gap: 0px;
-        width: 70%;
+        gap: 4px;
+        width: 100%;
         height: 70%;
-    }
-
-    .linha-estoque .insumo-grupo .item-nome svg {
-        display: none;
-    }
-
-    .linha-estoque .insumo-grupo .item-nome {
-        font-size: 10px;
+        font-size: 12px;
         text-overflow: ellipsis;
+        overflow: hidden;
     }
 
     .grupo-container .insumo-icone-value {
@@ -419,13 +423,8 @@
         height: 16px;
     }
 
-    .botoes-container {
-        width: 100%;
-    }
-
     .linha-estoque {
         min-width: 0;
         width: 100%;
     }
-
 }

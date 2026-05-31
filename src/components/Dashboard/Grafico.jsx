@@ -67,7 +67,10 @@ export default function Grafico({ dados }) {
       redrawOnParentResize: true,
       redrawOnWindowResize: true,
       toolbar: {
-        show: false,
+        show: true,
+        tools: {
+          download: true,
+        },
       },
     },
     plotOptions: {

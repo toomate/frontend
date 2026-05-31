@@ -45,6 +45,7 @@ export default function Index() {
 
   async function fetchLotes() {
     const lotesData = await Lote.listarLotes()
+    console.log(lotesData)
     setlotesData(lotesData)
   }
 
