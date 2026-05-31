@@ -20,7 +20,7 @@ export function Estoque() {
     const [grupoMax, setGrupoMax] = useState([])
     const [grupo, setGrupo] = useState([])
     const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
-    const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
+    const [categoriasAtivas, setCategoriasAtivas] = useState([])
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
     const [exibirRelatorio, setExibirRelatorio] = useState(false);
@@ -29,24 +29,43 @@ export function Estoque() {
     const [idSelecionado, setIdSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
-    const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
     const [loading, setLoading] = useState({ rotina: false, relatorio: false });
     const [totalPaginas, setTotalPaginas] = useState(0);
     const [pagina, setPagina] = useState(0);
 
-    const carregarEstoque = useCallback(async (categoria = categoriaAtiva, busca = pesquisa, paginaAtual = pagina) => {
-        const dados = await Lote.dynamicGetEstoque(categoria, busca, paginaAtual);
-        if (dados.total > 0) {
+    const carregarEstoque = useCallback(async () => {
+        if (categoriasAtivas.length >= 2) {
+            const respostas = await Promise.all(
+                categoriasAtivas.map((cat) => Lote.dynamicGetEstoque(cat, pesquisa, 0))
+            );
+            const vistos = new Set();
+            const todos = respostas
+                .flatMap((r) => (Array.isArray(r?.conteudo) ? r.conteudo : Array.isArray(r) ? r : []))
+                .filter((item) => {
+                    const chave = item?.fkInsumo;
+                    if (chave == null || vistos.has(chave)) return false;
+                    vistos.add(chave);
+                    return true;
+                });
+            setGrupo(todos);
+            setGrupoMax(todos);
+            setTotalPaginas(0);
+            return todos;
+        }
+
+        const categoria = categoriasAtivas[0] ?? "Geral";
+        const dados = await Lote.dynamicGetEstoque(categoria, pesquisa, pagina);
+        if (dados?.total > 0) {
             setGrupo(dados.conteudo);
             setGrupoMax(dados.conteudo);
             setTotalPaginas(dados.totalPaginas);
             return dados.conteudo;
-        } else {
-            setGrupo([])
-            setGrupoMax([]);
-            return []
         }
-    }, [categoriaAtiva, pesquisa, pagina]);
+        setGrupo([]);
+        setGrupoMax([]);
+        setTotalPaginas(0);
+        return [];
+    }, [categoriasAtivas, pesquisa, pagina]);
 
     // const calcularDeficit = (item) => {
     //     const qtdMinima = Number(item?.qtdMinima ?? 0);
@@ -105,9 +124,29 @@ export function Estoque() {
     const pesquisar = (valor) => {
         setPesquisa(valor)
         if (valor.length > 0) {
-            setCategoriaAtiva("Geral")
+            setCategoriasAtivas([])
         }
     };
+
+    const alternarCategoria = (categoria) => {
+        if (categoria === "Geral") {
+            setCategoriasAtivas([])
+            setPagina(0)
+            return
+        }
+        setCategoriasAtivas((atual) => {
+            const proxima = atual.includes(categoria)
+                ? atual.filter((c) => c !== categoria)
+                : [...atual, categoria]
+            return proxima
+        })
+        setPagina(0)
+    }
+
+    const limparCategorias = () => {
+        setCategoriasAtivas([])
+        setPagina(0)
+    }
 
     const voltarPag = () => {
         if (pagina > 0) {
@@ -276,7 +315,7 @@ export function Estoque() {
 
     useEffect(() => {
         carregarEstoque();
-    }, [pagina, categoriaAtiva, pesquisa])
+    }, [carregarEstoque])
 
     useEffect(() => {
         CategoriaApi.listar()
@@ -322,22 +361,6 @@ export function Estoque() {
         )
     }
 
-    useEffect(() => {
-        const mobile = window.matchMedia("(max-width: 480px)");
-
-        const update = () => {
-            if (mobile.matches) setMaxCategoriasFixas(0);
-            else setMaxCategoriasFixas(10);
-        };
-
-        update();
-
-        mobile.addEventListener("change", update);
-
-        return () => {
-            mobile.removeEventListener("change", update);
-        };
-    }, []);
 
     return (
         <div className="estoque-container">
@@ -379,7 +402,12 @@ export function Estoque() {
                     </div>
                 </div>
                 <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
+                    <NavCategorias
+                        categoriasAtivas={categoriasAtivas}
+                        aoAlternarCategoria={alternarCategoria}
+                        aoLimparCategorias={limparCategorias}
+                        categorias={categorias}
+                    />
                 </div>
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Medida", "Qtd. Mínima", "Qtd. Atual", "Data de Vencimento", "Controle"]} />
@@ -390,9 +418,11 @@ export function Estoque() {
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>
-                    <div className="estoque-seletor">
-                        <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={pagina} selecionar={selecionarPag}></SeletorPaginas>
-                    </div>
+                    {totalPaginas > 0 && categoriasAtivas.length < 2 && (
+                        <div className="estoque-seletor">
+                            <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={pagina} selecionar={selecionarPag}></SeletorPaginas>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
