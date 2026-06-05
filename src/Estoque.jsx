@@ -229,7 +229,6 @@ export function Estoque() {
     }
 
     const alterarQuantidade = (idLote, operacao) => {
-
         let novaQtd = null;
         let nomeProduto = null;
         let idInsumo = null;
@@ -260,8 +259,6 @@ export function Estoque() {
 
                     diferenca = novaQtd - quantidadeAtual;
 
-
-
                     nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
                     unidadeMedida = atual.unidadeMedida
@@ -280,7 +277,6 @@ export function Estoque() {
         })
         setGrupo(novoGrupo)
         setMudancas(prev => {
-            console.log("a", prev)
             const existente = prev.find(m => m.id === idLote)
 
             if (existente) {
@@ -293,8 +289,6 @@ export function Estoque() {
                         : m
                 )
             }
-            
-
             return [
                 ...prev,
                 {
