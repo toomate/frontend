@@ -110,8 +110,9 @@ export default function Rotinas() {
                 </div>
                 <div className="produtos">
                     {props.insumos && props.insumos.length > 0 ? (props.insumos.map(atual => <React.Fragment key={atual.id}>
+                        {console.log(atual)}
                         <div className="produto-linha">
-                            <div className="produto">{atual.nome}</div><div className="info-linha"><ArrowDown size={20} style={{color: "red"}}/>{Math.abs(atual.quantidade)}</div>
+                            <div className="produto">{atual.nome}</div><div className="info-linha"><ArrowDown size={20} style={{ color: "red" }} />{Math.abs(atual.quantidade)}{atual.unidadeMedida}</div>
                             <div className="icone-linha">
                             </div></div>
                     </React.Fragment>)) :

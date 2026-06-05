@@ -188,12 +188,14 @@ export function Estoque() {
 
     const criarRotina = async (titulo) => {
         try {
+            console.log("mudancas", mudancas)
             setLoading({ rotina: true })
             const res = await Rotinas.criar(titulo)
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
                 insumoId: atual.insumoId,
-                quantidadeInsumo: Math.abs(atual.diferenca)
+                quantidadeInsumo: Math.abs(atual.diferenca) * atual.quantidadeMedida,
+                unidadeMedida: atual.unidadeMedida
             }))
             await Rotinas.associarInsumos(id, insumosRotina)
             setCardRotina(false)
@@ -243,6 +245,8 @@ export function Estoque() {
         let nomeProduto = null;
         let idInsumo = null;
         let diferenca = null;
+        let unidadeMedida = null;
+        let quantidadeMedida = null;
         const quantidadeMaxima = qtdMaxima(idLote);
 
         const novoGrupo = grupo.map(item => {
@@ -269,7 +273,9 @@ export function Estoque() {
 
                     nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
-
+                    unidadeMedida = atual.unidadeMedida
+                    quantidadeMedida = atual.quantidadeMedida
+                
                     return {
                         ...atual,
                         quantidadeTotal: novaQtd
@@ -283,6 +289,7 @@ export function Estoque() {
         })
         setGrupo(novoGrupo)
         setMudancas(prev => {
+            console.log("a", prev)
             const existente = prev.find(m => m.id === idLote)
 
             if (existente) {
@@ -303,6 +310,8 @@ export function Estoque() {
                     insumoId: idInsumo,
                     produto: nomeProduto,
                     quantidadeTotal: novaQtd,
+                    unidadeMedida: unidadeMedida,
+                    quantidadeMedida: quantidadeMedida,
                     diferenca: diferenca
                 }
             ]
