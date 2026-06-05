@@ -10,6 +10,24 @@
     height: 8vh;
 }
 
+#abaixo {
+    animation: piscar 2.5s infinite;
+}
+
+@keyframes piscar {
+    0% {
+        background-color: rgb(255, 182, 182);
+    }
+
+    50% {
+        background-color: white;
+    }
+
+    100% {
+        background-color: rgb(255, 182, 182);
+    }
+}
+
 .insumo-grupo {
     font-size: 18px;
     display: flex;
@@ -55,7 +73,7 @@
     display: flex;
     align-items: center;
     width: 30%;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .botao-cadastrar {

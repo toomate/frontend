@@ -25,11 +25,12 @@ export function Estoque() {
     const [mudancas, setMudancas] = useState([])
     const [exibirRelatorio, setExibirRelatorio] = useState(false);
     const [cardRemocao, setCardRemocao] = useState(false);
+    const [cardExclusao, setCardExclusao] = useState(false);
     const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
-    const [loading, setLoading] = useState({ rotina: false, relatorio: false });
+    const [loading, setLoading] = useState({ rotina: false, relatorio: false, exclusao: false });
     const [totalPaginas, setTotalPaginas] = useState(0);
     const [pagina, setPagina] = useState(0);
 
@@ -67,57 +68,15 @@ export function Estoque() {
         return [];
     }, [categoriasAtivas, pesquisa, pagina]);
 
-    // const calcularDeficit = (item) => {
-    //     const qtdMinima = Number(item?.qtdMinima ?? 0);
-    //     const qtdTotal = Number(item?.qtdTotal ?? 0);
 
-    //     if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-    //         return 0;
-    //     }
-
-    //     return qtdMinima - qtdTotal;
-    // };
-
-    // const calcularRazaoEstoqueMinimo = (item) => {
-    //     const qtdMinima = Number(item?.qtdMinima ?? 0);
-    //     const qtdTotal = Number(item?.qtdTotal ?? 0);
-
-    //     if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-    //         return Number.POSITIVE_INFINITY;
-    //     }
-
-    //     if (qtdMinima <= 0) {
-    //         return Number.POSITIVE_INFINITY;
-    //     }
-
-    //     return qtdTotal / qtdMinima;
-    // };
-
-    // // const grupoOrdenado = [...grupo].sort((a, b) => {
-    // //     const razaoA = calcularRazaoEstoqueMinimo(a);
-    // //     const razaoB = calcularRazaoEstoqueMinimo(b);
-
-    // //     if (razaoA !== razaoB) {
-    // //         return razaoA - razaoB;
-    // //     }
-
-    // //     const deficitA = calcularDeficit(a);
-    // //     const deficitB = calcularDeficit(b);
-
-    // //     if (deficitA !== deficitB) {
-    // //         return deficitB - deficitA;
-    // //     }
-
-    // //     const nomeA = String(a?.insumo ?? "");
-    // //     const nomeB = String(b?.insumo ?? "");
-    // //     return nomeA.localeCompare(nomeB, "pt-BR");
-    // // });
-
+    const abrirCardExclusao = (idLote) => {
+        setIdSelecionado(idLote);
+        setCardExclusao(true);
+    }
 
     const abrirDropdown = (idLote) => {
         setDropdownAbertoId(prev => prev === idLote ? null : idLote);
     }
-
 
     const navigate = useNavigate();
 
@@ -207,6 +166,15 @@ export function Estoque() {
         }
     }
 
+    const excluirLote = async (idLote) => {
+        setLoading({ exclusao: true })
+        await Lote.excluirLote(idLote);
+        await carregarEstoque()
+
+        setCardExclusao(false);
+        setIdSelecionado(null);
+    }
+
 
     const salvarAlteracoes = async () => {
         try {
@@ -223,9 +191,30 @@ export function Estoque() {
         }
     }
 
+    const recalcularGrupo = (mudancasAtualizadas) => {
+        let novoGrupo = JSON.parse(JSON.stringify(grupoMax))
+
+        mudancasAtualizadas.forEach(m => {
+            novoGrupo = novoGrupo.map(item => ({
+                ...item,
+                itens: item.itens.map(i =>
+                    i.idLote === m.id
+                        ? { ...i, quantidadeTotal: m.quantidadeTotal }
+                        : i
+                )
+            }))
+        })
+
+        setGrupo(novoGrupo)
+    }
+    const loteOriginal = (idLote) => {
+        return obterItemLote(grupoMax, idLote);
+    }
+
     const removerAlteracao = () => {
         const novoArray = mudancas.filter((e) => e.id !== Number(idSelecionado))
         setMudancas(novoArray)
+        recalcularGrupo(novoArray)
         setCardRemocao(false)
     }
 
@@ -271,11 +260,13 @@ export function Estoque() {
 
                     diferenca = novaQtd - quantidadeAtual;
 
+
+
                     nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
                     unidadeMedida = atual.unidadeMedida
                     quantidadeMedida = atual.quantidadeMedida
-                
+
                     return {
                         ...atual,
                         quantidadeTotal: novaQtd
@@ -302,6 +293,7 @@ export function Estoque() {
                         : m
                 )
             }
+            
 
             return [
                 ...prev,
@@ -375,13 +367,18 @@ export function Estoque() {
         <div className="estoque-container">
             {exibirRelatorio && (
                 <div className="escurecer">
-                    <CardRelatorio props={mudancas}
+                    <CardRelatorio props={mudancas.filter(m => m.diferenca !== 0)}
                         fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} loading={loading.relatorio} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={abrirCardRotina} />
                 </div>
             )}
             {cardRemocao && (
                 <div className="escurecer">
                     <CardConfirmacao titulo={"Deseja descartar as alterações?"} fecharCard={() => { setCardRemocao(false) }} confirmar={removerAlteracao} />
+                </div>
+            )}
+            {cardExclusao && (
+                <div className="escurecer">
+                    <CardConfirmacao titulo={"Deseja excluir o lote?"} fecharCard={() => { setCardExclusao(false) }} confirmar={() => excluirLote(idSelecionado)} loading={loading.exclusao} />
                 </div>
             )}
 
@@ -423,7 +420,7 @@ export function Estoque() {
                     <div className="grupo-insumos-container">
                         {grupo.length > 0 ? grupo.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}
-                                dropdownAbertoId={dropdownAbertoId}
+                                dropdownAbertoId={dropdownAbertoId} excluirLote={abrirCardExclusao} loteOriginal={loteOriginal}
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>

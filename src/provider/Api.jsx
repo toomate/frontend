@@ -228,8 +228,8 @@ export class AuthApi {
       payload?.ehAdmin !== undefined
         ? Boolean(payload.ehAdmin)
         : payload?.administrador !== undefined
-        ? Boolean(payload.administrador)
-        : undefined;
+          ? Boolean(payload.administrador)
+          : undefined;
 
     const nome = String(payload?.nome ?? "").trim();
     const apelido = String(payload?.username ?? payload?.apelido ?? "")
@@ -245,52 +245,52 @@ export class AuthApi {
 
     const tentativas = atualizacaoCompleta
       ? [
-          {
-            method: "put",
-            url: `/usuarios/${idNormalizado}`,
-            data: {
-              id: idNormalizado,
-              nome,
-              apelido,
-              senha,
-              administrador: ehAdminNormalizado,
-            },
+        {
+          method: "put",
+          url: `/usuarios/${idNormalizado}`,
+          data: {
+            id: idNormalizado,
+            nome,
+            apelido,
+            senha,
+            administrador: ehAdminNormalizado,
           },
-          {
-            method: "put",
-            url: "/usuarios",
-            data: {
-              id: idNormalizado,
-              nome,
-              apelido,
-              senha,
-              administrador: ehAdminNormalizado,
-            },
+        },
+        {
+          method: "put",
+          url: "/usuarios",
+          data: {
+            id: idNormalizado,
+            nome,
+            apelido,
+            senha,
+            administrador: ehAdminNormalizado,
           },
-        ]
+        },
+      ]
       : [
-          {
-            method: "patch",
-            url: `/usuarios/${idNormalizado}`,
-            data: {
-              administrador: ehAdminNormalizado,
-              ehAdmin: ehAdminNormalizado,
-              admin: ehAdminNormalizado,
-              getadministrador: ehAdminNormalizado,
-            },
+        {
+          method: "patch",
+          url: `/usuarios/${idNormalizado}`,
+          data: {
+            administrador: ehAdminNormalizado,
+            ehAdmin: ehAdminNormalizado,
+            admin: ehAdminNormalizado,
+            getadministrador: ehAdminNormalizado,
           },
-          {
-            method: "patch",
-            url: "/usuarios",
-            data: {
-              id: idNormalizado,
-              administrador: ehAdminNormalizado,
-              ehAdmin: ehAdminNormalizado,
-              admin: ehAdminNormalizado,
-              getadministrador: ehAdminNormalizado,
-            },
+        },
+        {
+          method: "patch",
+          url: "/usuarios",
+          data: {
+            id: idNormalizado,
+            administrador: ehAdminNormalizado,
+            ehAdmin: ehAdminNormalizado,
+            admin: ehAdminNormalizado,
+            getadministrador: ehAdminNormalizado,
           },
-        ];
+        },
+      ];
 
     if (atualizacaoCompleta && (!nome || !apelido || !senha)) {
       throw new Error(
@@ -376,7 +376,7 @@ export class Lote {
         parametro = `/search?insumo=${busca}`;
       }
 
-      if(pagina > 0){
+      if (pagina > 0) {
         parametro += `?pagina=${pagina}`
       }
 
@@ -455,7 +455,7 @@ export class Lote {
     }
   }
 
-  static async criar({payload}) {
+  static async criar({ payload }) {
     try {
       const response = await requestComFallback({
         method: "post",
@@ -466,6 +466,18 @@ export class Lote {
     } catch (error) {
       console.error("Erro ao cadastrar os lotes:", error);
       throw error;
+    }
+  }
+
+  static async excluirLote(idLote) {
+    try {
+      const response = await requestComFallback({
+        method: "patch",
+        url: `/lotes/estoque/${idLote}`
+      })
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao excluir lote", error)
     }
   }
 }
@@ -754,10 +766,10 @@ export class Rotinas {
   static async listar(pesquisa, pagina, tamanho) {
     try {
       let url = `/rotinas?`;
-      if(pagina !== undefined && tamanho !== undefined){
+      if (pagina !== undefined && tamanho !== undefined) {
         url += `pagina=${pagina}&tamanho=${tamanho}`;
       }
-      
+
       if (pesquisa.length > 0) {
         url += `&titulo=${pesquisa}`
       }

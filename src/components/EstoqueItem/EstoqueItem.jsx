@@ -39,9 +39,15 @@ export function EstoqueItem(props) {
         return Math.trunc(numero * fator) / fator;
     }
 
+    const mostrarExcluir = (original) => {
+        return original && Number(original.quantidadeTotal) <= 0;
+    }
+
     return (
-        <>{props.elementos.map((atual) => <React.Fragment key={atual.idLote}>
-            <div className="linha-estoque item-container">
+        <>{props.elementos
+            .filter((atual) => atual && atual.quantidadeTotal !== 0)
+            .map((atual) => <React.Fragment key={atual.idLote}>
+            <div className="linha-estoque item-container" id={atual.quantidadeTotal <= 0 ? "abaixo" : ""}>
                 <div className="insumo-grupo">
                     <div className="item-nome">
                         {atual.quantidadeTotal < atual.quantidadeMinima
@@ -60,37 +66,36 @@ export function EstoqueItem(props) {
 
                 <div className="controle-container">
                     <div className="controle">
-                        <CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />
-                        <span
-                            className="quantidade-total"
-                            style={{ cursor: 'pointer', textDecoration: 'underline' }}
-                        >
-                            <input
-                                class
-                                type="Number" 
-                                pattern="[0-9]*"
-                                value={atual.quantidadeTotal}
-                                onInput={(e) => props.alterarValor(atual.idLote, e.target.value)}
-                                style={{
-                                    border: 'none',
-                                    background: 'transparent',
-                                    textAlign: 'center',
-                                    margin: 0,
-                                    width: '70px',
-                                    appearance: 'textfield',
-                                    outline: 'none',
-                                    fontSize: 'inherit',
-                                    color: 'inherit'
-                                }}
-                            />
-                        </span>
-                        <CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} />
+                        {mostrarExcluir(props.loteOriginal(atual.idLote)) <= 0 ? (<><CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />
+                            <span
+                                className="quantidade-total"
+                                style={{ cursor: 'pointer', textDecoration: 'underline' }}
+                            >
+                                <input
+                                    class
+                                    type="Number"
+                                    pattern="[0-9]*"
+                                    value={atual.quantidadeTotal}
+                                    onInput={(e) => props.alterarValor(atual.idLote, e.target.value)}
+                                    style={{
+                                        border: 'none',
+                                        background: 'transparent',
+                                        textAlign: 'center',
+                                        margin: 0,
+                                        width: '70px',
+                                        appearance: 'textfield',
+                                        outline: 'none',
+                                        fontSize: 'inherit',
+                                        color: 'inherit'
+                                    }}
+                                />
+                            </span>
+                            <CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} /></>) : <><button onClick={() => props.excluirLote(atual.idLote)} className="btn">Excluir</button></>}
                     </div>
                 </div>
 
                 <div className="botao-cadastrar">
                     <Button onClick={() => props.abrirDropdown(atual.idLote)} texto={<PiDotsThree size={30} />} />
-
                     {props.dropdownAbertoId === atual.idLote && (
                         <DropdownEstoque atual={{ insumoId: atual.idInsumo, insumoNome: props.nomeInsumo, marca: atual.idMarca }} />
                     )}

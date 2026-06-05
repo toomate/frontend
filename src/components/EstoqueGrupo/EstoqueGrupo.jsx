@@ -4,7 +4,7 @@ import "./EstoqueGrupo.css"
 import { EstoqueItem } from "../EstoqueItem/EstoqueItem";
 import { useEffect } from "react";
 
-export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId }) {
+export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId, excluirLote, loteOriginal }) {
     const [expandido, setExpandido] = useState(false);
     const UM_DIA_EM_MS = 24 * 60 * 60 * 1000;
     const UMA_SEMANA_EM_MS = 7 * UM_DIA_EM_MS;
@@ -145,7 +145,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             </div><div className="controle"></div>
         </div>
         {expandido && (
-            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} />
+            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} excluirLote={excluirLote} loteOriginal={loteOriginal} />
         )}
     </div>
 
