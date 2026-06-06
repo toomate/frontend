@@ -1,49 +1,39 @@
 import React, { useState } from "react";
 import { useNotifications } from "../../utils/useNotification.js";
+import sseManager from "../../utils/sseManager";
+import NotificationsList, {
+  getNotificationKey,
+} from "../NotificationsList/NotificationsList";
+import "../NotificationsList/NotificationsList.css";
 import "./NotificationBell.css";
 
 export default function NotificationBell() {
   const notifications = useNotifications();
   const [open, setOpen] = useState(false);
+  const [removendoIds, setRemovendoIds] = useState({});
 
-  const processNotifications = (rawData) => {
+  const notificationList = notifications
+    .filter((message) => message?.id)
+    .slice(0, 20);
+
+  const handleRemoverNotificacao = async (message, index) => {
+    const itemKey = getNotificationKey(message, index);
+
     try {
-      const groupedMessages = rawData.reduce((acc, message) => {
-        const { id, timestamp, body } = message;
-
-        if (!id || !body) {
-          console.warn("Notification missing required fields:", message);
-          return acc;
-        }
-
-        // Determine group based on the first character of the ID
-        const groupKey = id[0].toLowerCase();
-        let groupName = "Outros";
-
-        if (groupKey === "e") {
-          groupName = "Estoque";
-        } else if (groupKey === "v") {
-          groupName = "Vencimento";
-        } else if (groupKey === "b") {
-          groupName = "Boleto";
-        }
-
-        if (!acc[groupName]) {
-          acc[groupName] = [];
-        }
-
-        acc[groupName].push({ timestamp, ...body });
-        return acc;
-      }, {});
-
-      return groupedMessages;
+      setRemovendoIds((prev) => ({ ...prev, [itemKey]: true }));
+      const removed = await sseManager.deleteNotification(message);
+      if (!removed) return;
     } catch (error) {
-      console.error("Failed to process notifications:", error);
-      return {};
+      console.error("Erro ao remover notificacao:", error);
+      alert("Nao foi possivel remover a notificacao agora.");
+    } finally {
+      setRemovendoIds((prev) => {
+        const next = { ...prev };
+        delete next[itemKey];
+        return next;
+      });
     }
   };
-
-  const groupedNotifications = processNotifications(notifications);
 
   return (
     <div className="notif-container">
@@ -56,25 +46,14 @@ export default function NotificationBell() {
 
       {open && (
         <div className="notif-dropdown">
-          <h4>Notificações</h4>
-
-          {Object.keys(groupedNotifications).length === 0 && (
-            <p className="empty">Nenhuma notificação</p>
-          )}
-
-          {Object.keys(groupedNotifications).map((groupName) => (
-            <div key={groupName} className="notif-group">
-              <h5>{groupName}</h5>
-              {groupedNotifications[groupName].map((msg, index) => (
-                <div key={index} className="notif-item">
-                  <strong>{msg.nome}</strong>
-                  <p>Quantidade Atual: {msg.quantidadeAtual}</p>
-                  <p>Quantidade Mínima: {msg.quantidadeMinima}</p>
-                  <p>Timestamp: {new Date(msg.timestamp).toLocaleString("pt-BR")}</p>
-                </div>
-              ))}
-            </div>
-          ))}
+          <h4 className="notif-lista-titulo">Listagem de Notificações</h4>
+          <NotificationsList
+            notifications={notificationList}
+            onRemove={handleRemoverNotificacao}
+            removendoIds={removendoIds}
+            containerClass="notifications-list-container notif-lista-container"
+            emptyMessage="Nenhuma notificação armazenada."
+          />
         </div>
       )}
     </div>

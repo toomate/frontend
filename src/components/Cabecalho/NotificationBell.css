@@ -27,26 +27,23 @@
   position: absolute;
   right: 0;
   top: 40px;
-  width: 280px;
-  max-height: 300px;
-  overflow-y: auto;
+  width: min(420px, calc(100vw - 24px));
+  max-height: 420px;
   background: white;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid #f4c9cf;
+  border-radius: 10px;
   padding: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
   z-index: 100;
+  overflow: hidden;
 }
 
-.notif-item {
-  border-bottom: 1px solid #eee;
-  padding: 8px 0;
+.notif-lista-titulo {
+  margin: 0 0 8px;
+  font-size: 15px;
+  color: #7b1e1e;
 }
 
-.notif-item:last-child {
-  border-bottom: none;
-}
-
-.empty {
-  color: #777;
-  font-size: 14px;
+.notif-lista-container {
+  max-height: 350px;
 }

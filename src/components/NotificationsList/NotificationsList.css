@@ -1,0 +1,73 @@
+/* NotificationsList.css - Componente reutilizável de listagem de notificações */
+
+.notifications-list-container {
+  width: 100%;
+}
+
+.notifications-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  max-height: 100%;
+}
+
+.notifications-item {
+  display: flex;
+  position: relative;
+  border: 1px solid #f4c9cf;
+  border-radius: 8px;
+  padding: 30px 10px 8px;
+  background: #fff8f9;
+}
+
+.notifications-remove-btn {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 22px;
+  height: 22px;
+  border: 1px solid #e9aeb7;
+  background: #fff7f8;
+  color: #c92c2c;
+  border-radius: 6px;
+  padding: 0;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.notifications-remove-btn:hover:not(:disabled) {
+  background: #c92c2c;
+  color: #fff;
+  border-color: #c92c2c;
+}
+
+.notifications-remove-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notifications-item-text {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #2f2f2f;
+}
+
+.notifications-item-date {
+  font-size: 12px;
+  color: #666;
+}
+
+.notifications-empty {
+  margin: 0;
+  color: #666;
+  font-size: 13px;
+}

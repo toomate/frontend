@@ -1,5 +1,6 @@
 ﻿import React, { useEffect } from "react";
 import "./Dashboard.css";
+import "../../components/NotificationsList/NotificationsList.css";
 import HeaderPadrao from "../../HeaderPadrao";
 import { useNavigate } from "react-router-dom";
 import Kpi from "../../components/Kpi/Kpi";
@@ -11,6 +12,10 @@ import { boletos } from "../../provider/Api";
 import { dividas } from "../../provider/Api";
 import { ehAdmin } from "../../utils/sessao";
 import { useNotifications } from "../../utils/useNotification.js";
+import sseManager from "../../utils/sseManager";
+import NotificationsList, {
+  getNotificationKey,
+} from "../../components/NotificationsList/NotificationsList";
 
 export default function Index() {
   const navigate = useNavigate();
@@ -20,6 +25,7 @@ export default function Index() {
   const [dadosInsumo, setDadosInsumo] = useState([])
   const [boletosData, setBoletosData] = useState([])
   const [clientesData, setClientesData] = useState(0)
+  const [removendoIds, setRemovendoIds] = useState({})
 
   // ✅ Consome as notificações SSE
   const notifications = useNotifications();
@@ -133,6 +139,25 @@ export default function Index() {
   // ✅ Badge por grupo
   const badgeCount = (group) => groupedNotifications[group]?.length || 0;
 
+  const handleRemoverNotificacao = async (message, index) => {
+    const itemKey = getNotificationKey(message, index);
+
+    try {
+      setRemovendoIds((prev) => ({ ...prev, [itemKey]: true }));
+      const removed = await sseManager.deleteNotification(message);
+      if (!removed) return;
+    } catch (error) {
+      console.error("Erro ao remover notificacao:", error);
+      alert("Nao foi possivel remover a notificacao agora.");
+    } finally {
+      setRemovendoIds((prev) => {
+        const next = { ...prev };
+        delete next[itemKey];
+        return next;
+      });
+    }
+  };
+
   return (
     <div className="dashboard">
       <HeaderPadrao mostrarBotao={false} />
@@ -178,39 +203,15 @@ export default function Index() {
         </div>
 
         <div className="notificacao">
-          <h2 className="alerta-titulo">ALERTAS!</h2>
-
-          <button className="alerta-btn validade" onClick={() => navigate("/Vencimentos")}>
-            <span className="validade-icone"></span>
-            <span>Notificação de Validade!</span>
-            {badgeCount("Vencimento") > 0 && (
-              <span className="notif-badge">{badgeCount("Vencimento")}</span>
-            )}
-          </button>
-
-          <button className="alerta-btn estoque" onClick={() => navigate("/estoque")}>
-            <span className="estoque-icone"></span>
-            <span>Notificação de Estoque!</span>
-            {badgeCount("Estoque") > 0 && (
-              <span className="notif-badge">{badgeCount("Estoque")}</span>
-            )}
-          </button>
-
-          <button className="alerta-btn fornecedor" onClick={() => navigate("/fornecedor")}>
-            <span className="fornecedor-icone"></span>
-            <span>Notificação de Fornecedor!</span>
-            {badgeCount("Outros") > 0 && (
-              <span className="notif-badge">{badgeCount("Outros")}</span>
-            )}
-          </button>
-
-          <button className="alerta-btn boleto" onClick={() => navigate("/Boletos")}>
-            <span className="boleto-icone"></span>
-            <span>Notificação de Boleto!</span>
-            {badgeCount("Boleto") > 0 && (
-              <span className="notif-badge">{badgeCount("Boleto")}</span>
-            )}
-          </button>
+          <div className="notificacao-lista-wrapper">
+            <h3 className="notificacao-lista-titulo">Listagem de Notificações</h3>
+            <NotificationsList
+              notifications={notifications}
+              onRemove={handleRemoverNotificacao}
+              removendoIds={removendoIds}
+              containerClass="notifications-list-container dashboard-notifications"
+            />
+          </div>
         </div>
       </div>
     </div>

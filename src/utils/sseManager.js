@@ -1,7 +1,151 @@
 const CHANNEL_NAME = "sse_channel";
 const LEADER_KEY = "sse_leader";
 const HEARTBEAT_KEY = "sse_heartbeat";
+const NOTIFICATIONS_KEY = "sse_notifications";
 const SSE_URL = import.meta.env.VITE_SSE_URL;
+
+function getAuthToken() {
+  return (
+    localStorage.getItem("token") ||
+    localStorage.getItem("authToken") ||
+    sessionStorage.getItem("token") ||
+    localStorage.getItem("accessToken") ||
+    localStorage.getItem("jwt")
+  );
+}
+
+function loadStoredNotifications() {
+  try {
+    const raw = localStorage.getItem(NOTIFICATIONS_KEY);
+    if (!raw) return [];
+
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    console.warn("Falha ao carregar notificacoes do localStorage:", error);
+    return [];
+  }
+}
+
+function saveNotifications(notifications) {
+  try {
+    localStorage.setItem(NOTIFICATIONS_KEY, JSON.stringify(notifications));
+  } catch (error) {
+    console.warn("Falha ao salvar notificacoes no localStorage:", error);
+  }
+}
+
+function getNotificationIdentity(notification) {
+  if (!notification || typeof notification !== "object") return null;
+
+  const id = String(notification.id ?? "");
+  const group = id ? id[0].toLowerCase() : "o";
+  const body = notification.body ?? {};
+
+  // Identidade principal por entidade de negócio para evitar duplicar o mesmo alerta.
+  const entityId =
+    body.insumoId ??
+    body.idInsumo ??
+    body.boletoId ??
+    body.idBoleto ??
+    body.fornecedorId ??
+    body.idFornecedor ??
+    body.id ??
+    body.nome;
+
+  if (entityId === undefined || entityId === null || entityId === "") {
+    return null;
+  }
+
+  return `${group}|${String(entityId)}`;
+}
+
+function getNotificationPayloadHash(notification) {
+  if (!notification || typeof notification !== "object") return null;
+
+  const id = String(notification.id ?? "");
+  const body = notification.body ?? {};
+
+  // Ignora timestamp para nao considerar duplicada uma mesma mensagem reenviada com horario diferente.
+  return `${id}|${JSON.stringify(body)}`;
+}
+
+function getNotificationInsumoId(notification) {
+  if (!notification || typeof notification !== "object") return null;
+
+  const body = notification.body ?? {};
+  const idFromBody =
+    body.insumoId ??
+    body.idInsumo ??
+    body.fkInsumo ??
+    body?.insumo?.idInsumo ??
+    body?.insumo?.id;
+
+  if (idFromBody !== undefined && idFromBody !== null && String(idFromBody).trim() !== "") {
+    return idFromBody;
+  }
+
+  const rawId = String(notification.id ?? "");
+  const match = rawId.match(/\d+/);
+  if (match) {
+    return match[0];
+  }
+
+  return null;
+}
+
+function upsertNotifications(currentList, incomingList) {
+  const result = [...currentList];
+  let changed = false;
+
+  incomingList.forEach((incoming) => {
+    if (!incoming || typeof incoming !== "object") return;
+
+    const incomingIdentity = getNotificationIdentity(incoming);
+    const incomingHash = getNotificationPayloadHash(incoming);
+
+    if (!incomingHash) return;
+
+    if (incomingIdentity) {
+      const existingIndex = result.findIndex(
+        (item) => getNotificationIdentity(item) === incomingIdentity
+      );
+
+      if (existingIndex >= 0) {
+        const existingHash = getNotificationPayloadHash(result[existingIndex]);
+        if (existingHash === incomingHash) {
+          return;
+        }
+
+        result.splice(existingIndex, 1);
+        result.unshift(incoming);
+        changed = true;
+        return;
+      }
+    } else {
+      const alreadyExists = result.some(
+        (item) => getNotificationPayloadHash(item) === incomingHash
+      );
+      if (alreadyExists) {
+        return;
+      }
+    }
+
+    result.unshift(incoming);
+    changed = true;
+  });
+
+  const limited = result.slice(0, 50);
+  return { notifications: limited, changed };
+}
+
+function normalizeStoredNotifications(list) {
+  if (!Array.isArray(list) || list.length === 0) {
+    return [];
+  }
+
+  return upsertNotifications([], [...list].reverse()).notifications;
+}
 
 class sseManager {
   constructor() {
@@ -11,7 +155,7 @@ class sseManager {
     this.listeners = [];
 
     // 👇 estado persistente de notificações
-    this.notifications = [];
+    this.notifications = normalizeStoredNotifications(loadStoredNotifications());
 
     this.reconnectAttempts = 0; // Track reconnection attempts
     this.maxReconnectAttempts = 5; // Limit reconnection attempts
@@ -140,7 +284,17 @@ handleIncomingData(rawData) {
       typeof item === "string" ? JSON.parse(item) : item
     );
 
-    this.notifications = [...objects, ...this.notifications].slice(0, 50);
+    const { notifications: nextNotifications, changed } = upsertNotifications(
+      this.notifications,
+      objects
+    );
+
+    if (!changed) {
+      return;
+    }
+
+    this.notifications = nextNotifications;
+    saveNotifications(this.notifications);
     this.notifyListeners();
   } catch (err) {
     console.error("Erro ao processar SSE:", err);
@@ -159,6 +313,45 @@ handleIncomingData(rawData) {
 
   notifyListeners() {
     this.listeners.forEach((cb) => cb(this.notifications));
+  }
+
+  async deleteNotification(notification) {
+    const idInsumo = getNotificationInsumoId(notification);
+    if (!idInsumo) {
+      return false;
+    }
+
+    const token = getAuthToken();
+    const endpoint = `${SSE_URL.replace(/\/$/, "")}/deletar/${encodeURIComponent(idInsumo)}`;
+
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Falha ao remover notificacao (${response.status}).`);
+    }
+
+    const identityToRemove = getNotificationIdentity(notification);
+    const nextNotifications = this.notifications.filter((item) => {
+      if (identityToRemove) {
+        return getNotificationIdentity(item) !== identityToRemove;
+      }
+
+      return getNotificationPayloadHash(item) !== getNotificationPayloadHash(notification);
+    });
+
+    if (nextNotifications.length !== this.notifications.length) {
+      this.notifications = nextNotifications;
+      saveNotifications(this.notifications);
+      this.notifyListeners();
+    }
+
+    return true;
   }
 
   // =========================

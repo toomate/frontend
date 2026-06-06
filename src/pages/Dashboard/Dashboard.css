@@ -181,6 +181,26 @@
   overflow: hidden;
 }
 
+.dashboard .notificacao-lista-wrapper {
+  width: 100%;
+  flex: 1 1 auto;
+  min-height: 0;
+  border-top: 1px solid #f0d3d7;
+  padding-top: 8px;
+  overflow: hidden;
+}
+
+.dashboard .notificacao-lista-titulo {
+  margin: 0 0 8px;
+  font-size: 25px;
+  font-weight: 600;
+  color: #7b1e1e;
+}
+
+.dashboard-notifications {
+  max-height: 100%;
+}
+
 .dashboard .alerta-titulo {
   width: 100%;
   display: flex;
@@ -345,6 +365,10 @@
   .dashboard .notificacao {
     width: 100%;
     min-height: 320px;
+  }
+
+  .dashboard .notificacao-lista {
+    max-height: 220px;
   }
 
   .dashboard .alerta-btn {
