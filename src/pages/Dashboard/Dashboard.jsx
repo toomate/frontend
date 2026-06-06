@@ -60,7 +60,7 @@ export default function Index() {
     const mapa = new Map()
     for (const dado of dados) {
       const nome = dado.marca?.insumo?.nome ?? ''
-      const qtd = Number(dado.quantidadeMedida ?? 0)
+      const qtd = Number(dado.quantidadeAtual ?? 0)
       const qtdMinima = Number(dado.marca?.insumo?.qtdMinima ?? 0)
       if (!mapa.has(nome)) mapa.set(nome, { nome, quantidade: 0, qtdMinima })
       const item = mapa.get(nome)

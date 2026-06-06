@@ -98,13 +98,14 @@
 }
 
 .card {
-  background-color: white;
-  border: 1px solid gold;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.30);
-  padding: 10px;
-  height: 125px;
-  border-radius: 5px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+  background: white;
+  border: none;
+  gap: 5px;
+  padding: 0 12px; 
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -165,7 +166,7 @@ svg.lucide {
 
 .titulo {
   font-size: 26px;
-  margin-bottom: 10px;
+  margin-bottom: 4px;
   font-weight: bold;
   color: black;
 }
@@ -184,10 +185,9 @@ svg.lucide {
 
 input {
   width: 100%;
-  height: 35px;
-  border-radius: 5px;
+  height: 35px !important;
+  border-radius: 5px !important;
   padding: 10px;
-  margin-bottom: 15px;
   background-color: white;
   color: rgb(175, 175, 175);
   border: 1.5px solid rgb(175, 175, 175);
@@ -234,7 +234,7 @@ input {
 .selectNome, .selectMarca, .selectCategoria, .selectUnidade, .selectCategoriaBoleto, .selectPedido {
   width: 100%;
   padding-right: 20px;
-  height: 40px;
+  height: 35px;
   border-radius: 5px;
   border: 1.5px solid rgb(175, 175, 175);
   background-color: #fff;
@@ -253,7 +253,7 @@ input {
 
 .input-wrapper input {
   width: 100%;
-  height: 40px;
+  height: 35px;
   border-radius: 5px;
   padding: 10px 40px 10px 10px;
   margin-bottom: 15px;
@@ -494,7 +494,7 @@ input {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 50px;
+  height: 30px;
   color: black;
   border-radius: 5px;
   cursor: pointer;
@@ -543,7 +543,7 @@ input {
 
 .modal-input {
   width: 100%;
-  padding: 8px;
+  padding: 15px;
   border-radius: 8px;
   border: 1px solid #ccc;
   margin-bottom: 15px;
@@ -585,15 +585,62 @@ input {
   width: 100%;
   max-width: 350px;
   background: white;
-  padding: 20px;
   border: none;
   gap: 5px;
+  padding: 0 12px; 
 }
 
 .caixa span {
+  display: block;
+  text-align: left;
+}
+
+/* Alinhar elementos do form dentro de .caixa à esquerda */
+.caixa form {
   display: flex;
-  align-items: start;
-  margin-bottom: 5px;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
+}
+
+.caixa form > span,
+.caixa form .input-wrapper,
+.caixa form input,
+.caixa form select,
+.caixa form .botao-upload,
+.caixa form .modal-input,
+.caixa form .input-wrapper1 {
+  width: 100%;
+  text-align: left;
+}
+
+.caixa form .input-wrapper {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+/* Também aplicar alinhamento quando não houver `.caixa` (form direto em `.box`) */
+.box form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
+}
+
+.box form > span,
+.box form .input-wrapper,
+.box form input,
+.box form select,
+.box form .botao-upload,
+.box form .modal-input,
+.box form .input-wrapper1 {
+  width: 100%;
+  text-align: left;
+}
+
+.box form .input-wrapper {
+  justify-content: flex-start;
+  gap: 8px;
 }
 
 /* Tela menor que 480px */
