@@ -12,6 +12,29 @@
   min-height: 44px;
 }
 
+.categorias-toolbar-desktop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  width: 100%;
+}
+
+.categorias-barra-scroll {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  flex: 1;
+  min-width: 0;
+}
+
+.categorias-barra-scroll::-webkit-scrollbar {
+  display: none;
+}
+
 .categoria-item {
   display: flex;
   align-items: center;
@@ -33,6 +56,87 @@
   background: #6b4423;
   color: #f8ecc6;
   border-color: #6b4423;
+}
+
+.categorias-hamburger-wrapper {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.categorias-hamburger-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 40px;
+  width: 44px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  color: #2a2a2a;
+  cursor: pointer;
+  transition: background 0.12s ease, box-shadow 0.12s ease;
+  position: relative;
+}
+
+.categorias-hamburger-btn:hover {
+  background: #f0dfa8;
+}
+
+.categorias-hamburger-btn.aberto {
+  background: #6b4423;
+  color: #f8ecc6;
+  border-color: #6b4423;
+  box-shadow: 0 0 0 2px rgba(107, 68, 35, 0.18);
+}
+
+.categorias-hamburger-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: #6b4423;
+  color: #f8ecc6;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.categorias-hamburger-btn.aberto .categorias-hamburger-badge {
+  background: #f8ecc6;
+  color: #6b4423;
+}
+
+.categorias-hamburger-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  min-width: 280px;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #6b4423;
+  border-radius: 8px;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.14);
+  padding: 6px;
+  z-index: 30;
+}
+
+.categorias-hamburger-dropdown > .categorias-mobile-item:first-child {
+  display: flex;
+}
+
+.categorias-hamburger-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
 }
 
 .categorias-toolbar-mobile {
@@ -145,7 +249,7 @@
 
 @media (max-width: 768px) {
   .categorias-toolbar-desktop {
-    display: none;
+    display: none !important;
   }
 
   .categorias-toolbar-mobile {

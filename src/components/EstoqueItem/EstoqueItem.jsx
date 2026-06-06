@@ -11,26 +11,31 @@ export function EstoqueItem(props) {
 
     const formatarData = (data) => {
         if (!data) return '';
-        const d = new Date(data);
-        const dia = String(d.getDate()).padStart(2, '0');
-        const mes = String(d.getMonth() + 1).padStart(2, '0');
-        const ano = d.getFullYear();
-        return `${dia}/${mes}/${ano}`;
+        const match = String(data).match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (match) return `${match[3]}/${match[2]}/${match[1]}`;
+        return String(data);
+    };
+
+    const parsarDataLocal = (dataValidade) => {
+        const match = String(dataValidade).match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (!match) return null;
+        // Constrói como meia-noite local, sem UTC shift
+        return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
     };
 
     const obterClasseValidade = (dataValidade) => {
         if (!dataValidade) return "";
 
-        const vencimento = new Date(`${dataValidade}`.includes("T") ? dataValidade : `${dataValidade}T00:00:00`);
-        if (Number.isNaN(vencimento.getTime())) return "";
+        const vencimento = parsarDataLocal(dataValidade);
+        if (!vencimento) return "";
 
         const hoje = new Date();
         hoje.setHours(0, 0, 0, 0);
 
-        const diferencaDias = Math.ceil((vencimento.getTime() - hoje.getTime()) / UM_DIA_EM_MS);
+        const diferencaMs = vencimento.getTime() - hoje.getTime();
 
-        if (diferencaDias < 0) return "dt-vencimento-vencido";
-        if (vencimento.getTime() - hoje.getTime() <= UMA_SEMANA_EM_MS) return "dt-vencimento-alerta";
+        if (diferencaMs < 0) return "dt-vencimento-vencido";
+        if (diferencaMs <= UMA_SEMANA_EM_MS) return "dt-vencimento-alerta";
         return "";
     };
 

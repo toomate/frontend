@@ -31,8 +31,8 @@
     display: flex;
     width: 95%;
     align-items: center;
-    height: 8vh;
-    justify-content: space-evenly;
+    height: auto;
+    padding: 6px 0;
 }
 
 .nav-categorias-container .categorias-container .categoria-item {
