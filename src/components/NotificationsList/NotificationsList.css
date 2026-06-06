@@ -17,16 +17,17 @@
 
 .notifications-item {
   display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
   position: relative;
   border: 1px solid #f4c9cf;
   border-radius: 8px;
-  padding: 30px 10px 8px;
+  padding: 10px;
   background: #fff8f9;
 }
 
 .notifications-remove-btn {
-  position: absolute;
-  top: 6px;
   left: 6px;
   width: 22px;
   height: 22px;

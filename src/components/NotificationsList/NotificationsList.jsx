@@ -70,6 +70,14 @@ export default function NotificationsList({
         <ul className="notifications-list" aria-label="Listagem de notificações armazenadas">
           {notificationList.map((message, index) => (
             <li className="notifications-item" key={getNotificationKey(message, index)}>
+              <div>
+              <p className="notifications-item-text">{formatNotificationText(message)}</p>
+              <span className="notifications-item-date">
+                {message.timestamp
+                  ? new Date(message.timestamp).toLocaleString("pt-BR")
+                  : "Sem data"}
+              </span>
+                  </div>
               <button
                 type="button"
                 className="notifications-remove-btn"
@@ -89,12 +97,6 @@ export default function NotificationsList({
               >
                 <span aria-hidden="true">🗑</span>
               </button>
-              <p className="notifications-item-text">{formatNotificationText(message)}</p>
-              <span className="notifications-item-date">
-                {message.timestamp
-                  ? new Date(message.timestamp).toLocaleString("pt-BR")
-                  : "Sem data"}
-              </span>
             </li>
           ))}
         </ul>
