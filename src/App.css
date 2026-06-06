@@ -591,7 +591,6 @@ input {
 .caixa span {
   display: block;
   text-align: left;
-  margin-bottom: 2px;
 }
 
 /* Tela menor que 480px */
