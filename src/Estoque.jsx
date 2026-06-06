@@ -178,12 +178,19 @@ export function Estoque() {
     }
 
     const excluirLote = async (idLote) => {
-        setLoading({ exclusao: true })
-        await Lote.excluirLote(idLote);
-        await carregarEstoque()
+        try {
+            setLoading({ exclusao: true })
+            await Lote.excluirLote(idLote);
+            await carregarEstoque()
 
-        setCardExclusao(false);
-        setIdSelecionado(null);
+            setCardExclusao(false);
+            setIdSelecionado(null);
+        } catch (error) {
+            console.error("Erro ao excluir lote:", error)
+            throw error;
+        } finally {
+            setLoading({ exclusao: false })
+        }
     }
 
 

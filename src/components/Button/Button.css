@@ -41,3 +41,68 @@
     background-color: transparent;
 }
 
+
+
+/* =============================================
+   TABLET (769px – 1024px)
+   ============================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .button-container {
+        width: auto;
+        min-width: 100px;
+        height: 40px;
+        padding: 0 14px;
+    }
+
+    .button-value {
+        font-size: 14px;
+    }
+}
+
+/* =============================================
+   SMARTPHONE (até 768px)
+   ============================================= */
+@media (max-width: 768px) {
+    .button-container {
+        width: auto;
+        min-width: 80px;
+        height: 44px;
+        padding: 0 14px;
+        border-radius: 6px;
+    }
+
+    .button-value {
+        font-size: 14px;
+        margin-left: 0;
+    }
+
+    .icon-container {
+        width: auto;
+        margin-left: 6px;
+    }
+
+    .button-icon svg {
+        height: 18px;
+        width: 18px;
+    }
+}
+
+/* =============================================
+   SMARTPHONE PEQUENO (até 480px)
+   ============================================= */
+@media (max-width: 480px) {
+    .button-container {
+        height: 42px;
+        padding: 0 12px;
+        min-width: 70px;
+    }
+
+    .button-value {
+        font-size: 13px;
+    }
+
+    .button-icon svg {
+        height: 16px;
+        width: 16px;
+    }
+}

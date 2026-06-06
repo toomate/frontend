@@ -208,7 +208,100 @@
 }
 
 
+/* =============================================
+   TABLET (769px – 1024px)
+   ============================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .estoque-container {
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
 
+    .categoria-container {
+        width: 100%;
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 16px;
+        box-sizing: border-box;
+    }
+
+    .button-secund {
+        width: 100%;
+        height: auto;
+    }
+
+    .botoes-container {
+        display: grid;
+        grid-template-columns: repeat(3, auto) 1fr;
+        grid-template-rows: auto auto;
+        height: auto;
+        gap: 8px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    /* Botões de adicionar ficam na primeira linha */
+    .botoes-container .plus-container:nth-child(1),
+    .botoes-container .plus-container:nth-child(2),
+    .botoes-container .plus-container:nth-child(3) {
+        height: 40px;
+    }
+
+    /* Rotinas, Salvar, QR Code em linha */
+    .botoes-container .button-container,
+    .botoes-container-icon {
+        height: 40px;
+    }
+
+    /* Search ocupa toda a segunda linha */
+    .container-search {
+        grid-column: 1 / -1;
+        max-width: none;
+        min-width: 0;
+        width: 100%;
+        padding-left: 10px;
+    }
+
+    .nav-categorias-container {
+        width: 100%;
+        height: auto;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 4px 0;
+        justify-content: flex-start;
+    }
+
+    .insumos-container {
+        width: 100%;
+        flex: 1 1 auto;
+        min-height: 300px;
+        padding-bottom: 16px;
+    }
+
+    .grupo-insumos-container {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: auto;
+    }
+
+    .insumos-container .grupo-insumos-container .insumo-nome,
+    .insumos-container .grupo-insumos-container .grupo-container,
+    .insumos-container .grupo-insumos-container .item-container,
+    .qtd-total,
+    .medida,
+    .dt-vencimento,
+    .controle,
+    .item-nome {
+        font-size: 14px;
+    }
+}
+
+/* =============================================
+   SMARTPHONE (até 768px)
+   ============================================= */
 @media (max-width: 768px) {
     #root {
         width: 100dvw;
@@ -231,8 +324,9 @@
         height: auto;
         display: flex;
         flex-direction: column;
-        gap: 12px;
-        padding: 12px;
+        gap: 10px;
+        padding: 10px 12px;
+        box-sizing: border-box;
     }
 
     .button-secund {
@@ -259,13 +353,16 @@
         height: 44px;
         margin: 0;
         justify-content: center;
-        font-size: 14px;
+        font-size: 13px;
+        box-sizing: border-box;
     }
 
     .botoes-container-icon {
-        gap: 8px;
+        width: 100%;
+        gap: 6px;
     }
 
+    /* Barra de pesquisa ocupa linha inteira */
     .container-search {
         grid-column: 1 / -1;
         max-width: none;
@@ -275,6 +372,7 @@
         padding-left: 0;
         background: transparent;
         border-radius: 0;
+        box-sizing: border-box;
     }
 
     .container-search .search-container {
@@ -286,12 +384,36 @@
 
     .nav-categorias-container {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        flex-wrap: wrap;
         width: 100%;
         height: auto;
         padding: 0;
+        gap: 6px;
         justify-content: flex-start;
+    }
+
+    /* Categorias como pills scroll horizontal */
+    .nav-categorias-container .categorias-container {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        gap: 6px;
+        width: 100%;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .nav-categorias-container .categorias-container::-webkit-scrollbar {
+        display: none;
+    }
+
+    .nav-categorias-container .categorias-container .categoria-item {
         flex-shrink: 0;
+        font-size: 13px;
+        white-space: nowrap;
     }
 
     .insumos-container {
@@ -299,14 +421,16 @@
         min-height: 0;
         width: 100%;
         padding-bottom: 12px;
+        box-sizing: border-box;
     }
 
     .grupo-insumos-container {
         width: 100%;
-        overflow-x: visible;
+        overflow-x: auto;
         overflow-y: visible;
         padding-bottom: 8px;
         align-items: stretch;
+        -webkit-overflow-scrolling: touch;
     }
 
     .insumos-container .grupo-insumos-container .insumo-nome,
@@ -325,14 +449,17 @@
     }
 }
 
+/* =============================================
+   SMARTPHONE PEQUENO (até 480px)
+   ============================================= */
 @media (max-width: 480px) {
     #root {
         width: 100dvw;
     }
 
     .categoria-container {
-        padding: 10px;
-        gap: 10px;
+        padding: 8px 10px;
+        gap: 8px;
     }
 
     .botoes-container {
@@ -344,20 +471,20 @@
     .botoes-container .plus-container,
     .botoes-container-icon {
         height: 42px;
-        font-size: 13px;
-        padding: 0 10px;
+        font-size: 12px;
+        padding: 0 8px;
     }
 
     .botoes-container .button-container .button-value,
     .botoes-container .plus-icon-container {
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .botoes-container .button-container .icon-container .button-icon svg,
     .botoes-container .plus-icon svg,
     .botoes-container-icon svg {
-        height: 18px;
-        width: 18px;
+        height: 16px;
+        width: 16px;
     }
 
     .container-search .search-container {
@@ -426,5 +553,11 @@
     .linha-estoque {
         min-width: 0;
         width: 100%;
+    }
+
+    .mensagemErro {
+        font-size: 16px;
+        text-align: center;
+        padding: 20px;
     }
 }
