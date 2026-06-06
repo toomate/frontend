@@ -10,6 +10,10 @@
   background-image: url(../../images/fundo-tela.png);
 }
 
+.boletos .conteudo {
+  width: 100%;
+}
+
 .boletos .conteudo span {
   display: flex;
   align-items: flex-start;
@@ -21,22 +25,26 @@
 .card-pagamentos {
   height: auto;
   overflow: visible;
-  padding: 0 20px 0 20px;
+  width: min(1200px, calc(100% - 24px));
+  margin: 0 auto;
+  padding: 0 12px 24px;
+  box-sizing: border-box;
 }
 
 .boletos .filtros {
   --filtro-altura: 38px;
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   align-items: stretch;
   margin-bottom: 20px;
-  flex-wrap: wrap;
 }
 
 .boletos .filtros select {
   height: var(--filtro-altura);
   color: black;
-  width: 150px;
+  width: 100%;
+  min-width: 0;
   background-color: white;
   border-color: #ccc;
   padding: 0 8px;
@@ -48,8 +56,8 @@
   display: flex;
   align-items:center;
   justify-content: space-evenly;
-  width: 360px;
-  min-width: 340px;
+  width: 100%;
+  min-width: 0;
   height: var(--filtro-altura);
   padding: 0 10px;
   gap: 5px;
@@ -59,10 +67,9 @@
 }
 
 .boletos .busca input {
-  width: 90%;
+  width: 100%;
   min-width: 0;
   height: 100%;
-
   color: black;
   border: none;
   margin: 0;
@@ -83,7 +90,8 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 150px;
+  width: 100%;
+  min-width: 0;
   height: var(--filtro-altura);
   background: white;
   border: 1px solid #ccc !important;
@@ -101,6 +109,16 @@
   align-items: center;
   width: auto;
   border-top: 1px solid #ccc;
+  gap: 16px;
+}
+
+.info-esquerda {
+  min-width: 0;
+  flex: 1;
+}
+
+.lado-direito {
+  flex-shrink: 0;
 }
 
 .vencimento {
@@ -210,9 +228,49 @@
   gap: 15px;
 }
 
+.paginacao-boletos {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 16px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
 @media (max-width: 480px) {
+  .card-pagamentos {
+    width: calc(100% - 16px);
+    padding: 0 0 20px;
+  }
+
+  .boletos .filtros {
+    grid-template-columns: 1fr;
+  }
+
+  .boletos .filtros select,
+  .btn-calendario,
+  .view-toggle-btn,
   .boletos .busca {
     width: 100%;
+  }
+
+  .item-pagamento {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .lado-direito,
+  .btn-pago,
+  .btn-pendente {
+    width: 100%;
+  }
+
+  .lista {
+    padding: 14px;
+  }
+
+  .boletos .busca {
+    min-height: var(--filtro-altura);
   }
 
   .btn-pago {
@@ -224,19 +282,40 @@
   }
 
   .descricao {
-    width: 80%;
+    width: auto;
     font-size: 12px;
+    margin: 8px 0;
   }
 
   .valor {
     font-size: 12px;
     font-weight: bold;
+    width: auto;
+    display: inline-block;
+    margin: 0;
   }
 
   .btn-pago {
-    width: 70px;
     padding: 6px 12px;
     border-radius: 6px;
+  }
+
+  .paginacao-boletos {
+    flex-direction: column;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 900px) {
+  .boletos .filtros {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .boletos .busca {
+    grid-column: 1 / -1;
+  }
+
+  .btn-calendario {
+    grid-column: 1 / -1;
   }
 }
 
