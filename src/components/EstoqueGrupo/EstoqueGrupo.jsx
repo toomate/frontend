@@ -9,6 +9,12 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
     const UM_DIA_EM_MS = 24 * 60 * 60 * 1000;
     const UMA_SEMANA_EM_MS = 7 * UM_DIA_EM_MS;
 
+    const parsarDataLocal = (dataValidade) => {
+        const match = String(dataValidade).match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (!match) return null;
+        return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    };
+
     const classificarValidadeGrupo = (itens = []) => {
         let encontrouAlerta = false;
 
@@ -16,20 +22,15 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             const dataValidade = item?.dataValidade;
             if (!dataValidade) continue;
 
-            const vencimento = new Date(String(dataValidade).includes("T") ? dataValidade : `${dataValidade}T00:00:00`);
-            if (Number.isNaN(vencimento.getTime())) continue;
+            const vencimento = parsarDataLocal(dataValidade);
+            if (!vencimento) continue;
 
             const hoje = new Date();
             hoje.setHours(0, 0, 0, 0);
 
             const diferenca = vencimento.getTime() - hoje.getTime();
-            if (diferenca < 0) {
-                return "vencido";
-            }
-
-            if (diferenca <= UMA_SEMANA_EM_MS) {
-                encontrouAlerta = true;
-            }
+            if (diferenca < 0) return "vencido";
+            if (diferenca <= UMA_SEMANA_EM_MS) encontrouAlerta = true;
         }
 
         return encontrouAlerta ? "alerta" : "";

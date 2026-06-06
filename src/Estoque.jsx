@@ -19,7 +19,18 @@ import SeletorPaginas from "./components/Paginas/SeletorPaginas"
 export function Estoque() {
     const [grupoMax, setGrupoMax] = useState([])
     const [grupo, setGrupo] = useState([])
-    const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
+    const [categorias, setCategorias] = useState([
+        "Geral",
+        "Proteínas",
+        "Hortifruti",
+        "Frios e Embutidos",
+        "Temperos e Condimentos",
+        "Bebidas",
+        "Pescados",
+        "Laticínios",
+        "Grãos e Secos",
+        "Óleos e Gorduras",
+    ])
     const [categoriasAtivas, setCategoriasAtivas] = useState([])
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
