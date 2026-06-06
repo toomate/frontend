@@ -214,8 +214,13 @@ export function Estoque() {
             return { ...item, itens: itensAtualizados }
         })
         setGrupo(novoGrupo)
+        if (diferenca === 0) return;
         setMudancas(prev => {
             const existente = prev.find(m => m.id === idLote)
+
+            if (existente && novaQtd === Number(obterItemLote(grupoMax, idLote)?.quantidadeTotal ?? 0)) {
+                return prev.filter(m => m.id !== idLote)
+            }
 
             if (existente) {
                 return prev.map(m =>
