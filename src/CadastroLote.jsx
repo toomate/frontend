@@ -438,10 +438,6 @@ export default function CadastroLote() {
                 <option value="l">Litros (L)</option>
                 <option value="ml">Mililitros (ML)</option>
               </select>
-
-              <button type="button" className="eye-btn2" onClick={() => setAbrirModal("marca")}>
-                <Plus size={18} />
-              </button>
             </div>
 
             {/* Upload */}
