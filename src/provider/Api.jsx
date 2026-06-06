@@ -892,4 +892,78 @@ export class Vencimentos {
   }
 }
 
+export const BUCKET_COMPROVANTES = "toomate-comprovantes";
+
+export class ArquivoApi {
+  // Sobe a foto do comprovante e relaciona com a entidade de negócio (lote/divida).
+  // O backend espera multipart com duas partes: "arquivo" (file) e "relacionamento" (JSON).
+  static async cadastrarComprovante({
+    arquivo,
+    idEntidade,
+    tipoEntidade,
+    categoria,
+    bucket = BUCKET_COMPROVANTES,
+  }) {
+    if (!arquivo) {
+      throw new Error("Nenhum arquivo informado para o comprovante.");
+    }
+
+    const formData = new FormData();
+    formData.append("arquivo", arquivo);
+    formData.append(
+      "relacionamento",
+      new Blob(
+        [JSON.stringify({ tipoEntidade, idEntidade, categoria })],
+        { type: "application/json" }
+      )
+    );
+
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: `/arquivos/${encodeURIComponent(bucket)}`,
+        data: formData,
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Erro ao cadastrar comprovante:",
+        error?.response?.status,
+        error?.response?.data ?? error?.message
+      );
+      throw error;
+    }
+  }
+
+  static async listarComprovantes() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/arquivos/comprovantes",
+      });
+      // 204 No Content vem sem corpo
+      return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+      console.error("Erro ao listar comprovantes:", error);
+      throw error;
+    }
+  }
+
+  // O endpoint da imagem exige Bearer token, então buscamos como blob
+  // (o interceptor injeta o token) e devolvemos um object URL utilizável em <img>.
+  static async buscarImagemUrl(bucket, chave) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/arquivos/${encodeURIComponent(bucket)}/${encodeURIComponent(chave)}`,
+        responseType: "blob",
+      });
+      return URL.createObjectURL(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar imagem do comprovante:", error);
+      throw error;
+    }
+  }
+}
+
 export default api;

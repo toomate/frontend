@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./CadastroFiado.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { clientes, dividas } from "./provider/Api";
+import { ArquivoApi, clientes, dividas } from "./provider/Api";
 
 export default function CadastroFiado() {
   const navigate = useNavigate();
@@ -36,6 +36,8 @@ export default function CadastroFiado() {
 
   const [pedidos, setPedidos] = useState([]);
   const [observacoesPedidos, setObservacoesPedidos] = useState("");
+
+  const [arquivoNotaConsumo, setArquivoNotaConsumo] = useState(null);
 
   useEffect(() => {
     async function carregarDados() {
@@ -222,18 +224,37 @@ function adicionarPedido() {
     try {
       setIsCadastrando(true);
 
+      let idPrimeiraDivida = null;
       for (const item of listaFinal) {
-        await dividas.criar({
+        const dividaCriada = await dividas.criar({
           valor: item.valor,
           dataCompra: item.dataPedido,
           pedido: item.pedido,
           idCliente: Number(idCliente),
           pago: false,
         });
+        if (idPrimeiraDivida == null) {
+          idPrimeiraDivida = dividaCriada?.idDivida ?? dividaCriada?.id;
+        }
+      }
+
+      // Comprovante de consumo (nota): vincula ao primeiro pedido do fiado
+      if (arquivoNotaConsumo && idPrimeiraDivida) {
+        try {
+          await ArquivoApi.cadastrarComprovante({
+            arquivo: arquivoNotaConsumo,
+            idEntidade: Number(idPrimeiraDivida),
+            tipoEntidade: "DIVIDA",
+            categoria: "CONSUMO",
+          });
+        } catch (erroUpload) {
+          console.error("Fiado cadastrado, mas o comprovante de consumo não pôde ser enviado:", erroUpload);
+        }
       }
 
       setPedidos([]);
       setObservacoesPedidos("");
+      setArquivoNotaConsumo(null);
 
       setPedidoSelecionado("");
       setValor("");
@@ -346,9 +367,19 @@ function adicionarPedido() {
                 Enviar Nota Fiscal
 
                 <label className="botao-upload-fiado">
-                  <input type="file" accept="image/*" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => setArquivoNotaConsumo(e.target.files?.[0] ?? null)}
+                  />
                 </label>
               </div>
+
+              {arquivoNotaConsumo && (
+                <span style={{ fontSize: "14px" }}>
+                  Arquivo selecionado: {arquivoNotaConsumo.name}
+                </span>
+              )}
             </form>
 
             <button

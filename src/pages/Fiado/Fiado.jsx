@@ -6,7 +6,7 @@ import { FiadoModal } from "../../components/FiadoModal/FiadoModal";
 import { FiltroSelecaoMultipla } from "../../components/shared/FiltroSelecaoMultipla";
 import "./Fiado.css";
 import HeaderPadrao from '../../HeaderPadrao';
-import { clientes, dividas } from "../../provider/Api";
+import { ArquivoApi, clientes, dividas } from "../../provider/Api";
 
 export default function Fiado({ irPara }) {
   const navigate = useNavigate();
@@ -154,9 +154,24 @@ export default function Fiado({ irPara }) {
     });
 
   // Marca apenas a dívida clicada como paga
-  const pagarDivida = async (idCliente, idDivida) => {
+  const pagarDivida = async (idCliente, idDivida, comprovantePagamento) => {
     try {
       await dividas.atualizarEstado(idDivida);
+
+      // Sobe o comprovante de pagamento (best-effort: a dívida já foi quitada)
+      const arquivoPagamento = comprovantePagamento?.comprovante;
+      if (arquivoPagamento) {
+        try {
+          await ArquivoApi.cadastrarComprovante({
+            arquivo: arquivoPagamento,
+            idEntidade: Number(idDivida),
+            tipoEntidade: "DIVIDA",
+            categoria: "PAGAMENTO",
+          });
+        } catch (erroUpload) {
+          console.error("Pagamento registrado, mas o comprovante não pôde ser enviado:", erroUpload);
+        }
+      }
 
       const agora = new Date().toISOString();
       setFiados((prev) => atualizarDividaNoEstado(prev, idCliente, [idDivida], agora));

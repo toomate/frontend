@@ -1,0 +1,521 @@
+.admin-comprovantes-card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+}
+
+.admin-comprovantes-header h2 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--admin-marrom, #6b4423);
+}
+
+.admin-comprovantes-header p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--admin-texto-suave, #5f5f5f);
+}
+
+/* Abas principais */
+.admin-comprovantes-abas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  border-bottom: 1px solid var(--admin-borda, #d9bf80);
+  padding-bottom: 10px;
+}
+
+.admin-comprovantes-aba {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 16px;
+  border: 1px solid var(--admin-borda, #d9bf80);
+  border-radius: 10px;
+  background: #fffdf8;
+  color: var(--admin-marrom, #6b4423);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.admin-comprovantes-aba:hover {
+  background: #f8ecc6;
+}
+
+.admin-comprovantes-aba.ativo {
+  background: var(--admin-marrom, #6b4423);
+  border-color: var(--admin-marrom, #6b4423);
+  color: #f8ecc6;
+}
+
+.admin-comprovantes-aba-contagem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: rgba(107, 68, 35, 0.12);
+  color: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.admin-comprovantes-aba.ativo .admin-comprovantes-aba-contagem {
+  background: rgba(248, 236, 198, 0.26);
+}
+
+/* Busca + filtro de data */
+.admin-comprovantes-filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+}
+
+.admin-comprovantes-busca {
+  flex: 1 1 280px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--admin-borda, #d9bf80);
+  border-radius: 10px;
+  background: #fffdf8;
+  color: var(--admin-marrom, #6b4423);
+}
+
+.admin-comprovantes-busca input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  color: var(--admin-texto, #1f1f1f);
+}
+
+.admin-comprovantes-busca button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--admin-texto-suave, #5f5f5f);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: 6px;
+}
+
+.admin-comprovantes-busca button:hover {
+  background: #f0dfa8;
+}
+
+.admin-comprovantes-filtro-data {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-comprovantes-filtro-data label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--admin-texto-suave, #5f5f5f);
+}
+
+.admin-comprovantes-filtro-data input {
+  height: 38px;
+  padding: 0 8px;
+  border: 1px solid var(--admin-borda, #d9bf80);
+  border-radius: 8px;
+  background: #fffdf8;
+  color: var(--admin-texto, #1f1f1f);
+  font-size: 13px;
+}
+
+/* Chips (fiado) */
+.admin-comprovantes-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.admin-comprovantes-chip-grupo {
+  display: inline-flex;
+  gap: 6px;
+  background: #f4ead0;
+  padding: 4px;
+  border-radius: 999px;
+}
+
+.admin-comprovantes-chip {
+  height: 30px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--admin-marrom, #6b4423);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.admin-comprovantes-chip:hover {
+  background: rgba(107, 68, 35, 0.1);
+}
+
+.admin-comprovantes-chip.ativo {
+  background: var(--admin-marrom, #6b4423);
+  color: #f8ecc6;
+}
+
+/* Resultados / grupos sanfona */
+.admin-comprovantes-resultados {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 4px;
+}
+
+.comprovante-grupo {
+  border: 1px solid var(--admin-borda, #d9bf80);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #fffdf8;
+}
+
+.comprovante-grupo-cabecalho {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border: none;
+  background: #fbf3da;
+  color: var(--admin-marrom, #6b4423);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: left;
+}
+
+.comprovante-grupo-cabecalho:hover {
+  background: #f8ecc6;
+}
+
+.comprovante-grupo-chevron {
+  transition: transform 0.18s ease;
+  flex-shrink: 0;
+}
+
+.comprovante-grupo-cabecalho.aberto .comprovante-grupo-chevron {
+  transform: rotate(180deg);
+}
+
+.comprovante-grupo-nome {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comprovante-grupo-contagem {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 7px;
+  border-radius: 999px;
+  background: rgba(107, 68, 35, 0.14);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+/* Grade de comprovantes */
+.admin-comprovantes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 14px;
+  padding: 14px;
+}
+
+.comprovante-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  padding: 0;
+  border: 1px solid var(--admin-borda, #d9bf80);
+  border-radius: 12px;
+  background: #ffffff;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.18s ease, transform 0.18s ease, border-color 0.18s ease;
+}
+
+.comprovante-card:hover:not(:disabled) {
+  box-shadow: 0 8px 20px rgba(107, 68, 35, 0.16);
+  transform: translateY(-2px);
+  border-color: var(--admin-dourado, #b88b09);
+}
+
+.comprovante-card:disabled {
+  cursor: default;
+  opacity: 0.85;
+}
+
+.comprovante-thumb {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: #f4ead0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.comprovante-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.comprovante-thumb-tags {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.comprovante-thumb-erro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #a98a4a;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.comprovante-thumb-spinner {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 3px solid rgba(107, 68, 35, 0.18);
+  border-top-color: var(--admin-marrom, #6b4423);
+  animation: comprovante-girar 0.8s linear infinite;
+}
+
+@keyframes comprovante-girar {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.comprovante-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+}
+
+.comprovante-tag-nf {
+  background: #eef4ff;
+  color: #2f80ed;
+}
+
+.comprovante-tag-consumo {
+  background: #fff3e0;
+  color: #e07b00;
+}
+
+.comprovante-tag-pagamento {
+  background: #f0faf5;
+  color: #1ba968;
+}
+
+.comprovante-tag-status.pago {
+  background: #e7f8ef;
+  color: #1ba968;
+}
+
+.comprovante-tag-status.aberto {
+  background: #fdecec;
+  color: #c92c2c;
+}
+
+.comprovante-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px 12px;
+}
+
+.comprovante-titulo {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--admin-texto, #1f1f1f);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comprovante-subtitulo {
+  font-size: 12px;
+  color: var(--admin-texto-suave, #5f5f5f);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.comprovante-rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--admin-texto-suave, #5f5f5f);
+}
+
+.comprovante-rodape strong {
+  color: var(--admin-marrom, #6b4423);
+  font-size: 13px;
+}
+
+/* Lightbox */
+.comprovante-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  background: rgba(31, 20, 8, 0.78);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.comprovante-lightbox-conteudo {
+  display: flex;
+  flex-direction: column;
+  width: min(1100px, 96vw);
+  max-width: 96vw;
+  height: 92vh;
+  max-height: 92vh;
+  background: #fffdf8;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.comprovante-lightbox-topo {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--admin-borda, #d9bf80);
+}
+
+.comprovante-lightbox-titulo {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  min-width: 0;
+}
+
+.comprovante-lightbox-textos {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.comprovante-lightbox-meta {
+  font-size: 12px;
+  color: var(--admin-texto-suave, #5f5f5f);
+}
+
+.comprovante-lightbox-fechar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--admin-marrom, #6b4423);
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.15s ease;
+}
+
+.comprovante-lightbox-fechar:hover {
+  background: #f8ecc6;
+}
+
+.comprovante-lightbox-imagem {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: #f4ead0;
+  overflow: auto;
+}
+
+.comprovante-lightbox-imagem img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 6px;
+}
+
+@media (max-width: 768px) {
+  .admin-comprovantes-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .admin-comprovantes-filtro-data {
+    width: 100%;
+  }
+
+  .admin-comprovantes-filtro-data label {
+    flex: 1;
+  }
+
+  .admin-comprovantes-filtro-data input {
+    width: 100%;
+  }
+
+  .comprovante-lightbox {
+    padding: 12px;
+  }
+}

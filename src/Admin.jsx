@@ -11,6 +11,7 @@ import GerenciamentoUsuariosAdmin from "./components/admin/AdminUsersManagement"
 import AdminLogsSistema from "./components/admin/AdminLogsSistema";
 import AdminRelatorios from "./components/admin/AdminRelatorios";
 import AdminLancamentos from "./components/admin/AdminLancamentos";
+import AdminComprovantes from "./components/admin/AdminComprovantes";
 import HeaderPadrao from "./HeaderPadrao";
 import { AdminApi, AuthApi, FornecedorApi, Lote } from "./provider/Api";
 import "./components/admin/Admin.css";
@@ -55,6 +56,7 @@ const abasAdminDisponiveis = new Set([
   "usuarios",
   "relatorios",
   "logs",
+  "comprovantes",
 ]);
 
 function listasIguais(listaA, listaB) {
@@ -569,6 +571,7 @@ export default function Admin() {
   const exibindoLancamentos = itemAtivo === "lancamentos";
   const exibindoRelatorios = itemAtivo === "relatorios";
   const exibindoLogsSistema = itemAtivo === "logs";
+  const exibindoComprovantes = itemAtivo === "comprovantes";
 
   const logsRecentesPainel = useMemo(
     () =>
@@ -1312,6 +1315,8 @@ export default function Admin() {
           <AdminRelatorios lancamentosInsumos={lancamentosInsumos} />
         ) : exibindoLogsSistema ? (
           <AdminLogsSistema />
+        ) : exibindoComprovantes ? (
+          <AdminComprovantes />
         ) : (
           <>
             <section className="admin-stat-grid">
