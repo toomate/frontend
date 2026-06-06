@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./App.css";
+import "./CadastroBoleto.css";
 import { Plus, Trash2, Save, CheckCircle } from "lucide-react";
 import { data, useNavigate } from "react-router-dom";
 import AutocompleteInput from "./components/common/AutocompleteInput";
@@ -7,7 +7,6 @@ import { boletos, FornecedorApi } from "./provider/Api";
 
 export default function CadastroBoleto() {
   const navigate = useNavigate();
-
   const [abrirModal, setAbrirModal] = useState(false);
   const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);
   const [novaCategoriaBoleto, setNovaCategoriaBoleto] = useState("");
@@ -81,6 +80,9 @@ export default function CadastroBoleto() {
 
   }
 
+  function irParaCadastroFornecedor() {
+    navigate("/cadastro-fornecedor");
+  }
 
   useEffect(() => {
     async function carregarCategorias() {
@@ -201,6 +203,14 @@ export default function CadastroBoleto() {
                     placeholder="Insira um fornecedor"
                     className="selectFornecedorBoleto"
                   />
+
+                    <button
+                      type="button"
+                      className="eye-btn"
+                        onClick={irParaCadastroFornecedor}
+                    >
+                      <Plus size={18} />
+                    </button>
                 </div>
               </>
             )}

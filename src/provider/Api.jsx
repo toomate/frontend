@@ -64,6 +64,20 @@ export class boletos {
     }
   };
 
+  static async listarBoletosPaginado({ pagina = 0, tamanho = 10 } = {}) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/boletos/paginado",
+        params: { pagina, tamanho },
+      });
+      return response.data;
+    } catch (error) {
+      console.error('Erro ao buscar boletos paginados:', error);
+      throw error;
+    }
+  }
+
   static async listarCategorias() {
     try {
       const response = await requestComFallback({
@@ -214,8 +228,8 @@ export class AuthApi {
       payload?.ehAdmin !== undefined
         ? Boolean(payload.ehAdmin)
         : payload?.administrador !== undefined
-        ? Boolean(payload.administrador)
-        : undefined;
+          ? Boolean(payload.administrador)
+          : undefined;
 
     const nome = String(payload?.nome ?? "").trim();
     const apelido = String(payload?.username ?? payload?.apelido ?? "")
@@ -231,52 +245,52 @@ export class AuthApi {
 
     const tentativas = atualizacaoCompleta
       ? [
-          {
-            method: "put",
-            url: `/usuarios/${idNormalizado}`,
-            data: {
-              id: idNormalizado,
-              nome,
-              apelido,
-              senha,
-              administrador: ehAdminNormalizado,
-            },
+        {
+          method: "put",
+          url: `/usuarios/${idNormalizado}`,
+          data: {
+            id: idNormalizado,
+            nome,
+            apelido,
+            senha,
+            administrador: ehAdminNormalizado,
           },
-          {
-            method: "put",
-            url: "/usuarios",
-            data: {
-              id: idNormalizado,
-              nome,
-              apelido,
-              senha,
-              administrador: ehAdminNormalizado,
-            },
+        },
+        {
+          method: "put",
+          url: "/usuarios",
+          data: {
+            id: idNormalizado,
+            nome,
+            apelido,
+            senha,
+            administrador: ehAdminNormalizado,
           },
-        ]
+        },
+      ]
       : [
-          {
-            method: "patch",
-            url: `/usuarios/${idNormalizado}`,
-            data: {
-              administrador: ehAdminNormalizado,
-              ehAdmin: ehAdminNormalizado,
-              admin: ehAdminNormalizado,
-              getadministrador: ehAdminNormalizado,
-            },
+        {
+          method: "patch",
+          url: `/usuarios/${idNormalizado}`,
+          data: {
+            administrador: ehAdminNormalizado,
+            ehAdmin: ehAdminNormalizado,
+            admin: ehAdminNormalizado,
+            getadministrador: ehAdminNormalizado,
           },
-          {
-            method: "patch",
-            url: "/usuarios",
-            data: {
-              id: idNormalizado,
-              administrador: ehAdminNormalizado,
-              ehAdmin: ehAdminNormalizado,
-              admin: ehAdminNormalizado,
-              getadministrador: ehAdminNormalizado,
-            },
+        },
+        {
+          method: "patch",
+          url: "/usuarios",
+          data: {
+            id: idNormalizado,
+            administrador: ehAdminNormalizado,
+            ehAdmin: ehAdminNormalizado,
+            admin: ehAdminNormalizado,
+            getadministrador: ehAdminNormalizado,
           },
-        ];
+        },
+      ];
 
     if (atualizacaoCompleta && (!nome || !apelido || !senha)) {
       throw new Error(
@@ -354,7 +368,7 @@ export class AdminApi {
 }
 
 export class Lote {
-  static async dynamicGetEstoque(categoria, busca) {
+  static async dynamicGetEstoque(categoria, busca, pagina) {
     try {
       let parametro = categoria === "Geral" ? "" : `/${categoria}`;
 
@@ -362,10 +376,15 @@ export class Lote {
         parametro = `/search?insumo=${busca}`;
       }
 
+      if (pagina > 0) {
+        parametro += `?pagina=${pagina}`
+      }
+
       const response = await requestComFallback({
         method: "get",
         url: `/lotes/estoque${parametro}`,
       });
+      console.log(response)
       return response.data;
     } catch (error) {
       console.error("Erro ao buscar o estoque:", error);
@@ -436,7 +455,7 @@ export class Lote {
     }
   }
 
-  static async criar({payload}) {
+  static async criar({ payload }) {
     try {
       const response = await requestComFallback({
         method: "post",
@@ -449,10 +468,22 @@ export class Lote {
       throw error;
     }
   }
+
+  static async excluirLote(idLote) {
+    try {
+      const response = await requestComFallback({
+        method: "patch",
+        url: `/lotes/estoque/${idLote}`
+      })
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao excluir lote", error)
+    }
+  }
 }
 
 export class FornecedorApi {
-  static async listar({ razaoSocial = "", pagina = 0, tamanho = 9 } = {}) {
+  static async listar({ razaoSocial = "", pagina = 0, tamanho = 12 } = {}) {
     try {
       const params = {
         razaoSocial: razaoSocial || undefined,
@@ -735,10 +766,10 @@ export class Rotinas {
   static async listar(pesquisa, pagina, tamanho) {
     try {
       let url = `/rotinas?`;
-      if(pagina !== undefined && tamanho !== undefined){
+      if (pagina !== undefined && tamanho !== undefined) {
         url += `pagina=${pagina}&tamanho=${tamanho}`;
       }
-      
+
       if (pesquisa.length > 0) {
         url += `&titulo=${pesquisa}`
       }
@@ -869,6 +900,80 @@ export class Vencimentos {
         code: err.code
       })
       throw err;
+    }
+  }
+}
+
+export const BUCKET_COMPROVANTES = "toomate-comprovantes";
+
+export class ArquivoApi {
+  // Sobe a foto do comprovante e relaciona com a entidade de negócio (lote/divida).
+  // O backend espera multipart com duas partes: "arquivo" (file) e "relacionamento" (JSON).
+  static async cadastrarComprovante({
+    arquivo,
+    idEntidade,
+    tipoEntidade,
+    categoria,
+    bucket = BUCKET_COMPROVANTES,
+  }) {
+    if (!arquivo) {
+      throw new Error("Nenhum arquivo informado para o comprovante.");
+    }
+
+    const formData = new FormData();
+    formData.append("arquivo", arquivo);
+    formData.append(
+      "relacionamento",
+      new Blob(
+        [JSON.stringify({ tipoEntidade, idEntidade, categoria })],
+        { type: "application/json" }
+      )
+    );
+
+    try {
+      const response = await requestComFallback({
+        method: "post",
+        url: `/arquivos/${encodeURIComponent(bucket)}`,
+        data: formData,
+      });
+      return response.data;
+    } catch (error) {
+      console.error(
+        "Erro ao cadastrar comprovante:",
+        error?.response?.status,
+        error?.response?.data ?? error?.message
+      );
+      throw error;
+    }
+  }
+
+  static async listarComprovantes() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: "/arquivos/comprovantes",
+      });
+      // 204 No Content vem sem corpo
+      return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+      console.error("Erro ao listar comprovantes:", error);
+      throw error;
+    }
+  }
+
+  // O endpoint da imagem exige Bearer token, então buscamos como blob
+  // (o interceptor injeta o token) e devolvemos um object URL utilizável em <img>.
+  static async buscarImagemUrl(bucket, chave) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/arquivos/${encodeURIComponent(bucket)}/${encodeURIComponent(chave)}`,
+        responseType: "blob",
+      });
+      return URL.createObjectURL(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar imagem do comprovante:", error);
+      throw error;
     }
   }
 }

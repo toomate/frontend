@@ -4,10 +4,16 @@ import "./EstoqueGrupo.css"
 import { EstoqueItem } from "../EstoqueItem/EstoqueItem";
 import { useEffect } from "react";
 
-export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId }) {
+export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId, excluirLote, loteOriginal }) {
     const [expandido, setExpandido] = useState(false);
     const UM_DIA_EM_MS = 24 * 60 * 60 * 1000;
     const UMA_SEMANA_EM_MS = 7 * UM_DIA_EM_MS;
+
+    const parsarDataLocal = (dataValidade) => {
+        const match = String(dataValidade).match(/^(\d{4})-(\d{2})-(\d{2})/);
+        if (!match) return null;
+        return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
+    };
 
     const classificarValidadeGrupo = (itens = []) => {
         let encontrouAlerta = false;
@@ -16,20 +22,15 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             const dataValidade = item?.dataValidade;
             if (!dataValidade) continue;
 
-            const vencimento = new Date(String(dataValidade).includes("T") ? dataValidade : `${dataValidade}T00:00:00`);
-            if (Number.isNaN(vencimento.getTime())) continue;
+            const vencimento = parsarDataLocal(dataValidade);
+            if (!vencimento) continue;
 
             const hoje = new Date();
             hoje.setHours(0, 0, 0, 0);
 
             const diferenca = vencimento.getTime() - hoje.getTime();
-            if (diferenca < 0) {
-                return "vencido";
-            }
-
-            if (diferenca <= UMA_SEMANA_EM_MS) {
-                encontrouAlerta = true;
-            }
+            if (diferenca < 0) return "vencido";
+            if (diferenca <= UMA_SEMANA_EM_MS) encontrouAlerta = true;
         }
 
         return encontrouAlerta ? "alerta" : "";
@@ -115,8 +116,18 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
         return Math.trunc(numero * fator) / fator;
     }
 
+    function getIcon(qtdMin, qtdAtual) {
+        if(qtdMin > qtdAtual){
+            return <TriangleAlert style={{ color: "darkred" }} />
+        } else if (qtdAtual <= qtdMin) {
+            return <TriangleAlert style={{ color: "darkorange" }} />
+        } else {
+            return <CheckCircle style={{ color: "green" }} />
+        }
+    }
+
     return (<div className="grupo-geral">
-        <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)} id={grupo.qtdAtual < grupo.qtdMinima ? "vencido" : ""}>
+        <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)}>
             <div className="insumo" ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
                 transform: expandido ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "transform 0.2s ease"
@@ -127,9 +138,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             <div className="qtd-medida">
             </div>
             <div className="qtd-minima">{`${grupo.qtdMinima}`}</div>
-            <div className="volume">{grupo.qtdAtual}{grupo.qtdAtual < grupo.qtdMinima
-                ? (<TriangleAlert style={{ color: "darkred" }} />)
-                : (<CheckCircle style={{ color: "green" }} />)}</div>
+            <div className="volume"><span id={grupo.qtdAtual < grupo.qtdMinima ? "vencido" : ""}>{grupo.qtdAtual}{getIcon(grupo.qtdMinima, grupo.qtdAtual)}</span></div>
             <div className="dt-vencimento">
                 {statusValidade && (
                     <span className={`badge-validade badge-validade-${statusValidade}`}>V</span>
@@ -137,7 +146,7 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             </div><div className="controle"></div>
         </div>
         {expandido && (
-            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} />
+            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} excluirLote={excluirLote} loteOriginal={loteOriginal} />
         )}
     </div>
 

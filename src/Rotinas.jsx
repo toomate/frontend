@@ -20,7 +20,6 @@ export default function Rotinas() {
     const [insumosGrupo, setInsumosGrupo] = useState([])
     const [pagina, setPagina] = useState(0)
     const [totalPaginas, setTotalPaginas] = useState(0)
-    const [tamanho, setTamanho] = useState(12)
     const [ordenacao, setOrdenacao] = useState("alfabetica")
     const [cardRemocao, setCardRemocao] = useState(false)
     const [cardConfirmacao, setCardConfirmacao] = useState(false)
@@ -28,11 +27,16 @@ export default function Rotinas() {
     const [idSelecionado, setIdSelecionado] = useState("")
     const [rotinaSelecionada, setRotinaSelecionada] = useState(null);
     const [loading, setLoading] = useState(false);
+    const tamanho = useTamanhoPagina({ mobile: 4, tablet: 8, desktop: 12 });
 
     const abrirCardRemocao = (id) => {
         setCardRemocao(true)
         setIdSelecionado(id)
     }
+
+    useEffect(() => {
+        setPagina(0);
+    }, [tamanho]);
 
     const voltarPag = () => {
         if (pagina > 0) {
@@ -110,8 +114,9 @@ export default function Rotinas() {
                 </div>
                 <div className="produtos">
                     {props.insumos && props.insumos.length > 0 ? (props.insumos.map(atual => <React.Fragment key={atual.id}>
+                        {console.log(atual)}
                         <div className="produto-linha">
-                            <div className="produto">{atual.nome}</div><div className="info-linha">{Math.abs(atual.quantidade)}</div>
+                            <div className="produto">{atual.nome}</div><div className="info-linha"><ArrowDown size={20} style={{ color: "red" }} />{Math.abs(atual.quantidade)}{atual.unidadeMedida}</div>
                             <div className="icone-linha">
                             </div></div>
                     </React.Fragment>)) :
@@ -179,4 +184,26 @@ export default function Rotinas() {
     )
 
 
+}
+
+export function useTamanhoPagina({ mobile = 4, tablet = 8, desktop = 12 } = {}) {
+    function calcular() {
+        const w = window.innerWidth;
+        if (w <= 768) return mobile;
+        if (w <= 1024) return tablet;
+        return desktop;
+    }
+
+    const [tamanho, setTamanho] = useState(calcular);
+
+    useEffect(() => {
+        function aoRedimensionar() {
+            setTamanho(calcular());
+        }
+
+        window.addEventListener("resize", aoRedimensionar);
+        return () => window.removeEventListener("resize", aoRedimensionar);
+    }, []);
+
+    return tamanho;
 }

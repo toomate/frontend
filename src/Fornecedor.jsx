@@ -1,20 +1,21 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { SearchX, TriangleAlert } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { SearchX, TriangleAlert, Trash2, Save } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
 import { FornecedorToolbar } from "./components/fornecedores/FornecedorToolbar";
 import { FornecedorCard } from "./components/fornecedores/FornecedorCard";
 import SeletorPaginas from "./components/Paginas/SeletorPaginas";
-import { NovoFornecedorModal } from "./components/fornecedores/NovoFornecedorModal";
 import { NovaCategoriaModal } from "./components/fornecedores/NovaCategoriaModal";
 import { BaseModal } from "./components/common/BaseModal";
 import { CategoriaApi, FornecedorApi } from "./provider/Api";
 import "./Fornecedor.css";
 
-const ITENS_POR_PAGINA = 12;
+const ITENS_POR_PAGINA = 9;
 
 const estadoInicialForm = {
   razaoSocial: "",
   telefone: "",
+  linkWhatsapp: "",
 };
 
 const estadoInicialCategoriaForm = {
@@ -55,18 +56,21 @@ function mapearFornecedor(item) {
     id: item.idFornecedor ?? item.id,
     razaoSocial: item.razaoSocial ?? item.nome ?? "Fornecedor sem nome",
     telefone: item.telefone ?? "",
-    link: item.link ?? "",
+    linkWhatsapp: item.linkWhatsapp ?? item.link ?? "",
     categoria: item.categoria ?? item.nomeCategoria ?? item.categoriaNome ?? "Sem categoria",
   };
 }
 
+
 export default function Fornecedor() {
+  const navigate = useNavigate();
   const [fornecedores, setFornecedores] = useState([]);
   const [busca, setBusca] = useState("");
   const [categorias, setCategorias] = useState([]);
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
   const [fornecedoresSelecionados, setFornecedoresSelecionados] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(0);
+  const [totalPaginas, setTotalPaginas] = useState(0);
   const [ordenacao, setOrdenacao] = useState("alfabetica");
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -86,10 +90,6 @@ export default function Fornecedor() {
   useEffect(() => {
     document.title = "Fornecedores";
   }, []);
-
-  useEffect(() => {
-    setPaginaAtual(0);
-  }, [busca, categoriasSelecionadas, fornecedoresSelecionados]);
 
   function exibirToast(mensagem, tipo = "sucesso") {
     setToast({ visivel: true, tipo, mensagem });
@@ -118,8 +118,9 @@ export default function Fornecedor() {
       let itens;
 
       if (categoriasSelecionadas.length === 0) {
-        const response = await FornecedorApi.listar({ tamanho: 999 });
+        const response = await FornecedorApi.listar({pagina: paginaAtual});
         itens = Array.isArray(response) ? response : response?.conteudo ?? response?.fornecedores ?? [];
+        setTotalPaginas(response.totalPaginas)
       } else {
         const respostas = await Promise.all(
           categoriasSelecionadas.map((id) => FornecedorApi.listarPorCategoria(id, { tamanho: 999 }))
@@ -143,7 +144,7 @@ export default function Fornecedor() {
     } finally {
       setCarregando(false);
     }
-  }, [categoriasSelecionadas]);
+  }, [categoriasSelecionadas, paginaAtual]);
 
   useEffect(() => {
     carregarCategorias();
@@ -151,7 +152,7 @@ export default function Fornecedor() {
 
   useEffect(() => {
     carregarFornecedores();
-  }, [carregarFornecedores]);
+  }, [carregarFornecedores, paginaAtual]);
 
   useEffect(() => {
     return () => {
@@ -161,6 +162,10 @@ export default function Fornecedor() {
     };
   }, []);
 
+  function irParaCadastroFornecedor() {
+    navigate("/cadastro-fornecedor");
+  }
+  
   function aoToggleCategoria(id) {
     setCategoriasSelecionadas((prev) =>
       prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
@@ -185,13 +190,6 @@ export default function Fornecedor() {
     setForm(estadoInicialForm);
   }
 
-  function abrirModalCriacao() {
-    setModoModal("criar");
-    setFornecedorSelecionado(null);
-    limparForm();
-    setModalAberto(true);
-  }
-
   function abrirModalCategoria() {
     setFormCategoria(estadoInicialCategoriaForm);
     setModalCategoriaAberto(true);
@@ -203,6 +201,7 @@ export default function Fornecedor() {
     setForm({
       razaoSocial: fornecedor.razaoSocial ?? "",
       telefone: fornecedor.telefone ?? "",
+      linkWhatsapp: fornecedor.linkWhatsapp ?? "",
     });
     setModalAberto(true);
   }
@@ -251,6 +250,7 @@ export default function Fornecedor() {
       const payload = {
         razaoSocial: form.razaoSocial.trim(),
         telefone: form.telefone.trim(),
+        linkWhatsapp: form.linkWhatsapp.trim(),
       };
 
       if (modoModal === "editar" && fornecedorSelecionado?.id) {
@@ -315,38 +315,6 @@ export default function Fornecedor() {
     }
   }
 
-  const { fornecedoresPagina, totalPaginas } = useMemo(() => {
-    let lista = [...fornecedores];
-
-    const normalizar = (s) =>
-      String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-
-    const termo = normalizar(busca.trim());
-    if (fornecedoresSelecionados.length > 0) {
-      lista = lista.filter((f) => fornecedoresSelecionados.includes(f.id));
-    }
-
-    if (termo) {
-      const termoDigitos = termo.replace(/\D/g, "");
-      lista = lista.filter((f) => {
-        if (normalizar(f.razaoSocial).includes(termo)) return true;
-        if (termoDigitos.length > 0 && f.telefone.replace(/\D/g, "").includes(termoDigitos)) return true;
-        return false;
-      });
-    }
-
-    if (ordenacao === "alfabetica_desc") {
-      lista.sort((a, b) => b.razaoSocial.localeCompare(a.razaoSocial));
-    } else {
-      lista.sort((a, b) => a.razaoSocial.localeCompare(b.razaoSocial));
-    }
-
-    const totalPaginas = Math.max(1, Math.ceil(lista.length / ITENS_POR_PAGINA));
-    const pagina = Math.min(paginaAtual, totalPaginas - 1);
-    const fornecedoresPagina = lista.slice(pagina * ITENS_POR_PAGINA, (pagina + 1) * ITENS_POR_PAGINA);
-
-    return { fornecedoresPagina, totalPaginas };
-  }, [fornecedores, busca, ordenacao, paginaAtual, fornecedoresSelecionados]);
 
   return (
     <div className="fornecedores-page">
@@ -354,118 +322,232 @@ export default function Fornecedor() {
 
       {toast.visivel && <div className={`fornecedores-toast ${toast.tipo}`}>{toast.mensagem}</div>}
 
+
       <main className="fornecedores-content">
-        <FornecedorToolbar
-          busca={busca}
-          aoBuscar={setBusca}
-          ordenacao={ordenacao}
-          aoMudarOrdenacao={setOrdenacao}
-          aoAdicionar={abrirModalCriacao}
-          aoAdicionarCategoria={abrirModalCategoria}
-          categorias={categorias}
-          categoriasSelecionadas={categoriasSelecionadas}
-          aoToggleCategoria={aoToggleCategoria}
-          aoLimparCategorias={aoLimparCategorias}
-          fornecedores={fornecedores}
-          fornecedoresSelecionados={fornecedoresSelecionados}
-          aoToggleFornecedor={aoToggleFornecedor}
-          aoLimparFornecedores={aoLimparFornecedores}
-        />
+        {/* 1º bloco: Toolbar */}
+        <div className="fornecedores-bloco-toolbar">
+          <FornecedorToolbar
+            busca={busca}
+            aoBuscar={setBusca}
+            ordenacao={ordenacao}
+            aoMudarOrdenacao={setOrdenacao}
+            aoAdicionar={irParaCadastroFornecedor}
+            aoAdicionarCategoria={abrirModalCategoria}
+            categorias={categorias}
+            categoriasSelecionadas={categoriasSelecionadas}
+            aoToggleCategoria={aoToggleCategoria}
+            aoLimparCategorias={aoLimparCategorias}
+            fornecedores={fornecedores}
+            fornecedoresSelecionados={fornecedoresSelecionados}
+            aoToggleFornecedor={aoToggleFornecedor}
+            aoLimparFornecedores={aoLimparFornecedores}
+          />
+        </div>
+        {/* 3º bloco: Cards */}
+        <div className="fornecedores-bloco-cards">
+          {erro && <p className="fornecedores-erro">{erro}</p>}
 
-        {erro && <p className="fornecedores-erro">{erro}</p>}
+          {carregando ? (
+            <p className="fornecedores-mensagem">Carregando fornecedores...</p>
+          ) : fornecedores.length > 0 ? (
+            <section className="fornecedores-grid">
+              {fornecedores.map((fornecedor) => (
+                <FornecedorCard
+                  key={fornecedor.id ?? fornecedor.razaoSocial}
+                  fornecedor={fornecedor}
+                  onEditar={abrirModalEdicao}
+                  onExcluir={abrirConfirmacaoExclusao}
+                />
+              ))}
+            </section>
+          ) : (
+            <section className="fornecedores-empty-state">
+              <div className="fornecedores-empty-icon">
+                <SearchX size={30} />
+              </div>
+              <h3>Nenhum fornecedor encontrado</h3>
+              <p>
+                Tente ajustar os filtros ou a busca. Se preferir, cadastre um novo fornecedor no
+                botao <strong>+</strong>.
+              </p>
+            </section>
+          )}
+        </div>
+      </main>
 
-        {carregando ? (
-          <p className="fornecedores-mensagem">Carregando fornecedores...</p>
-        ) : fornecedoresPagina.length > 0 ? (
-          <section className="fornecedores-grid">
-            {fornecedoresPagina.map((fornecedor) => (
-              <FornecedorCard
-                key={fornecedor.id ?? fornecedor.razaoSocial}
-                fornecedor={fornecedor}
-                onEditar={abrirModalEdicao}
-                onExcluir={abrirConfirmacaoExclusao}
-              />
-            ))}
-          </section>
-        ) : (
-          <section className="fornecedores-empty-state">
-            <div className="fornecedores-empty-icon">
-              <SearchX size={30} />
+      {/* MODAL NOVO/EDITAR FORNECEDOR */}
+      {modalAberto && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span className="titulo">
+              {modoModal === "editar"
+                ? "Editar fornecedor"
+                : "Novo fornecedor"}
+            </span>
+
+            <input
+              className="modal-input"
+              type="text"
+              name="razaoSocial"
+              placeholder="Razão social"
+              value={form.razaoSocial}
+              onChange={onChangeForm}
+            />
+
+            <input
+              className="modal-input"
+              type="text"
+              name="telefone"
+              placeholder="Telefone"
+              value={form.telefone}
+              onChange={onChangeForm}
+            />
+
+            <input
+              className="modal-input"
+              type="text"
+              name="linkWhatsapp"
+              placeholder="Link do WhatsApp"
+              value={form.linkWhatsapp}
+              onChange={onChangeForm}
+            />
+
+            <div className="modal-actions">
+              <button
+                className="btn btn-cancelar"
+                onClick={fecharModal}
+              >
+                Cancelar <Trash2 size={14} />
+              </button>
+
+              <button
+                className="btn"
+                onClick={salvarFornecedor}
+                disabled={salvando}
+              >
+                {salvando
+                  ? "Salvando..."
+                  : modoModal === "editar"
+                  ? "Atualizar"
+                  : "Salvar"}{" "}
+                <Save size={14} />
+              </button>
             </div>
-            <h3>Nenhum fornecedor encontrado</h3>
-            <p>
-              Tente ajustar os filtros ou a busca. Se preferir, cadastre um novo fornecedor no
-              botao <strong>+</strong>.
+          </div>
+        </div>
+      )}
+
+      {/* MODAL NOVA CATEGORIA */}
+      {modalCategoriaAberto && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <span className="titulo">
+              Nova categoria
+            </span>
+
+            <input
+              className="modal-input"
+              type="text"
+              name="nome"
+              placeholder="Nome da categoria"
+              value={formCategoria.nome}
+              onChange={onChangeFormCategoria}
+            />
+
+            <div className="modal-actions">
+              <button
+                className="btn btn-cancelar"
+                onClick={fecharModalCategoria}
+              >
+                Cancelar <Trash2 size={14} />
+              </button>
+
+              <button
+                className="btn"
+                onClick={salvarCategoria}
+                disabled={salvandoCategoria}
+              >
+                {salvandoCategoria
+                  ? "Salvando..."
+                  : "Salvar"}{" "}
+                <Save size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL CONFIRMAÇÃO EXCLUSÃO */}
+      {confirmacaoExclusaoAberta && (
+        <div className="modal-overlay">
+          <div className="modal">
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginBottom: "10px",
+              }}
+            >
+              <TriangleAlert size={50} />
+            </div>
+
+            <span className="titulo">
+              Excluir fornecedor?
+            </span>
+
+            <p
+              style={{
+                textAlign: "center",
+                marginBottom: "20px",
+              }}
+            >
+              Essa ação remove{" "}
+              <strong>
+                {fornecedorSelecionado?.razaoSocial}
+              </strong>{" "}
+              da sua lista.
             </p>
-          </section>
+
+            <div className="modal-actions">
+              <button
+                className="btn btn-cancelar"
+                onClick={fecharConfirmacaoExclusao}
+                disabled={excluindo}
+              >
+                Cancelar <Trash2 size={14} />
+              </button>
+
+              <button
+                className="btn"
+                onClick={excluirFornecedor}
+                disabled={excluindo}
+              >
+                {excluindo
+                  ? "Excluindo..."
+                  : "Excluir"}{" "}
+                <TriangleAlert size={14} />
+              </button>
+            </div>
+          </div>
+        </div>
         )}
 
-      </main>
-{/* 
-      <div className="fornecedores-paginacao">
-        <SeletorPaginas
-          avancar={() => setPaginaAtual(p => Math.min(p + 1, totalPaginas - 1))}
-          voltar={() => setPaginaAtual(p => Math.max(p - 1, 0))}
-          selecionar={setPaginaAtual}
-          numPages={totalPaginas}
-          paginaSelecionada={paginaAtual}
-        />
-      </div> */}
-
-      <NovoFornecedorModal
-        aberto={modalAberto}
-        aoFechar={fecharModal}
-        aoSalvar={salvarFornecedor}
-        form={form}
-        aoMudar={onChangeForm}
-        salvando={salvando}
-        titulo={modoModal === "editar" ? "Editar fornecedor" : "Novo fornecedor"}
-        textoBotao={modoModal === "editar" ? "Atualizar" : "Salvar"}
-      />
-
-      <NovaCategoriaModal
-        aberto={modalCategoriaAberto}
-        aoFechar={fecharModalCategoria}
-        aoSalvar={salvarCategoria}
-        form={formCategoria}
-        aoMudar={onChangeFormCategoria}
-        salvando={salvandoCategoria}
-      />
-
-      <BaseModal
-        aberto={confirmacaoExclusaoAberta}
-        onClose={fecharConfirmacaoExclusao}
-        title="Excluir fornecedor?"
-        width={360}
-        className="fornecedores-modal-confirmacao"
-        footer={
-          <>
-            <button
-              type="button"
-              className="fornecedores-btn-cancelar"
-              onClick={fecharConfirmacaoExclusao}
-              disabled={excluindo}
-            >
-              Cancelar
-            </button>
-            <button
-              type="button"
-              className="fornecedores-btn-salvar fornecedores-btn-excluir"
-              onClick={excluirFornecedor}
-              disabled={excluindo}
-            >
-              {excluindo ? "Excluindo..." : "Excluir"}
-            </button>
-          </>
-        }
-      >
-        <div className="fornecedores-confirmacao-icone">
-          <TriangleAlert size={28} />
+      {/* 2º bloco: Paginação */}
+      <div className="fornecedores-bloco-paginacao">
+        <div className="fornecedores-paginacao">
+          <SeletorPaginas
+            avancar={() =>
+              setPaginaAtual((p) => Math.min(p + 1, totalPaginas - 1))
+            }
+            voltar={() =>
+              setPaginaAtual((p) => Math.max(p - 1, 0))
+            }
+            selecionar={setPaginaAtual}
+            numPages={totalPaginas}
+            paginaSelecionada={paginaAtual}
+          />
         </div>
-        <p>
-          Essa acao remove <strong>{fornecedorSelecionado?.razaoSocial}</strong> da sua lista.
-        </p>
-      </BaseModal>
+      </div>
     </div>
   );
 }

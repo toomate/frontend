@@ -1,5 +1,6 @@
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import { ChevronDown } from 'lucide-react';
 import 'moment/locale/pt-br';
 
 moment.locale('pt-br');
@@ -39,6 +40,30 @@ export default function Calendario() {
   const [currentDate, setCurrentDate] = useState(initialDate || new Date());
 
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+  const meses = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ];
+
+  function alterarMes(event) {
+    const novoMes = Number(event.target.value);
+
+    const novaData = new Date(currentDate);
+    novaData.setMonth(novoMes);
+
+    setCurrentDate(novaData);
+  }
 
 useEffect(() => {
   const handleResize = () => {
@@ -200,7 +225,58 @@ useEffect(() => {
         date={currentDate}
         onNavigate={(date) => setCurrentDate(date)}
         style={{ height: '100%' }}
-        toolbar={true}
+
+        components={{
+          toolbar: ({ label, onNavigate }) => (
+            <div className="custom-toolbar">
+
+              <div className="toolbar-top">
+
+                <div className="toolbar-left">
+                  <div className="select-wrapper">
+                    <select
+                      value={currentDate.getMonth()}
+                      onChange={alterarMes}
+                      className="month-select"
+                    >
+                      {meses.map((mes, index) => (
+                        <option key={mes} value={index}>
+                          {mes}
+                        </option>
+                      ))}
+                    </select>
+
+                    <ChevronDown
+                      size={16}
+                      className="select-icon"
+                    />
+                  </div>
+                </div>
+
+                <div className="toolbar-right">
+                  <button onClick={() => onNavigate('PREV')}>
+                    Mês Anterior
+                  </button>
+
+                  <button onClick={() => onNavigate('TODAY')}>
+                    Mês Atual
+                  </button>
+
+                  <button onClick={() => onNavigate('NEXT')}>
+                    Próximo Mês
+                  </button>
+                </div>
+
+              </div>
+
+              <span className="custom-toolbar-label">
+                {label}
+              </span>
+
+            </div>
+          )
+        }}
+
         messages={{
           previous: 'Mês Anterior',
           today: 'Mês Atual',

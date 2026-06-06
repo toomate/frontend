@@ -15,24 +15,86 @@
     justify-content: center;
 }
 
-@media (max-width: 480px) {
-    .container-card-conf{
-        width: 70%;
+/* =============================================
+   TABLET (769px – 1024px)
+   ============================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .container-card-conf {
+        width: 50vw;
+        height: auto;
+        min-height: 18vh;
+        padding: 24px 20px;
+        border-radius: 8px;
+    }
+
+    .titulo-card-conf {
+        font-size: 17px;
+    }
+}
+
+/* =============================================
+   SMARTPHONE (até 768px)
+   ============================================= */
+@media (max-width: 768px) {
+    .container-card-conf {
+        position: relative;
+        width: 88vw;
+        max-width: 380px;
+        height: auto;
+        min-height: unset;
+        padding: 28px 20px 20px;
+        border-radius: 12px;
+        gap: 20px;
+        box-sizing: border-box;
+    }
+
+    .titulo-card-conf {
+        font-size: 16px;
+        font-weight: 600;
+        padding: 0;
+        text-align: center;
+    }
+
+    .container-card-conf .botoes {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 12px;
+        width: 100%;
     }
 
     .container-card-conf .botoes .button-container {
-        width: 30%;
-        display: flex;
+        flex: 1;
+        max-width: 140px;
+        height: 44px;
+        width: auto;
     }
 
-    .container-card-conf .botoes .button-container .button-value {
-        font-size: 16px;
+    .container-card-conf .botoes .button-value {
+        font-size: 15px;
+        margin-left: 0;
+    }
+}
+
+/* =============================================
+   SMARTPHONE PEQUENO (até 480px)
+   ============================================= */
+@media (max-width: 480px) {
+    .container-card-conf {
+        width: 92vw;
+        padding: 24px 16px 18px;
+        gap: 18px;
     }
 
-    .container-card-conf .titulo-card-conf {
-        display: flex;
-        justify-content: center;
+    .titulo-card-conf {
         font-size: 14px;
     }
 
+    .container-card-conf .botoes .button-container {
+        height: 42px;
+    }
+
+    .container-card-conf .botoes .button-value {
+        font-size: 14px;
+    }
 }

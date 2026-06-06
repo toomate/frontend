@@ -74,6 +74,7 @@ const secoesMenu = [
       { to: "/cadastro", label: "Cadastro de Usuários", icone: UserPlus },
       { to: "/admin?aba=logs", label: "Logs de Mudança", icone: Activity },
       { to: "/admin?aba=relatorios", label: "Relatório do Sistema", icone: FileText },
+      { to: "/admin?aba=comprovantes", label: "Comprovantes", icone: Receipt },
       {to: "/admin?aba=whatsapp", label: "Configurações do WhatsApp", icone: Handshake},
     ],
   },

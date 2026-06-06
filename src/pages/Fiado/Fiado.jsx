@@ -6,7 +6,7 @@ import { FiadoModal } from "../../components/FiadoModal/FiadoModal";
 import { FiltroSelecaoMultipla } from "../../components/shared/FiltroSelecaoMultipla";
 import "./Fiado.css";
 import HeaderPadrao from '../../HeaderPadrao';
-import { clientes, dividas } from "../../provider/Api";
+import { ArquivoApi, clientes, dividas } from "../../provider/Api";
 
 export default function Fiado({ irPara }) {
   const navigate = useNavigate();
@@ -55,13 +55,13 @@ export default function Fiado({ irPara }) {
     cliente.dividas.length > 0 && cliente.dividas.every((divida) => divida.pago);
 
   // Última data de compra
-  // const ultimaData = (cliente) => {
-  //   if (cliente.dividas.length === 0) return "";
-  //   return cliente.dividas
-  //     .map((d) => d.dataCompra)
-  //     .sort()
-  //     .pop();
-  // };
+  const ultimaData = (cliente) => {
+    if (cliente.dividas.length === 0) return "";
+    return cliente.dividas
+      .map((d) => d.dataCompra)
+      .sort()
+      .pop();
+  };
 
   // Filtra e ordena
   const fiadosFiltrados = fiados
@@ -102,12 +102,17 @@ export default function Fiado({ irPara }) {
         const diff = calcularAberto(b) - calcularAberto(a);
         return ordenacao.direcao === "asc" ? diff : -diff;
       }
-      // if (ordenacao.tipo === "data") {
-      //   const dA = ultimaData(a) || "";
-      //   const dB = ultimaData(b) || "";
-      //   return dB.localeCompare(dA);
-      // }
-      return 0;
+      if (ordenacao.tipo === "data") {
+        const dA = ultimaData(a) || "";
+        const dB = ultimaData(b) || "";
+
+        const comparison = dA.localeCompare(dB);
+
+      return ordenacao.direcao === "asc"
+        ? comparison
+        : -comparison;
+        }
+        return 0;
     });
 
   const toggleOrdenacao = (tipo) => {
@@ -149,9 +154,24 @@ export default function Fiado({ irPara }) {
     });
 
   // Marca apenas a dívida clicada como paga
-  const pagarDivida = async (idCliente, idDivida) => {
+  const pagarDivida = async (idCliente, idDivida, comprovantePagamento) => {
     try {
       await dividas.atualizarEstado(idDivida);
+
+      // Sobe o comprovante de pagamento (best-effort: a dívida já foi quitada)
+      const arquivoPagamento = comprovantePagamento?.comprovante;
+      if (arquivoPagamento) {
+        try {
+          await ArquivoApi.cadastrarComprovante({
+            arquivo: arquivoPagamento,
+            idEntidade: Number(idDivida),
+            tipoEntidade: "DIVIDA",
+            categoria: "PAGAMENTO",
+          });
+        } catch (erroUpload) {
+          console.error("Pagamento registrado, mas o comprovante não pôde ser enviado:", erroUpload);
+        }
+      }
 
       const agora = new Date().toISOString();
       setFiados((prev) => atualizarDividaNoEstado(prev, idCliente, [idDivida], agora));
@@ -292,7 +312,7 @@ export default function Fiado({ irPara }) {
             {renderSetaOrdenacao("valor")}
           </div>
         </button>
-{/* 
+
         <button
           className={`filtro-btn ${ordenacao.tipo === "data" ? "active" : ""}`}
           onClick={() => toggleOrdenacao("data")}
@@ -302,7 +322,7 @@ export default function Fiado({ irPara }) {
             <Filter size={18} />
             {renderSetaOrdenacao("data")}
           </div>
-        </button> */}
+        </button>
 
         <FiltroSelecaoMultipla
           itens={opcoesFiltroPagamento}

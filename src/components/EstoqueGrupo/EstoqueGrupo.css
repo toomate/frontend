@@ -86,12 +86,138 @@
     gap: 4px;
 }
 
-@media (max-width: 480px) {
+.volume {
+    height: 100%;
+}
+
+.volume span {
+    display: flex;
+    border-radius: 10px;
+    height: 80%;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 23%;
+}
+
+/* =============================================
+   TABLET (769px – 1024px)
+   ============================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
     .linha-estoque {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 25px;
-        align-items: center;
-        justify-items: stretch;
+        grid-template-columns: 140px 1fr 1fr 1fr 1fr 1fr 36px;
         width: 100%;
+    }
+
+    .grupo-container {
+        font-size: 16px;
+        min-height: 52px;
+    }
+
+    .insumo-nome {
+        font-size: 13px;
+    }
+}
+
+/* =============================================
+   SMARTPHONE (até 768px) — layout de cards
+   ============================================= */
+@media (max-width: 768px) {
+
+    .linha-estoque {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: nowrap;
+        align-items: center;
+        width: 100%;
+        padding: 10px 12px;
+        box-sizing: border-box;
+    }
+
+    .grupo-container {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr 1fr;
+        font-size: 15px;
+        min-height: 52px;
+        border-radius: 8px;
+        border-bottom: none;
+        border: 1px solid #ddd;
+        margin-bottom: 4px;
+        background-color: white;
+        padding: 0 12px;
+        box-sizing: border-box;
+        width: 100%;
+    }
+
+    /* Insumo ocupa a 1ª coluna */
+    .grupo-container .insumo {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+        overflow: hidden;
+    }
+
+    .grupo-container .insumo .icon {
+        height: 10px;
+    }
+
+    .grupo-container .insumo .insumo-nome {
+        font-size: 12px;
+        font-weight: 700;
+        width: auto;
+        height: auto;
+        justify-content: flex-start;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .grupo-container .insumo-icon,
+    .grupo-container .insumo .icone {
+        flex-shrink: 0;
+        height: auto;
+        width: 15px;
+    }
+
+    .grupo-container .insumo-icon svg {
+        height: 22px;
+    }
+
+    .grupo-container .insumo .icone svg {
+        height: 15px;
+    }
+
+    /* Oculta colunas que não entram no grid de 3 */
+    .grupo-container .qtd-medida,
+    .grupo-container .dt-vencimento,
+    .grupo-container .controle {
+        display: none !important;
+    }
+
+    .grupo-container .qtd-minima {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 12px;
+    }
+
+    .grupo-container .volume {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+    }
+
+    .grupo-container .volume span {
+        width: auto;
+        height: auto;
+        gap: 4px;
+        font-size: 12px; 
+        padding: 2px 4px;
+    }
+
+    .grupo-geral {
+        margin-bottom: 8px;
     }
 }

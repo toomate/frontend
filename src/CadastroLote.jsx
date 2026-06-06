@@ -4,7 +4,7 @@ import { Plus, CheckCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import FormModal from "./components/common/FormModal";
 import AutocompleteInput from "./components/common/AutocompleteInput";
-import { FornecedorApi, Lote, MarcaApi, insumos } from "./provider/Api";
+import { ArquivoApi, FornecedorApi, Lote, MarcaApi, insumos } from "./provider/Api";
 import { useLocation } from "react-router-dom";
 
 export default function CadastroLote() {
@@ -211,7 +211,7 @@ export default function CadastroLote() {
 
     try {
       setIsCadastrando(true);
-      await Lote.criar({
+      const loteCriado = await Lote.criar({
         payload: {
           dataValidade,
           precoUnitario: preco,
@@ -221,6 +221,21 @@ export default function CadastroLote() {
           fkUsuario: idUsuario,
         },
       });
+
+      // Sobe a nota fiscal (best-effort: o lote já foi criado)
+      const idLoteCriado = loteCriado?.idLote ?? loteCriado?.id;
+      if (arquivoNotaFiscal && idLoteCriado) {
+        try {
+          await ArquivoApi.cadastrarComprovante({
+            arquivo: arquivoNotaFiscal,
+            idEntidade: Number(idLoteCriado),
+            tipoEntidade: "LOTE",
+            categoria: "NOTA_FISCAL",
+          });
+        } catch (erroUpload) {
+          console.error("Lote cadastrado, mas a nota fiscal não pôde ser enviada:", erroUpload);
+        }
+      }
 
       setInsumoSelecionado("");
       setIdInsumoSelecionado(null);

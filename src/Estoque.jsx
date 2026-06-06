@@ -13,91 +13,129 @@ import HeaderPadrao from "./HeaderPadrao";
 import { CardRotina } from "./components/CardRotina/CardRotina";
 import { useNavigate } from "react-router-dom";
 import { Rotinas } from "./provider/Api";
+import SeletorPaginas from "./components/Paginas/SeletorPaginas"
 
 
 export function Estoque() {
     const [grupoMax, setGrupoMax] = useState([])
     const [grupo, setGrupo] = useState([])
-    const [categorias, setCategorias] = useState(["Geral", "Mercearia", "Proteinas", "Vegetais", "Graos", "Bebidas"])
-    const [categoriaAtiva, setCategoriaAtiva] = useState("Geral")
+    const [categorias, setCategorias] = useState([
+        "Geral",
+        "Proteínas",
+        "Hortifruti",
+        "Frios e Embutidos",
+        "Temperos e Condimentos",
+        "Bebidas",
+        "Pescados",
+        "Laticínios",
+        "Grãos e Secos",
+        "Óleos e Gorduras",
+    ])
+    const [categoriasAtivas, setCategoriasAtivas] = useState([])
     const [pesquisa, setPesquisa] = useState("")
     const [mudancas, setMudancas] = useState([])
     const [exibirRelatorio, setExibirRelatorio] = useState(false);
     const [cardRemocao, setCardRemocao] = useState(false);
+    const [cardExclusao, setCardExclusao] = useState(false);
     const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
-    const [maxCategoriasFixas, setMaxCategoriasFixas] = useState(0);
-    const [loading, setLoading] = useState({rotina: false, relatorio: false});
+    const [loading, setLoading] = useState({ rotina: false, relatorio: false, exclusao: false });
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [pagina, setPagina] = useState(0);
 
-    const carregarEstoque = useCallback(async (categoria = categoriaAtiva, busca = pesquisa) => {
-        const dados = await Lote.dynamicGetEstoque(categoria, busca);
-        setGrupo(dados);
-        setGrupoMax(dados);
-        return dados;
-    }, [categoriaAtiva, pesquisa]);
-
-    const calcularDeficit = (item) => {
-        const qtdMinima = Number(item?.qtdMinima ?? 0);
-        const qtdTotal = Number(item?.qtdTotal ?? 0);
-
-        if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-            return 0;
+    const carregarEstoque = useCallback(async () => {
+        if (categoriasAtivas.length >= 2) {
+            const respostas = await Promise.all(
+                categoriasAtivas.map((cat) => Lote.dynamicGetEstoque(cat, pesquisa, 0))
+            );
+            const vistos = new Set();
+            const todos = respostas
+                .flatMap((r) => (Array.isArray(r?.conteudo) ? r.conteudo : Array.isArray(r) ? r : []))
+                .filter((item) => {
+                    const chave = item?.fkInsumo;
+                    if (chave == null || vistos.has(chave)) return false;
+                    vistos.add(chave);
+                    return true;
+                });
+            setGrupo(todos);
+            setGrupoMax(todos);
+            setTotalPaginas(0);
+            return todos;
         }
 
-        return qtdMinima - qtdTotal;
-    };
-
-    const calcularRazaoEstoqueMinimo = (item) => {
-        const qtdMinima = Number(item?.qtdMinima ?? 0);
-        const qtdTotal = Number(item?.qtdTotal ?? 0);
-
-        if (!Number.isFinite(qtdMinima) || !Number.isFinite(qtdTotal)) {
-            return Number.POSITIVE_INFINITY;
+        const categoria = categoriasAtivas[0] ?? "Geral";
+        const dados = await Lote.dynamicGetEstoque(categoria, pesquisa, pagina);
+        if (dados?.total > 0) {
+            setGrupo(dados.conteudo);
+            setGrupoMax(dados.conteudo);
+            setTotalPaginas(dados.totalPaginas);
+            return dados.conteudo;
         }
+        setGrupo([]);
+        setGrupoMax([]);
+        setTotalPaginas(0);
+        return [];
+    }, [categoriasAtivas, pesquisa, pagina]);
 
-        if (qtdMinima <= 0) {
-            return Number.POSITIVE_INFINITY;
-        }
 
-        return qtdTotal / qtdMinima;
-    };
-
-    const grupoOrdenado = [...grupo].sort((a, b) => {
-        const razaoA = calcularRazaoEstoqueMinimo(a);
-        const razaoB = calcularRazaoEstoqueMinimo(b);
-
-        if (razaoA !== razaoB) {
-            return razaoA - razaoB;
-        }
-
-        const deficitA = calcularDeficit(a);
-        const deficitB = calcularDeficit(b);
-
-        if (deficitA !== deficitB) {
-            return deficitB - deficitA;
-        }
-
-        const nomeA = String(a?.insumo ?? "");
-        const nomeB = String(b?.insumo ?? "");
-        return nomeA.localeCompare(nomeB, "pt-BR");
-    });
-
+    const abrirCardExclusao = (idLote) => {
+        setIdSelecionado(idLote);
+        setCardExclusao(true);
+    }
 
     const abrirDropdown = (idLote) => {
         setDropdownAbertoId(prev => prev === idLote ? null : idLote);
     }
-
 
     const navigate = useNavigate();
 
     const pesquisar = (valor) => {
         setPesquisa(valor)
         if (valor.length > 0) {
-            setCategoriaAtiva("Geral")
+            setCategoriasAtivas([])
         }
     };
+
+    const alternarCategoria = (categoria) => {
+        if (categoria === "Geral") {
+            setCategoriasAtivas([])
+            setPagina(0)
+            return
+        }
+        setCategoriasAtivas((atual) => {
+            const proxima = atual.includes(categoria)
+                ? atual.filter((c) => c !== categoria)
+                : [...atual, categoria]
+            return proxima
+        })
+        setPagina(0)
+    }
+
+    const limparCategorias = () => {
+        setCategoriasAtivas([])
+        setPagina(0)
+    }
+
+    const voltarPag = () => {
+        if (pagina > 0) {
+            let pag = pagina - 1;
+            setPagina(pag)
+        }
+    }
+
+    const avancarPag = () => {
+        if (pagina < totalPaginas - 1) {
+            let pag = pagina + 1;
+            setPagina(pag)
+        }
+    }
+
+    const selecionarPag = (numPag) => {
+        setPagina(numPag);
+    }
+
 
 
     const abrirCard = () => {
@@ -120,12 +158,14 @@ export function Estoque() {
 
     const criarRotina = async (titulo) => {
         try {
-            setLoading({rotina: true})
+            console.log("mudancas", mudancas)
+            setLoading({ rotina: true })
             const res = await Rotinas.criar(titulo)
             const id = res.id;
             const insumosRotina = mudancas.map(atual => ({
                 insumoId: atual.insumoId,
-                quantidadeInsumo: Math.abs(atual.diferenca)
+                quantidadeInsumo: Math.abs(atual.diferenca) * atual.quantidadeMedida,
+                unidadeMedida: atual.unidadeMedida
             }))
             await Rotinas.associarInsumos(id, insumosRotina)
             setCardRotina(false)
@@ -137,10 +177,26 @@ export function Estoque() {
         }
     }
 
+    const excluirLote = async (idLote) => {
+        try {
+            setLoading({ exclusao: true })
+            await Lote.excluirLote(idLote);
+            await carregarEstoque()
+
+            setCardExclusao(false);
+            setIdSelecionado(null);
+        } catch (error) {
+            console.error("Erro ao excluir lote:", error)
+            throw error;
+        } finally {
+            setLoading({ exclusao: false })
+        }
+    }
+
 
     const salvarAlteracoes = async () => {
         try {
-            setLoading({relatorio: true})
+            setLoading({ relatorio: true })
             await Lote.atualizarQuantidade(mudancas)
             await carregarEstoque()
             setExibirRelatorio(false)
@@ -153,9 +209,30 @@ export function Estoque() {
         }
     }
 
+    const recalcularGrupo = (mudancasAtualizadas) => {
+        let novoGrupo = JSON.parse(JSON.stringify(grupoMax))
+
+        mudancasAtualizadas.forEach(m => {
+            novoGrupo = novoGrupo.map(item => ({
+                ...item,
+                itens: item.itens.map(i =>
+                    i.idLote === m.id
+                        ? { ...i, quantidadeTotal: m.quantidadeTotal }
+                        : i
+                )
+            }))
+        })
+
+        setGrupo(novoGrupo)
+    }
+    const loteOriginal = (idLote) => {
+        return obterItemLote(grupoMax, idLote);
+    }
+
     const removerAlteracao = () => {
         const novoArray = mudancas.filter((e) => e.id !== Number(idSelecionado))
         setMudancas(novoArray)
+        recalcularGrupo(novoArray)
         setCardRemocao(false)
     }
 
@@ -170,11 +247,12 @@ export function Estoque() {
     }
 
     const alterarQuantidade = (idLote, operacao) => {
-        
         let novaQtd = null;
         let nomeProduto = null;
         let idInsumo = null;
         let diferenca = null;
+        let unidadeMedida = null;
+        let quantidadeMedida = null;
         const quantidadeMaxima = qtdMaxima(idLote);
 
         const novoGrupo = grupo.map(item => {
@@ -184,8 +262,8 @@ export function Estoque() {
                     const quantidadeSolicitada = operacao === "somar"
                         ? quantidadeAtual + 1
                         : operacao === "subtrair"
-                        ? quantidadeAtual - 1
-                        : Number(operacao);
+                            ? quantidadeAtual - 1
+                            : Number(operacao);
 
                     novaQtd = Number.isFinite(quantidadeSolicitada)
                         ? quantidadeSolicitada
@@ -201,6 +279,8 @@ export function Estoque() {
 
                     nomeProduto = atual.nomeMarca
                     idInsumo = atual.idInsumo
+                    unidadeMedida = atual.unidadeMedida
+                    quantidadeMedida = atual.quantidadeMedida
 
                     return {
                         ...atual,
@@ -232,7 +312,6 @@ export function Estoque() {
                         : m
                 )
             }
-
             return [
                 ...prev,
                 {
@@ -240,6 +319,8 @@ export function Estoque() {
                     insumoId: idInsumo,
                     produto: nomeProduto,
                     quantidadeTotal: novaQtd,
+                    unidadeMedida: unidadeMedida,
+                    quantidadeMedida: quantidadeMedida,
                     diferenca: diferenca
                 }
             ]
@@ -252,7 +333,7 @@ export function Estoque() {
 
     useEffect(() => {
         carregarEstoque();
-    }, [carregarEstoque])
+    }, [carregarEstoque]);
 
     useEffect(() => {
         CategoriaApi.listar()
@@ -285,12 +366,12 @@ export function Estoque() {
         };
     }, []);
 
-    function ButtonPlus({nome, onClick}) {
+    function ButtonPlus({ nome, onClick }) {
         return (
-            
+
             <div className="plus-container">
                 <div className="plus-icon-container" onClick={onClick}>
-                    {nome} 
+                    {nome}
                     <div className="plus-icon"><Plus />
                     </div>
                 </div>
@@ -298,34 +379,23 @@ export function Estoque() {
         )
     }
 
-    useEffect(() => {
-        const mobile = window.matchMedia("(max-width: 480px)");
 
-        const update = () => {
-            if (mobile.matches) setMaxCategoriasFixas(0);
-            else setMaxCategoriasFixas(10);
-        };
-
-        update();
-
-        mobile.addEventListener("change", update);
-
-        return () => {
-            mobile.removeEventListener("change", update);
-        };
-    }, []);
-    
     return (
         <div className="estoque-container">
             {exibirRelatorio && (
                 <div className="escurecer">
-                    <CardRelatorio props={mudancas}
+                    <CardRelatorio props={mudancas.filter(m => m.diferenca !== 0)}
                         fechar={() => setExibirRelatorio(false)} salvarAlteracoes={salvarAlteracoes} loading={loading.relatorio} abrirCardRemocao={abrirCardRemocao} abrirCardRotina={abrirCardRotina} />
                 </div>
             )}
             {cardRemocao && (
                 <div className="escurecer">
                     <CardConfirmacao titulo={"Deseja descartar as alterações?"} fecharCard={() => { setCardRemocao(false) }} confirmar={removerAlteracao} />
+                </div>
+            )}
+            {cardExclusao && (
+                <div className="escurecer">
+                    <CardConfirmacao titulo={"Deseja excluir o lote?"} fecharCard={() => { setCardExclusao(false) }} confirmar={() => excluirLote(idSelecionado)} loading={loading.exclusao} />
                 </div>
             )}
 
@@ -340,14 +410,14 @@ export function Estoque() {
             <div className="categoria-container">
                 <div className="button-secund">
                     <div className="botoes-container">
-                        <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }}/>
-                        <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }}/>
-                        <ButtonPlus nome="Adicionar Fornecedor" onClick={() => { navigate("/cadastro-fornecedor") }}/>
+                        <ButtonPlus nome="Adicionar Insumo" onClick={() => { navigate("/cadastro-insumo") }} />
+                        <ButtonPlus nome="Adicionar Lote" onClick={() => { navigate("/cadastro-lote") }} />
+                        <ButtonPlus nome="Adicionar Fornecedor" onClick={() => { navigate("/cadastro-fornecedor") }} />
                         <Button texto="Rotinas" Icone={Bookmark} onClick={() => { navigate("/rotinas") }} />
                         <Button onClick={abrirCard} texto="Salvar" Icone={Save} />
                         <button className="botoes-container-icon" onClick={() => { navigate("/leitor") }}>
                             <span>QR Code</span>
-                            <ScanBarcode style={{cursor: "pointer"}} color="black" size={28}/>
+                            <ScanBarcode style={{ cursor: "pointer" }} color="black" size={28} />
                         </button>
                         <div className="container-search">
                             <Search Icone={SearchIcon} pesquisar={pesquisar} value={pesquisa} />
@@ -355,17 +425,27 @@ export function Estoque() {
                     </div>
                 </div>
                 <div className="nav-categorias-container">
-                    <NavCategorias categoriaAtual={categoriaAtiva} aoMudarCategoria={setCategoriaAtiva} categorias={categorias} maxCategoriasFixas={maxCategoriasFixas} />
+                    <NavCategorias
+                        categoriasAtivas={categoriasAtivas}
+                        aoAlternarCategoria={alternarCategoria}
+                        aoLimparCategorias={limparCategorias}
+                        categorias={categorias}
+                    />
                 </div>
                 <div className="insumos-container">
                     <Cabecalho elementos={["Insumo", "Qtd. Medida", "Qtd. Mínima", "Qtd. Atual", "Data de Vencimento", "Controle"]} />
                     <div className="grupo-insumos-container">
-                        {grupoOrdenado.length > 0 ? grupoOrdenado.map(atual => (
+                        {grupo.length > 0 ? grupo.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}
-                                dropdownAbertoId={dropdownAbertoId}
+                                dropdownAbertoId={dropdownAbertoId} excluirLote={abrirCardExclusao} loteOriginal={loteOriginal}
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>
+                    {totalPaginas > 0 && categoriasAtivas.length < 2 && (
+                        <div className="estoque-seletor">
+                            <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={pagina} selecionar={selecionarPag}></SeletorPaginas>
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

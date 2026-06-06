@@ -10,6 +10,24 @@
     height: 8vh;
 }
 
+#abaixo {
+    animation: piscar 2.5s infinite;
+}
+
+@keyframes piscar {
+    0% {
+        background-color: rgb(255, 182, 182);
+    }
+
+    50% {
+        background-color: white;
+    }
+
+    100% {
+        background-color: rgb(255, 182, 182);
+    }
+}
+
 .insumo-grupo {
     font-size: 18px;
     display: flex;
@@ -55,7 +73,7 @@
     display: flex;
     align-items: center;
     width: 30%;
-    justify-content: space-around;
+    justify-content: center;
 }
 
 .botao-cadastrar {
@@ -86,4 +104,169 @@ input::-webkit-inner-spin-button {
 
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+/* =============================================
+   TABLET (769px – 1024px)
+   ============================================= */
+@media (min-width: 769px) and (max-width: 1024px) {
+    .item-container {
+        height: auto;
+        min-height: 44px;
+        font-size: 14px;
+    }
+
+    .item-nome {
+        font-size: 13px;
+    }
+
+    .controle {
+        width: 60%;
+        gap: 4px;
+    }
+}
+
+/* =============================================
+   SMARTPHONE (até 768px) — card layout
+   ============================================= */
+@media (max-width: 768px) {
+
+    /* O item vira um card full-width */
+    .item-container {
+        display: flex !important;
+        flex-direction: column !important;
+        height: auto !important;
+        min-height: unset !important;
+        width: 100% !important;
+        font-size: 14px;
+        padding: 10px 12px 12px;
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        border-top: none;
+        background-color: rgb(244, 244, 244);
+        border-radius: 0 0 8px 8px;
+
+        /* Cancelar o grid herdado de .linha-estoque */
+        grid-template-columns: unset !important;
+    }
+
+    /* ── Linha 1: nome do item + botão de opções ── */
+    .item-container .insumo-grupo {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .item-container .item-nome {
+        width: auto;
+        height: auto;
+        font-size: 14px;
+        justify-content: flex-start;
+        gap: 6px;
+    }
+
+    /* ── Linha 2: grade de detalhes (label + valor) ── */
+    .item-container .qtd-medida,
+    .item-container .qtd-minima,
+    .item-container .qtd-total,
+    .item-container .dt-vencimento {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        text-align: left !important;
+        width: 100%;
+        font-size: 13px;
+        padding: 3px 0;
+        border-bottom: 1px solid #e8e8e8;
+    }
+
+    /* Labels via ::before */
+    .item-container .qtd-medida::before {
+        content: "Qtd. Medida:";
+        font-weight: 600;
+        color: #555;
+    }
+
+    .item-container .qtd-minima::before {
+        content: "Qtd. Mínima:";
+        font-weight: 600;
+        color: #555;
+    }
+
+    .item-container .qtd-total::before {
+        content: "Qtd. Atual:";
+        font-weight: 600;
+        color: #555;
+    }
+
+    .item-container .dt-vencimento::before {
+        content: "Vencimento:";
+        font-weight: 600;
+        color: #555;
+    }
+
+    /* ── Linha 3: controle (−  input  +  /  Excluir) ── */
+    .item-container .controle-container {
+        width: 100%;
+        justify-content: flex-end;
+        margin-top: 10px;
+    }
+
+    .item-container .controle {
+        width: auto;
+        gap: 8px;
+        justify-content: center;
+    }
+
+    .item-container .controle input {
+        width: 52px !important;
+        font-size: 14px !important;
+    }
+
+    /* ── Botão de opções ── */
+    .item-container .botao-cadastrar {
+        align-self: flex-end;
+        margin-top: -4px;
+    }
+
+    .item-container .botao-cadastrar .button-container {
+        border: 1px solid #ccc !important;
+        border-radius: 6px !important;
+        padding: 2px 6px !important;
+        background-color: white !important;
+    }
+}
+
+/* =============================================
+   SMARTPHONE PEQUENO (até 480px)
+   ============================================= */
+@media (max-width: 480px) {
+    .item-container {
+        padding: 8px 10px 10px;
+        font-size: 13px;
+    }
+
+    .item-container .qtd-medida,
+    .item-container .qtd-minima,
+    .item-container .qtd-total,
+    .item-container .dt-vencimento {
+        font-size: 12px;
+    }
+
+    .item-container .item-nome {
+        font-size: 13px;
+    }
+
+    .item-container .controle input {
+        width: 44px !important;
+        font-size: 13px !important;
+    }
+
+    .item-container .controle {
+        gap: 6px;
+    }
 }
