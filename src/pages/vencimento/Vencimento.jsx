@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { X } from "lucide-react";
 import { Cabecalho } from "../../components/Cabecalho/Cabecalho";
@@ -20,15 +20,40 @@ export default function Vencimento() {
     const [vencimento, setVencimento] = useState([])
     const [kpis, setKpis] = useState([])
     const [paginaAtual, setPaginaAtual] = useState(1)
+    const [totalPaginas, setTotalPaginas] = useState(1)
+    const [totalElementos, setTotalElementos] = useState(0)
+    const [usaPaginacaoServidor, setUsaPaginacaoServidor] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
     const itensPorPagina = 10
 
     const filtroInsumo = searchParams.get("insumo") ?? ""
 
+    const carregarVencimentos = useCallback(async (pagina = paginaAtual) => {
+        const resposta = await Vencimentos.buscarEstoque({
+            pagina: Math.max(0, pagina - 1),
+            tamanho: itensPorPagina,
+        });
+
+        if (Array.isArray(resposta)) {
+            setUsaPaginacaoServidor(false);
+            setVencimento(resposta);
+            setTotalElementos(resposta.length);
+            setTotalPaginas(Math.max(1, Math.ceil(resposta.length / itensPorPagina)));
+            return;
+        }
+
+        const conteudo = Array.isArray(resposta?.content) ? resposta.content : [];
+
+        setUsaPaginacaoServidor(true);
+        setVencimento(conteudo);
+        setTotalElementos(Number(resposta?.totalElements ?? conteudo.length));
+        setTotalPaginas(Math.max(1, Number(resposta?.totalPages ?? 1)));
+    }, [paginaAtual, itensPorPagina]);
+
     useEffect(() => {
-        Vencimentos.buscarEstoque().then((res) => setVencimento(res));
+        carregarVencimentos();
         Vencimentos.buscarKpis().then((res) => setKpis(res));
-    }, [])
+    }, [carregarVencimentos])
 
     const vencimentoFiltrado = useMemo(() => {
         if (!filtroInsumo) return vencimento
@@ -37,11 +62,13 @@ export default function Vencimento() {
     }, [vencimento, filtroInsumo])
 
     useEffect(() => {
-        const totalPaginas = Math.max(1, Math.ceil(vencimentoFiltrado.length / itensPorPagina))
+        const paginasCalculadas = usaPaginacaoServidor
+            ? totalPaginas
+            : Math.max(1, Math.ceil(vencimentoFiltrado.length / itensPorPagina))
 
         setPaginaAtual((paginaAnterior) => {
-            if (paginaAnterior > totalPaginas) {
-                return totalPaginas
+            if (paginaAnterior > paginasCalculadas) {
+                return paginasCalculadas
             }
 
             if (paginaAnterior < 1) {
@@ -50,17 +77,20 @@ export default function Vencimento() {
 
             return paginaAnterior
         })
-    }, [vencimentoFiltrado])
+    }, [vencimentoFiltrado, totalPaginas, usaPaginacaoServidor])
 
     useEffect(() => {
         document.title = "Vencimentos";
       }, []);
 
-    const totalPaginas = Math.max(1, Math.ceil(vencimentoFiltrado.length / itensPorPagina))
     const indiceInicial = (paginaAtual - 1) * itensPorPagina
     const indiceFinal = indiceInicial + itensPorPagina
-    const vencimentosPaginados = vencimentoFiltrado.slice(indiceInicial, indiceFinal)
-    const temRegistros = vencimentoFiltrado.length > 0
+    const vencimentosPaginados = usaPaginacaoServidor
+        ? vencimentoFiltrado
+        : vencimentoFiltrado.slice(indiceInicial, indiceFinal)
+    const temRegistros = usaPaginacaoServidor
+        ? totalElementos > 0
+        : vencimentoFiltrado.length > 0
 
     function irParaPagina(proximaPagina) {
         setPaginaAtual(Math.min(Math.max(proximaPagina, 1), totalPaginas))
@@ -104,7 +134,7 @@ export default function Vencimento() {
                         <div className="tabela-paginacao">
                             <div className="tabela-paginacao-resumo">
                                 {temRegistros
-                                    ? `Mostrando ${indiceInicial + 1}-${Math.min(indiceFinal, vencimentoFiltrado.length)} de ${vencimentoFiltrado.length}`
+                                    ? `Mostrando ${indiceInicial + 1}-${Math.min(indiceFinal, usaPaginacaoServidor ? totalElementos : vencimentoFiltrado.length)} de ${usaPaginacaoServidor ? totalElementos : vencimentoFiltrado.length}`
                                     : filtroInsumo
                                         ? `Nenhum registro para "${filtroInsumo}"`
                                         : "Nenhum registro encontrado"}

@@ -866,11 +866,12 @@ export class insumos {
 }
 
 export class Vencimentos {
-  static async buscarEstoque() {
+  static async buscarEstoque({ pagina = 0, tamanho = 10 } = {}) {
     try {
       const response = await requestComFallback({
         method: "get",
-        url: "/lotes/estoque/vencimentos"
+        url: "/lotes/estoque/vencimentos",
+        params: { pagina, tamanho }
       })
 
       return response.data
