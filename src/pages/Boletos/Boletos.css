@@ -160,12 +160,44 @@
   fill: #6b4423;
 }
 
-.btn-pago {
-  background: green;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
+..btn-pago {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #155724;
+  padding: 4px 8px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  min-width: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-pago:hover {
+  background: #c8e6cf;
+}
+
+.btn-pendente {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #856404;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+  min-width: 0;
+  transition: background 0.2s, transform 0.2s;
+}
+
+.btn-pendente:hover {
+  background: #ffe69c;
 }
 
 .lista {

@@ -219,7 +219,7 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
 
                         <button
                           type="button"
-                          className="event-action-button is-pending"
+                          className="event-action-button is-success"
                           onClick={() => marcarComoPagoSemComprovante(boleto)}
                           disabled={carregandoPorId[boleto.id]}
                         >

@@ -2,11 +2,10 @@ import { useState, useEffect, useMemo, useLayoutEffect, useRef } from 'react';
 import { useNavigate } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import "./Boletos.css";
-import { CalendarDays, Search } from "lucide-react";
+import { CalendarDays, Search, Plus } from "lucide-react";
 import HeaderPadrao from "../../HeaderPadrao";
 import BoletoDetail from "../../components/Calendario/boletoDetail";
 import { boletos } from '../../provider/Api';
-import { Plus } from 'lucide-react';
 
 export default function Boletos() {
   const navigate = useNavigate();
