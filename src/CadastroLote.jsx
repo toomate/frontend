@@ -18,10 +18,12 @@ export default function CadastroLote() {
   const [precoUnitario, setPrecoUnitario] = useState("");
   const [dataValidade, setDataValidade] = useState("");
   const [quantidade, setQuantidade] = useState("");
+  const [quantidadeMedida, setQuantidadeMedida] = useState("");
   const [erroFormulario, setErroFormulario] = useState("");
   const [isCadastrando, setIsCadastrando] = useState(false);
   const [arquivoNotaFiscal, setArquivoNotaFiscal] = useState(null);
-
+  
+  const [unidadeMedida, setUnidadeMedida] = useState("");
   const [abrirModal, setAbrirModal] = useState(null);
   const [abrirModalSucesso, setAbrirModalSucesso] = useState(false);
   const [novaMarca, setNovaMarca] = useState("");
@@ -92,7 +94,7 @@ export default function CadastroLote() {
       setIdMarcaSelecionada(dados.atual.marca)
     }
   }, [dados])
- 
+
 
   async function fetchInsumos() {
     try {
@@ -156,16 +158,18 @@ export default function CadastroLote() {
     setErroFormulario("");
 
     const idMarca = Number(idMarcaSelecionada);
-    
+
     // Converte preço formatado (ex: "R$ 100,00") para número
     const precoFormatado = String(precoUnitario ?? "").replace(/\D/g, "");
     const preco = precoFormatado ? Number(precoFormatado) / 100 : 0;
-    
+
     const qtd = Number(quantidade);
+    const qtdMedida = Number(quantidadeMedida);
     const idUsuario = Number(localStorage.getItem("usuarioId"));
 
     const insumoFinal = resolverInsumoFinal();
     const idInsumoFinal = insumoFinal?.id;
+    const unidadeMedidaFinal = unidadeMedida;
 
     if (!idInsumoFinal) {
       setErroFormulario("Selecione um insumo valido no autocomplete.");
@@ -194,13 +198,18 @@ export default function CadastroLote() {
       return;
     }
 
-    if (!Number.isFinite(qtd) || qtd <= 0) {
+    if (!Number.isFinite(qtd) || qtd <= 0 || !Number.isFinite(qtdMedida) || qtdMedida <= 0) {
       setErroFormulario("Informe uma quantidade valida.");
       return;
     }
 
     if (!Number.isFinite(idUsuario) || idUsuario <= 0) {
       setErroFormulario("Nao foi possivel identificar o usuario logado. Faca login novamente.");
+      return;
+    }
+    
+    if(!unidadeMedidaFinal || !isNaN(unidadeMedidaFinal)){
+      setErroFormulario("Não foi possível identificar a unidade medida. Escolha uma opção.");
       return;
     }
 
@@ -215,7 +224,10 @@ export default function CadastroLote() {
         payload: {
           dataValidade,
           precoUnitario: preco,
-          quantidadeMedida: qtd,
+          unidadeMedida: unidadeMedida,
+          quantidadeMedida: qtdMedida,
+          quantidadeOriginal: qtd,
+          quantidadeAtual: qtd,
           dataEntrada,
           fkMarca: idMarca,
           fkUsuario: idUsuario,
@@ -324,111 +336,140 @@ export default function CadastroLote() {
         <div className="caixa">
           <form onSubmit={cadastrarLote}>
 
-          {/* Nome do insumo */}
-          <span>Nome</span>
-          <div className="input-wrapper">
-            <AutocompleteInput
-              options={opcoesInsumo}
-              value={insumoSelecionado}
-              onValueChange={(v) => {
-                setInsumoSelecionado(v);
-                setIdInsumoSelecionado(null);
-                setIdMarcaSelecionada("0");
+            {/* Nome do insumo */}
+            <span>Nome</span>
+            <div className="input-wrapper">
+              <AutocompleteInput
+                options={opcoesInsumo}
+                value={insumoSelecionado}
+                onValueChange={(v) => {
+                  setInsumoSelecionado(v);
+                  setIdInsumoSelecionado(null);
+                  setIdMarcaSelecionada("0");
+                }}
+                onSelect={(opcao) => {
+                  if (!opcao) return;
+                  // opcao may include idInsumo
+                  const id = opcao.idInsumo ?? opcao.id;
+                  setIdInsumoSelecionado(id ? Number(id) : null);
+                  setInsumoSelecionado(opcao.label ?? "");
+                  setIdMarcaSelecionada("0");
+                }}
+                placeholder="Selecione um insumo"
+                className="selectNome"
+              />
+            </div>
+
+            {/* Marca */}
+            <span>Marca</span>
+            <div className="input-wrapper">
+              <select
+                className="selectMarca"
+                value={idMarcaSelecionada}
+                onChange={(e) => setIdMarcaSelecionada(e.target.value)}
+              >
+                <option value="0">Marca do Insumo</option>
+                {marcasFiltradas.map((marca) => (
+                  <option key={marca.idMarca} value={marca.idMarca}>{marca.nome}</option>
+                ))}
+              </select>
+
+              <button type="button" className="eye-btn2" onClick={() => setAbrirModal("marca")}>
+                <Plus size={18} />
+              </button>
+            </div>
+
+            <span>Preço unitário</span>
+            <input
+              type="text"
+              placeholder="R$ 0,00"
+              value={precoUnitario}
+              onChange={(e) => {
+                let valor = e.target.value;
+
+                // Remove tudo que não for número
+                valor = valor.replace(/\D/g, "");
+
+                // Converte para centavos
+                const numero = Number(valor) / 100;
+
+                // Formata para moeda BR
+                const formatado = numero.toLocaleString("pt-BR", {
+                  style: "currency",
+                  currency: "BRL",
+                });
+
+                setPrecoUnitario(formatado);
               }}
-              onSelect={(opcao) => {
-                if (!opcao) return;
-                // opcao may include idInsumo
-                const id = opcao.idInsumo ?? opcao.id;
-                setIdInsumoSelecionado(id ? Number(id) : null);
-                setInsumoSelecionado(opcao.label ?? "");
-                setIdMarcaSelecionada("0");
-              }}
-              placeholder="Selecione um insumo"
-              className="selectNome"
             />
-          </div>
 
-          {/* Marca */}
-          <span>Marca</span>
-          <div className="input-wrapper">
-            <select
-              className="selectMarca"
-              value={idMarcaSelecionada}
-              onChange={(e) => setIdMarcaSelecionada(e.target.value)}
-            >
-              <option value="0">Marca do Insumo</option>
-              {marcasFiltradas.map((marca) => (
-                <option key={marca.idMarca} value={marca.idMarca}>{marca.nome}</option>
-              ))}
-            </select>
+            <span>Data de validade</span>
+            <input type="date" value={dataValidade} onChange={(e) => setDataValidade(e.target.value)} />
 
-            <button type="button" className="eye-btn2" onClick={() => setAbrirModal("marca")}>
-              <Plus size={18} />
-            </button>
-          </div>
-          
-          <span>Preço unitário</span>
-          <input
-            type="text"
-            placeholder="R$ 0,00"
-            value={precoUnitario}
-            onChange={(e) => {
-              let valor = e.target.value;
+            <span>Quantidade</span>
+            <input
+              type="number"
+              step="1"
+              min="0"
+              placeholder="0"
+              value={quantidade}
+              onChange={(e) => setQuantidade(e.target.value)}
+            />
 
-              // Remove tudo que não for número
-              valor = valor.replace(/\D/g, "");
+            <span>Quantidade Medida (de cada pacote)</span>
+            <input
+              type="number"
+              step="1"
+              min="0"
+              placeholder="0"
+              value={quantidadeMedida}
+              onChange={(e) => setQuantidadeMedida(e.target.value)}
+            />
 
-              // Converte para centavos
-              const numero = Number(valor) / 100;
+            <span>Medida</span>
+            <div className="input-wrapper">
+              <select
+                className="selectMarca"
+                value={unidadeMedida}
+                onChange={(e) => setUnidadeMedida(e.target.value)}
+              >
+                <option value="0">Unidade de Medida do Insumo</option>
+                <option value="kg">Quilos (KG)</option>
+                <option value="g">Gramas (G)</option>
+                <option value="l">Litros (L)</option>
+                <option value="ml">Mililitros (ML)</option>
+              </select>
 
-              // Formata para moeda BR
-              const formatado = numero.toLocaleString("pt-BR", {
-                style: "currency",
-                currency: "BRL",
-              });
+              <button type="button" className="eye-btn2" onClick={() => setAbrirModal("marca")}>
+                <Plus size={18} />
+              </button>
+            </div>
 
-              setPrecoUnitario(formatado);
-            }}
-          />
-          
-          <span>Data de validade</span>
-          <input type="date" value={dataValidade} onChange={(e) => setDataValidade(e.target.value)} />
+            {/* Upload */}
+            <div className="botao-upload">
+              Enviar Nota Fiscal
+              <label className="botao-upload-lote">
+                <input type="file" accept="image/*" onChange={(e) => setArquivoNotaFiscal(e.target.files?.[0] ?? null)} />
+              </label>
+            </div>
+            <br />
+            {arquivoNotaFiscal && (
+              <span style={{ fontSize: "14px" }}>Arquivo selecionado: {arquivoNotaFiscal.name}</span>
+            )}
 
-          <span>Quantidade</span>
-          <input
-            type="number"
-            step="1"
-            min="0"
-            placeholder="0"
-            value={quantidade}
-            onChange={(e) => setQuantidade(e.target.value)}
-          />
+            {erroFormulario && (
+              <span style={{ color: "#b3261e", fontSize: "14px" }}>{erroFormulario}</span>
+            )}
 
-          {/* Upload */}
-          <div className="botao-upload">
-            Enviar Nota Fiscal
-            <label className="botao-upload-lote">
-              <input type="file" accept="image/*" onChange={(e) => setArquivoNotaFiscal(e.target.files?.[0] ?? null)} />
-            </label>
-          </div>
-          <br />
-          {arquivoNotaFiscal && (
-            <span style={{ fontSize: "14px" }}>Arquivo selecionado: {arquivoNotaFiscal.name}</span>
-          )}
+            <div className="actions">
+              <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
+                Voltar
+              </button>
 
-          {erroFormulario && (
-            <span style={{ color: "#b3261e", fontSize: "14px" }}>{erroFormulario}</span>
-          )}
-
-          <div className="actions">
-            <button type="button" className="btn btn-cancelar" onClick={() => navigate(-1)}>
-              Voltar
-            </button>
-
-            <button type="submit" className="btn" disabled={isCadastrando}>
-              {isCadastrando ? "Cadastrando..." : "Cadastrar"}
-            </button>
-          </div>
+              <button type="submit" className="btn" disabled={isCadastrando}>
+                {isCadastrando ? "Cadastrando..." : "Cadastrar"}
+              </button>
+            </div>
           </form>
         </div>
       </div>
