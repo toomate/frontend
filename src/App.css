@@ -98,13 +98,14 @@
 }
 
 .card {
-  background-color: white;
-  border: 1px solid gold;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.30);
-  padding: 10px;
-  height: 125px;
-  border-radius: 5px;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 350px;
+  background: white;
+  border: none;
+  gap: 5px;
+  padding: 0 12px; 
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -493,7 +494,7 @@ input {
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 50px;
+  height: 30px;
   color: black;
   border-radius: 5px;
   cursor: pointer;
@@ -586,11 +587,60 @@ input {
   background: white;
   border: none;
   gap: 5px;
+  padding: 0 12px; 
 }
 
 .caixa span {
   display: block;
   text-align: left;
+}
+
+/* Alinhar elementos do form dentro de .caixa à esquerda */
+.caixa form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
+}
+
+.caixa form > span,
+.caixa form .input-wrapper,
+.caixa form input,
+.caixa form select,
+.caixa form .botao-upload,
+.caixa form .modal-input,
+.caixa form .input-wrapper1 {
+  width: 100%;
+  text-align: left;
+}
+
+.caixa form .input-wrapper {
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+/* Também aplicar alinhamento quando não houver `.caixa` (form direto em `.box`) */
+.box form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 90%;
+}
+
+.box form > span,
+.box form .input-wrapper,
+.box form input,
+.box form select,
+.box form .botao-upload,
+.box form .modal-input,
+.box form .input-wrapper1 {
+  width: 100%;
+  text-align: left;
+}
+
+.box form .input-wrapper {
+  justify-content: flex-start;
+  gap: 8px;
 }
 
 /* Tela menor que 480px */

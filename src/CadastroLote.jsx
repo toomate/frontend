@@ -333,7 +333,6 @@ export default function CadastroLote() {
 
         <span className="titulo">Cadastro de Lote</span>
 
-        <div className="caixa">
           <form onSubmit={cadastrarLote}>
 
             {/* Nome do insumo */}
@@ -471,7 +470,7 @@ export default function CadastroLote() {
               </button>
             </div>
           </form>
-        </div>
+        
       </div>
 
       {/* MODAL NOVA MARCA */}
