@@ -206,7 +206,6 @@ input[type=number] {
     .item-container .dt-vencimento::before {
         content: "Vencimento:";
         font-weight: 600;
-        color: #555;
     }
 
     /* ── Linha 3: controle (−  input  +  /  Excluir) ── */
