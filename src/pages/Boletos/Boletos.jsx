@@ -155,6 +155,11 @@ export default function Boletos() {
 
   useLayoutEffect(() => {
     function recalcularItensPorPagina() {
+      if (window.innerWidth <= 480) {
+        setItensPorPagina(2);
+        return;
+      }
+
       const filtros = filtrosRef.current;
       const paginacao = paginacaoRef.current;
       const lista = listaRef.current;
@@ -297,7 +302,7 @@ export default function Boletos() {
           </div>
 
           {Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina)) > 1 && (
-            <div ref={paginacaoRef} className="paginacao-boletos" style={{ display: "flex", justifyContent: "center", gap: "12px", marginTop: "16px", alignItems: "center" }}>
+            <div ref={paginacaoRef} className="paginacao-boletos">
               <button
                 type="button"
                 className="btn-pendente"
