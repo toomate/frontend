@@ -155,10 +155,10 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento,
             <h2>Confirmar pagamento</h2>
 
             <div className="comprovante-form">
-              <label>Documento</label>
+              <label>Comprovante</label>
               <input
                 type="text"
-                placeholder="Digite o documento"
+                placeholder="Digite um nome para o comprovante"
                 value={documento}
                 onChange={(e) => setDocumento(e.target.value)}
               />
