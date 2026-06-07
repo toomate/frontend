@@ -13,7 +13,6 @@
     background-repeat: no-repeat;
     background-position: center;
     overflow: hidden;
-    /* Evita que a página inteira ganhe scroll */
 }
 
 .categoria-container {

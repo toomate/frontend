@@ -2,16 +2,24 @@
   display: flex;
   flex-direction: column;
   font-family: "Arial", sans-serif;
-  min-height: 100dvh;
+  height: 100vh;
   width: 100%;
   background-color: white;
   color: black;
   margin: 0 auto;
   background-image: url(../../images/fundo-tela.png);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  overflow: hidden;
 }
 
 .boletos .conteudo {
   width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
 }
 
 .boletos .conteudo span {
@@ -25,16 +33,18 @@
 .card-pagamentos {
   height: auto;
   overflow: visible;
-  width: min(1200px, calc(100% - 24px));
+  width: 100%;
   margin: 0 auto;
   padding: 0 12px 24px;
   box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .boletos .filtros {
+  display: flex;
   --filtro-altura: 38px;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   align-items: stretch;
   margin-bottom: 20px;
@@ -43,18 +53,19 @@
 .boletos .filtros select {
   height: var(--filtro-altura);
   color: black;
-  width: 100%;
+  width: 55%;
   min-width: 0;
   background-color: white;
   border-color: #ccc;
   padding: 0 8px;
   border-radius: 6px;
+  cursor: pointer;
   box-sizing: border-box;
 }
 
 .boletos .busca {
   display: flex;
-  align-items:center;
+  align-items: center;
   justify-content: space-evenly;
   width: 100%;
   min-width: 0;
@@ -90,7 +101,7 @@
   align-items: center;
   justify-content: center;
   gap: 10px;
-  width: 100%;
+  width: 55%;
   min-width: 0;
   height: var(--filtro-altura);
   background: white;
@@ -153,7 +164,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: auto;
+  width: 50%;
   height: var(--fiado-control-height);
   border-radius: 8px;
   cursor: pointer;
@@ -172,7 +183,8 @@
   z-index: 1;
 }
 
-.btn-calendario:hover, .view-toggle-btn:hover {
+.btn-calendario:hover,
+.view-toggle-btn:hover {
   background: #e6d08e;
   color: #6b4423;
   fill: #6b4423;
@@ -223,18 +235,20 @@
   flex-direction: column;
   background: white;
   padding: 20px;
-  border:  1px #ccc solid;
+  border: 1px #ccc solid;
   border-radius: 8px;
   gap: 15px;
+  flex: 1;
 }
 
 .paginacao-boletos {
   display: flex;
   justify-content: center;
   gap: 12px;
-  margin-top: 16px;
   align-items: center;
   flex-wrap: wrap;
+  margin-top: auto;
+  padding-top: 20px;
 }
 
 @media (max-width: 480px) {
@@ -371,6 +385,7 @@
     opacity: 0;
     transform: scale(0.95);
   }
+
   to {
     opacity: 1;
     transform: scale(1);

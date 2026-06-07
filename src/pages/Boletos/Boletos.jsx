@@ -7,12 +7,13 @@ import HeaderPadrao from "../../HeaderPadrao";
 import BoletoDetail from "../../components/Calendario/boletoDetail";
 import { boletos } from '../../provider/Api';
 import { Plus } from 'lucide-react';
+import SeletorPaginas from '../../components/Paginas/SeletorPaginas'
 
 export default function Boletos() {
   const navigate = useNavigate();
   const [boletoLista, setBoletos] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(0);
-  const [itensPorPagina, setItensPorPagina] = useState(10);
+  const [itensPorPagina, setItensPorPagina] = useState(4);
   const mesAtual = String(new Date().getMonth());
   const categorias = Array.from(new Set(boletoLista.map((b) => b.categoria).filter(Boolean)));
   const [filtroMes, setFiltroMes] = useState(mesAtual);
@@ -153,49 +154,68 @@ export default function Boletos() {
     setPaginaAtual(0);
   }, [filtroMes, filtroStatus, filtroTipo, pesquisa]);
 
-  useLayoutEffect(() => {
-    function recalcularItensPorPagina() {
-      if (window.innerWidth <= 480) {
-        setItensPorPagina(2);
-        return;
-      }
 
-      const filtros = filtrosRef.current;
-      const paginacao = paginacaoRef.current;
-      const lista = listaRef.current;
-      const item = itemMedidaRef.current;
-
-      if (!filtros || !lista || !item) return;
-
-      const viewportBottom = window.innerHeight;
-      const listaTop = lista.getBoundingClientRect().top;
-      const filtrosBottom = filtros.getBoundingClientRect().bottom;
-      const paginacaoAltura = paginacao ? paginacao.getBoundingClientRect().height : 0;
-      const alturaItem = item.getBoundingClientRect().height;
-      const estiloLista = window.getComputedStyle(lista);
-      const gapLista = Number.parseFloat(estiloLista.rowGap || estiloLista.gap || "0") || 0;
-
-      const espacoUtil = Math.max(0, viewportBottom - listaTop - paginacaoAltura - (filtrosBottom - listaTop));
-      const alturaLinha = Math.max(1, alturaItem + gapLista);
-      const itensVisiveis = Math.max(1, Math.floor(espacoUtil / alturaLinha));
-
-      setItensPorPagina(itensVisiveis);
+  const voltarPag = () => {
+    if (paginaAtual > 0) {
+      let pag = paginaAtual - 1;
+      setPaginaAtual(pag)
     }
+  }
 
-    recalcularItensPorPagina();
+  const avancarPag = () => {
+    if (paginaAtual < totalPaginas - 1) {
+      let pag = paginaAtual + 1;
+      setPaginaAtual(pag)
+    }
+  }
 
-    const observer = new ResizeObserver(() => recalcularItensPorPagina());
-    if (filtrosRef.current) observer.observe(filtrosRef.current);
-    if (paginacaoRef.current) observer.observe(paginacaoRef.current);
-    if (listaRef.current) observer.observe(listaRef.current);
-    if (itemMedidaRef.current) observer.observe(itemMedidaRef.current);
-    window.addEventListener("resize", recalcularItensPorPagina);
+  const selecionarPag = (numPag) => {
+    setPaginaAtual(numPag);
+  }
 
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", recalcularItensPorPagina);
-    };
-  }, [boletoLista.length]);
+  // useLayoutEffect(() => {
+  //   function recalcularItensPorPagina() {
+  //     if (window.innerWidth <= 480) {
+  //       setItensPorPagina(10);
+  //       return;
+  //     }
+
+  //     const filtros = filtrosRef.current;
+  //     const paginacao = paginacaoRef.current;
+  //     const lista = listaRef.current;
+  //     const item = itemMedidaRef.current;
+
+  //     if (!filtros || !lista || !item) return;
+
+  //     const viewportBottom = window.innerHeight;
+  //     const listaTop = lista.getBoundingClientRect().top;
+  //     const filtrosBottom = filtros.getBoundingClientRect().bottom;
+  //     const paginacaoAltura = paginacao ? paginacao.getBoundingClientRect().height : 0;
+  //     const alturaItem = item.getBoundingClientRect().height;
+  //     const estiloLista = window.getComputedStyle(lista);
+  //     const gapLista = Number.parseFloat(estiloLista.rowGap || estiloLista.gap || "0") || 0;
+
+  //     const espacoUtil = Math.max(0, viewportBottom - listaTop - paginacaoAltura - (filtrosBottom - listaTop));
+  //     const alturaLinha = Math.max(1, alturaItem + gapLista);
+  //     const itensVisiveis = Math.max(1, Math.floor(espacoUtil / alturaLinha));
+
+  //     setItensPorPagina(itensVisiveis);
+  //   }
+
+  //   recalcularItensPorPagina();
+
+  //   const observer = new ResizeObserver(() => recalcularItensPorPagina());
+  //   if (filtrosRef.current) observer.observe(filtrosRef.current);
+  //   if (paginacaoRef.current) observer.observe(paginacaoRef.current);
+  //   if (listaRef.current) observer.observe(listaRef.current);
+  //   if (itemMedidaRef.current) observer.observe(itemMedidaRef.current);
+  //   window.addEventListener("resize", recalcularItensPorPagina);
+
+  //   return () => {
+  //     observer.disconnect();
+  //     window.removeEventListener("resize", recalcularItensPorPagina);
+  //   };
+  // }, [boletoLista.length]);
 
   useEffect(() => {
     const totalPaginasCalculado = Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina));
@@ -246,11 +266,6 @@ export default function Boletos() {
               ))}
             </select>
 
-            <div className="busca">
-              <Search size={16} />
-              <input placeholder="Busca por nome" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} />
-            </div>
-
             <button
               className="btn-calendario"
               onClick={() =>
@@ -270,6 +285,12 @@ export default function Boletos() {
                 Adicionar Boleto
                 <Plus size={20} />
             </button>
+
+
+            <div className="busca">
+              <Search size={16} />
+              <input placeholder="Busca por nome" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} />
+            </div>
           </div>
 
           <div className="lista" ref={listaRef}>
@@ -303,27 +324,7 @@ export default function Boletos() {
 
           {Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina)) > 1 && (
             <div ref={paginacaoRef} className="paginacao-boletos">
-              <button
-                type="button"
-                className="btn-pendente"
-                onClick={() => setPaginaAtual((atual) => Math.max(0, atual - 1))}
-                disabled={paginaAtual === 0}
-              >
-                Anterior
-              </button>
-
-              <span>
-                Página {paginaAtual + 1} de {Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina))}
-              </span>
-
-              <button
-                type="button"
-                className="btn-pendente"
-                onClick={() => setPaginaAtual((atual) => Math.min(Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina)) - 1, atual + 1))}
-                disabled={paginaAtual + 1 >= Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina))}
-              >
-                Próxima
-              </button>
+              <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={paginaAtual} selecionar={selecionarPag} />
             </div>
           )}
         </div>
