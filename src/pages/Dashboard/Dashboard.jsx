@@ -62,8 +62,7 @@ export default function Index() {
       if (!item.qtdMinima && qtdMinima) item.qtdMinima = qtdMinima
     }
     const dadosAgrupados = Array.from(mapa.values()).map((it) => {
-      const parts = (it.nome || '').split(/\s+/).filter(Boolean);
-      const nomeCurto = parts.slice(0, 3).join(' ');
+      const nomeCurto = it.nome.split(' ')[0]
       const y = it.quantidade
       const estoqueMinimo = Number(it.qtdMinima ?? 0)
       const diferenca = y - estoqueMinimo
