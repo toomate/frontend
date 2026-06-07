@@ -304,7 +304,6 @@
     grid-column: 1 / -1;
   }
 }
-<<<<<<< Updated upstream
 
 /* Page-specific modal overrides for boleto detail */
 .boletos .modal-overlay {
@@ -364,5 +363,3 @@
     transform: scale(1);
   }
 }
-=======
->>>>>>> Stashed changes
