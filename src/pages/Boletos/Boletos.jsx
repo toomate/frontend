@@ -321,12 +321,9 @@ export default function Boletos() {
               <div className="sem-resultados">Nenhum boleto encontrado para os filtros selecionados.</div>
             )}
           </div>
-
-          {Math.max(1, Math.ceil(boletosFiltrados.length / itensPorPagina)) > 1 && (
             <div ref={paginacaoRef} className="paginacao-boletos">
               <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={paginaAtual} selecionar={selecionarPag} />
             </div>
-          )}
         </div>
       </div>
 

@@ -440,7 +440,7 @@ export function Estoque() {
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>
-                    {totalPaginas > 0 && categoriasAtivas.length < 2 && (
+                    {categoriasAtivas.length < 2 && (
                         <div className="estoque-seletor">
                             <SeletorPaginas numPages={totalPaginas} voltar={voltarPag} avancar={avancarPag} paginaSelecionada={pagina} selecionar={selecionarPag}></SeletorPaginas>
                         </div>
