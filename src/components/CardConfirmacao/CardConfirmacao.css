@@ -4,15 +4,25 @@
     color: black;
     flex-direction: column;
     width: 35vw;
-    height: 20vh;
+    min-height: 30vh;
+    align-items: center;
+    border-radius: 8px;
+    padding: 20px;
+    box-sizing: border-box;
     justify-content: space-evenly;
-    border-radius: 2px;
 }
 
 .titulo-card-conf {
-    font-size: large;
     display: flex;
     justify-content: center;
+    text-align: center;
+    font-size: large;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.4;
+    width: 100%;
+    height: auto;
+    padding: 10px 0;
 }
 
 /* =============================================

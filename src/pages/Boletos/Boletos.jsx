@@ -288,7 +288,7 @@ export default function Boletos() {
 
 
             <div className="busca">
-              <Search size={16} />
+              <Search className='searchBusca' size={16} />
               <input placeholder="Busca por nome" value={pesquisa} onChange={(e) => setPesquisa(e.target.value)} />
             </div>
           </div>

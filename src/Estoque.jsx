@@ -394,7 +394,7 @@ export function Estoque() {
             )}
             {cardExclusao && (
                 <div className="escurecer">
-                    <CardConfirmacao titulo={"Deseja excluir o lote?"} fecharCard={() => { setCardExclusao(false) }} confirmar={() => excluirInsumo(idInsumoSelecionado)} loading={loading.exclusao} />
+                    <CardConfirmacao titulo={<>É recomendado que você reponha esse insumo.<br />Deseja excluir da tela?</>} fecharCard={() => { setCardExclusao(false) }} confirmar={() => excluirInsumo(idInsumoSelecionado)} loading={loading.exclusao} />
                 </div>
             )}
 
