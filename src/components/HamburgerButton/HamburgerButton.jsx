@@ -47,6 +47,13 @@ const secoesMenu = [
   { id: "fornecedores", titulo: "Fornecedores", to: "/fornecedores", icone: Building2 },
   { id: "vencimentos", titulo: "Vencimentos", to: "/vencimentos", icone: CalendarDays },
   {
+    id: "dashboards",
+    titulo: "Dashboards",
+    to: URL_DASHBOARD_GRAFANA,
+    icone: BarChart3,
+    externa: true,
+  },
+  {
     id: "boletos",
     titulo: "Boletos",
     to: "/boletos",
@@ -82,7 +89,6 @@ const secoesMenu = [
       { to: "/admin?aba=relatorios", label: "Relatório do Sistema", icone: FileText },
       { to: "/admin?aba=comprovantes", label: "Comprovantes", icone: Receipt },
       {to: "/admin?aba=whatsapp", label: "Configurações do WhatsApp", icone: Handshake},
-      { to: URL_DASHBOARD_GRAFANA, label: "Dashboards", icone: BarChart3, externa: true },
     ],
   },
 ];
