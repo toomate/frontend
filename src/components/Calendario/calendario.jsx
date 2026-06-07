@@ -30,12 +30,13 @@ import './calendario.css';
 import BoletoDetail from './boletoDetail';
 import { useLocation } from 'react-router-dom';
 import HeaderPadrao from '../../HeaderPadrao';
+import { boletos as BoletosApi } from '../../provider/Api';
 
 
 export default function Calendario() {
   const [selectedBoletos, setSelectedBoletos] = useState([]);
   const location = useLocation();
-  const [myEventsList, setMyEventsList] = useState(location.state?.myEventsList || []);
+  const [myEventsList, setMyEventsList] = useState([]);
   const initialDate = location.state?.initialDate ? new Date(location.state.initialDate) : undefined;
   const [currentDate, setCurrentDate] = useState(initialDate || new Date());
 
@@ -65,6 +66,24 @@ export default function Calendario() {
     setCurrentDate(novaData);
   }
 
+  function mapearBoletosParaEventos(listaBoletos = []) {
+    return Array.isArray(listaBoletos)
+      ? listaBoletos.map((boleto) => {
+          const startDate = new Date(`${boleto.dataVencimento}T00:00:00`);
+
+          return {
+            id: boleto.idBoleto,
+            title: boleto.descricao,
+            status: boleto.pago,
+            value: `R$ ${boleto.valor}`,
+            start: startDate,
+            end: startDate,
+            categoria: boleto.categoria,
+          };
+        })
+      : [];
+  }
+
 useEffect(() => {
   const handleResize = () => {
     setIsMobile(window.innerWidth <= 768);
@@ -75,7 +94,27 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
-  setMyEventsList(location.state?.myEventsList || []);
+  const eventosDaTela = location.state?.myEventsList;
+
+  if (Array.isArray(eventosDaTela) && eventosDaTela.length > 0) {
+    setMyEventsList(eventosDaTela);
+  }
+
+  const fetchBoletos = async () => {
+    try {
+      const boletosData = await BoletosApi.listarBoletos();
+      const eventosApi = mapearBoletosParaEventos(boletosData);
+      setMyEventsList(eventosApi);
+    } catch (error) {
+      console.error('Erro ao buscar boletos para o calendário:', error);
+
+      if (!Array.isArray(eventosDaTela) || eventosDaTela.length === 0) {
+        setMyEventsList([]);
+      }
+    }
+  };
+
+  fetchBoletos();
 }, [location.state]);
 
 useEffect(() => {
