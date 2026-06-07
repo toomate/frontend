@@ -478,9 +478,10 @@ export default function Admin() {
               1
             );
 
+            // Estoque atual (usado em perdas por validade): quantidadeAtual e a coluna certa.
             const quantidadeEstoque = normalizarNumero(
-              lote?.quantidadeMedida ??
-                lote?.quantidadeAtual ??
+              lote?.quantidadeAtual ??
+                lote?.quantidadeMedida ??
                 lote?.quantidadeEmEstoque ??
                 lote?.quantidadeDisponivel ??
                 lote?.quantidadeEstoque ??
