@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import {
   Activity,
+  BarChart3,
   Boxes,
   Building2,
   CalendarDays,
@@ -21,7 +22,11 @@ import {
 } from "lucide-react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { ehAdmin, limparSessaoAutenticacao } from "../../utils/sessao";
+import config from "../../config";
 import "./HamburgerButton.css";
+
+// Dashboard "Visao Cliente" no Grafana (mesma infra, porta 3001).
+const URL_DASHBOARD_GRAFANA = `${config.GRAFANA_URL}/d/visao-cliente`;
 
 const secoesMenu = [
   { id: "home", titulo: "Home", to: "/dashboard", icone: Home },
@@ -40,6 +45,13 @@ const secoesMenu = [
   },
   { id: "fornecedores", titulo: "Fornecedores", to: "/fornecedores", icone: Building2 },
   { id: "vencimentos", titulo: "Vencimentos", to: "/vencimentos", icone: CalendarDays },
+  {
+    id: "dashboards",
+    titulo: "Dashboards",
+    to: URL_DASHBOARD_GRAFANA,
+    icone: BarChart3,
+    externa: true,
+  },
   {
     id: "boletos",
     titulo: "Boletos",
@@ -223,18 +235,35 @@ export default function HamburgerButton({
               return (
                 <div key={secao.id} className="menu-secao">
                   <div className="menu-secao-cabecalho">
-                    <Link
-                      to={secao.to}
-                      onClick={fecharMenu}
-                      className={`link-menu link-menu-principal ${secaoAtiva ? "ativo" : ""}`}
-                    >
-                      {IconeSecao ? (
-                        <span className="link-menu-icone" aria-hidden="true">
-                          <IconeSecao size={15} />
-                        </span>
-                      ) : null}
-                      {secao.titulo}
-                    </Link>
+                    {secao.externa ? (
+                      <a
+                        href={secao.to}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={fecharMenu}
+                        className="link-menu link-menu-principal"
+                      >
+                        {IconeSecao ? (
+                          <span className="link-menu-icone" aria-hidden="true">
+                            <IconeSecao size={15} />
+                          </span>
+                        ) : null}
+                        {secao.titulo}
+                      </a>
+                    ) : (
+                      <Link
+                        to={secao.to}
+                        onClick={fecharMenu}
+                        className={`link-menu link-menu-principal ${secaoAtiva ? "ativo" : ""}`}
+                      >
+                        {IconeSecao ? (
+                          <span className="link-menu-icone" aria-hidden="true">
+                            <IconeSecao size={15} />
+                          </span>
+                        ) : null}
+                        {secao.titulo}
+                      </Link>
+                    )}
 
                     {secaoTemSubitens ? (
                       <button
