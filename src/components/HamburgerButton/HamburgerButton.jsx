@@ -26,7 +26,8 @@ import config from "../../config";
 import "./HamburgerButton.css";
 
 // Dashboard "Visao Cliente" no Grafana (mesma infra, porta 3001).
-const URL_DASHBOARD_GRAFANA = `${config.GRAFANA_URL}/d/visao-cliente`;
+// kiosk: abre so o painel, sem a navbar/sidebar do Grafana.
+const URL_DASHBOARD_GRAFANA = `${config.GRAFANA_URL}/d/visao-cliente?kiosk`;
 
 const secoesMenu = [
   { id: "home", titulo: "Home", to: "/dashboard", icone: Home },
