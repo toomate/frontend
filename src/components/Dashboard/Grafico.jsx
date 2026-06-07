@@ -73,13 +73,17 @@ export default function Grafico({ dados }) {
         },
       },
     },
+    title: {
+      text: "Estoque de Insumos (Atual x Mínimo esperado)",
+      align: "center",
+    },
     plotOptions: {
       bar: {
         columnWidth: "52%",
         borderRadius: 4,
       },
     },
-    colors: ["green"],
+    colors: ["#4f2f16"],
     dataLabels: {
       enabled: false,
     },
@@ -88,7 +92,7 @@ export default function Grafico({ dados }) {
       showForSingleSeries: true,
       customLegendItems: ["Atual", "Esperado"],
       markers: {
-        fillColors: ["green", "red"],
+        fillColors: ["#4f2f16", "red"],
       },
     },
     yaxis: {

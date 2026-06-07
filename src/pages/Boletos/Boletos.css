@@ -81,6 +81,7 @@
   width: auto !important;
   max-width: none !important;
   height: 100%;
+
   color: black;
   border: none;
   margin: 0;
@@ -195,43 +196,11 @@
 }
 
 .btn-pago {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #d4edda;
-  color: #155724;
-  border: 1px solid #155724;
-  padding: 6px 14px;
-  border-radius: 10px;
+  background: green;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: background 0.2s, transform 0.2s;
-  min-width: 0;
-}
-
-.btn-pago:hover {
-  background: #c8e6cf;
-}
-
-.btn-pendente {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: #fff3cd;
-  color: #856404;
-  border: 1px solid #856404;
-  padding: 6px 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
-  transition: background 0.2s, transform 0.2s;
-  min-width: 0;
-}
-
-.btn-pendente:hover {
-  background: #ffe69c;
 }
 
 .lista {
@@ -335,6 +304,7 @@
     grid-column: 1 / -1;
   }
 }
+<<<<<<< Updated upstream
 
 /* Page-specific modal overrides for boleto detail */
 .boletos .modal-overlay {
@@ -394,3 +364,5 @@
     transform: scale(1);
   }
 }
+=======
+>>>>>>> Stashed changes

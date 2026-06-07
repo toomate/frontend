@@ -120,11 +120,13 @@ export class boletos {
 
   static async atualizar(idBoleto, payload) {
     try {
+      console.log('[API] Atualizando boleto', idBoleto, payload);
       const response = await requestComFallback({
         method: "put",
         url: `/boletos/${idBoleto}`,
         data: payload,
       });
+      console.log('[API] Atualizar resposta', response.status, response.data);
       return response.data;
     } catch (error) {
       console.error("Erro ao atualizar boleto:", error);
@@ -133,14 +135,17 @@ export class boletos {
   }
 
   static async marcarComoPago(idBoleto) {
+    console.log('[API] marcarComoPago chamado para id', idBoleto);
     const boletoAtual = await boletos.buscarPorId(idBoleto);
+    console.log('[API] boletoAtual', boletoAtual);
     const payload = {
       ...boletoAtual,
       pago: true,
       dataPagamento: new Date().toISOString().slice(0, 10),
     };
-
-    return boletos.atualizar(idBoleto, payload);
+    const resultado = await boletos.atualizar(idBoleto, payload);
+    console.log('[API] marcarComoPago resultado', resultado);
+    return resultado;
   }
 
   static async desmarcarComoPago(idBoleto) {

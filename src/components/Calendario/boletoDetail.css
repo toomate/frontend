@@ -220,8 +220,9 @@
     position: relative;
     width: 40%;
     max-width: 320px;
-    max-height: 75vh;
-    overflow: hidden;
+    max-height: calc(100vh - 80px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
     border-radius: 1.2em;
     background: #fff;
     border: 1px solid #6b4423;
@@ -314,6 +315,8 @@
         border-top-left-radius: 16px;
         border-top-right-radius: 16px;
         animation: slideUp 0.25s ease-out;
+        max-height: 85vh;
+        overflow-y: auto;
         -webkit-overflow-scrolling: touch;
     }
 

@@ -135,81 +135,83 @@ useEffect(() => {
   const localizer = momentLocalizer(moment);
   const EVENT_BG = '#C3C3C3';
 
-  // Componente customizado para o evento
- const EventComponent = ({ event, allEvents }) => {
+   // Componente customizado para o evento
+   const EventComponent = ({ event }) => {
+    // usa `myEventsList` do escopo para descobrir os eventos do dia
+    const eventosDoDia = myEventsList.filter((e) => {
+      const d1 = new Date(e.start);
+      const d2 = new Date(event.start);
 
-  const eventosDoDia = allEvents.filter((e) => {
-    const d1 = new Date(e.start);
-    const d2 = new Date(event.start);
+      return (
+        d1.getFullYear() === d2.getFullYear() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getDate() === d2.getDate()
+      );
+    });
 
-    return (
-      d1.getFullYear() === d2.getFullYear() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getDate() === d2.getDate()
+    const eventosOrdenados = [...eventosDoDia].sort(
+      (a, b) => new Date(a.start) - new Date(b.start)
     );
-  });
 
-  const eventosOrdenados = [...eventosDoDia].sort(
-    (a, b) => new Date(a.start) - new Date(b.start)
-  );
+    const ehPrimeiroDoDia = eventosOrdenados[0]?.id === event.id;
 
-  const ehPrimeiroDoDia = eventosOrdenados[0]?.id === event.id;
+    if (isMobile) {
+      if (!ehPrimeiroDoDia) return null;
 
-  if (isMobile) {
-    if (!ehPrimeiroDoDia) return null;
+      return (
+        <div className="mobile-day-container">
+          <button
+            className="ver-dia-btn-mobile"
+            onClick={() => detalharPorData(event.start)}
+          >
+            {eventosDoDia.length} boleto{eventosDoDia.length > 1 ? 's' : ''}
+          </button>
+        </div>
+      );
+    }
 
-    return (
-      <div className="mobile-day-container">
-        <button
-          className="ver-dia-btn-mobile"
-          onClick={() => detalharPorData(event.start)}
-        >
-          {eventosDoDia.length} boleto{eventosDoDia.length > 1 ? 's' : ''}
-        </button>
-      </div>
-    );
-  }
+    const titleParts = (event.title || '').split(/\s+/).filter(Boolean);
+    const primeiraPalavra = titleParts.slice(0, 2).join(' ');
 
-  const primeiraPalavra = event.title?.split(' ')[0] + " " +  event.title?.split(' ')[1];
+    if (eventosDoDia.length > 1) {
+      if (!ehPrimeiroDoDia) return null;
 
-  if (eventosDoDia.length > 1) {
-    if (!ehPrimeiroDoDia) return null;
+      return (
+        <div className="event-content">
+          <button
+            className="ver-dia-btn"
+            onClick={() => detalharPorData(event.start)}
+          >
+            Ver boletos do dia ({eventosDoDia.length})
+          </button>
+        </div>
+      );
+    }
 
     return (
       <div className="event-content">
-        <button
-          className="ver-dia-btn"
-          onClick={() => detalharPorData(event.start)}
+        <div
+          style={{ display: 'flex', alignItems: 'center', width: '100%', cursor: 'pointer' }}
+          onClick={() => detalhar(event.id)}
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') detalhar(event.id); }}
         >
-          Ver boletos do dia ({eventosDoDia.length})
-        </button>
+          <span
+            style={{
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              backgroundColor: event.status ? 'green' : 'red',
+              marginRight: '5px'
+            }}
+          ></span>
+
+          <span className="event">{primeiraPalavra}</span>
+        </div>
       </div>
     );
-  }
-
-  return (
-    <div className="event-content">
-      <div style={{ display: 'flex', alignItems: 'center', width: '100%' }}>
-        <span
-          style={{
-            width: '10px',
-            height: '10px',
-            borderRadius: '50%',
-            backgroundColor: event.status ? 'green' : 'red',
-            marginRight: '5px'
-          }}
-        ></span>
-
-        <span
-          className="event"
-          onClick={() => detalhar(event.id)}
-        >
-          {primeiraPalavra}
-        </span>
-      </div>
-    </div>
-  );
-};
+  };
 
 
   const MyCalendar = ({ events }) => (
@@ -275,6 +277,8 @@ useEffect(() => {
 
             </div>
           )
+          ,
+          month: { event: EventComponent }
         }}
 
         messages={{
