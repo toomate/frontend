@@ -47,13 +47,6 @@ const secoesMenu = [
   { id: "fornecedores", titulo: "Fornecedores", to: "/fornecedores", icone: Building2 },
   { id: "vencimentos", titulo: "Vencimentos", to: "/vencimentos", icone: CalendarDays },
   {
-    id: "dashboards",
-    titulo: "Dashboards",
-    to: URL_DASHBOARD_GRAFANA,
-    icone: BarChart3,
-    externa: true,
-  },
-  {
     id: "boletos",
     titulo: "Boletos",
     to: "/boletos",
@@ -89,6 +82,7 @@ const secoesMenu = [
       { to: "/admin?aba=relatorios", label: "Relatório do Sistema", icone: FileText },
       { to: "/admin?aba=comprovantes", label: "Comprovantes", icone: Receipt },
       {to: "/admin?aba=whatsapp", label: "Configurações do WhatsApp", icone: Handshake},
+      { to: URL_DASHBOARD_GRAFANA, label: "Dashboards", icone: BarChart3, externa: true },
     ],
   },
 ];
@@ -282,23 +276,41 @@ export default function HamburgerButton({
                   {secaoTemSubitens ? (
                     <div className={`submenu-painel ${secaoAberta ? "aberto" : ""}`}>
                       <div className="submenu-conteudo">
-                        {secao.subitens.map((subitem) => (
-                          <Link
-                            key={`${secao.id}-${subitem.to}-${subitem.label}`}
-                            to={subitem.to}
-                            onClick={fecharMenu}
-                            className={`link-menu link-menu-sub ${
-                              itemEstaAtivo(subitem.to) ? "ativo" : ""
-                            }`}
-                          >
-                            {subitem.icone ? (
-                              <span className="link-menu-icone" aria-hidden="true">
-                                <subitem.icone size={14} />
-                              </span>
-                            ) : null}
-                            {subitem.label}
-                          </Link>
-                        ))}
+                        {secao.subitens.map((subitem) =>
+                          subitem.externa ? (
+                            <a
+                              key={`${secao.id}-${subitem.to}-${subitem.label}`}
+                              href={subitem.to}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              onClick={fecharMenu}
+                              className="link-menu link-menu-sub"
+                            >
+                              {subitem.icone ? (
+                                <span className="link-menu-icone" aria-hidden="true">
+                                  <subitem.icone size={14} />
+                                </span>
+                              ) : null}
+                              {subitem.label}
+                            </a>
+                          ) : (
+                            <Link
+                              key={`${secao.id}-${subitem.to}-${subitem.label}`}
+                              to={subitem.to}
+                              onClick={fecharMenu}
+                              className={`link-menu link-menu-sub ${
+                                itemEstaAtivo(subitem.to) ? "ativo" : ""
+                              }`}
+                            >
+                              {subitem.icone ? (
+                                <span className="link-menu-icone" aria-hidden="true">
+                                  <subitem.icone size={14} />
+                                </span>
+                              ) : null}
+                              {subitem.label}
+                            </Link>
+                          )
+                        )}
                       </div>
                     </div>
                   ) : null}
