@@ -466,8 +466,10 @@ export default function Admin() {
               0
             );
 
+            // Total da compra = precoUnit * quantidadeOriginal (qtd comprada no lote).
             const quantidade = normalizarNumero(
-              lote?.quantidade ??
+              lote?.quantidadeOriginal ??
+                lote?.quantidade ??
                 lote?.quantidadeInicial ??
                 lote?.quantidadeMedida ??
                 lote?.qtd ??

@@ -65,8 +65,9 @@ function normalizarLote(lote, indice) {
     "Fornecedor não informado"
   );
   const precoUnitario = normalizarNumero(lote?.precoUnitario ?? lote?.preco, 0);
+  // Total da compra = precoUnit * quantidadeOriginal (qtd comprada); fallback p/ lotes antigos.
   const quantidade = normalizarNumero(
-    lote?.quantidadeTotal ?? lote?.quantidadeMedida ?? lote?.quantidade,
+    lote?.quantidadeOriginal ?? lote?.quantidadeTotal ?? lote?.quantidadeMedida ?? lote?.quantidade,
     0
   );
   const valorTotal = normalizarNumero(
