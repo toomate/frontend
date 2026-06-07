@@ -155,8 +155,8 @@ export default function AdminRelatorios({ lancamentosInsumos }) {
     const mapa = new Map();
     lancamentosFiltrados.forEach((lancamento, indice) => {
       const dataValidadeIso = String(lancamento.dataValidadeIso || "");
-      const quantidadeEstoque = Number(lancamento.quantidadeEstoque) || 0;
-      if (!dataValidadeIso || quantidadeEstoque <= 0) return;
+      const quantidadeAtual = Number(lancamento.quantidadeAtual) || 0;
+      if (!dataValidadeIso || quantidadeAtual <= 0) return;
       if (dataValidadeIso >= hojeIso) return;
       const precoUnitario = Number(lancamento.precoUnitario) || 0;
       const produto =
@@ -169,8 +169,8 @@ export default function AdminRelatorios({ lancamentosInsumos }) {
         lotesVencidos: 0,
         ultimaDataValidadeIso: dataValidadeIso,
       };
-      perdaAtual.valorTotal += precoUnitario * quantidadeEstoque;
-      perdaAtual.quantidadeTotal += quantidadeEstoque;
+      perdaAtual.valorTotal += precoUnitario * quantidadeAtual;
+      perdaAtual.quantidadeTotal += quantidadeAtual;
       perdaAtual.lotesVencidos += 1;
       if (dataValidadeIso > perdaAtual.ultimaDataValidadeIso) {
         perdaAtual.ultimaDataValidadeIso = dataValidadeIso;

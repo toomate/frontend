@@ -466,33 +466,15 @@ export default function Admin() {
               0
             );
 
-            // Total da compra = precoUnit * quantidadeOriginal (qtd comprada no lote).
+            // Total da compra = precoUnit * quantidadeOriginal (unidades compradas no lote).
+            // Lotes antigos sem o campo caem na quantidadeAtual (= original no cadastro).
             const quantidade = normalizarNumero(
-              lote?.quantidadeOriginal ??
-                lote?.quantidade ??
-                lote?.quantidadeInicial ??
-                lote?.quantidadeMedida ??
-                lote?.qtd ??
-                lote?.estoque ??
-                lote?.unidades,
+              lote?.quantidadeOriginal ?? lote?.quantidadeAtual,
               1
             );
 
-            // Estoque atual (usado em perdas por validade): quantidadeAtual e a coluna certa.
-            const quantidadeEstoque = normalizarNumero(
-              lote?.quantidadeAtual ??
-                lote?.quantidadeMedida ??
-                lote?.quantidadeEmEstoque ??
-                lote?.quantidadeDisponivel ??
-                lote?.quantidadeEstoque ??
-                lote?.estoqueAtual ??
-                lote?.estoque ??
-                lote?.saldo ??
-                lote?.qtdEstoque ??
-                lote?.quantidade ??
-                lote?.unidades,
-              0
-            );
+            // Estoque atual (usado em perdas por validade) = quantidadeAtual.
+            const quantidadeAtual = normalizarNumero(lote?.quantidadeAtual, 0);
 
             const valorTotal = normalizarNumero(
               lote?.valorTotal ?? lote?.custoTotal ?? lote?.valor,
@@ -514,7 +496,7 @@ export default function Admin() {
               fornecedor,
               dataIso: resolverDataLote(lote, dataPadraoLote),
               dataValidadeIso: resolverDataValidadeLote(lote),
-              quantidadeEstoque,
+              quantidadeAtual,
               valorTotal,
               precoUnitario,
             };
