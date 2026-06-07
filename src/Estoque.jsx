@@ -5,7 +5,7 @@ import { Search } from "./components/Search/Search";
 import { Save, Bookmark, SearchIcon, Plus, ScanBarcode } from "lucide-react";
 import { Button } from "./components/Button/Button";
 import "./Estoque.css"
-import { CategoriaApi, Lote } from "./provider/Api";
+import { CategoriaApi, Lote, insumos } from "./provider/Api";
 import { EstoqueGrupo } from "./components/EstoqueGrupo/EstoqueGrupo";
 import { CardRelatorio } from "./components/CardRelatorio/CardRelatorio";
 import { CardConfirmacao } from "./components/CardConfirmacao/CardConfirmacao";
@@ -39,6 +39,7 @@ export function Estoque() {
     const [cardExclusao, setCardExclusao] = useState(false);
     const [cardRotina, setCardRotina] = useState(false);
     const [idSelecionado, setIdSelecionado] = useState(0);
+    const [idInsumoSelecionado, setIdInsumoSelecionado] = useState(0);
     const [titulo, setTitulo] = useState("")
     const [dropdownAbertoId, setDropdownAbertoId] = useState(null);
     const [loading, setLoading] = useState({ rotina: false, relatorio: false, exclusao: false });
@@ -80,8 +81,8 @@ export function Estoque() {
     }, [categoriasAtivas, pesquisa, pagina]);
 
 
-    const abrirCardExclusao = (idLote) => {
-        setIdSelecionado(idLote);
+    const abrirCardExclusao = (idInsumo) => {
+        setIdInsumoSelecionado(idInsumo);
         setCardExclusao(true);
     }
 
@@ -177,16 +178,16 @@ export function Estoque() {
         }
     }
 
-    const excluirLote = async (idLote) => {
+    const excluirInsumo = async (idInsumo) => {
         try {
             setLoading({ exclusao: true })
-            await Lote.excluirLote(idLote);
+            await insumos.excluirInsumo(idInsumo);
             await carregarEstoque()
 
             setCardExclusao(false);
             setIdSelecionado(null);
         } catch (error) {
-            console.error("Erro ao excluir lote:", error)
+            console.error("Erro ao excluir insumo:", error)
             throw error;
         } finally {
             setLoading({ exclusao: false })
@@ -225,9 +226,6 @@ export function Estoque() {
 
         setGrupo(novoGrupo)
     }
-    const loteOriginal = (idLote) => {
-        return obterItemLote(grupoMax, idLote);
-    }
 
     const removerAlteracao = () => {
         const novoArray = mudancas.filter((e) => e.id !== Number(idSelecionado))
@@ -240,6 +238,7 @@ export function Estoque() {
         return listaGrupos.find((item) => item.itens.some((atual) => atual.idLote === idLote))
             ?.itens.find((atual) => atual.idLote === idLote);
     }
+ 
 
     const qtdMaxima = (idLote) => {
         const item = obterItemLote(grupoMax, idLote);
@@ -395,7 +394,7 @@ export function Estoque() {
             )}
             {cardExclusao && (
                 <div className="escurecer">
-                    <CardConfirmacao titulo={"Deseja excluir o lote?"} fecharCard={() => { setCardExclusao(false) }} confirmar={() => excluirLote(idSelecionado)} loading={loading.exclusao} />
+                    <CardConfirmacao titulo={"Deseja excluir o lote?"} fecharCard={() => { setCardExclusao(false) }} confirmar={() => excluirInsumo(idInsumoSelecionado)} loading={loading.exclusao} />
                 </div>
             )}
 
@@ -437,7 +436,7 @@ export function Estoque() {
                     <div className="grupo-insumos-container">
                         {grupo.length > 0 ? grupo.map(atual => (
                             <EstoqueGrupo key={atual.fkInsumo} grupo={atual} alterarValor={alterarQuantidade} abrirDropdown={abrirDropdown}
-                                dropdownAbertoId={dropdownAbertoId} excluirLote={abrirCardExclusao} loteOriginal={loteOriginal}
+                                dropdownAbertoId={dropdownAbertoId} excluirInsumo={abrirCardExclusao}
                             />
                         )) : <div className="mensagemErro">Não há produtos cadastrados!</div>}
                     </div>

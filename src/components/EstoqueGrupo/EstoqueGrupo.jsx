@@ -4,7 +4,7 @@ import "./EstoqueGrupo.css"
 import { EstoqueItem } from "../EstoqueItem/EstoqueItem";
 import { useEffect } from "react";
 
-export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId, excluirLote, loteOriginal }) {
+export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbertoId, excluirInsumo }) {
     const [expandido, setExpandido] = useState(false);
     const UM_DIA_EM_MS = 24 * 60 * 60 * 1000;
     const UMA_SEMANA_EM_MS = 7 * UM_DIA_EM_MS;
@@ -126,6 +126,10 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
         }
     }
 
+    const mostrarExcluir = (qtd) => {
+        return qtd <= 0;
+    }
+
     return (<div className="grupo-geral">
         <div className="linha-estoque grupo-container" onClick={() => setExpandido(!expandido)}>
             <div className="insumo" ><div className="icone"><ChevronDown className="insumo-icone-value" style={{
@@ -142,11 +146,11 @@ export function EstoqueGrupo({ grupo, alterarValor, abrirDropdown, dropdownAbert
             <div className="dt-vencimento">
                 {statusValidade && (
                     <span className={`badge-validade badge-validade-${statusValidade}`}>V</span>
-                )}
-            </div><div className="controle"></div>
+                )} 
+            </div><div className="controle">{mostrarExcluir(grupo.qtdAtual) ? (<><button onClick={() => excluirInsumo(grupo.fkInsumo)} className="btn">Excluir</button></>) : ("")}</div>
         </div>
         {expandido && (
-            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} excluirLote={excluirLote} loteOriginal={loteOriginal} />
+            <EstoqueItem alterarValor={alterarValor} elementos={grupo.itens} nomeInsumo={grupo.insumo} abrirDropdown={abrirDropdown} dropdownAbertoId={dropdownAbertoId} />
         )}
     </div>
 

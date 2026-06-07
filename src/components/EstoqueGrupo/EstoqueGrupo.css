@@ -90,6 +90,14 @@
     height: 100%;
 }
 
+.controle {
+    display: flex;
+    margin-left: 30px;
+    align-items: center;
+    width: 30%;
+    justify-self: center;
+}
+
 .volume span {
     display: flex;
     border-radius: 10px;
@@ -168,9 +176,9 @@
         width: auto;
         height: auto;
         justify-content: flex-start;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        overflow: visible;
+        text-overflow: unset;
+        word-break: break-word;
     }
 
     .grupo-container .insumo-icon,
@@ -190,9 +198,19 @@
 
     /* Oculta colunas que não entram no grid de 3 */
     .grupo-container .qtd-medida,
-    .grupo-container .dt-vencimento,
-    .grupo-container .controle {
+    .grupo-container .dt-vencimento {
         display: none !important;
+    }
+
+    .grupo-container .controle {
+        width: 60%;
+        justify-content: end;
+    }
+
+    .grupo-container .controle .btn {
+        font-size: smaller;
+        height: 10%;
+        width: 85%;
     }
 
     .grupo-container .qtd-minima {
@@ -213,7 +231,7 @@
         width: auto;
         height: auto;
         gap: 4px;
-        font-size: 12px; 
+        font-size: 12px;
         padding: 2px 4px;
     }
 

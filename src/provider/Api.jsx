@@ -468,18 +468,6 @@ export class Lote {
       throw error;
     }
   }
-
-  static async excluirLote(idLote) {
-    try {
-      const response = await requestComFallback({
-        method: "patch",
-        url: `/lotes/estoque/${idLote}`
-      })
-      return response.data;
-    } catch (error) {
-      console.error("Erro ao excluir lote", error)
-    }
-  }
 }
 
 export class FornecedorApi {
@@ -861,6 +849,18 @@ export class insumos {
     } catch (error) {
       console.error("Erro ao buscar categorias:", error);
       throw error;
+    }
+  }
+
+  static async excluirInsumo(idInsumo) {
+    try {
+      const response = await requestComFallback({
+        method: "patch",
+        url: `/insumos/${idInsumo}`
+      })
+      return response.data;
+    } catch (error) {
+      console.error("Erro ao excluir insumo", error)
     }
   }
 }

@@ -44,10 +44,6 @@ export function EstoqueItem(props) {
         return Math.trunc(numero * fator) / fator;
     }
 
-    const mostrarExcluir = (original) => {
-        return original && Number(original.quantidadeTotal) <= 0;
-    }
-
     return (
         <>{props.elementos
             .map((atual) => <React.Fragment key={atual.idLote}>
@@ -70,7 +66,7 @@ export function EstoqueItem(props) {
 
                     <div className="controle-container">
                         <div className="controle">
-                            {mostrarExcluir(props.loteOriginal(atual.idLote)) ? (<><button onClick={() => props.excluirLote(atual.idLote)} className="btn">Excluir</button></>) : (<><CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />
+                            {<><CircleMinus onClick={() => props.alterarValor(atual.idLote, 'subtrair')} size={20} />
                                 <span
                                     className="quantidade-total"
                                     style={{ cursor: 'pointer', textDecoration: 'underline' }}>
@@ -93,7 +89,7 @@ export function EstoqueItem(props) {
                                         }}
                                     />
                                 </span>
-                                <CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} /></>)}
+                                <CirclePlus onClick={() => props.alterarValor(atual.idLote, 'somar')} size={20} /></>}
                         </div>
                     </div>
 
