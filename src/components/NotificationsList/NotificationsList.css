@@ -56,7 +56,7 @@
 }
 
 .notifications-item-text {
-  margin: 0 0 4px;
+  margin: 0 0 0px;
   font-size: 13px;
   font-weight: 600;
   color: #2f2f2f;
@@ -71,4 +71,11 @@
   margin: 0;
   color: #666;
   font-size: 13px;
+}
+
+.notifications-item-title{
+  font-size: 14px;
+  font-weight: 800;
+  color: #2f2f2f;
+  padding-bottom: 10px;
 }

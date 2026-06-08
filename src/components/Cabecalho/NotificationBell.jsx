@@ -35,12 +35,23 @@ export default function NotificationBell() {
     }
   };
 
+  const toggleOpen = () => {
+    setOpen((prev) => {
+      const next = !prev;
+      if (next) {
+        // Ao abrir o sino, marcar tudo que estava presente como lido
+        sseManager.markAllVisibleAsRead();
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="notif-container">
-      <button className="notif-button" onClick={() => setOpen(!open)}>
+      <button className="notif-button" onClick={toggleOpen}>
         🔔
-        {notifications.length > 0 && (
-          <span className="notif-badge">{notifications.length}</span>
+        {notifications.filter((n) => !n.read).length > 0 && (
+          <span className="notif-badge">{notifications.filter((n) => !n.read).length}</span>
         )}
       </button>
 

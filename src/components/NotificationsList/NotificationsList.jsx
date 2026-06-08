@@ -1,11 +1,13 @@
 import React from "react";
 import "./NotificationsList.css";
+import sseManager from "../../utils/sseManager";
 
 function formatNotificationText(message) {
   if (!message?.body || typeof message.body !== "object") {
     return "Notificação recebida";
   }
 
+  const body = message.body || {};
   const {
     nome,
     quantidadeAtual,
@@ -13,18 +15,37 @@ function formatNotificationText(message) {
     dataValidade,
     dataVencimento,
     mensagem,
-  } = message.body;
+  } = body;
 
+  // Mensagem textual direta tem prioridade
   if (typeof mensagem === "string" && mensagem.trim()) {
     return mensagem;
   }
 
   const parts = [];
 
+  // Estoque
   if (nome) parts.push(nome);
   if (quantidadeAtual !== undefined && quantidadeMinima !== undefined) {
     parts.push(`Qtd atual: ${quantidadeAtual} | Qtd minima: ${quantidadeMinima}`);
   }
+
+  // Validade (body.insumo + vencimento)
+  if (body.insumo) {
+    parts.push(`Insumo: ${body.insumo}`);
+    if (body.vencimento) {
+      parts.push(`Vencimento: ${new Date(body.vencimento).toLocaleDateString("pt-BR")}`);
+    }
+  }
+
+  // Boleto (descricao, valor, vencimento)
+  if (body.descricao) {
+    parts.push(body.descricao);
+    if (body.valor !== undefined) parts.push(`Valor: R$ ${Number(body.valor).toFixed(2)}`);
+    if (body.vencimento) parts.push(`Venc.: ${new Date(body.vencimento).toLocaleDateString("pt-BR")}`);
+  }
+
+  // Datas genéricas
   if (dataValidade) {
     parts.push(`Validade: ${new Date(dataValidade).toLocaleDateString("pt-BR")}`);
   }
@@ -36,7 +57,7 @@ function formatNotificationText(message) {
 }
 
 export function getNotificationKey(message, index) {
-  return `${message?.id || "sem-id"}-${message?.body?.insumoId ?? message?.body?.idInsumo ?? "sem-insumo"}-${index}`;
+  return `${message?.id || "sem-id"}-${index}`;
 }
 
 export function canRemoveNotification(message) {
@@ -46,7 +67,7 @@ export function canRemoveNotification(message) {
     message?.body?.fkInsumo ??
     message?.body?.insumo?.idInsumo ??
     message?.body?.insumo?.id ??
-    String(message?.id ?? "").match(/\d+/)?.[0];
+    String(message?.id ?? "");
   return idInsumo !== undefined && idInsumo !== null && String(idInsumo).trim() !== "";
 }
 
@@ -69,15 +90,22 @@ export default function NotificationsList({
       ) : (
         <ul className="notifications-list" aria-label="Listagem de notificações armazenadas">
           {notificationList.map((message, index) => (
-            <li className="notifications-item" key={getNotificationKey(message, index)}>
+            <li
+              className={`notifications-item ${message.read ? "read" : "unread"}`}
+              key={getNotificationKey(message, index)}
+              onClick={() => sseManager.markAsRead(message)}
+            >
               <div>
-              <p className="notifications-item-text">{formatNotificationText(message)}</p>
-              <span className="notifications-item-date">
-                {message.timestamp
-                  ? new Date(message.timestamp).toLocaleString("pt-BR")
-                  : "Sem data"}
-              </span>
-                  </div>
+                {message.title && (
+                  <span className="notifications-item-title">• Notificação de {message.title} </span>
+                )}
+                <p className="notifications-item-text">{formatNotificationText(message)}</p>
+                <span className="notifications-item-date">
+                  {message.timestamp
+                    ? new Date(message.timestamp).toLocaleString("pt-BR")
+                    : "Sem data"}
+                </span>
+              </div>
               <button
                 type="button"
                 className="notifications-remove-btn"
@@ -89,7 +117,10 @@ export default function NotificationsList({
                       ? "Removendo notificação"
                       : "Remover notificação"
                 }
-                onClick={() => onRemove && onRemove(message, index)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRemove && onRemove(message, index);
+                }}
                 disabled={
                   !canRemoveNotification(message) ||
                   Boolean(removendoIds[getNotificationKey(message, index)])

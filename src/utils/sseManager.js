@@ -68,6 +68,22 @@ function getNotificationPayloadHash(notification) {
   return `${id}|${JSON.stringify(body)}`;
 }
 
+function getNotificationType(notification) {
+  const rawId = String(notification?.id ?? "").trim();
+  const prefix = rawId[0]?.toLowerCase();
+
+  switch (prefix) {
+    case "e":
+      return { key: "estoque", title: "Estoque" };
+    case "b":
+      return { key: "boleto", title: "Boleto" };
+    case "v":
+      return { key: "validade", title: "Validade" };
+    default:
+      return { key: "outro", title: "Notificação" };
+  }
+}
+
 function getNotificationInsumoId(notification) {
   if (!notification || typeof notification !== "object") return null;
 
@@ -164,6 +180,19 @@ class sseManager {
     // Cleanup ao fechar aba
     window.addEventListener("beforeunload", () => {
       this.onUnload();
+    });
+
+    // Sincroniza com alterações externas no localStorage (outras abas/serviço)
+    window.addEventListener("storage", (e) => {
+      try {
+        if (e.key === NOTIFICATIONS_KEY) {
+          const stored = normalizeStoredNotifications(loadStoredNotifications());
+          this.notifications = stored;
+          this.notifyListeners();
+        }
+      } catch (err) {
+        console.warn("Erro ao sincronizar notificacoes via storage event:", err);
+      }
     });
   }
 
@@ -278,7 +307,23 @@ handleIncomingData(rawData) {
       return;
     }
 
-    this.notifications = nextNotifications;
+    // Preserve `read` state for existing notifications and enrich with `type`/`title`.
+    const existingReadMap = new Map(
+      (this.notifications || []).map((n) => [String(n.id ?? ""), Boolean(n.read)])
+    );
+
+    this.notifications = (nextNotifications || []).map((n) => {
+      const id = String(n.id ?? "");
+      const typeInfo = getNotificationType(n);
+      return {
+        ...n,
+        id,
+        type: typeInfo.key,
+        title: typeInfo.title,
+        read: existingReadMap.has(id) ? existingReadMap.get(id) : false,
+      };
+    });
+
     saveNotifications(this.notifications);
     this.notifyListeners();
   } catch (err) {
@@ -326,10 +371,17 @@ handleIncomingData(rawData) {
 
     const identityToRemove = getNotificationIdentity(notification);
     const nextNotifications = this.notifications.filter((item) => {
+      // Remove por identidade (categoria|entity) quando disponível
       if (identityToRemove) {
         return getNotificationIdentity(item) !== identityToRemove;
       }
 
+      // Fallback: remove por id exato
+      if (String(item.id ?? "") === String(notification.id ?? "")) {
+        return false;
+      }
+
+      // Último fallback: comparar payload hash
       return getNotificationPayloadHash(item) !== getNotificationPayloadHash(notification);
     });
 
@@ -337,6 +389,83 @@ handleIncomingData(rawData) {
       this.notifications = nextNotifications;
       saveNotifications(this.notifications);
       this.notifyListeners();
+    }
+
+    return true;
+  }
+
+  async markAsRead(notificationOrId) {
+    const id =
+      typeof notificationOrId === "string"
+        ? notificationOrId
+        : String(notificationOrId?.id ?? "");
+
+    if (!id) return false;
+
+    const idx = this.notifications.findIndex((n) => String(n.id) === id);
+    if (idx === -1) return false;
+
+    if (this.notifications[idx].read) return true;
+
+    this.notifications[idx] = { ...this.notifications[idx], read: true };
+    try {
+      saveNotifications(this.notifications);
+      this.notifyListeners();
+    } catch (err) {
+      console.warn("Falha ao marcar notificação como lida localmente:", err);
+    }
+
+    // Tenta persistir no servidor, mas não bloqueia a atualização local.
+    try {
+      const token = getAuthToken();
+      const endpoint = `${SSE_URL.replace(/\/$/, "")}/ler/${encodeURIComponent(id)}`;
+      await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+      });
+    } catch (err) {
+      console.warn("Falha ao persistir leitura no servidor:", err);
+    }
+
+    return true;
+  }
+
+  async markAllVisibleAsRead() {
+    const idsToMark = this.notifications
+      .filter((n) => n && !n.read)
+      .map((n) => String(n.id ?? ""))
+      .filter((id) => id !== "");
+
+    if (idsToMark.length === 0) return true;
+
+    this.notifications = this.notifications.map((n) => ({ ...n, read: true }));
+
+    try {
+      saveNotifications(this.notifications);
+      this.notifyListeners();
+    } catch (err) {
+      console.warn("Falha ao salvar notificacoes apos marcar como lidas:", err);
+    }
+
+    // Persistir no servidor em background
+    try {
+      const token = getAuthToken();
+      const base = SSE_URL.replace(/\/$/, "");
+      idsToMark.forEach((id) => {
+        const endpoint = `${base}/ler/${encodeURIComponent(id)}`;
+        fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        }).catch((err) => console.warn("Falha ao persistir leitura no servidor:", err));
+      });
+    } catch (err) {
+      console.warn("Erro ao iniciar persistencia de leituras:", err);
     }
 
     return true;
