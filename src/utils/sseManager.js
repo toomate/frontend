@@ -42,7 +42,6 @@ function getNotificationIdentity(notification) {
   const group = id ? id[0].toLowerCase() : "o";
   const body = notification.body ?? {};
 
-  // Identidade principal por entidade de negócio para evitar duplicar o mesmo alerta.
   const entityId =
     body.insumoId ??
     body.idInsumo ??
@@ -66,29 +65,15 @@ function getNotificationPayloadHash(notification) {
   const id = String(notification.id ?? "");
   const body = notification.body ?? {};
 
-  // Ignora timestamp para nao considerar duplicada uma mesma mensagem reenviada com horario diferente.
   return `${id}|${JSON.stringify(body)}`;
 }
 
 function getNotificationInsumoId(notification) {
   if (!notification || typeof notification !== "object") return null;
 
-  const body = notification.body ?? {};
-  const idFromBody =
-    body.insumoId ??
-    body.idInsumo ??
-    body.fkInsumo ??
-    body?.insumo?.idInsumo ??
-    body?.insumo?.id;
-
-  if (idFromBody !== undefined && idFromBody !== null && String(idFromBody).trim() !== "") {
-    return idFromBody;
-  }
-
-  const rawId = String(notification.id ?? "");
-  const match = rawId.match(/\d+/);
-  if (match) {
-    return match[0];
+  const rawId = String(notification.id ?? "").trim();
+  if (rawId !== "") {
+    return rawId;
   }
 
   return null;
@@ -238,7 +223,7 @@ class sseManager {
     }
 
     console.log("Iniciando SSE para clienteId:", clientId);
-    const sseUrlWithClient = `${SSE_URL.replace(/\/$/, "")}/${encodeURIComponent(clientId)}`;
+    const sseUrlWithClient = `${SSE_URL.replace(/\/$/, "")}/conectar/${encodeURIComponent(clientId)}`;
     console.log("URL SSE:", sseUrlWithClient);
 
     this.eventSource = new EventSource(sseUrlWithClient);
@@ -322,7 +307,10 @@ handleIncomingData(rawData) {
     }
 
     const token = getAuthToken();
-    const endpoint = `${SSE_URL.replace(/\/$/, "")}/deletar/${encodeURIComponent(idInsumo)}`;
+    const endpoint = `${SSE_URL.replace(/\/$/, "")}/deletar/${encodeURIComponent(
+      idInsumo
+    )}`;
+
 
     const response = await fetch(endpoint, {
       method: "POST",
