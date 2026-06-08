@@ -35,7 +35,7 @@
   padding: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.18);
   z-index: 100;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .notif-lista-titulo {
@@ -44,6 +44,3 @@
   color: #7b1e1e;
 }
 
-.notif-lista-container {
-  max-height: 350px;
-}

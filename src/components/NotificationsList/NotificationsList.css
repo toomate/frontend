@@ -5,14 +5,16 @@
 }
 
 .notifications-list {
+  max-height: 400px;
   list-style: none;
   margin: 0;
   padding: 0;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  overflow-y: auto;
-  max-height: 100%;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+  scrollbar-gutter: stable;
 }
 
 .notifications-item {
