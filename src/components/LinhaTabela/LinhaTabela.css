@@ -1,7 +1,8 @@
 .tabela-insumo-container {
-    min-height: 118px;
+    min-height: 60px;
     display: flex;
-    font-size: 1rem;
+    font-size: 0.95rem;
+    line-height: 1.1;
 }
 
 
@@ -14,8 +15,9 @@
     font-size: inherit;
     flex: 1;
     min-width: 0;
-    padding: 0 10px;
+    padding: 4px 8px;
     text-align: center;
+    min-height: 0;
 }
 
 .linha-valor {
@@ -23,6 +25,7 @@
     align-items: center;
     justify-content: center;
     min-width: 0;
+    line-height: 1.1;
 }
 
 
