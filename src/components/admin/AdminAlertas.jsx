@@ -21,6 +21,8 @@ export default function AdminAlertas({ lancamentos }) {
 
     (lancamentos ?? []).forEach((l) => {
       if (!l.dataValidadeIso) return;
+      // Sem estoque atual = nada a perder/alertar (alinha com o relatório de perdas).
+      if ((Number(l.quantidadeAtual) || 0) <= 0) return;
 
       const venc = new Date(`${l.dataValidadeIso}T00:00:00`);
       const ehVencido = venc < hoje;
