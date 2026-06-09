@@ -360,7 +360,7 @@ export default function Admin() {
       const [usuariosResposta, lotesResposta, fornecedoresResposta, logsResposta] =
         await Promise.allSettled([
           AuthApi.listarUsuarios(),
-          Lote.listarLotes(),
+          Lote.listarCompleto(),
           FornecedorApi.listar(),
           AdminApi.listarAuditLogs(),
         ]);

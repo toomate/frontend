@@ -424,6 +424,21 @@ export class Lote {
     }
   }
 
+  // Todos os lotes (inclusive consumidos/fora de estoque). Usado no Admin para
+  // gasto histórico, pois o /lotes só traz os que estão em estoque.
+  static async listarCompleto() {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/lotes/completo`,
+      });
+      return Array.isArray(response.data) ? response.data : [];
+    } catch (error) {
+      console.error("Erro ao buscar todos os lotes:", error);
+      throw error;
+    }
+  }
+
   static async listarLotesPaginado({ pagina = 0, tamanho = 10, dataInicial, dataFinal } = {}) {
     try {
       const params = { pagina, tamanho };
