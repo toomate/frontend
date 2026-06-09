@@ -146,9 +146,9 @@ export default function Rotinas() {
             <HeaderPadrao />
             <div className="rotinas-container">
                 <div className="nav-categorias-container">
-                    <div className="botao-voltar">
+                    {/* <div className="botao-voltar">
                         <Button Icone={ArrowLeft} texto={"Voltar"} onClick={() => { navigate("/estoque") }} />
-                    </div>
+                    </div> */}
                     <select value={ordenacao} onChange={(e) => setOrdenacao(e.target.value)} className="fornecedores-select">
                         <option value="alfabetica">A → Z</option>
                         <option value="alfabetica_desc">Z → A</option>
