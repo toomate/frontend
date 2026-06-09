@@ -19,8 +19,8 @@ function normalizar(valor) {
 export default function Vencimento() {
     const [vencimento, setVencimento] = useState([])
     const [kpis, setKpis] = useState([])
-    const [paginaAtual, setPaginaAtual] = useState(1)
-    const [totalPaginas, setTotalPaginas] = useState(1)
+    const [paginaAtual, setPaginaAtual] = useState(0)
+    const [totalPaginas, setTotalPaginas] = useState(0)
     const [totalElementos, setTotalElementos] = useState(0)
     const [usaPaginacaoServidor, setUsaPaginacaoServidor] = useState(false)
     const [searchParams, setSearchParams] = useSearchParams()
@@ -42,12 +42,12 @@ export default function Vencimento() {
             return;
         }
 
-        const conteudo = Array.isArray(resposta?.content) ? resposta.content : [];
+        const conteudo = Array.isArray(resposta?.conteudo) ? resposta.conteudo : [];
 
         setUsaPaginacaoServidor(true);
         setVencimento(conteudo);
-        setTotalElementos(Number(resposta?.totalElements ?? conteudo.length));
-        setTotalPaginas(Math.max(1, Number(resposta?.totalPages ?? 1)));
+        setTotalElementos(Number(resposta?.total ?? conteudo.length));
+        setTotalPaginas(Math.max(1, Number(resposta?.totalPaginas ?? 1)));
     }, [paginaAtual, itensPorPagina]);
 
     useEffect(() => {
