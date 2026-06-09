@@ -415,17 +415,17 @@ export default function CadastroLote() {
               onChange={(e) => setQuantidade(e.target.value)}
             />
 
-            <span>Quantidade Medida (de cada pacote)</span>
+            <span>Quantidade Medida (Por unidade)</span>
             <input
               type="number"
               step="1"
               min="0"
-              placeholder="0"
+              placeholder="Ex: 500 ml, 1kg, etc"
               value={quantidadeMedida}
               onChange={(e) => setQuantidadeMedida(e.target.value)}
             />
 
-            <span>Medida</span>
+            <span>Unidade de Medida</span>
             <div className="input-wrapper">
               <select
                 className="selectMarca"
