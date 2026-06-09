@@ -13,7 +13,7 @@ export default function Boletos() {
   const navigate = useNavigate();
   const [boletoLista, setBoletos] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(0);
-  const [itensPorPagina, setItensPorPagina] = useState(4);
+  const [itensPorPagina] = useState(3);
   const mesAtual = String(new Date().getMonth());
   const categorias = Array.from(new Set(boletoLista.map((b) => b.categoria).filter(Boolean)));
   const [filtroMes, setFiltroMes] = useState(mesAtual);
