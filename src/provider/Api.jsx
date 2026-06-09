@@ -783,6 +783,25 @@ export class Rotinas {
     }
   }
 
+  static async mostrarPreview(id) {
+    try {
+      const response = await requestComFallback({
+        method: "get",
+        url: `/rotinas/${id}/preview`
+      })
+
+      return response.data;
+    } catch (err) {
+      console.error("Erro:", {
+        message: err.message,
+        status: err.response?.status,
+        data: err.response?.data,
+        code: err.code
+      })
+      throw err;
+    }
+  }
+
   static async excluirRotina(id) {
     try {
       await requestComFallback({

@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowUp, Save, SearchIcon, X } from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUp, Save, SearchIcon, X, Package} from "lucide-react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import RotinaCard from "./components/RotinaCard/RotinaCard"
 import { Search } from "./components/Search/Search";
@@ -62,11 +62,14 @@ export default function Rotinas() {
         setPesquisa(valor)
     };
 
-    const abrirCard = (id) => {
+    const abrirCard = async (id) => {
         const rotina = rotinas.find(r => r.id === id);
         setCardConfirmacao(true)
-        setRotinaSelecionada(rotina);
         setIdSelecionado(id)
+        const preview = await mostrarPreview(id);
+
+        setRotinaSelecionada(preview);
+
     }
 
     const darBaixa = async () => {
@@ -93,6 +96,11 @@ export default function Rotinas() {
         setTotalPaginas(response.totalPaginas);
     }
 
+    const mostrarPreview = async (id) => {
+        const response = await RotinasClass.mostrarPreview(id);
+        return response;
+    }
+
     useEffect(() => {
         RotinasClass.listar(pesquisa, pagina, tamanho).then((response) => {
             setRotinas(response.conteudo);
@@ -106,29 +114,72 @@ export default function Rotinas() {
 
 
     function RelatorioRotina({ props = [], fechar, confirmar, loading }) {
-        return (
-            <div className="container-card">
-                <div className="titulo-relatorio">
-                    <div className="titulo-primario">Deseja Realizar a baixa desses insumos?</div>
-                    <X className="icone-clicavel" onClick={fechar} />
-                </div>
-                <div className="produtos">
-                    {props.insumos && props.insumos.length > 0 ? (props.insumos.map(atual => <React.Fragment key={atual.id}>
-                        {console.log(atual)}
-                        <div className="produto-linha">
-                            <div className="produto">{atual.nome}</div><div className="info-linha"><ArrowDown size={20} style={{ color: "red" }} />{Math.abs(atual.quantidade)}{atual.unidadeMedida}</div>
-                            <div className="icone-linha">
-                            </div></div>
-                    </React.Fragment>)) :
-                        <div className="mensagem-vazio">Não há produtos!</div>}
-                </div>
-                <div className="botoes">
-                    <Button texto={loading ? "Salvando..." : "Sim"} onClick={darBaixa} disabled={loading}></Button>
-                    <Button texto={"Não"} onClick={fechar}></Button>
-                </div>
+        const formatarData = (data) => {
+            if (!data) return '';
+            const match = String(data).match(/^(\d{4})-(\d{2})-(\d{2})/);
+            if (match) return `${match[3]}/${match[2]}/${match[1]}`;
+            return String(data);
+        };
+        const itensComLote = props?.itens?.filter((item) => item?.lotes?.length > 0) ?? [];
 
+        return (
+            <div className="rr-overlay">
+                <div className="rr-modal" role="dialog" aria-modal="true" aria-labelledby="rr-titulo">
+
+                    <div className="rr-header">
+                        <p className="rr-titulo" id="rr-titulo">
+                            Deseja realizar a baixa desses insumos?
+                        </p>
+                        <button className="rr-fechar" onClick={fechar} aria-label="Fechar">
+                            <X size={18} />
+                        </button>
+                    </div>
+
+                    <div className="rr-body">
+                        {itensComLote.length === 0 ? (
+                            <div className="rr-vazio">Nenhum insumo com estoque disponível.</div>
+                        ) : (
+                            itensComLote.map((item) => (
+                                <div className="rr-card" key={item.insumoId}>
+
+                                    <div className="rr-card-header">
+                                        <span className="rr-insumo-nome">{item.nomeInsumo}</span>
+                                        <span className="rr-total">
+                                            <ArrowDown size={13} aria-hidden="true" />
+                                            {item.quantidadeNecessaria}&nbsp;{item.unidadeMedida} do estoque
+                                        </span>
+                                    </div>
+
+                                    <div className="rr-lotes">
+                                        {item.lotes.map((lote) => (
+                                            <div className="rr-lote-row" key={lote.loteId}>
+                                                <div className="rr-lote-info">
+                                                    <Package size={13} className="rr-lote-icone" aria-hidden="true" />
+                                                    <span className="rr-lote-marca">{lote.marca}</span>
+                                                    <span className="rr-lote-validade">
+                                                        venc.&nbsp;{formatarData(lote.validade)}
+                                                    </span>
+                                                </div>
+                                                <span className="rr-lote-qtd">
+                                                    {lote.quantidadeConsumida}&nbsp;{lote.unidadeMedida}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    <div className="rr-footer">
+                        <Button className="rr-btn rr-btn-cancelar" texto={"Não"} onClick={fechar} disabled={loading}/>
+                        <Button className="rr-btn rr-btn-confirmar" texto={loading ? "Salvando..." : "Sim"} onClick={confirmar} disabled={loading}/>
+                    </div>
+
+                </div>
             </div>
-        )
+        );
     }
 
     return (
