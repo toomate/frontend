@@ -25,9 +25,9 @@ import { ehAdmin, limparSessaoAutenticacao } from "../../utils/sessao";
 import config from "../../config";
 import "./HamburgerButton.css";
 
-// Dashboard "Visao Cliente" no Grafana (mesma infra, porta 3001).
+// Dashboard no Grafana (mesma infra, porta 3001 via GRAFANA_URL).
 // kiosk: abre so o painel, sem a navbar/sidebar do Grafana.
-const URL_DASHBOARD_GRAFANA = `${config.GRAFANA_URL}/d/visao-cliente?kiosk`;
+const URL_DASHBOARD_GRAFANA = `${config.GRAFANA_URL}/d/dash-insights?kiosk`;
 
 const secoesMenu = [
   { id: "home", titulo: "Home", to: "/dashboard", icone: Home },
