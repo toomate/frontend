@@ -363,6 +363,27 @@
     background: #f7c1c1;
 }
 
+@media (max-width: 1024px) {
+    .rotinas-container-geral {
+        min-height: auto;
+    }
+
+    .rotina-toolbar {
+        width: 98%;
+        flex-wrap: wrap;
+    }
+
+    .rotinas-linhas {
+        grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+        gap: 18px;
+    }
+
+    .rotina-container {
+        width: 100%;
+        min-height: auto;
+    }
+}
+
 @media (max-width: 480px) {
     .rr-overlay {
         align-items: flex-end;
