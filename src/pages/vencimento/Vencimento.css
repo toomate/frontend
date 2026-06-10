@@ -1,4 +1,3 @@
-
 .vencimento-container {
     background-image: url("../../images/fundo-tela.png");
     background-size: cover;
@@ -46,6 +45,7 @@
     box-shadow: 0 8px 20px rgba(21, 35, 61, 0.08);
     font-size: 14px;
     color: #6b4423;
+    box-sizing: border-box;
 }
 
 .vencimento-filtro-banner strong {
@@ -64,6 +64,8 @@
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
     transition: background 0.15s ease, color 0.15s ease;
 }
 
@@ -79,16 +81,19 @@
     width: 95%;
     padding: 0;
     gap: 30px;
+    flex-wrap: wrap;
 }
 
 .kpi-container-interior .card {
-    min-width: 180px;
+    min-width: 160px;
+    flex: 1 1 160px;
     padding: 18px 22px;
     border-radius: 18px;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(245, 247, 250, 0.98));
     box-shadow: 0 18px 40px rgba(21, 35, 61, 0.12);
     border: 1px solid rgba(255, 255, 255, 0.72);
     backdrop-filter: blur(10px);
+    box-sizing: border-box;
 }
 
 .kpi-container-interior .card span:first-child {
@@ -150,19 +155,21 @@
     color: #854d0e;
 }
 
+/* ── TABELA ── */
+
 .tabela-container {
     display: flex;
     background: rgba(255, 255, 255, 0.94);
     align-items: center;
-    min-height: 50vh;
     height: auto;
-    width: min(100%);
-    max-height: calc(100vh - 240px);
+    width: min(92%, 1360px);
+    max-width: 100%;
     flex-direction: column;
     margin: 0 auto 12px;
     border-radius: 18px;
     box-shadow: 0 20px 55px rgba(20, 31, 52, 0.15);
     overflow: hidden;
+    box-sizing: border-box;
 }
 
 .tabela-container .elemento-container {
@@ -170,7 +177,8 @@
 }
 
 .tabela-container .linha-estoque {
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 2fr 1.5fr 1fr 1.5fr 1fr 1.2fr;
+    min-width: 0;
 }
 
 .tabela-insumo-container {
@@ -183,19 +191,22 @@
     border: none;
     height: auto;
     margin-top: 5px;
+    overflow-x: auto;
     overflow-y: auto;
     max-height: 56vh;
-    }
+}
 
 .tabela-container .linha-tabela {
     font-size: 15px;
     font-weight: 600;
-    line-height: 0.8
+    line-height: 1.1;
 }
 
 .tabela-container #vencido {
     background: linear-gradient(90deg, rgba(255, 202, 202, 0.72), rgba(255, 255, 255, 0.96));
 }
+
+/* ── BADGES ── */
 
 .badge-status {
     display: inline-flex;
@@ -247,6 +258,8 @@
     background: rgba(243, 247, 252, 0.9);
 }
 
+/* ── PAGINAÇÃO ── */
+
 .tabela-paginacao {
     display: flex;
     align-items: center;
@@ -256,6 +269,8 @@
     padding: 16px 20px 20px;
     border-top: 1px solid rgba(148, 163, 184, 0.2);
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(248, 250, 252, 0.96));
+    box-sizing: border-box;
+    flex-wrap: wrap;
 }
 
 .tabela-paginacao-resumo {
@@ -268,6 +283,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
+    flex-wrap: wrap;
 }
 
 .tabela-paginacao-pagina {
@@ -299,26 +315,54 @@
     opacity: 0.45;
 }
 
-/* ── 768 ── */
+/* ── 1024px (tablets landscape) ── */
+@media (max-width: 1024px) {
+    .tabela-container {
+        width: 96%;
+    }
+
+    .kpi-container-interior {
+        width: 96%;
+    }
+
+    .vencimento-filtro-banner {
+        width: 96%;
+    }
+
+    .kpi-container-interior .numero {
+        font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+    }
+}
+
+/* ── 768px (tablets portrait) ── */
 @media (max-width: 768px) {
     .kpi-container {
         padding: 0 10px 18px;
         height: auto;
+        width: 100%;
     }
 
     .kpi-container-interior {
         height: 100%;
+        width: 100%;
         padding: 16px 0;
         gap: 12px;
         flex-wrap: wrap;
         min-height: unset;
     }
 
+    .vencimento-filtro-banner {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
     .tabela-container {
-        width: 95%;
+        width: 100%;
         height: auto;
-        overflow: hidden;
         margin: 8px auto 20px;
+        border-radius: 14px;
+        overflow: hidden;
     }
 
     .tabela-container .linha-estoque.elemento-container {
@@ -328,7 +372,8 @@
     .tabela-interior {
         height: auto;
         min-height: 0;
-        overflow: visible;
+        overflow-x: hidden;
+        overflow-y: visible;
         max-height: none;
         padding: 0 12px 12px;
         gap: 12px;
@@ -337,15 +382,24 @@
     }
 
     .kpi-container-interior .card {
-        min-width: 140px;
-        flex: 1 1 160px;
-        padding: 16px 18px;
+        min-width: 130px;
+        flex: 1 1 140px;
+        padding: 14px 16px;
+    }
+
+    .kpi-container-interior .numero {
+        font-size: clamp(1.5rem, 6vw, 2rem);
     }
 
     .tabela-paginacao {
         flex-direction: column;
         align-items: stretch;
         padding: 14px 16px 16px;
+        gap: 10px;
+    }
+
+    .tabela-paginacao-resumo {
+        text-align: center;
     }
 
     .tabela-paginacao-acoes {
@@ -354,21 +408,30 @@
     }
 }
 
+/* ── 480px (mobile) ── */
 @media (max-width: 480px) {
     .vencimento-container {
         padding: 0;
         overflow-x: hidden;
     }
 
+    .kpi-container {
+        padding: 0 8px 14px;
+    }
 
     .kpi-container-interior .status {
         width: 100%;
         gap: 10px;
     }
 
+    .kpi-container-interior .card {
+        min-width: 120px;
+        flex: 1 1 120px;
+    }
+
     .tabela-container {
         width: 100%;
-        border-radius: 14px;
+        border-radius: 12px;
     }
 
     .tabela-interior {
@@ -376,11 +439,12 @@
     }
 
     .kpi-container-interior .numero {
-        font-size: 2rem;
+        font-size: 1.8rem;
     }
 
     .botao-paginacao {
-        width: 100%;
+        flex: 1 1 auto;
+        min-width: 90px;
     }
 
     .tabela-paginacao-acoes {
@@ -390,6 +454,11 @@
 
     .tabela-paginacao-pagina,
     .tabela-paginacao-resumo {
-        font-size: 0.95rem;
+        font-size: 0.9rem;
+    }
+
+    .vencimento-filtro-banner {
+        font-size: 13px;
+        padding: 8px 12px;
     }
 }
