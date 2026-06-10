@@ -2,7 +2,7 @@ const CHANNEL_NAME = "sse_channel";
 const LEADER_KEY = "sse_leader";
 const HEARTBEAT_KEY = "sse_heartbeat";
 const NOTIFICATIONS_KEY = "sse_notifications";
-const SSE_URL = import.meta.env.VITE_SSE_URL;
+const SSE_PROXY_BASE = "/sse";
 
 function getAuthToken() {
   return (
@@ -74,13 +74,13 @@ function getNotificationType(notification) {
 
   switch (prefix) {
     case "e":
-      return { key: "estoque", title: "Estoque" };
+      return { key: "estoque", title: "Estoque " };
     case "b":
-      return { key: "boleto", title: "Boleto" };
+      return { key: "boleto", title: "Boleto " };
     case "v":
-      return { key: "validade", title: "Validade" };
+      return { key: "validade", title: "Validade " };
     default:
-      return { key: "outro", title: "Notificação" };
+      return { key: "outro", title: "Notificação 🔔" };
   }
 }
 
@@ -150,7 +150,7 @@ function normalizeStoredNotifications(list) {
 
 class sseManager {
   constructor() {
-    this.channel = new BroadcastChannel(SSE_URL);
+    this.channel = new BroadcastChannel(CHANNEL_NAME);
     this.eventSource = null;
     this.isLeader = false;
     this.listeners = [];
@@ -252,8 +252,7 @@ class sseManager {
     }
 
     console.log("Iniciando SSE para clienteId:", clientId);
-    const sseUrlWithClient = `${SSE_URL.replace(/\/$/, "")}/conectar/${encodeURIComponent(clientId)}`;
-    console.log("URL SSE:", sseUrlWithClient);
+    const sseUrlWithClient = `${SSE_PROXY_BASE}/conectar/${encodeURIComponent(clientId)}`;
 
     this.eventSource = new EventSource(sseUrlWithClient);
 
@@ -352,9 +351,7 @@ handleIncomingData(rawData) {
     }
 
     const token = getAuthToken();
-    const endpoint = `${SSE_URL.replace(/\/$/, "")}/deletar/${encodeURIComponent(
-      idInsumo
-    )}`;
+    const endpoint = `${SSE_PROXY_BASE}/deletar/${encodeURIComponent(idInsumo)}`;
 
 
     const response = await fetch(endpoint, {
@@ -418,7 +415,7 @@ handleIncomingData(rawData) {
     // Tenta persistir no servidor, mas não bloqueia a atualização local.
     try {
       const token = getAuthToken();
-      const endpoint = `${SSE_URL.replace(/\/$/, "")}/ler/${encodeURIComponent(id)}`;
+      const endpoint = `${SSE_PROXY_BASE}/ler/${encodeURIComponent(id)}`;
       await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -450,10 +447,9 @@ handleIncomingData(rawData) {
       console.warn("Falha ao salvar notificacoes apos marcar como lidas:", err);
     }
 
-    // Persistir no servidor em background
     try {
       const token = getAuthToken();
-      const base = SSE_URL.replace(/\/$/, "");
+      const base = SSE_PROXY_BASE;
       idsToMark.forEach((id) => {
         const endpoint = `${base}/ler/${encodeURIComponent(id)}`;
         fetch(endpoint, {
