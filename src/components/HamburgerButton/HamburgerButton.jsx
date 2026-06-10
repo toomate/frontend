@@ -26,8 +26,11 @@ import config from "../../config";
 import "./HamburgerButton.css";
 
 // Dashboard no Grafana (mesma infra, porta 3001 via GRAFANA_URL).
-// kiosk: abre so o painel, sem a navbar/sidebar do Grafana.
-const URL_DASHBOARD_GRAFANA = `${config.GRAFANA_URL}/d/dash-insights?kiosk`;
+// URL completa (slug + orgId + intervalo) que o Grafana renderiza corretamente
+// para o usuario anonimo. O /d/<uid> sozinho com ?kiosk nao estava renderizando.
+const URL_DASHBOARD_GRAFANA =
+  `${config.GRAFANA_URL}/d/dash-insights/exemplo-lotes-mysql` +
+  `?orgId=1&from=now-1y&to=now&timezone=browser`;
 
 const secoesMenu = [
   { id: "home", titulo: "Home", to: "/dashboard", icone: Home },

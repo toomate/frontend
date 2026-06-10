@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './boletoDetail.css';
-import { boletos as BoletosApi } from '../../provider/Api';
+import { boletos as BoletosApi, ArquivoApi } from '../../provider/Api';
 
 export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
   const [carregandoPorId, setCarregandoPorId] = useState({});
@@ -32,12 +32,14 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
         delete proximoEstado[boleto.id];
         return proximoEstado;
       });
+      return true;
     } catch (error) {
       console.error('Erro ao marcar boleto como pago:', error);
       setErroPorId((estadoAtual) => ({
         ...estadoAtual,
         [boleto.id]: 'Não foi possível atualizar o boleto.',
       }));
+      return false;
     } finally {
       setCarregandoPorId((estadoAtual) => ({
         ...estadoAtual,
@@ -58,7 +60,21 @@ export default function BoletoDetail({ boletos, onClose, onStatusAtualizado }){
       [boleto.id]: arquivo.name,
     }));
 
-    await marcarComoPago(boleto);
+    const pagou = await marcarComoPago(boleto);
+
+    // Sobe o comprovante do pagamento (best-effort: o boleto ja foi quitado)
+    if (pagou) {
+      try {
+        await ArquivoApi.cadastrarComprovante({
+          arquivo,
+          idEntidade: Number(boleto.id),
+          tipoEntidade: 'BOLETO',
+          categoria: 'PAGAMENTO',
+        });
+      } catch (erroUpload) {
+        console.error('Boleto pago, mas o comprovante nao pode ser enviado:', erroUpload);
+      }
+    }
   }
 
   function abrirPagamento(boleto) {
