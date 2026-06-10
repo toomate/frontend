@@ -8,7 +8,7 @@ const config = {
     GRAFANA_URL:
       window.env?.GRAFANA_URL ||
       window.GRAFANA_URL ||
-      "http://174.129.125.107:3001"
+      "http://localhost:3001"
 }
 
 export default config

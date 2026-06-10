@@ -295,7 +295,6 @@ export default function AdminComprovantes() {
     <section className="admin-card admin-comprovantes-card">
       <header className="admin-comprovantes-header">
         <h2>Comprovantes</h2>
-        <p>Notas fiscais de compra e comprovantes de fiado (consumo e pagamento).</p>
       </header>
 
       {/* Abas principais */}
