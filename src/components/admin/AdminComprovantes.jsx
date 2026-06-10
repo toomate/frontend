@@ -13,12 +13,14 @@ const CONFIG_CATEGORIA = {
 const ABAS = [
   { id: "compra", rotulo: "Compra (Nota Fiscal)" },
   { id: "fiado", rotulo: "Fiado" },
+  { id: "boletos", rotulo: "Boletos" },
 ];
 
 function abaDoComprovante(comprovante) {
   const tipo = String(comprovante.tipoEntidade ?? "").toLowerCase();
   if (tipo === "divida") return "fiado";
   if (tipo === "lote") return "compra";
+  if (tipo === "boleto") return "boletos";
   return "outros";
 }
 
@@ -206,7 +208,7 @@ export default function AdminComprovantes() {
   }, [comprovanteAberto]);
 
   const contagensAba = useMemo(() => {
-    const total = { compra: 0, fiado: 0, outros: 0 };
+    const total = { compra: 0, fiado: 0, boletos: 0, outros: 0 };
     comprovantes.forEach((c) => {
       const id = abaDoComprovante(c);
       total[id] = (total[id] ?? 0) + 1;
@@ -282,9 +284,12 @@ export default function AdminComprovantes() {
     setGruposFechados({});
   }
 
-  const placeholderBusca = ehFiado
-    ? "Buscar por cliente ou pedido..."
-    : "Buscar por insumo, marca ou fornecedor...";
+  const placeholderBusca =
+    aba === "fiado"
+      ? "Buscar por cliente ou pedido..."
+      : aba === "boletos"
+        ? "Buscar por descrição ou categoria..."
+        : "Buscar por insumo, marca ou fornecedor...";
 
   return (
     <section className="admin-card admin-comprovantes-card">
