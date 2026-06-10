@@ -101,6 +101,10 @@
   .restaurante-subnome {
     font-size: 12px;
   }
+
+  .lado-direito {
+    flex-direction: row;
+  }
 }
 
 @media (max-width: 768px) {
