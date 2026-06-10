@@ -206,6 +206,31 @@
   cursor: pointer;
 }
 
+@media (max-width: 900px) {
+  .auth-page {
+    padding: 18px;
+  }
+
+  .auth-card,
+  .auth-card-register,
+  .auth-card-cadastro {
+    width: min(100%, 470px);
+  }
+
+  .auth-input-wrap {
+    width: 100%;
+  }
+
+  .auth-actions {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .auth-actions .auth-submit {
+    flex: 1 1 100%;
+  }
+}
+
 @media (max-width: 600px) {
   .auth-page {
     padding: 16px;

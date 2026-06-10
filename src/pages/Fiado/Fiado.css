@@ -518,6 +518,20 @@ display: flex;
   background: #8a5a30;
 }
 
+@media (max-width: 1024px) {
+  .fiado-page {
+    background-attachment: scroll;
+  }
+
+  .fiado-filtros {
+    align-items: stretch;
+  }
+
+  .fiado-cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 /* ===== Responsivo: Tablets ===== */
 @media (max-width: 64em) {
   .fiado-filtros {
@@ -539,27 +553,64 @@ display: flex;
 /* ===== Responsivo: Mobile ===== */
 @media (max-width: 48em) {
   .fiado-filtros {
+    display: flex;
     flex-wrap: wrap;
-    gap: 0.5em;
+    align-items: stretch;
+    gap: 0.4em;
     padding: 2.5% 3%;
+    overflow: visible;
   }
 
   .filtro-btn {
-    flex: 1 1 auto;
+    flex: 1 1 calc(33.333% - 0.4em);
     min-width: 0;
     justify-content: center;
+    font-size: 0.78rem;
+    padding-inline: 0.45em;
+    white-space: nowrap;
   }
 
-  .add-btn {
-    flex: 0 0 auto;
+  .fiado-filtro-container {
+    flex: 1 1 0;
+    min-width: 0;
+    order: 1;
+  }
+
+  .fiado-filtro-toggle {
+    width: 100%;
+    min-width: 0;
+    font-size: 0.78rem;
+    padding-inline: 0.45em;
+  }
+
+  .view-toggle {
+    display: flex;
+    flex: 1 1 0;
+    min-width: 0;
+    order: 2;
+    gap: 0.35em;
+  }
+
+  .view-toggle-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    justify-content: center;
+    font-size: 0.82rem;
+  }
+
+  .fiado-filtros > .view-toggle-btn:last-of-type {
+    flex: 1 1 0;
+    min-width: 0;
+    width: auto;
   }
 
   .fiado-search-wrapper {
+    width: 100%;
     max-width: 100%;
     min-width: 100%;
     flex-basis: 100%;
-    order: 10;
-    margin-top: 0.5em;
+    order: 3;
+    margin-top: 0.35em;
   }
 
   .fiado-cards-grid {

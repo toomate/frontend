@@ -15,6 +15,8 @@ FROM nginx:stable-alpine
 COPY --from=builder /app/dist /usr/share/nginx/html
 COPY public/config.js /usr/share/nginx/html/config.js
 
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
