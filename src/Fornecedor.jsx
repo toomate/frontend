@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SearchX, TriangleAlert, Trash2, Save } from "lucide-react";
 import HeaderPadrao from "./HeaderPadrao";
@@ -61,6 +61,14 @@ function mapearFornecedor(item) {
   };
 }
 
+function normalizarTexto(valor) {
+  return String(valor ?? "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .trim();
+}
+
 
 export default function Fornecedor() {
   const navigate = useNavigate();
@@ -70,7 +78,6 @@ export default function Fornecedor() {
   const [categoriasSelecionadas, setCategoriasSelecionadas] = useState([]);
   const [fornecedoresSelecionados, setFornecedoresSelecionados] = useState([]);
   const [paginaAtual, setPaginaAtual] = useState(0);
-  const [totalPaginas, setTotalPaginas] = useState(0);
   const [ordenacao, setOrdenacao] = useState("alfabetica");
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState("");
@@ -118,9 +125,9 @@ export default function Fornecedor() {
       let itens;
 
       if (categoriasSelecionadas.length === 0) {
-        const response = await FornecedorApi.listar({pagina: paginaAtual});
+        // Carrega todos; busca, filtro de fornecedor e paginação são feitos no cliente.
+        const response = await FornecedorApi.listar({ tamanho: 999 });
         itens = Array.isArray(response) ? response : response?.conteudo ?? response?.fornecedores ?? [];
-        setTotalPaginas(response.totalPaginas)
       } else {
         const respostas = await Promise.all(
           categoriasSelecionadas.map((id) => FornecedorApi.listarPorCategoria(id, { tamanho: 999 }))
@@ -144,7 +151,7 @@ export default function Fornecedor() {
     } finally {
       setCarregando(false);
     }
-  }, [categoriasSelecionadas, paginaAtual]);
+  }, [categoriasSelecionadas]);
 
   useEffect(() => {
     carregarCategorias();
@@ -152,7 +159,44 @@ export default function Fornecedor() {
 
   useEffect(() => {
     carregarFornecedores();
-  }, [carregarFornecedores, paginaAtual]);
+  }, [carregarFornecedores]);
+
+  // Aplica busca, filtro de fornecedor e ordenação sobre a lista carregada.
+  const fornecedoresFiltrados = useMemo(() => {
+    const termo = normalizarTexto(busca);
+    let lista = fornecedores;
+
+    if (fornecedoresSelecionados.length > 0) {
+      lista = lista.filter((f) => fornecedoresSelecionados.includes(f.id));
+    }
+
+    if (termo) {
+      lista = lista.filter((f) => normalizarTexto(f.razaoSocial).includes(termo));
+    }
+
+    const ordenada = [...lista].sort((a, b) =>
+      String(a.razaoSocial).localeCompare(String(b.razaoSocial), "pt-BR")
+    );
+    if (ordenacao === "alfabetica_desc") ordenada.reverse();
+
+    return ordenada;
+  }, [fornecedores, fornecedoresSelecionados, busca, ordenacao]);
+
+  const totalPaginas = Math.max(1, Math.ceil(fornecedoresFiltrados.length / ITENS_POR_PAGINA));
+
+  const fornecedoresPagina = useMemo(
+    () =>
+      fornecedoresFiltrados.slice(
+        paginaAtual * ITENS_POR_PAGINA,
+        paginaAtual * ITENS_POR_PAGINA + ITENS_POR_PAGINA
+      ),
+    [fornecedoresFiltrados, paginaAtual]
+  );
+
+  // Volta pra primeira página sempre que um filtro/busca muda.
+  useEffect(() => {
+    setPaginaAtual(0);
+  }, [busca, fornecedoresSelecionados, categoriasSelecionadas, ordenacao]);
 
   useEffect(() => {
     return () => {
@@ -349,9 +393,9 @@ export default function Fornecedor() {
 
           {carregando ? (
             <p className="fornecedores-mensagem">Carregando fornecedores...</p>
-          ) : fornecedores.length > 0 ? (
+          ) : fornecedoresFiltrados.length > 0 ? (
             <section className="fornecedores-grid">
-              {fornecedores.map((fornecedor) => (
+              {fornecedoresPagina.map((fornecedor) => (
                 <FornecedorCard
                   key={fornecedor.id ?? fornecedor.razaoSocial}
                   fornecedor={fornecedor}
