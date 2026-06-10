@@ -30,7 +30,7 @@ import "./HamburgerButton.css";
 // para o usuario anonimo. O /d/<uid> sozinho com ?kiosk nao estava renderizando.
 const URL_DASHBOARD_GRAFANA =
   `${config.GRAFANA_URL}/d/dash-insights/exemplo-lotes-mysql` +
-  `?orgId=1&from=now-1y&to=now&timezone=browser&kiosk`;
+  `?orgId=1&from=now-1y&to=now&timezone=browser`;
 
 const secoesMenu = [
   { id: "home", titulo: "Home", to: "/dashboard", icone: Home },
