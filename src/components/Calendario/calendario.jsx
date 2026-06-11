@@ -203,7 +203,7 @@ useEffect(() => {
             className="ver-dia-btn-mobile"
             onClick={() => detalharPorData(event.start)}
           >
-            {eventosDoDia.length} boleto{eventosDoDia.length > 1 ? 's' : ''}
+            {eventosDoDia.length} 🧾{eventosDoDia.length > 1 ? '' : ''}
           </button>
         </div>
       );
