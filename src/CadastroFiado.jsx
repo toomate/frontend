@@ -71,6 +71,9 @@ export default function CadastroFiado() {
 
     const nome = String(novoCliente.nome ?? "").trim();
     const telefone = String(novoCliente.telefone ?? "").trim();
+    const cep = String(novoCliente.cep ?? "").trim();
+    const logradouro = String(novoCliente.logradouro ?? "").trim();
+    const bairro = String(novoCliente.bairro ?? "").trim();
 
     if (!nome) {
       setErroModalCliente("Informe o nome do cliente.");
@@ -82,13 +85,22 @@ export default function CadastroFiado() {
       return;
     }
 
+    // CEP é opcional, mas se preenchido precisa estar no formato 00000-000
+    if (cep && !/^\d{5}-\d{3}$/.test(cep)) {
+      setErroModalCliente("CEP inválido. Use o formato 00000-000.");
+      return;
+    }
+
     try {
       setIsCadastrandoCliente(true);
 
-      const clienteCriado = await clientes.criar({
-        nome,
-        telefone,
-      });
+      // Envia só os campos de endereço preenchidos (vazio quebraria a validação do CEP)
+      const payloadCliente = { nome, telefone };
+      if (cep) payloadCliente.cep = cep;
+      if (logradouro) payloadCliente.logradouro = logradouro;
+      if (bairro) payloadCliente.bairro = bairro;
+
+      const clienteCriado = await clientes.criar(payloadCliente);
 
       const clientesAtualizados = await clientes.listar();
 
@@ -455,6 +467,52 @@ function adicionarPedido() {
                 setNovoCliente((prev) => ({
                   ...prev,
                   telefone: e.target.value,
+                }))
+              }
+            />
+
+            <input
+              className="modal-input"
+              type="text"
+              placeholder="CEP (00000-000)"
+              inputMode="numeric"
+              maxLength={9}
+              value={novoCliente.cep}
+              onChange={(e) => {
+                const digitos = e.target.value.replace(/\D/g, "").slice(0, 8);
+                const cepFormatado =
+                  digitos.length > 5
+                    ? `${digitos.slice(0, 5)}-${digitos.slice(5)}`
+                    : digitos;
+                setNovoCliente((prev) => ({
+                  ...prev,
+                  cep: cepFormatado,
+                }));
+              }}
+            />
+
+            <input
+              className="modal-input"
+              type="text"
+              placeholder="Logradouro"
+              value={novoCliente.logradouro}
+              onChange={(e) =>
+                setNovoCliente((prev) => ({
+                  ...prev,
+                  logradouro: e.target.value,
+                }))
+              }
+            />
+
+            <input
+              className="modal-input"
+              type="text"
+              placeholder="Bairro"
+              value={novoCliente.bairro}
+              onChange={(e) =>
+                setNovoCliente((prev) => ({
+                  ...prev,
+                  bairro: e.target.value,
                 }))
               }
             />
