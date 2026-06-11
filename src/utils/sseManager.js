@@ -282,6 +282,10 @@ class sseManager {
           setTimeout(() => this.startSSE(), 3000);
         } else {
           console.error("SSE reconexão falhou após várias tentativas.");
+          setTimeout(() => {
+              this.reconnectAttempts = 0;
+              this.startSSE();
+              }, 60000);
         }
         return;
       }
