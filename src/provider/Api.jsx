@@ -800,6 +800,7 @@ export class Rotinas {
 
   static async mostrarPreview(id) {
     try {
+      console.log("id recebido", id)
       const response = await requestComFallback({
         method: "get",
         url: `/rotinas/${id}/preview`

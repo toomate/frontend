@@ -1,4 +1,4 @@
-import { ArrowDown, ArrowLeft, ArrowUp, Save, SearchIcon, X, Package} from "lucide-react";
+import { ArrowDown, ArrowLeft, ArrowUp, Save, SearchIcon, X, Package } from "lucide-react";
 import { NavCategorias } from "./components/NavCategorias/NavCategorias";
 import RotinaCard from "./components/RotinaCard/RotinaCard"
 import { Search } from "./components/Search/Search";
@@ -141,12 +141,13 @@ export default function Rotinas() {
                         ) : (
                             itensComLote.map((item) => (
                                 <div className="rr-card" key={item.insumoId}>
+                                    {console.log("item", item)}
 
                                     <div className="rr-card-header">
                                         <span className="rr-insumo-nome">{item.nomeInsumo}</span>
                                         <span className="rr-total">
+                                            Necessário retirar {item.quantidadeNecessaria}&nbsp;{item.unidadeMedida} do estoque
                                             <ArrowDown size={13} aria-hidden="true" />
-                                            {item.quantidadeNecessaria}&nbsp;{item.unidadeMedida} do estoque
                                         </span>
                                     </div>
 
@@ -161,7 +162,7 @@ export default function Rotinas() {
                                                     </span>
                                                 </div>
                                                 <span className="rr-lote-qtd">
-                                                    {lote.quantidadeConsumida}&nbsp;{lote.unidadeMedida}
+                                                    Estoque Atual: {lote.quantidadeConsumida}&nbsp;{lote.unidadeMedida}
                                                 </span>
                                             </div>
                                         ))}
@@ -173,8 +174,8 @@ export default function Rotinas() {
                     </div>
 
                     <div className="rr-footer">
-                        <Button className="rr-btn rr-btn-cancelar" texto={"Não"} onClick={fechar} disabled={loading}/>
-                        <Button className="rr-btn rr-btn-confirmar" texto={loading ? "Salvando..." : "Sim"} onClick={confirmar} disabled={loading}/>
+                        <Button className="rr-btn rr-btn-cancelar" texto={"Não"} onClick={fechar} disabled={loading} />
+                        <Button className="rr-btn rr-btn-confirmar" texto={loading ? "Salvando..." : "Sim"} onClick={confirmar} disabled={loading} />
                     </div>
 
                 </div>
