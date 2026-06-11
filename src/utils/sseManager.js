@@ -194,7 +194,7 @@ checkLeader() {
 
     if (!clientId) {
       console.warn("SSE nao iniciado: usuarioId ausente.");
-      timeout(() => this.startSSE(), 5000);
+      setTimeout(() => this.startSSE(), 5000);
       return;
     }
 
