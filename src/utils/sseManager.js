@@ -37,39 +37,6 @@ function saveNotifications(notifications) {
   }
 }
 
-function getNotificationIdentity(notification) {
-  if (!notification || typeof notification !== "object") return null;
-
-  const id = String(notification.id ?? "");
-  const group = id ? id[0].toLowerCase() : "o";
-  const body = notification.body ?? {};
-
-  const entityId =
-    body.insumoId ??
-    body.idInsumo ??
-    body.boletoId ??
-    body.idBoleto ??
-    body.fornecedorId ??
-    body.idFornecedor ??
-    body.id ??
-    body.nome;
-
-  if (entityId === undefined || entityId === null || entityId === "") {
-    return null;
-  }
-
-  return `${group}|${String(entityId)}`;
-}
-
-function getNotificationPayloadHash(notification) {
-  if (!notification || typeof notification !== "object") return null;
-
-  const id = String(notification.id ?? "");
-  const body = notification.body ?? {};
-
-  return `${id}|${JSON.stringify(body)}`;
-}
-
 function getNotificationType(notification) {
   const rawId = String(notification?.id ?? "").trim();
   const prefix = rawId[0]?.toLowerCase();
@@ -86,60 +53,34 @@ function getNotificationType(notification) {
   }
 }
 
-function getNotificationInsumoId(notification) {
-  if (!notification || typeof notification !== "object") return null;
-
-  const rawId = String(notification.id ?? "").trim();
-  if (rawId !== "") {
-    return rawId;
-  }
-
-  return null;
+function getNotificationId(notification) {
+  const id = String(notification?.id ?? "").trim();
+  return id !== "" ? id : null;
 }
 
 function upsertNotifications(currentList, incomingList) {
   const result = [...currentList];
   let changed = false;
 
-  incomingList.forEach((incoming) => {
-    if (!incoming || typeof incoming !== "object") return;
+  for (const incoming of incomingList) {
+    const incomingId = getNotificationId(incoming);
+    if (!incomingId) continue;
 
-    const incomingIdentity = getNotificationIdentity(incoming);
-    const incomingHash = getNotificationPayloadHash(incoming);
+    const existingIndex = result.findIndex(item => getNotificationId(item) === incomingId);
 
-    if (!incomingHash) return;
-
-    if (incomingIdentity) {
-      const existingIndex = result.findIndex(
-        (item) => getNotificationIdentity(item) === incomingIdentity
-      );
-
-      if (existingIndex >= 0) {
-        const existingHash = getNotificationPayloadHash(result[existingIndex]);
-        if (existingHash === incomingHash) {
-          return;
-        }
-
+    if (existingIndex >= 0) {
+      if (JSON.stringify(result[existingIndex]) !== JSON.stringify(incoming)) {
         result.splice(existingIndex, 1);
         result.unshift(incoming);
         changed = true;
-        return;
       }
     } else {
-      const alreadyExists = result.some(
-        (item) => getNotificationPayloadHash(item) === incomingHash
-      );
-      if (alreadyExists) {
-        return;
-      }
+      result.unshift(incoming);
+      changed = true;
     }
+  }
 
-    result.unshift(incoming);
-    changed = true;
-  });
-
-  const limited = result.slice(0, 50);
-  return { notifications: limited, changed };
+  return { notifications: result.slice(0, 50), changed };
 }
 
 function normalizeStoredNotifications(list) {
@@ -351,52 +292,33 @@ handleIncomingData(rawData) {
     this.listeners.forEach((cb) => cb(this.notifications));
   }
 
-  async deleteNotification(notification) {
-    const idInsumo = getNotificationInsumoId(notification);
-    if (!idInsumo) {
-      return false;
-    }
+async deleteNotification(notification) {
+  const id = getNotificationId(notification);
+  if (!id) return false;
 
-    const token = getAuthToken();
-    const endpoint = `${baseURL}deletar/${encodeURIComponent(idInsumo)}`;
+  const token = getAuthToken();
+  const response = await fetch(`${baseURL}deletar/${encodeURIComponent(id)}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
+  });
 
-
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`Falha ao remover notificacao (${response.status}).`);
-    }
-
-    const identityToRemove = getNotificationIdentity(notification);
-    const nextNotifications = this.notifications.filter((item) => {
-      // Remove por identidade (categoria|entity) quando disponível
-      if (identityToRemove) {
-        return getNotificationIdentity(item) !== identityToRemove;
-      }
-
-      // Fallback: remove por id exato
-      if (String(item.id ?? "") === String(notification.id ?? "")) {
-        return false;
-      }
-
-      // Último fallback: comparar payload hash
-      return getNotificationPayloadHash(item) !== getNotificationPayloadHash(notification);
-    });
-
-    if (nextNotifications.length !== this.notifications.length) {
-      this.notifications = nextNotifications;
-      saveNotifications(this.notifications);
-      this.notifyListeners();
-    }
-
-    return true;
+  if (!response.ok) {
+    throw new Error(`Falha ao remover notificacao (${response.status}).`);
   }
+
+  const next = this.notifications.filter(item => getNotificationId(item) !== id);
+
+  if (next.length !== this.notifications.length) {
+    this.notifications = next;
+    saveNotifications(this.notifications);
+    this.notifyListeners();
+  }
+
+  return true;
+}
 
   async markAsRead(notificationOrId) {
     const id =
@@ -461,9 +383,6 @@ handleIncomingData(rawData) {
     return true;
   }
 
-  // =========================
-  // 🔴 CLEANUP
-  // =========================
 
   onUnload() {
     if (this.isLeader) {

@@ -61,14 +61,7 @@ export function getNotificationKey(message, index) {
 }
 
 export function canRemoveNotification(message) {
-  const idInsumo =
-    message?.body?.insumoId ??
-    message?.body?.idInsumo ??
-    message?.body?.fkInsumo ??
-    message?.body?.insumo?.idInsumo ??
-    message?.body?.insumo?.id ??
-    String(message?.id ?? "");
-  return idInsumo !== undefined && idInsumo !== null && String(idInsumo).trim() !== "";
+  return !!message?.id;
 }
 
 export default function NotificationsList({
