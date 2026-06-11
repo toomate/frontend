@@ -165,20 +165,23 @@ class sseManager {
     }, 2000);
   }
 
-  checkLeader() {
-    const heartbeat = localStorage.getItem(HEARTBEAT_KEY);
+checkLeader() {
+  const heartbeat = localStorage.getItem(HEARTBEAT_KEY);
 
-    if (!heartbeat) {
-      this.tryBecomeLeader();
-      return;
-    }
-
-    const diff = Date.now() - Number(heartbeat);
-
-    if (diff > 5000) {
-      this.becomeLeader();
-    }
+  if (!heartbeat) {
+    this.tryBecomeLeader();
+    return;
   }
+
+  const diff = Date.now() - Number(heartbeat);
+  if (diff > 5000) {
+    this.becomeLeader();
+  }
+
+  if (this.isLeader && !this.eventSource) {
+    this.startSSE();
+  }
+}
 
   // =========================
   // 🔵 SSE
@@ -191,7 +194,7 @@ class sseManager {
 
     if (!clientId) {
       console.warn("SSE nao iniciado: usuarioId ausente.");
-      
+      timeout(() => this.startSSE(), 5000);
       return;
     }
 
