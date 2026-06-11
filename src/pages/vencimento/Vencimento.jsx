@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { Cabecalho } from "../../components/Cabecalho/Cabecalho";
 import Kpi from "../../components/Kpi/Kpi";
 import LinhaTabela from "../../components/LinhaTabela/LinhaTabela";
+import SeletorPaginas from "../../components/Paginas/SeletorPaginas";
 import HeaderPadrao from "../../HeaderPadrao";
 import "./Vencimento.css"
 import { Vencimentos } from "../../provider/Api";
@@ -15,6 +16,7 @@ function normalizar(valor) {
         .replace(/[̀-ͯ]/g, "")
         .trim();
 }
+
 
 export default function Vencimento() {
     const [vencimento, setVencimento] = useState([])
@@ -28,9 +30,27 @@ export default function Vencimento() {
 
     const filtroInsumo = searchParams.get("insumo") ?? ""
 
+    const selecionarPag = (numPag) => {
+        setPaginaAtual(numPag);
+    }
+
+    const voltarPag = () => {
+        if (paginaAtual > 0) {
+            let pag = paginaAtual - 1;
+            setPaginaAtual(pag)
+        }
+    }
+
+    const avancarPag = () => {
+        if (paginaAtual < totalPaginas - 1) {
+            let pag = paginaAtual + 1;
+            setPaginaAtual(pag)
+        }
+    }
+
     const carregarVencimentos = useCallback(async (pagina = paginaAtual) => {
         const resposta = await Vencimentos.buscarEstoque({
-            pagina: Math.max(0, pagina - 1),
+            pagina: paginaAtual,
             tamanho: itensPorPagina,
         });
 
@@ -67,14 +87,13 @@ export default function Vencimento() {
             : Math.max(1, Math.ceil(vencimentoFiltrado.length / itensPorPagina))
 
         setPaginaAtual((paginaAnterior) => {
-            if (paginaAnterior > paginasCalculadas) {
-                return paginasCalculadas
+            if (paginaAnterior >= paginasCalculadas) {
+                return Math.max(0, paginasCalculadas - 1)
             }
 
-            if (paginaAnterior < 1) {
-                return 1
+            if (paginaAnterior < 0) {
+                return 0
             }
-
             return paginaAnterior
         })
     }, [vencimentoFiltrado, totalPaginas, usaPaginacaoServidor])
@@ -83,7 +102,7 @@ export default function Vencimento() {
         document.title = "Vencimentos";
       }, []);
 
-    const indiceInicial = (paginaAtual - 1) * itensPorPagina
+    const indiceInicial = paginaAtual * itensPorPagina
     const indiceFinal = indiceInicial + itensPorPagina
     const vencimentosPaginados = usaPaginacaoServidor
         ? vencimentoFiltrado
@@ -93,14 +112,19 @@ export default function Vencimento() {
         : vencimentoFiltrado.length > 0
 
     function irParaPagina(proximaPagina) {
-        setPaginaAtual(Math.min(Math.max(proximaPagina, 1), totalPaginas))
+        setPaginaAtual(
+            Math.min(
+                Math.max(proximaPagina, 0),
+                totalPaginas - 1
+            )
+        )
     }
 
     function limparFiltro() {
         const novosParams = new URLSearchParams(searchParams)
         novosParams.delete("insumo")
         setSearchParams(novosParams)
-        setPaginaAtual(1)
+        setPaginaAtual(0)
     }
 
     return (
@@ -140,25 +164,7 @@ export default function Vencimento() {
                                         : "Nenhum registro encontrado"}
                             </div>
                             <div className="tabela-paginacao-acoes">
-                                <button
-                                    type="button"
-                                    className="botao-paginacao"
-                                    onClick={() => irParaPagina(paginaAtual - 1)}
-                                    disabled={paginaAtual <= 1}
-                                >
-                                    Anterior
-                                </button>
-                                <span className="tabela-paginacao-pagina">
-                                    Página {paginaAtual} de {totalPaginas}
-                                </span>
-                                <button
-                                    type="button"
-                                    className="botao-paginacao"
-                                    onClick={() => irParaPagina(paginaAtual + 1)}
-                                    disabled={paginaAtual >= totalPaginas}
-                                >
-                                    Próxima
-                                </button>
+                                <SeletorPaginas avancar={avancarPag} voltar={voltarPag} selecionar={selecionarPag} paginaSelecionada={paginaAtual} numPages={totalPaginas} />
                             </div>
                         </div>
                     </div>
