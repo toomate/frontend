@@ -278,7 +278,7 @@ export default function Boletos() {
               }
             >
             <CalendarDays size={20} />
-            <h3>Painel</h3>
+            <h4>Calendário</h4>
             </button>
               <button className="view-toggle-btn" 
               onClick={() => navigate("/cadastro-boleto")}>
