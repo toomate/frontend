@@ -29,8 +29,8 @@ import "./HamburgerButton.css";
 // URL completa (slug + orgId + intervalo) que o Grafana renderiza corretamente
 // para o usuario anonimo. O /d/<uid> sozinho com ?kiosk nao estava renderizando.
 const URL_DASHBOARD_GRAFANA =
-  `${config.GRAFANA_URL}/d/dash-insights/exemplo-lotes-mysql` +
-  `?orgId=1&from=now-1y&to=now&timezone=browser`;
+  `${config.GRAFANA_URL}/d/restaurante-recomendacoes-estoque-v2/recomendacoes-de-estoque-e28094-restaurante-v2` +
+  `?orgId=1&from=now-6M&to=now&timezone=America%2FSao_Paulo&refresh=5m`;
 
 const secoesMenu = [
   { id: "home", titulo: "Home", to: "/dashboard", icone: Home },
