@@ -7,6 +7,17 @@
   margin-bottom: 10px;
 }
 
+.fornecedores-bloco-paginacao {
+  display: flex;
+  justify-content: center;
+  padding: 8px 16px 20px;
+}
+
+.fornecedores-paginacao {
+  display: flex;
+  justify-content: center;
+}
+
 
 html, body, #root {
   width: 100%;
@@ -27,13 +38,20 @@ html, body, #root {
 
 .fornecedores-content {
   width: 100%;
+  max-width: 1200px;
 
   margin: 0 auto;
-  padding: 10px 16px 0;
+  padding: 16px 16px 28px;
 
   box-sizing: border-box;
   background: transparent;
   min-height: 80vh;
+}
+
+@media (min-width: 768px) {
+  .fornecedores-content {
+    padding: 20px 24px 32px;
+  }
 }
 
 .fornecedores-toast {
@@ -269,14 +287,14 @@ html, body, #root {
   /* Fluido: 1 coluna no mobile, mais conforme a largura cresce. */
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
 
-  gap: 12px;
+  gap: 14px;
 }
 
 .fornecedor-card {
   background: #ffffff;
   border: 1px solid #d9bf80;
   border-radius: 12px;
-  padding: 12px;
+  padding: 14px 16px;
   min-height: 95px;
   display: flex;
   flex-direction: column;
