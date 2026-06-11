@@ -7,17 +7,6 @@
   margin-bottom: 10px;
 }
 
-.fornecedores-bloco-paginacao {
-  display: flex;
-  justify-content: center;
-  padding: 8px 16px 20px;
-}
-
-.fornecedores-paginacao {
-  display: flex;
-  justify-content: center;
-}
-
 
 html, body, #root {
   width: 100%;
@@ -28,7 +17,7 @@ html, body, #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow: hidden;
 
   background-image: url(./images/fundo-tela.png);
   background-position: center center;
@@ -38,20 +27,13 @@ html, body, #root {
 
 .fornecedores-content {
   width: 100%;
-  max-width: 1200px;
 
   margin: 0 auto;
-  padding: 16px 16px 28px;
+  padding: 10px 16px 0;
 
   box-sizing: border-box;
   background: transparent;
   min-height: 80vh;
-}
-
-@media (min-width: 768px) {
-  .fornecedores-content {
-    padding: 20px 24px 32px;
-  }
 }
 
 .fornecedores-toast {
@@ -80,16 +62,19 @@ html, body, #root {
 
 .fornecedores-toolbar {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 10px;
-  margin: 0 auto 12px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin: 0 auto 10px auto;
 }
 
 .fornecedores-toolbar-esquerda {
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 .fornecedores-toolbar-direita {
@@ -108,8 +93,8 @@ html, body, #root {
   background: white;
   color: black;
   cursor: pointer;
-  width: 100%;
-  height: 42px;
+  width: 220px;
+  height: 34px;
   margin-top: 0;
   padding: 0 10px;
   font-size: 14px;
@@ -138,8 +123,9 @@ html, body, #root {
   color: black;
   background: white;
   font-size: 14px;
-  height: 42px;
-  width: 100%;
+  height: 34px;
+  width: 130px;
+  flex-shrink: 0;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s ease;
@@ -156,20 +142,20 @@ html, body, #root {
 }
 
 .fornecedores-busca {
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 42px;
+  height: 38px;
   border: 1px solid #ccc;
   border-radius: 6px;
   background: white;
   padding: 0 12px;
-  margin-bottom: 0;
+  margin-bottom: 5px;
 }
 
 .fornecedores-busca .search {
-  width: 100%;
+  width: 350px;
   height: 35px;
   border: none;
   background: transparent;
@@ -196,14 +182,12 @@ html, body, #root {
 
 .filtro-categoria-container {
   position: relative;
-  margin: 0;
-  display: block;
-  width: 100%;
+  margin: 6px 0 12px;
+  display: inline-block;
 }
 
 .filtro-categoria-toggle {
-  height: 42px;
-  width: 100%;
+  height: 36px;
   border: 1px solid #ccc;
   border-radius: 8px;
   background: white;
@@ -215,7 +199,7 @@ html, body, #root {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-width: 0;
+  min-width: 200px;
   justify-content: space-between;
   transition: border-color 0.15s;
 }
@@ -284,17 +268,16 @@ html, body, #root {
   width: 100%;
 
   display: grid;
-  /* Fluido: 1 coluna no mobile, mais conforme a largura cresce. */
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
+  grid-template-columns: repeat(3, minmax(220px, 1fr));
 
-  gap: 14px;
+  gap: 12px;
 }
 
 .fornecedor-card {
   background: #ffffff;
   border: 1px solid #d9bf80;
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 12px;
   min-height: 95px;
   display: flex;
   flex-direction: column;
@@ -316,10 +299,9 @@ html, body, #root {
 }
 
 .fornecedor-card-topo h3 {
-  font-size: 16px;
+  font-size: 1p6x;
   margin: 0;
   color: #5a3519;
-  word-break: break-word;
 }
 
 .fornecedor-whatsapp {
@@ -431,49 +413,63 @@ html, body, #root {
   line-height: 1.5;
 }
 
-/* Desktop/tablet: toolbar em linha, controles com largura propria. */
-@media (min-width: 768px) {
+@media (max-width: 768px) {
   .fornecedores-toolbar {
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    align-items: stretch;
     gap: 12px;
   }
 
   .fornecedores-toolbar-esquerda {
-    flex-direction: row;
     flex-wrap: wrap;
+    gap: 8px;
   }
 
   .fornecedores-btn-add,
   .fornecedores-btn-add-categoria {
-    width: 200px;
-    height: 36px;
+    width: 100%;
+    height: 30px;
   }
 
   .fornecedores-select {
-    width: 140px;
-    height: 36px;
+    width: 100%;
     flex-shrink: 0;
   }
 
   .filtro-categoria-container {
-    display: inline-block;
-    width: auto;
+    display: block;
+    width: 100%;
+    margin: 0;
   }
 
   .filtro-categoria-toggle {
-    width: auto;
-    min-width: 200px;
-    height: 36px;
+    min-width: 0;
+    width: 100%;
+    justify-content: space-between;
   }
 
   .fornecedores-busca {
-    width: auto;
-    flex: 1 1 240px;
-    max-width: 380px;
-    height: 38px;
+    width: 100%;
+  }
+
+  .fornecedores-busca .search {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .fornecedores-toolbar {
+    gap: 8px;
+  }
+
+  .fornecedores-btn-add,
+  .fornecedores-btn-add-categoria {
+    height: 40px;
+  }
+
+  .filtro-categoria-toggle {
+    font-size: 13px;
+    padding: 0 10px;
   }
 }
 
@@ -619,10 +615,48 @@ html, body, #root {
   color: #4f4f4f;
 }
 
-/* Telas grandes: limita a densidade do grid pra cards nao ficarem largos demais. */
-@media (min-width: 1024px) {
+@media (max-width: 768px) {
+  .fornecedores-content {
+    padding: 16px;
+  }
+
+  .fornecedores-toolbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .filtro-categoria-toggle {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .fornecedores-busca {
+    order: 3;
+    width: 100%;
+    flex: unset;
+  }
+
+  .fornecedores-select {
+    width: auto;
+  }
+
   .fornecedores-grid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .fornecedores-toolbar {
+    gap: 6px;
+  }
+
+  .fornecedores-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filtro-categoria-toggle {
+    font-size: 13px;
+    padding: 0 10px;
   }
 }
 
