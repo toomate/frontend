@@ -250,11 +250,12 @@ class sseManager {
 
     if (!clientId) {
       console.warn("SSE nao iniciado: usuarioId ausente.");
+      
       return;
     }
 
     console.log("Iniciando SSE para clienteId:", clientId);
-    const sseUrlWithClient = `${VITE_SSE_URL_BASE}/conectar/${encodeURIComponent(clientId)}`;
+    const sseUrlWithClient = `${baseURL}conectar/${encodeURIComponent(clientId)}`;
 
     this.eventSource = new EventSource(sseUrlWithClient);
 
@@ -357,7 +358,7 @@ handleIncomingData(rawData) {
     }
 
     const token = getAuthToken();
-    const endpoint = `${VITE_SSE_URL_BASE}/deletar/${encodeURIComponent(idInsumo)}`;
+    const endpoint = `${baseURL}deletar/${encodeURIComponent(idInsumo)}`;
 
 
     const response = await fetch(endpoint, {
@@ -418,20 +419,7 @@ handleIncomingData(rawData) {
       console.warn("Falha ao marcar notificação como lida localmente:", err);
     }
 
-    // Tenta persistir no servidor, mas não bloqueia a atualização local.
-    try {
-      const token = getAuthToken();
-      const endpoint = `${VITE_SSE_URL_BASE}/ler/${encodeURIComponent(id)}`;
-      await fetch(endpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-      });
-    } catch (err) {
-      console.warn("Falha ao persistir leitura no servidor:", err);
-    }
+
 
     return true;
   }
@@ -455,7 +443,7 @@ handleIncomingData(rawData) {
 
     try {
       const token = getAuthToken();
-      const base = VITE_SSE_URL_BASE;
+      const base = baseURL;
       idsToMark.forEach((id) => {
         const endpoint = `${base}/ler/${encodeURIComponent(id)}`;
         fetch(endpoint, {
