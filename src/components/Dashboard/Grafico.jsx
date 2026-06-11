@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 
 export default function Grafico({ dados }) {
-  const ITEMS_PER_PAGE = 10;
+  const ITEMS_PER_PAGE = 8;
   const [currentPage, setCurrentPage] = useState(1);
 
   function calcularRazaoCriticidade(item) {
@@ -76,6 +76,9 @@ export default function Grafico({ dados }) {
     title: {
       text: "Estoque de Insumos (Atual x Mínimo esperado)",
       align: "center",
+      style: {
+        fontSize: '24px'
+      }
     },
     plotOptions: {
       bar: {
