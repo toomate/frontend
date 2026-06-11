@@ -14,7 +14,7 @@ export default function Fiado({ irPara }) {
   const [loading, setLoading] = useState(true);
   const [pesquisa, setPesquisa] = useState("");
   const [ordenacao, setOrdenacao] = useState({ tipo: null, direcao: "asc" });
-  const [filtroPagamento, setFiltroPagamento] = useState(["naoPago"]);
+  const [filtroPagamento, setFiltroPagamento] = useState([]);
   const [visualizacao, setVisualizacao] = useState("cards");
   const [fiadoSelecionado, setFiadoSelecionado] = useState(null);
 
