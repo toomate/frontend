@@ -40,8 +40,8 @@ jobs:
           username: ubuntu
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker pull lucaspaessptech/toomate:frontend
-            docker stop frontend || true
-            docker rm frontend || true
-            docker network create toomate_network || true
-            docker run --network toomate_network --env-file /etc/toomate/containers.env --name frontend -p 80:80 -d lucaspaessptech/toomate:frontend
+            sudo docker pull lucaspaessptech/toomate:frontend
+            sudo docker stop frontend || true
+            sudo docker rm frontend || true
+            sudo docker network create toomate_network || true
+            sudo docker run --network toomate_network --env-file /etc/toomate/containers.env --name frontend -p 80:80 -d lucaspaessptech/toomate:frontend
