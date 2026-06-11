@@ -132,7 +132,7 @@ export default function Index() {
 
   const cards = [
     { nome: "Produtos Abaixo do Estoque Min.", valor: kpisDados[0] },
-    { nome: "Deploy lucas", valor: kpisDados[1] },
+    { nome: "Produtos Perto da Data de Vencimento", valor: kpisDados[1] },
     { nome: "Boletos Próximo ao Vencimento", valor: kpisDados[2] },
     { nome: "Total de Clientes Devedores", valor: kpisDados[3] },
   ]

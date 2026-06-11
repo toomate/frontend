@@ -149,7 +149,7 @@ export default function Grafico({ dados }) {
           disabled={currentPage === 1}
           aria-label="Página anterior"
         >
-          ←
+          ⮜
         </button>
 
         <span className="chart-page-indicator">Página {currentPage} de {totalPages}</span>
@@ -161,7 +161,7 @@ export default function Grafico({ dados }) {
           disabled={currentPage === totalPages}
           aria-label="Próxima página"
         >
-          →
+          ⮞
         </button>
       </div>
     </div>
