@@ -231,7 +231,7 @@ export default function Fiado({ irPara }) {
   };
 
   // Marca todas as dívidas em aberto do cliente como pagas
-  const pagarTodas = async (idCliente) => {
+  const pagarTodas = async (idCliente, comprovantePagamento) => {
     const cliente = fiados.find((c) => c.idCliente === idCliente);
     const idsDividasEmAberto = (cliente?.dividas || [])
       .filter((divida) => !divida.pago)
@@ -241,6 +241,25 @@ export default function Fiado({ irPara }) {
 
     try {
       await Promise.all(idsDividasEmAberto.map((idDivida) => dividas.atualizarEstado(idDivida)));
+
+      // Sobe o comprovante de pagamento para cada dívida quitada (best-effort)
+      const arquivoPagamento = comprovantePagamento?.comprovante;
+      if (arquivoPagamento) {
+        await Promise.all(
+          idsDividasEmAberto.map(async (idDivida) => {
+            try {
+              await ArquivoApi.cadastrarComprovante({
+                arquivo: arquivoPagamento,
+                idEntidade: Number(idDivida),
+                tipoEntidade: "DIVIDA",
+                categoria: "PAGAMENTO",
+              });
+            } catch (erroUpload) {
+              console.error("Pagamento registrado, mas o comprovante não pôde ser enviado:", erroUpload);
+            }
+          })
+        );
+      }
 
       const agora = new Date().toISOString();
       setFiados((prev) => atualizarDividaNoEstado(prev, idCliente, idsDividasEmAberto, agora));
