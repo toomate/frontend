@@ -17,7 +17,7 @@ html, body, #root {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
 
   background-image: url(./images/fundo-tela.png);
   background-position: center center;
@@ -62,19 +62,16 @@ html, body, #root {
 
 .fornecedores-toolbar {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  margin: 0 auto 10px auto;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+  margin: 0 auto 12px;
 }
 
 .fornecedores-toolbar-esquerda {
   display: flex;
-  align-items: center;
-  justify-content: center;
-
+  flex-direction: column;
   gap: 8px;
-  flex-wrap: wrap;
 }
 
 .fornecedores-toolbar-direita {
@@ -93,8 +90,8 @@ html, body, #root {
   background: white;
   color: black;
   cursor: pointer;
-  width: 220px;
-  height: 34px;
+  width: 100%;
+  height: 42px;
   margin-top: 0;
   padding: 0 10px;
   font-size: 14px;
@@ -123,9 +120,8 @@ html, body, #root {
   color: black;
   background: white;
   font-size: 14px;
-  height: 34px;
-  width: 130px;
-  flex-shrink: 0;
+  height: 42px;
+  width: 100%;
   font-weight: 600;
   cursor: pointer;
   transition: border-color 0.15s ease;
@@ -142,20 +138,20 @@ html, body, #root {
 }
 
 .fornecedores-busca {
-  flex: 1;
+  width: 100%;
   display: flex;
   align-items: center;
   gap: 8px;
-  height: 38px;
+  height: 42px;
   border: 1px solid #ccc;
   border-radius: 6px;
   background: white;
   padding: 0 12px;
-  margin-bottom: 5px;
+  margin-bottom: 0;
 }
 
 .fornecedores-busca .search {
-  width: 350px;
+  width: 100%;
   height: 35px;
   border: none;
   background: transparent;
@@ -182,12 +178,14 @@ html, body, #root {
 
 .filtro-categoria-container {
   position: relative;
-  margin: 6px 0 12px;
-  display: inline-block;
+  margin: 0;
+  display: block;
+  width: 100%;
 }
 
 .filtro-categoria-toggle {
-  height: 36px;
+  height: 42px;
+  width: 100%;
   border: 1px solid #ccc;
   border-radius: 8px;
   background: white;
@@ -199,7 +197,7 @@ html, body, #root {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  min-width: 200px;
+  min-width: 0;
   justify-content: space-between;
   transition: border-color 0.15s;
 }
@@ -268,7 +266,8 @@ html, body, #root {
   width: 100%;
 
   display: grid;
-  grid-template-columns: repeat(3, minmax(220px, 1fr));
+  /* Fluido: 1 coluna no mobile, mais conforme a largura cresce. */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 240px), 1fr));
 
   gap: 12px;
 }
@@ -299,9 +298,10 @@ html, body, #root {
 }
 
 .fornecedor-card-topo h3 {
-  font-size: 1p6x;
+  font-size: 16px;
   margin: 0;
   color: #5a3519;
+  word-break: break-word;
 }
 
 .fornecedor-whatsapp {
@@ -413,63 +413,49 @@ html, body, #root {
   line-height: 1.5;
 }
 
-@media (max-width: 768px) {
+/* Desktop/tablet: toolbar em linha, controles com largura propria. */
+@media (min-width: 768px) {
   .fornecedores-toolbar {
-    flex-direction: column;
-    align-items: stretch;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
     gap: 12px;
   }
 
   .fornecedores-toolbar-esquerda {
+    flex-direction: row;
     flex-wrap: wrap;
-    gap: 8px;
   }
 
   .fornecedores-btn-add,
   .fornecedores-btn-add-categoria {
-    width: 100%;
-    height: 30px;
+    width: 200px;
+    height: 36px;
   }
 
   .fornecedores-select {
-    width: 100%;
+    width: 140px;
+    height: 36px;
     flex-shrink: 0;
   }
 
   .filtro-categoria-container {
-    display: block;
-    width: 100%;
-    margin: 0;
+    display: inline-block;
+    width: auto;
   }
 
   .filtro-categoria-toggle {
-    min-width: 0;
-    width: 100%;
-    justify-content: space-between;
+    width: auto;
+    min-width: 200px;
+    height: 36px;
   }
 
   .fornecedores-busca {
-    width: 100%;
-  }
-
-  .fornecedores-busca .search {
-    width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .fornecedores-toolbar {
-    gap: 8px;
-  }
-
-  .fornecedores-btn-add,
-  .fornecedores-btn-add-categoria {
-    height: 40px;
-  }
-
-  .filtro-categoria-toggle {
-    font-size: 13px;
-    padding: 0 10px;
+    width: auto;
+    flex: 1 1 240px;
+    max-width: 380px;
+    height: 38px;
   }
 }
 
@@ -615,48 +601,10 @@ html, body, #root {
   color: #4f4f4f;
 }
 
-@media (max-width: 768px) {
-  .fornecedores-content {
-    padding: 16px;
-  }
-
-  .fornecedores-toolbar {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .filtro-categoria-toggle {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .fornecedores-busca {
-    order: 3;
-    width: 100%;
-    flex: unset;
-  }
-
-  .fornecedores-select {
-    width: auto;
-  }
-
+/* Telas grandes: limita a densidade do grid pra cards nao ficarem largos demais. */
+@media (min-width: 1024px) {
   .fornecedores-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 480px) {
-  .fornecedores-toolbar {
-    gap: 6px;
-  }
-
-  .fornecedores-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .filtro-categoria-toggle {
-    font-size: 13px;
-    padding: 0 10px;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   }
 }
 
