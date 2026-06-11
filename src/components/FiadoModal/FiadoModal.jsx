@@ -9,6 +9,7 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento,
   const [dividaSelecionada, setDividaSelecionada] = useState(null);
   const [comprovante, setComprovante] = useState(null);
   const [documento, setDocumento] = useState("");
+  const [pagarTodasModo, setPagarTodasModo] = useState(false);
 
   const totalAberto = fiado.dividas
     .filter((d) => !d.pago)
@@ -31,7 +32,22 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento,
     setDividaSelecionada(divida);
     setComprovante(null);
     setDocumento("");
+    setPagarTodasModo(false);
     setModalComprovante(true);
+  };
+
+  const abrirModalPagarTodas = () => {
+    if (todasPagas || fiado.dividas.length === 0) return;
+    setDividaSelecionada(null);
+    setComprovante(null);
+    setDocumento("");
+    setPagarTodasModo(true);
+    setModalComprovante(true);
+  };
+
+  const fecharModalComprovante = () => {
+    setModalComprovante(false);
+    setPagarTodasModo(false);
   };
 
   const confirmarPagamento = async () => {
@@ -45,12 +61,16 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento,
       return;
     }
 
-    await onPagarDivida(fiado.idCliente, dividaSelecionada.idDivida, {
-      comprovante,
-      documento,
-    });
+    if (pagarTodasModo) {
+      await onPagarTodas(fiado.idCliente, { comprovante, documento });
+    } else {
+      await onPagarDivida(fiado.idCliente, dividaSelecionada.idDivida, {
+        comprovante,
+        documento,
+      });
+    }
 
-    setModalComprovante(false);
+    fecharModalComprovante();
   };
 
   return (
@@ -136,7 +156,7 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento,
           </div>
           <button
             className="btn-pagar-todas"
-            onClick={() => onPagarTodas(fiado.idCliente)}
+            onClick={abrirModalPagarTodas}
             disabled={todasPagas || fiado.dividas.length === 0}
           >
             {todasPagas ? "Tudo pago" : "Pagar todas"}
@@ -146,13 +166,13 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento,
         {modalComprovante && (
         <div
           className="fiado-modal-overlay"
-          onClick={() => setModalComprovante(false)}
+          onClick={fecharModalComprovante}
         >
           <div
             className="fiado-modal comprovante-modal"
             onClick={(e) => e.stopPropagation()}
           >
-            <h2>Confirmar pagamento</h2>
+            <h2>{pagarTodasModo ? "Confirmar pagamento de todas" : "Confirmar pagamento"}</h2>
 
             <div className="comprovante-form">
               <label>Comprovante</label>
@@ -174,7 +194,7 @@ export function FiadoModal({ fiado, onClose, onPagarDivida, onDesfazerPagamento,
             <div className="comprovante-actions">
               <button
                 className="btn-cancelar"
-                onClick={() => setModalComprovante(false)}
+                onClick={fecharModalComprovante}
               >
                 Cancelar
               </button>
