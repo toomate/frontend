@@ -25,9 +25,11 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: 1.5% 2.5%;
+  padding: 16px;
   gap: 0.625em;
   width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
   box-sizing: border-box;
   flex-wrap: wrap;
   overflow: visible;
@@ -308,16 +310,25 @@ display: flex;
 .fiado-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 0.5% 2%;
-  padding: 1.5% 2.5%;
-  auto-rows: 1fr;
-  gap: 5px;
+  grid-auto-rows: 1fr;
+  gap: 14px;
+
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
 }
 
 /* ===== Tabela / Lista ===== */
 .fiado-tabela-container {
-  padding: 0 2.5% 1.5%;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  box-sizing: border-box;
   background-color: white;
+  border-radius: 12px;
 }
 
 .fiado-tabela-header {
@@ -541,8 +552,8 @@ display: flex;
 
   .fiado-cards-grid {
     grid-template-columns: 1fr 1fr;
-    gap: 4% 2%;
-    padding: 2% 3%;
+    gap: 14px;
+    padding: 16px;
   }
 
   .novo-fiado-modal {
@@ -615,12 +626,12 @@ display: flex;
 
   .fiado-cards-grid {
     grid-template-columns: 1fr;
-    gap: 5% 2%;
-    padding: 3% 4%;
+    gap: 14px;
+    padding: 12px;
   }
 
   .fiado-tabela-container {
-    padding: 0 3% 3%;
+    padding: 12px;
   }
 
   .fiado-tabela-header,
