@@ -1,8 +1,10 @@
+import config from "../config";
+const baseURL = config.VITE_SSE_URL;
+
 const CHANNEL_NAME = "sse_channel";
 const LEADER_KEY = "sse_leader";
 const HEARTBEAT_KEY = "sse_heartbeat";
 const NOTIFICATIONS_KEY = "sse_notifications";
-const SSE_PROXY_BASE = "/sse";
 
 function getAuthToken() {
   return (
@@ -252,7 +254,7 @@ class sseManager {
     }
 
     console.log("Iniciando SSE para clienteId:", clientId);
-    const sseUrlWithClient = `${SSE_PROXY_BASE}/conectar/${encodeURIComponent(clientId)}`;
+    const sseUrlWithClient = `${VITE_SSE_URL_BASE}/conectar/${encodeURIComponent(clientId)}`;
 
     this.eventSource = new EventSource(sseUrlWithClient);
 
@@ -351,7 +353,7 @@ handleIncomingData(rawData) {
     }
 
     const token = getAuthToken();
-    const endpoint = `${SSE_PROXY_BASE}/deletar/${encodeURIComponent(idInsumo)}`;
+    const endpoint = `${VITE_SSE_URL_BASE}/deletar/${encodeURIComponent(idInsumo)}`;
 
 
     const response = await fetch(endpoint, {
@@ -415,7 +417,7 @@ handleIncomingData(rawData) {
     // Tenta persistir no servidor, mas não bloqueia a atualização local.
     try {
       const token = getAuthToken();
-      const endpoint = `${SSE_PROXY_BASE}/ler/${encodeURIComponent(id)}`;
+      const endpoint = `${VITE_SSE_URL_BASE}/ler/${encodeURIComponent(id)}`;
       await fetch(endpoint, {
         method: "POST",
         headers: {
@@ -449,7 +451,7 @@ handleIncomingData(rawData) {
 
     try {
       const token = getAuthToken();
-      const base = SSE_PROXY_BASE;
+      const base = VITE_SSE_URL_BASE;
       idsToMark.forEach((id) => {
         const endpoint = `${base}/ler/${encodeURIComponent(id)}`;
         fetch(endpoint, {
