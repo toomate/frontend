@@ -19,6 +19,7 @@
 .detail-wrapper {
     width: 90%;
     max-width: 100%;
+    border-radius: 10px !important;
 }
 
 /* Header */
@@ -256,6 +257,7 @@
     position: relative;
     width: 100%;
     overflow-x: hidden;
+    border-radius: 10px;
 }
 
 .modal-close-inside {
@@ -284,6 +286,7 @@
 
     .detail-wrapper {
         width: 100%;
+        max-width: 100%;
     }
 
     #titulo-calendario {
@@ -315,9 +318,9 @@
     }
 
     .modal-container {
-        width: 100%;
+        min-width: 95%;
+
         height: 70vh;
-        max-width: none;
         max-height: 100vh;
         border-radius: 5px;
         margin: 5px;

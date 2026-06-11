@@ -52,7 +52,7 @@
 }
 
 .boletos .filtros select {
-  height: var(--filtro-altura);
+  height: 35px;
   color: black;
   width: 150px;
   min-width: 0;
@@ -108,10 +108,10 @@
   gap: 10px;
   width: 180px;
   min-width: 0;
-  height: var(--filtro-altura);
+  height: 35px !important;
   background: white;
   border: 1px solid #ccc !important;
-  border-radius: 8px;
+  border-radius: 5px;
   border: 1px solid #ccc;
   cursor: pointer;
   color: black;
@@ -242,6 +242,7 @@
   .view-toggle {
     flex: 1 1 180px;
     width: 100%;
+    height: 35px;
   }
 
   .boletos .busca {
@@ -260,17 +261,13 @@
     padding: 0 0 20px;
   }
 
-  .boletos .filtros {
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-  }
+  .boletos .filtros select, .btn-calendario, .view-toggle-btn {
+    height: 36px !important;
+    min-height: 36px !important;
+    max-height: 36px !important;
 
-  .boletos .filtros select,
-  .btn-calendario,
-  .view-toggle-btn,
-  .boletos .busca {
-    width: 100%;
+    padding: 0 8px;
+    font-size: 14px;
   }
 
   .item-pagamento {
@@ -282,6 +279,8 @@
   .btn-pago,
   .btn-pendente {
     width: 100%;
+    height: 36px;
+    border-radius: 5px;
   }
 
   .lista {
@@ -322,24 +321,14 @@
   .paginacao-boletos {
     flex-direction: column;
   }
-}
-
-@media (min-width: 481px) and (max-width: 900px) {
-  .boletos .filtros {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .boletos .busca {
-    grid-column: 1 / -1;
-  }
 
   .btn-calendario {
-    grid-column: 1 / -1;
+    width: 100%;
+    height: 20px;
   }
+
 }
 
-/* Page-specific modal overrides for boleto detail */
 .boletos .modal-overlay {
   position: fixed;
   inset: 0;
@@ -384,6 +373,12 @@
 
 .boletos .modal-close-inside:hover {
   background: #f5f5f5;
+}
+
+
+.btn-calendario {
+  width: 100%;
+  height: 20px;
 }
 
 @keyframes fadeIn {
