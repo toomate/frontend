@@ -7,7 +7,8 @@
 .rbc-event {
     border-radius: 8px;
     border: 1px solid #b9c2cb;
-    background: #f8fafc;
+    background: #2c3e50 !important;
+    color: white !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.18);
     padding: 4px 6px;
 }
@@ -27,7 +28,7 @@
     max-width: 100%;
     font-size: 12px;
     font-weight: 700;
-    color: #1c2833;
+    color: white;
     line-height: 1.2;
     cursor: pointer;
 }
